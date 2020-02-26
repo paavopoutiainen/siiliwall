@@ -85,6 +85,10 @@ function App() {
   const [columns, setColumns] = useState(columnsFromBackend);
   console.log("columns", columns);
 
+  const addNewStickie = id => {
+    console.log("click", id);
+  };
+
   return (
     <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
       {/* Alue joka hallitsee Drag n Drop aluetta */}
@@ -159,6 +163,9 @@ function App() {
                           );
                         })}
                         {provided.placeholder}
+                        <button onClick={() => addNewStickie(id)}>
+                          + add new
+                        </button>
                       </div>
                     );
                   }}
