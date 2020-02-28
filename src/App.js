@@ -84,6 +84,31 @@ const onDragEnd = (result, columns, setColumns) => {
 
 function App() {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [stickerInput, setStickerInput] = useState("");
+  const [input, setInput] = useState({ id: null, status: false });
+  console.log("stickerrr", stickerInput);
+  console.log("columns", columns);
+  const addNewStickie = id => {
+    setInput({ id: id, status: true });
+    console.log("des id:", id);
+    const destinationColumn = columns[id];
+    const destItems = [...destinationColumn.items];
+    console.log("testi", destItems);
+    const tiko = { id: uuid(), content: stickerInput };
+    if (tiko.content) {
+      setColumns({
+        ...columns,
+        [id]: {
+          ...destinationColumn,
+          items: destItems.concat(tiko)
+        }
+      });
+      setInput({ id: null, status: false });
+    }
+    setStickerInput("");
+    //const searchedId = Object.entries(columns).find( => columns.id === id);
+    //console.log(searchedId);
+  };
   console.log("columns", columns);
 
   function addColumn() {
@@ -180,6 +205,17 @@ function App() {
                             );
                           })}
                           {provided.placeholder}
+                          {input.id === id && input.status === true && (
+                            <input
+                              id={id}
+                              type="text"
+                              value={stickerInput}
+                              onChange={e => setStickerInput(e.target.value)}
+                            ></input>
+                          )}
+                          <button onClick={() => addNewStickie(id)}>
+                            + add new
+                          </button>
                         </div>
                       );
                     }}
