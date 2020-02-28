@@ -81,93 +81,115 @@ const onDragEnd = (result, columns, setColumns) => {
     });
   }
 };
+
 function App() {
   const [columns, setColumns] = useState(columnsFromBackend);
   console.log("columns", columns);
 
+  function addColumn() {
+    const newColumn = {
+      ...columns,
+      [uuid()]: {
+        name: "New column",
+        items: []
+      }
+    };
+    setColumns(newColumn);
+  }
+
+  const renameColumn = id => {
+    console.log(id);
+  };
+
   return (
-    <div style={{ display: "flex", justifyContent: "center", height: "100%" }}>
-      {/* Alue joka hallitsee Drag n Drop aluetta */}
-      <DragDropContext
-        onDragEnd={result => onDragEnd(result, columns, setColumns)}
+    <div>
+      <button onClick={addColumn}>Add new column</button>
+
+      <div
+        style={{ display: "flex", justifyContent: "center", height: "100%" }}
       >
-        {/* Object entries poimii columns:ista id ja column parin stringinä */}
-        {Object.entries(columns).map(([id, column]) => {
-          console.log("id", id, "columns", column);
-          return (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center"
-              }}
-            >
-              <h2>{column.name}</h2>
-              <div style={{ margin: 8 }}>
-                {/*Tiputettavat alueet jotka rendataan  tarjotaan id: columneille */}
-                <Droppable droppableId={id} key={id}>
-                  {(provided, snapshot) => {
-                    console.log("provided", provided);
-                    console.log("snapshot", snapshot);
-                    return (
-                      <div
-                        {...provided.droppableProps}
-                        ref={provided.innerRef}
-                        style={{
-                          backgroundColor: snapshot.isDraggingOver
-                            ? "lightblue"
-                            : "lightgrey",
-                          padding: 4,
-                          width: 250,
-                          minHeight: 500
-                        }}
-                      >
-                        {/* Columin sisällä olevien itemien rendaus joilla on raahattava ominaisuus  */}
-                        {column.items.map((item, index) => {
-                          return (
-                            console.log("item", item, "index", index),
-                            (
-                              <Draggable
-                                key={item.id}
-                                draggableId={item.id}
-                                index={index}
-                              >
-                                {(provided, snapshot) => {
-                                  return (
-                                    <div
-                                      ref={provided.innerRef}
-                                      {...provided.draggableProps}
-                                      {...provided.dragHandleProps}
-                                      style={{
-                                        userSelect: "none",
-                                        padding: 16,
-                                        margin: "0 0 8px 0",
-                                        minHeight: "50px",
-                                        backgroundColor: snapshot.isDragging
-                                          ? "#263B4A"
-                                          : "#456C86",
-                                        color: "white",
-                                        ...provided.draggableProps.style
-                                      }}
-                                    >
-                                      {item.content}
-                                    </div>
-                                  );
-                                }}
-                              </Draggable>
-                            )
-                          );
-                        })}
-                        {provided.placeholder}
-                      </div>
-                    );
-                  }}
-                </Droppable>
+        {/* Alue joka hallitsee Drag n Drop aluetta */}
+        <DragDropContext
+          onDragEnd={result => onDragEnd(result, columns, setColumns)}
+        >
+          {/* Object entries poimii columns:ista id ja column parin stringinä */}
+          {Object.entries(columns).map(([id, column]) => {
+            console.log("id", id, "columns", column);
+            return (
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center"
+                }}
+              >
+                <h2 onClick={() => renameColumn(id)}>{column.name}</h2>
+                <div style={{ margin: 8 }}>
+                  {/*Tiputettavat alueet jotka rendataan  tarjotaan id: columneille */}
+                  <Droppable droppableId={id} key={id}>
+                    {(provided, snapshot) => {
+                      console.log("provided", provided);
+                      console.log("snapshot", snapshot);
+                      return (
+                        <div
+                          {...provided.droppableProps}
+                          ref={provided.innerRef}
+                          style={{
+                            backgroundColor: snapshot.isDraggingOver
+                              ? "lightblue"
+                              : "lightgrey",
+                            padding: 4,
+                            width: 250,
+                            minHeight: 500
+                          }}
+                        >
+                          {/* Columin sisällä olevien itemien rendaus joilla on raahattava ominaisuus  */}
+                          {column.items.map((item, index) => {
+                            return (
+                              console.log("item", item, "index", index),
+                              (
+                                <Draggable
+                                  key={item.id}
+                                  draggableId={item.id}
+                                  index={index}
+                                >
+                                  {(provided, snapshot) => {
+                                    return (
+                                      <div
+                                        ref={provided.innerRef}
+                                        {...provided.draggableProps}
+                                        {...provided.dragHandleProps}
+                                        style={{
+                                          userSelect: "none",
+                                          padding: 16,
+                                          margin: "0 0 8px 0",
+                                          minHeight: "50px",
+                                          backgroundColor: snapshot.isDragging
+                                            ? "#263B4A"
+                                            : "#456C86",
+                                          color: "white",
+                                          ...provided.draggableProps.style
+                                        }}
+                                      >
+                                        {item.content}
+                                      </div>
+                                    );
+                                  }}
+                                </Draggable>
+                              )
+                            );
+                          })}
+                          {provided.placeholder}
+                        </div>
+                      );
+                    }}
+                  </Droppable>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </DragDropContext>
+            );
+          })}
+        </DragDropContext>
+      </div>
     </div>
   );
 }
