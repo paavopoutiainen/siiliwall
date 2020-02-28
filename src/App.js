@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
+import ActionButton from "./components/ActionButton";
 
 const itemsFromBackend = [
   {
@@ -41,15 +42,17 @@ const columnsFromBackend = {
 };
 
 const onDragEnd = (result, columns, setColumns) => {
-  console.log("onDragEnd", result);
-  console.log("Ondrag col", columns);
-  console.log("Ondrag set", setColumns);
+  console.log("result", result);
+  // console.log("Ondrag col", columns);
+  // console.log("Ondrag set", setColumns);
   if (!result.destination) return;
   const { source, destination } = result;
 
   if (source.droppableId !== destination.droppableId) {
+    console.log("des id", destination.droppableId);
     const sourceColumn = columns[source.droppableId];
     const destColumn = columns[destination.droppableId];
+    console.log("destcol", destColumn);
     const sourceItems = [...sourceColumn.items];
     const destItems = [...destColumn.items];
     console.log("destinationItems", destItems);
@@ -81,12 +84,38 @@ const onDragEnd = (result, columns, setColumns) => {
     });
   }
 };
+
 function App() {
   const [columns, setColumns] = useState(columnsFromBackend);
+  const [stickerInput, setStickerInput] = useState("");
+  const [input, setInput] = useState({ id: null, status: false });
+  console.log("stickerrr", stickerInput);
   console.log("columns", columns);
 
   const addNewStickie = id => {
-    console.log("click", id);
+    setInput({ id: id, status: true });
+    console.log("des id:", id);
+    const destinationColumn = columns[id];
+    const destItems = [...destinationColumn.items];
+
+    console.log("testi", destItems);
+
+    const tiko = { id: uuid(), content: stickerInput };
+
+    if (tiko.content) {
+      setColumns({
+        ...columns,
+        [id]: {
+          ...destinationColumn,
+          items: destItems.concat(tiko)
+        }
+      });
+      setInput({ id: null, status: false });
+    }
+    setStickerInput("");
+
+    //const searchedId = Object.entries(columns).find( => columns.id === id);
+    //console.log(searchedId);
   };
 
   return (
@@ -163,6 +192,15 @@ function App() {
                           );
                         })}
                         {provided.placeholder}
+                        {input.id === id && input.status === true && (
+                          <input
+                            id={id}
+                            type='text'
+                            value={stickerInput}
+                            onChange={e => setStickerInput(e.target.value)}
+                          ></input>
+                        )}
+
                         <button onClick={() => addNewStickie(id)}>
                           + add new
                         </button>
