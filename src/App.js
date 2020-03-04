@@ -134,6 +134,19 @@ function App() {
       });
     }
   };
+  const deleteCard = (ids, index, item) => {
+    const { id, content } = item;
+    const destinationColumn = columns[ids];
+    const title = destinationColumn.name;
+    const destItems = [...destinationColumn.items];
+    setColumns({
+      ...columns,
+      [ids]: {
+        name: title,
+        items: destItems.filter(item => item.id !== id)
+      }
+    });
+  };
 
   return (
     <div>
@@ -148,6 +161,7 @@ function App() {
           {Object.entries(columns).map(([id, column]) => {
             return (
               <div
+                key={id}
                 style={{
                   display: "flex",
                   flexDirection: "column",
@@ -213,6 +227,13 @@ function App() {
                                       }}
                                     >
                                       {item.content}
+                                      <button
+                                        onClick={() =>
+                                          deleteCard(id, index, item)
+                                        }
+                                      >
+                                        x
+                                      </button>
                                     </div>
                                   );
                                 }}
