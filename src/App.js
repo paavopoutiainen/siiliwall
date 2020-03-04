@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
+import axios from 'axios';
 
 const itemsFromBackend = [
   {
@@ -78,7 +79,7 @@ const onDragEnd = (result, columns, setColumns) => {
 };
 
 function App() {
-  const [columns, setColumns] = useState(columnsFromBackend);
+  const [columns, setColumns] = useState({});
   const [stickerInput, setStickerInput] = useState("");
   const [input, setInput] = useState({ id: null, status: false });
   const [newTitle, setNewTitle] = useState({
@@ -86,6 +87,20 @@ function App() {
     id: null,
     newName: ""
   });
+
+  useEffect(() => {
+    getResponse()
+  }, [])
+
+  const getResponse = () => {
+    axios.get('http://siiliwall.me/testi.json')
+      .then((response) => {
+        setColumns(response.data)
+      }).catch((error) => {
+        console.log(error)
+      }
+      )
+  }
 
   const addNewStickie = id => {
     setInput({ id: id, status: true });
@@ -169,8 +184,8 @@ function App() {
                     </button>
                   </>
                 ) : (
-                  <h2 onClick={() => renameColumn(id)}>{column.name}</h2>
-                )}
+                    <h2 onClick={() => renameColumn(id)}>{column.name}</h2>
+                  )}
                 <div style={{ margin: 8 }}>
                   <Droppable droppableId={id} key={id}>
                     {(provided, snapshot) => {
