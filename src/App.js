@@ -3,44 +3,6 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
 import axios from 'axios';
 
-const itemsFromBackend = [
-  {
-    id: "eka",
-    content: "first things first"
-  },
-  {
-    id: "toka",
-    content: "Second things ar the hardest"
-  },
-  {
-    id: "kolmas",
-    content: "Second things ar the hardest"
-  },
-  {
-    id: "neljäs",
-    content: "Second things ar the hardest"
-  }
-];
-
-const columnsFromBackend = {
-  Colli_1: {
-    name: "Epic",
-    items: itemsFromBackend
-  },
-  Colli_2: {
-    name: "Todo",
-    items: []
-  },
-  Colli_3: {
-    name: "In Progress",
-    items: []
-  },
-  COlli_4: {
-    name: "Done",
-    items: []
-  }
-};
-
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
   const { source, destination } = result;
