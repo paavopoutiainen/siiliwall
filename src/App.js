@@ -78,6 +78,15 @@ const Cardreducer = (columns, action) => {
           items: dsItem.filter(item => item.id !== id)
         }
       };
+    case "DELETE_COLUMN":
+      console.log(action.id);
+      console.log("collaajat", columns[action.id]);
+      console.log("pitäs poistaa", delete columns[action.id]);
+
+      return {
+        ...columns,
+        ...delete columns[action.id]
+      };
 
     default:
       return columns;

@@ -5,6 +5,8 @@ import { MyContext } from "../App";
 
 const DnDContext = () => {
   const tiko = useContext(MyContext);
+  console.log(tiko);
+  console.log(tiko.columns.name);
   const [newTitle, setNewTitle] = useState({
     status: false,
     id: null,
@@ -33,6 +35,10 @@ const DnDContext = () => {
         items: destItems
       });
     }
+  };
+  const show = id => {
+    console.log(id);
+    console.log(tiko.columns[id].items.length);
   };
 
   return (
@@ -80,6 +86,15 @@ const DnDContext = () => {
                     column={column}
                     columnss={tiko.columns}
                   ></Dropps>
+                  {!tiko.columns[id].items.length && (
+                    <button
+                      onClick={result =>
+                        tiko.dispatch({ type: "DELETE_COLUMN", result, id })
+                      }
+                    >
+                      delete
+                    </button>
+                  )}
                 </div>
               </div>
             );
