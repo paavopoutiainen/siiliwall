@@ -40,7 +40,7 @@ const onDragEnd = (result, columns, setColumns) => {
     }
 };
 
-function App() {
+const App = () => {
     const [columns, setColumns] = useState({});
     const [stickerInput, setStickerInput] = useState("");
     const [input, setInput] = useState({ id: null, status: false });

@@ -1,16 +1,9 @@
-import React, { useEffect, useState } from "react";
-import axios from 'axios';
+import React from "react";
+import BoardForm from "../components/BoardForm"
 
-
-export default function Home() {
-    /* 
-    Tarkoitusena on luoda "Homepage", missä voit selata kaikkia tauluja ja tehdä uuden taulun.
-    Bäkkäristä fetchataan tiedot
-    */
-
+const Home = () => {
     return (
-        <div>
-            <p>This is Home</p>
-        </div>
+        <BoardForm />
     )
 }
+export default Home;
