@@ -2,6 +2,10 @@ import React, { useState, useContext } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
 import { MyContext } from "../App";
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
 
 const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
@@ -23,6 +27,7 @@ const Dropps = ({ id, column }) => {
       setInput({ id: null, status: false });
     }
     setStickerInput("");
+
   };
   return (
     <div>
@@ -63,7 +68,17 @@ const Dropps = ({ id, column }) => {
                           }}
                         >
                           {item.content}
-                          <button
+                          <IconButton aria-label="delete" onClick={() =>
+                              context.dispatch({
+                                type: "DELETE",
+                                id,
+                                index,
+                                item
+                              })
+                            }>
+                            <DeleteIcon style={{ color: "white" }} fontSize="small" />
+                          </IconButton>
+                          {/* <Button variant="contained" color="secondary" size="small"
                             onClick={() =>
                               context.dispatch({
                                 type: "DELETE",
@@ -74,7 +89,7 @@ const Dropps = ({ id, column }) => {
                             }
                           >
                             x
-                          </button>
+                          </Button> */}
                         </div>
                       );
                     }}
@@ -83,14 +98,15 @@ const Dropps = ({ id, column }) => {
               })}
               {provided.placeholder}
               {input.id === id && input.status === true && (
-                <input
+                <form style={{padding: 10}}>
+                <TextField id="outlined-basic" label="Sticky" variant="outlined"
                   id={id}
                   type='text'
                   value={stickerInput}
-                  onChange={e => setStickerInput(e.target.value)}
-                ></input>
+                  onChange={e => setStickerInput(e.target.value)} />
+                </form>
               )}
-              <button onClick={() => addNewStickie(id)}>+ add new</button>
+              <Button style={{margin: 10}} variant="contained" color="primary" onClick={() => addNewStickie(id)}>+ add new</Button>
             </div>
           );
         }}

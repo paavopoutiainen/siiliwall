@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
 import Dropps from "../components/Droppable";
 import { MyContext } from "../App";
+import Button from '@material-ui/core/Button';
+
 
 const DnDContext = () => {
   const tiko = useContext(MyContext);
@@ -43,9 +45,9 @@ const DnDContext = () => {
 
   return (
     <div>
-      <button onClick={() => tiko.dispatch({ type: "ADD_NEW_COL" })}>
+      <Button variant="contained" color="primary" onClick={() => tiko.dispatch({ type: "ADD_NEW_COL" })}>
         Add new column
-      </button>
+      </Button>
 
       <div
         style={{ display: "flex", justifyContent: "center", height: "100%" }}
@@ -73,9 +75,9 @@ const DnDContext = () => {
                         setNewTitle({ ...newTitle, newName: e.target.value })
                       }
                     ></input>
-                    <button onClick={() => renameColumn(id, newTitle.name)}>
+                    <Button style={{margin: 10}} variant="contained" color="primary" onClick={() => renameColumn(id, newTitle.name)}>
                       save name
-                    </button>
+                    </Button>
                   </>
                 ) : (
                   <h2 onClick={() => renameColumn(id)}>{column.name}</h2>
@@ -87,13 +89,13 @@ const DnDContext = () => {
                     columnss={tiko.columns}
                   ></Dropps>
                   {!tiko.columns[id].items.length && (
-                    <button
+                    <Button style={{margin: 10}} variant="contained" color="secondary"
                       onClick={result =>
                         tiko.dispatch({ type: "DELETE_COLUMN", result, id })
                       }
                     >
                       delete
-                    </button>
+                    </Button>
                   )}
                 </div>
               </div>
