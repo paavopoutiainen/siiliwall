@@ -130,7 +130,6 @@ const Dropps = ({ id, column }) => {
               })}
               {provided.placeholder}
               {input.id === id && input.status === true && (
-                
                 <TextField
                   size="small"
                   id="outlined-full-width"
@@ -143,18 +142,17 @@ const Dropps = ({ id, column }) => {
                   onChange={e => setStickerInput(e.target.value)}
                 ></TextField>
               )}
-              
-                <Button
-                  type="submit"
-                  style={{ margin: 10 }}
-                  variant="contained"
-                  color="primary"
-                  type="submit"
-                  onClick={event => addNewStickie(id)}
-                >
-                  + add new
-                </Button>
-              
+
+              <Button
+                type="submit"
+                style={{ margin: 10 }}
+                variant="contained"
+                color="primary"
+                type="submit"
+                onClick={event => addNewStickie(id)}
+              >
+                + add new
+              </Button>
             </div>
           );
         }}
