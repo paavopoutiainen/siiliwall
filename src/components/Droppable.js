@@ -8,7 +8,7 @@ const Dropps = ({ id, column }) => {
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
 
-  const addNewStickie = id => {
+  const addNewStickie = (id, event) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id];
     const destItems = [...destinationColumn.items];
