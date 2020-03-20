@@ -1,15 +1,8 @@
 import React from "react";
+import TextField from "@material-ui/core/TextField";
 
 const StickieFrom = () => {
-  return (
-    <form>
-      <label>
-        Name: Testi
-        <input type='text' name='name' />
-      </label>
-      <input type='submit' value='Submit' />
-    </form>
-  );
+  return <form></form>;
 };
 
 export default StickieFrom;

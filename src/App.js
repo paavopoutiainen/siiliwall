@@ -154,13 +154,13 @@ function App() {
         const tiko = Object.assign({}, responseJson);
         console.log("tiko", tiko);
         console.log("oikeat", columns);
-        dispatch({ type: "GET_DATA", tiko });
-        setUseData(tiko);
+        // dispatch({ type: "GET_DATA", tiko });
+        // setUseData(tiko);
 
         // const palu = Object.assign([], tiko);
         // console.log("palu", palu);
-        // const paska = JSON.stringify(palu);
-        // console.log("paska", paska);
+        // const rapu = JSON.stringify(palu);
+        // console.log("rapu", rapu);
 
         console.log("Tämä tulee jostain", responseJson);
         //console.log(JSON.stringify(tiko));
