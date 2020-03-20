@@ -8,17 +8,17 @@ const BoardForm = () => {
         const updateBoard = [...boardList];
         updateBoard[e.target.dataset.idx][e.target.className] = e.target.value;
         setBoardList(updateBoard);
+        console.log(boardList)
     }
 
     const addBoard = () => {
         setBoardList([...boardList, { ...blankBoard }]);
-        console.log(boardList)
     }
 
     return (<form>
         <input type="button" value="Add new board" onClick={addBoard} />
         {
-            boardList.map((val, idx) => {
+            boardList.map((data, idx) => {
                 const boardId = `name-${idx}`;
                 return (
                     <div key={`board-${idx}`}>
@@ -36,6 +36,13 @@ const BoardForm = () => {
             })
         }
         <input type="submit" value="Submit" />
+        <div>
+            {boardList.map(board => (
+                <div key={board.id}>
+                    <div>{`Board: ${board.name}`}</div>
+                </div>
+            ))}
+        </div>
     </form>
     )
 }

@@ -97,7 +97,6 @@ const App = () => {
         setNewTitle({ ...newTitle, status: !newTitle.status, id: id });
         const destinationColumn = columns[id];
         const destItems = [...destinationColumn.items];
-
         if (newTitle.newName) {
             setNewTitle({
                 ...newTitle,
