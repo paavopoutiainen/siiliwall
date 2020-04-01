@@ -11,17 +11,19 @@ const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
+  console.log("STICKER INPUT", stickerInput);
 
-  const addNewStickie = (id, event) => {
+  const addNewStickie = id => {
     setInput({ id: id, status: true });
-    const destinationColumn = context.columns[id];
-    const destItems = [...destinationColumn.items];
+    //  const destinationColumn = context.columns[id];
+    // const destItems = [...destinationColumn.items];
     const newCard = { id: uuid(), content: stickerInput };
+    console.log("NEW CARD", newCard);
     if (newCard.content) {
       context.dispatch({
         type: "ADD_CARD",
-        id: [id],
-        des: destItems,
+        id: id,
+        // des: destItems,
         item: newCard
       });
       setInput({ id: null, status: false });
@@ -92,22 +94,25 @@ const Dropps = ({ id, column }) => {
 
               {provided.placeholder}
               {input.id === id && input.status === true && (
-                <form onSubmit={() => addNewStickie(id)}>
-                  <TextField
-                    size='small'
-                    id='outlined-full-width'
-                    fullWidth
-                    label='Sticky'
-                    variant='outlined'
-                    id={id}
-                    type='text'
-                    value={stickerInput}
-                    onChange={e => setStickerInput(e.target.value)}
-                  ></TextField>
-                </form>
+                <TextField
+                  size='small'
+                  id='outlined-full-width'
+                  fullWidth
+                  label='Sticky'
+                  variant='outlined'
+                  id={id}
+                  type='text'
+                  value={stickerInput}
+                  onKeyPress={event => {
+                    if (event.key === "Enter") {
+                      addNewStickie(id);
+                    }
+                  }}
+                  onChange={e => setStickerInput(e.target.value)}
+                ></TextField>
               )}
               <Button
-                type='submit'
+                type='button'
                 style={{ margin: 10 }}
                 variant='contained'
                 color='primary'

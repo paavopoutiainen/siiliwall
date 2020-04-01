@@ -15,6 +15,8 @@ const Cardreducer = (columns, action) => {
         ...action.tiko
       };
     case "ADD_CARD":
+      console.log("ADDD NEWWWWWW CARDDDD");
+      console.log(action.id);
       const destinationColumn = columns[action.id];
       const destItems = [...destinationColumn.items];
       return {
@@ -172,9 +174,11 @@ function App() {
   }, []);
 
   return (
-    <MyContext.Provider value={{ columns, dispatch }}>
-      <DnDContext></DnDContext>
-    </MyContext.Provider>
+    <>
+      <MyContext.Provider value={{ columns, dispatch }}>
+        <DnDContext></DnDContext>
+      </MyContext.Provider>
+    </>
   );
 }
 
