@@ -114,7 +114,10 @@ const DnDContext = () => {
                       variant='contained'
                       color='secondary'
                       onClick={result =>
+                        { if
+                          (window.confirm('Are you sure you want to delete this column?'))
                         tiko.dispatch({ type: "DELETE_COLUMN", result, id })
+                        }
                       }
                     >
                       delete
