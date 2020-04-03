@@ -75,10 +75,13 @@ const DnDContext = () => {
                       style={{
                         padding: "9px 0px 9px 0px",
                         display: "flex",
-                        width: "95%"
+                        overflow: "auto",
+                        width: "95%",
+                        marginBottom: "10px"
                       }}
                     >
                       <TextField
+                        style={{ padding: "0px 5px 0px 5px" }}
                         id="outlined-basic"
                         label="Rename column"
                         variant="outlined"
@@ -92,10 +95,11 @@ const DnDContext = () => {
                       ></TextField>
 
                       <Button
-                        style={{ margin: 10 }}
+                        //style={{ padding: 5 }}
                         variant="contained"
                         color="primary"
-                        size="small"
+                        size="medium"
+                        type="submit"
                         onClick={() => renameColumn(id, newTitle.name)}
                       >
                         save

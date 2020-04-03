@@ -65,8 +65,8 @@ const Dropps = ({ id, column }) => {
             >
               {column.items.map((item, index) => {
                 return (
+                  <CardActions>
                   <Card>
-                    <CardActions>
                       <Draggable
                         className={classes.styles}
                         key={item.id}
@@ -124,8 +124,9 @@ const Dropps = ({ id, column }) => {
                           );
                         }}
                       </Draggable>
+                      </Card>
                     </CardActions>
-                  </Card>
+                  
                 );
               })}
               {provided.placeholder}
