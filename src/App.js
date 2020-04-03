@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 
 import uuid from "uuid/v4";
 import DnDContext from "./components/DragDropContext";
@@ -7,7 +7,16 @@ export const MyContext = React.createContext();
 
 const Cardreducer = (columns, action) => {
   switch (action.type) {
+    case "GET_DATA":
+      console.log("testi col", columns);
+      console.log("testi dataa", action.tiko);
+      return {
+        ...columns,
+        ...action.tiko
+      };
     case "ADD_CARD":
+      console.log("ADDD NEWWWWWW CARDDDD");
+      console.log(action.id);
       const destinationColumn = columns[action.id];
       const destItems = [...destinationColumn.items];
       return {
@@ -22,8 +31,10 @@ const Cardreducer = (columns, action) => {
         return { ...columns };
       }
       const { source, destination } = action.result;
+      console.log(action.result);
       if (source.droppableId !== destination.droppableId) {
         const sourceColumn = columns[source.droppableId];
+        console.log("LÄHDE", sourceColumn);
         const destColumn = columns[destination.droppableId];
         const sourceItems = [...sourceColumn.items];
         const destItems = [...destColumn.items];
@@ -42,6 +53,7 @@ const Cardreducer = (columns, action) => {
         };
       } else {
         const column = columns[source.droppableId];
+        console.log("COLUMNNN", column);
         const copiedItems = [...column.items];
         const [removed] = copiedItems.splice(source.index, 1);
         copiedItems.splice(destination.index, 0, removed);
@@ -93,13 +105,80 @@ const Cardreducer = (columns, action) => {
   }
 };
 
+const itemsFromBackend = [
+  {
+    id: "eka",
+    content: "first things first"
+  },
+  {
+    id: "toka",
+    content: "aaaa"
+  },
+  {
+    id: "kolmas",
+    content: "bbbbb"
+  },
+  {
+    id: "neljäs",
+    content: "ccccc"
+  }
+];
+
+const columnsFromBackend = {
+  Colli_1: {
+    name: "Epic",
+    items: itemsFromBackend
+  },
+  Colli_2: {
+    name: "Todo",
+    items: []
+  },
+  Colli_3: {
+    name: "In Progress",
+    items: []
+  },
+  COlli_4: {
+    name: "Done",
+    items: []
+  }
+};
+
 function App() {
   const [columns, dispatch] = useReducer(Cardreducer, {});
+  const [useData, setUseData] = useState({});
+  console.log("DATAAAAAAAA", columns);
+
+  useEffect(() => {
+    const url = "https://siiliwall.herokuapp.com/columns";
+    fetch(url)
+      .then(response => response.json())
+      .then(responseJson => {
+        const tiko = Object.assign({}, responseJson);
+        console.log("tiko", tiko);
+        console.log("oikeat", columns);
+        // dispatch({ type: "GET_DATA", tiko });
+        // setUseData(tiko);
+
+        // const palu = Object.assign([], tiko);
+        // console.log("palu", palu);
+        // const rapu = JSON.stringify(palu);
+        // console.log("rapu", rapu);
+
+        console.log("Tämä tulee jostain", responseJson);
+        //console.log(JSON.stringify(tiko));
+        // const paku = JSON.stringify(tiko);
+        // const taku = Object.entries(tiko);
+        // console.log("taku", taku);
+      })
+      .catch(error => {});
+  }, []);
 
   return (
-    <MyContext.Provider value={{ columns, dispatch }}>
-      <DnDContext></DnDContext>
-    </MyContext.Provider>
+    <>
+      <MyContext.Provider value={{ columns, dispatch }}>
+        <DnDContext></DnDContext>
+      </MyContext.Provider>
+    </>
   );
 }
 

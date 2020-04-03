@@ -7,39 +7,26 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
 import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import { makeStyles } from "@material-ui/core/styles";
 import CardActions from "@material-ui/core/CardActions";
-
-const useStyles = makeStyles({
-  styles: {
-    backgroundColor: "black"
-  },
-  cards: {
-    userSelect: "none",
-    padding: 16,
-    margin: "0 0 8px 0",
-    minHeight: "50px"
-  }
-});
+import CardContent from "@material-ui/core/CardContent";
 
 const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
+  console.log("STICKER INPUT", stickerInput);
 
-  const classes = useStyles();
-
-  const addNewStickie = (id, event) => {
+  const addNewStickie = id => {
     setInput({ id: id, status: true });
-    const destinationColumn = context.columns[id];
-    const destItems = [...destinationColumn.items];
+    //  const destinationColumn = context.columns[id];
+    // const destItems = [...destinationColumn.items];
     const newCard = { id: uuid(), content: stickerInput };
+    console.log("NEW CARD", newCard);
     if (newCard.content) {
       context.dispatch({
         type: "ADD_CARD",
-        id: [id],
-        des: destItems,
+        id: id,
+        // des: destItems,
         item: newCard
       });
       setInput({ id: null, status: false });
@@ -65,50 +52,29 @@ const Dropps = ({ id, column }) => {
             >
               {column.items.map((item, index) => {
                 return (
-                  <CardActions>
-                  <Card>
-                      <Draggable
-                        className={classes.styles}
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided, snapshot) => {
-                          return (
-                            <div
-                              ref={provided.innerRef}
-                              {...provided.draggableProps}
-                              {...provided.dragHandleProps}
-                              className={
-                                (classes.cards,
-                                {
-                                  backgroundColor: snapshot.isDragging
-                                    ? "#263B4A"
-                                    : "#456C86",
-                                  color: "white",
-
-                                  ...provided.draggableProps.style
-                                })
-                              }
-                            >
-                              <CardContent>{item.content}</CardContent>
-                              <IconButton
-                                aria-label="delete"
-                                onClick={() =>
-                                  context.dispatch({
-                                    type: "DELETE",
-                                    id,
-                                    index,
-                                    item
-                                  })
-                                }
-                              >
-                                <DeleteIcon
-                                  style={{ color: "black" }}
-                                  fontSize="small"
-                                />
-                              </IconButton>
-                              {/* <Button variant="contained" color="secondary" size="small"
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => {
+                      return (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={{
+                            userSelect: "none",
+                            padding: 16,
+                            margin: "0 0 5px 0",
+                            borderRadius: "5px",
+                            minHeight: "50px",
+                            backgroundColor: snapshot.isDragging
+                              ? "#fff"
+                              : "#fff",
+                            color: "#000",
+                            ...provided.draggableProps.style
+                          }}
+                        >
+                          {item.content}
+                          <IconButton
+                            aria-label="delete"
                             onClick={() =>
                               context.dispatch({
                                 type: "DELETE",
@@ -118,17 +84,18 @@ const Dropps = ({ id, column }) => {
                               })
                             }
                           >
-                            x
-                          </Button> */}
-                            </div>
-                          );
-                        }}
-                      </Draggable>
-                      </Card>
-                    </CardActions>
-                  
+                            <DeleteIcon
+                              style={{ color: "black" }}
+                              fontSize="small"
+                            />
+                          </IconButton>
+                        </div>
+                      );
+                    }}
+                  </Draggable>
                 );
               })}
+
               {provided.placeholder}
               {input.id === id && input.status === true && (
                 <TextField
@@ -140,17 +107,20 @@ const Dropps = ({ id, column }) => {
                   id={id}
                   type="text"
                   value={stickerInput}
+                  onKeyPress={event => {
+                    if (event.key === "Enter") {
+                      addNewStickie(id);
+                    }
+                  }}
                   onChange={e => setStickerInput(e.target.value)}
                 ></TextField>
               )}
-
               <Button
-                type="submit"
+                type="button"
                 style={{ margin: 10 }}
                 variant="contained"
                 color="primary"
-                type="submit"
-                onClick={event => addNewStickie(id)}
+                onClick={() => addNewStickie(id)}
               >
                 + add new
               </Button>

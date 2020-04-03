@@ -38,10 +38,6 @@ const DnDContext = () => {
       });
     }
   };
-  const show = id => {
-    console.log(id);
-    console.log(tiko.columns[id].items.length);
-  };
 
   return (
     <div>
@@ -95,11 +91,11 @@ const DnDContext = () => {
                       ></TextField>
 
                       <Button
-                        //style={{ padding: 5 }}
+                        // style={{ margin: 10 }}
+                        type="submit"
                         variant="contained"
                         color="primary"
-                        size="medium"
-                        type="submit"
+                        size="small"
                         onClick={() => renameColumn(id, newTitle.name)}
                       >
                         save
