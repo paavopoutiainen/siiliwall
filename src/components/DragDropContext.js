@@ -38,19 +38,19 @@ const DnDContext = () => {
   };
 
   const deleteCol = (result, id, removeId) => {
-    console.log(removeId);
-    tiko.dispatch({ type: "DELETE_COLUMN", result, id });
-    // const requestOptions = {
-    //   method: "DELETE"
-    // };
+    console.log("66666666666666", removeId);
+    tiko.dispatch({ type: "DELETE_COLUMN", result, id, removeId });
+    const requestOptions = {
+      method: "DELETE"
+    };
 
-    // fetch(
-    //   `https://siiliwall.herokuapp.com/board/${tiko.boardVal}/deletecolumn/${removeCol}`,
-    //   requestOptions
-    // )
-    //   .then(response => response.text())
-    //   .then(data => console.log(data))
-    //   .catch(error => console.log("Error detected: " + error));
+    fetch(
+      `https://siiliwall.herokuapp.com/board/${tiko.boardVal}/deletecolumn/${removeId}`,
+      requestOptions
+    )
+      .then(response => response.text())
+      .then(data => console.log(data))
+      .catch(error => console.log("Error detected: " + error));
   };
 
   const addCol = () => {

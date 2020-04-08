@@ -94,7 +94,7 @@ const Cardreducer = (columns, action) => {
         .catch(error => console.log("Error detected: " + error));
       return {
         ...columns,
-        [colKey]: {
+        [uuid()]: {
           key: action.tiko.boardVal,
           columnId: colId,
           name: "New column",
@@ -104,19 +104,24 @@ const Cardreducer = (columns, action) => {
     case "DELETE":
       const { id, content } = action.item;
       const desColumn = columns[action.id];
+      const desColId = desColumn.columnId;
       const title = desColumn.name;
       const dsItem = [...desColumn.items];
       return {
         ...columns,
         [action.id]: {
+          columnId: desColId,
           name: title,
           items: dsItem.filter(item => item.id !== id)
         }
       };
     case "DELETE_COLUMN":
+      console.log("MISSSSÄÄ MUN DELETE");
+      console.log(action.id);
+      console.log(columns[action.id]);
       return {
-        ...columns,
-        ...delete columns[action.id]
+        ...delete columns[action.id],
+        ...columns
       };
 
     default:

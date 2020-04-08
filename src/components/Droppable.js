@@ -14,6 +14,7 @@ const Dropps = ({ id, column }) => {
   const addNewStickie = id => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
+    console.log("PPPPPPPPPPP", destinationColumn);
     const newCard = {
       id: uuid(),
       // cardName: null,
