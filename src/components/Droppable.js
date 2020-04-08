@@ -11,14 +11,18 @@ const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
-  console.log("STICKER INPUT", stickerInput);
-
   const addNewStickie = id => {
     setInput({ id: id, status: true });
-    //  const destinationColumn = context.columns[id];
-    // const destItems = [...destinationColumn.items];
-    const newCard = { id: uuid(), content: stickerInput };
-    console.log("NEW CARD", newCard);
+    const destinationColumn = context.columns[id].columnId;
+    const newCard = {
+      id: uuid(),
+      // cardName: null,
+      content: stickerInput
+      // cardColor: null,
+      // cardOwner: null,
+      // cardSize: null,
+      // cardDifficulty: 0
+    };
     if (newCard.content) {
       context.dispatch({
         type: "ADD_CARD",
@@ -26,10 +30,48 @@ const Dropps = ({ id, column }) => {
         // des: destItems,
         item: newCard
       });
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        body: JSON.stringify(newCard)
+      };
+
+      fetch(
+        `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
+        requestOptions
+      )
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.log("Error detected: " + error));
       setInput({ id: null, status: false });
     }
     setStickerInput("");
   };
+
+  const deleteCard = (id, item) => {
+    const delColumn = context.columns[id].columnId;
+    context.dispatch({
+      type: "DELETE",
+      id,
+      item
+    });
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      }
+    };
+    fetch(
+      `https://siiliwall.herokuapp.com/${delColumn}/deletecard/${item.id}`,
+      requestOptions
+    )
+      .then(response => response.text())
+      .then(data => console.log(data))
+      .catch(error => console.log("Error detected: " + error));
+  };
+
   return (
     <div>
       <Droppable droppableId={id} key={id}>
@@ -71,14 +113,7 @@ const Dropps = ({ id, column }) => {
                           {item.content}
                           <IconButton
                             aria-label='delete'
-                            onClick={() =>
-                              context.dispatch({
-                                type: "DELETE",
-                                id,
-                                index,
-                                item
-                              })
-                            }
+                            onClick={() => deleteCard(id, item)}
                           >
                             <DeleteIcon
                               style={{ color: "black" }}

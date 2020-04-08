@@ -8,15 +8,16 @@ export const MyContext = React.createContext();
 const Cardreducer = (columns, action) => {
   switch (action.type) {
     case "GET_DATA":
-      console.log("testi col", columns);
-      console.log("testi dataa", action.tiko);
+      const { boardId } = action.result;
+
+      const jaha = Object.entries(action.tiko).map((o, index) =>
+        Object.assign({ key: boardId }, ...o)
+      );
       return {
         ...columns,
-        ...action.tiko
+        ...jaha
       };
     case "ADD_CARD":
-      console.log("ADDD NEWWWWWW CARDDDD");
-      console.log(action.id);
       const destinationColumn = columns[action.id];
       const destItems = [...destinationColumn.items];
       return {
@@ -31,10 +32,8 @@ const Cardreducer = (columns, action) => {
         return { ...columns };
       }
       const { source, destination } = action.result;
-      console.log(action.result);
       if (source.droppableId !== destination.droppableId) {
         const sourceColumn = columns[source.droppableId];
-        console.log("LÄHDE", sourceColumn);
         const destColumn = columns[destination.droppableId];
         const sourceItems = [...sourceColumn.items];
         const destItems = [...destColumn.items];
@@ -53,7 +52,6 @@ const Cardreducer = (columns, action) => {
         };
       } else {
         const column = columns[source.droppableId];
-        console.log("COLUMNNN", column);
         const copiedItems = [...column.items];
         const [removed] = copiedItems.splice(source.index, 1);
         copiedItems.splice(destination.index, 0, removed);
@@ -71,9 +69,34 @@ const Cardreducer = (columns, action) => {
         [action.id]: { name: action.name, items: action.items }
       };
     case "ADD_NEW_COL":
+      const uidu = uuid();
+      const colId = Date.now();
+      const colKey = Object.keys(action.tiko.columns).length + 1;
+
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8"
+        },
+        body: JSON.stringify({
+          columnId: colId,
+          name: "New column",
+          items: []
+        })
+      };
+
+      fetch(
+        `https://siiliwall.herokuapp.com/boardss/${action.tiko.boardVal}/columns`,
+        requestOptions
+      )
+        .then(response => response.text())
+        .then(data => console.log(data))
+        .catch(error => console.log("Error detected: " + error));
       return {
         ...columns,
-        [uuid()]: {
+        [colKey]: {
+          key: action.tiko.boardVal,
+          columnId: colId,
           name: "New column",
           items: []
         }
@@ -91,10 +114,6 @@ const Cardreducer = (columns, action) => {
         }
       };
     case "DELETE_COLUMN":
-      console.log(action.id);
-      console.log("collaajat", columns[action.id]);
-      console.log("pitäs poistaa", delete columns[action.id]);
-
       return {
         ...columns,
         ...delete columns[action.id]
@@ -146,36 +165,30 @@ const columnsFromBackend = {
 function App() {
   const [columns, dispatch] = useReducer(Cardreducer, {});
   const [useData, setUseData] = useState({});
+  const [boardVal, setBoardVadl] = useState();
   console.log("DATAAAAAAAA", columns);
 
   useEffect(() => {
-    const url = "https://siiliwall.herokuapp.com/columns";
+    const url = "http://siiliwall.herokuapp.com/boards";
     fetch(url)
       .then(response => response.json())
       .then(responseJson => {
-        const tiko = Object.assign({}, responseJson);
-        console.log("tiko", tiko);
+        const result = responseJson.find(({ boardId }) => boardId);
+        const boardValue = result.boardId;
+        setBoardVadl(boardValue);
+
+        console.log("ressun colu", result.columns);
+        const tiko = Object.assign({}, result.columns);
         console.log("oikeat", columns);
-        // dispatch({ type: "GET_DATA", tiko });
-        // setUseData(tiko);
-
-        // const palu = Object.assign([], tiko);
-        // console.log("palu", palu);
-        // const rapu = JSON.stringify(palu);
-        // console.log("rapu", rapu);
-
-        console.log("Tämä tulee jostain", responseJson);
-        //console.log(JSON.stringify(tiko));
-        // const paku = JSON.stringify(tiko);
-        // const taku = Object.entries(tiko);
-        // console.log("taku", taku);
+        dispatch({ type: "GET_DATA", tiko, result });
+        console.log("Tämä tulee DB", responseJson);
       })
       .catch(error => {});
   }, []);
 
   return (
     <>
-      <MyContext.Provider value={{ columns, dispatch }}>
+      <MyContext.Provider value={{ columns, dispatch, boardVal }}>
         <DnDContext></DnDContext>
       </MyContext.Provider>
     </>

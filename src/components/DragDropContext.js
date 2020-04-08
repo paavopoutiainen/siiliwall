@@ -7,8 +7,6 @@ import TextField from "@material-ui/core/TextField";
 
 const DnDContext = () => {
   const tiko = useContext(MyContext);
-  console.log(tiko);
-  console.log(tiko.columns.name);
   const [newTitle, setNewTitle] = useState({
     status: false,
     id: null,
@@ -39,13 +37,29 @@ const DnDContext = () => {
     }
   };
 
+  const deleteCol = (result, id, removeId) => {
+    console.log(removeId);
+    tiko.dispatch({ type: "DELETE_COLUMN", result, id });
+    // const requestOptions = {
+    //   method: "DELETE"
+    // };
+
+    // fetch(
+    //   `https://siiliwall.herokuapp.com/board/${tiko.boardVal}/deletecolumn/${removeCol}`,
+    //   requestOptions
+    // )
+    //   .then(response => response.text())
+    //   .then(data => console.log(data))
+    //   .catch(error => console.log("Error detected: " + error));
+  };
+
+  const addCol = () => {
+    tiko.dispatch({ type: "ADD_NEW_COL", tiko });
+  };
+
   return (
     <div>
-      <Button
-        variant='contained'
-        color='primary'
-        onClick={() => tiko.dispatch({ type: "ADD_NEW_COL" })}
-      >
+      <Button variant='contained' color='primary' onClick={() => addCol()}>
         Add new column
       </Button>
 
@@ -113,9 +127,7 @@ const DnDContext = () => {
                       style={{ marginTop: 10 }}
                       variant='contained'
                       color='secondary'
-                      onClick={result =>
-                        tiko.dispatch({ type: "DELETE_COLUMN", result, id })
-                      }
+                      onClick={result => deleteCol(result, id, column.columnId)}
                     >
                       delete
                     </Button>
