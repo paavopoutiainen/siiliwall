@@ -6,9 +6,6 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 
 const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
@@ -47,7 +44,8 @@ const Dropps = ({ id, column }) => {
                   : "lightgrey",
                 padding: 4,
                 width: 250,
-                minHeight: 500
+                minHeight: 500,
+                borderRadius: "5px"
               }}
             >
               {column.items.map((item, index) => {
@@ -75,17 +73,19 @@ const Dropps = ({ id, column }) => {
                           {item.content}
                           <IconButton
                             aria-label="delete"
-                            onClick={() =>
-                              { if 
-                                (window.confirm('Are you sure you want to delete this item?'))
-                              context.dispatch({
-                                type: "DELETE",
-                                id,
-                                index,
-                                item
-                                })
-                              }
-                            }
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this item?"
+                                )
+                              )
+                                context.dispatch({
+                                  type: "DELETE",
+                                  id,
+                                  index,
+                                  item
+                                });
+                            }}
                           >
                             <DeleteIcon
                               style={{ color: "black" }}
