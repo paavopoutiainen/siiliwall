@@ -34,12 +34,17 @@ const DnDContext = () => {
     }
   };
 
+  const addColumn = () => {
+    tiko.dispatch({type: "ADD_NEW_COL"})
+    console.log(tiko)
+  }
+
   return (
     <div>
       <Button
         variant='contained'
         color='primary'
-        onClick={() => tiko.dispatch({ type: "ADD_NEW_COL" })}
+        onClick={addColumn}
       >
         Add new column
       </Button>
