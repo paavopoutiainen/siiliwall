@@ -86,7 +86,8 @@ const Dropps = ({ id, column }) => {
                   : "lightgrey",
                 padding: 4,
                 width: 250,
-                minHeight: 500
+                minHeight: 500,
+                borderRadius: "5px"
               }}
             >
               {column.items.map((item, index) => {
@@ -101,19 +102,27 @@ const Dropps = ({ id, column }) => {
                           style={{
                             userSelect: "none",
                             padding: 16,
-                            margin: "0 0 8px 0",
+                            margin: "0 0 5px 0",
+                            borderRadius: "5px",
                             minHeight: "50px",
                             backgroundColor: snapshot.isDragging
-                              ? "#263B4A"
-                              : "#456C86",
-                            color: "white",
+                              ? "#fff"
+                              : "#fff",
+                            color: "#000",
                             ...provided.draggableProps.style
                           }}
                         >
                           {item.content}
                           <IconButton
                             aria-label='delete'
-                            onClick={() => deleteCard(id, item)}
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this item?"
+                                )
+                              )
+                                deleteCard(id, item);
+                            }}
                           >
                             <DeleteIcon
                               style={{ color: "black" }}

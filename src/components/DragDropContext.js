@@ -85,10 +85,13 @@ const DnDContext = () => {
                       style={{
                         padding: "9px 0px 9px 0px",
                         display: "flex",
-                        width: "95%"
+                        overflow: "auto",
+                        width: "95%",
+                        marginBottom: "10px"
                       }}
                     >
                       <TextField
+                        style={{ padding: "0px 5px 0px 5px" }}
                         id='outlined-basic'
                         label='Rename column'
                         variant='outlined'
@@ -102,7 +105,7 @@ const DnDContext = () => {
                       ></TextField>
 
                       <Button
-                        style={{ margin: 10 }}
+                        // style={{ margin: 10 }}
                         type='submit'
                         variant='contained'
                         color='primary'
@@ -127,7 +130,14 @@ const DnDContext = () => {
                       style={{ marginTop: 10 }}
                       variant='contained'
                       color='secondary'
-                      onClick={result => deleteCol(result, id, column.columnId)}
+                      onClick={result => {
+                        if (
+                          window.confirm(
+                            "Are you sure you want to delete this column?"
+                          )
+                        )
+                          deleteCol(result, id, column.columnId);
+                      }}
                     >
                       delete
                     </Button>
