@@ -76,12 +76,15 @@ const Dropps = ({ id, column }) => {
                           <IconButton
                             aria-label="delete"
                             onClick={() =>
+                              { if 
+                                (window.confirm('Are you sure you want to delete this item?'))
                               context.dispatch({
                                 type: "DELETE",
                                 id,
                                 index,
                                 item
-                              })
+                                })
+                              }
                             }
                           >
                             <DeleteIcon
