@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer} from "react";
 import Cardreducer from "./BoardReducer";
 import DnDContext from "../components/DragDropContext";
 
@@ -12,6 +12,7 @@ const App = () => {
       .then(response => response.json())
       .then(responseJson => {
         const tiko = Object.assign({}, responseJson);
+        dispatch({type:"GET_DATA", tiko});
       })
       .catch(error => {});
   }, []);
