@@ -10,10 +10,10 @@ const DnDContext = () => {
   const [newTitle, setNewTitle] = useState({
     status: false,
     id: null,
-    newName: ""
+    newName: "",
   });
 
-  const renameColumn = id => {
+  const renameColumn = (id) => {
     console.log("haloo");
     setNewTitle({ ...newTitle, status: !newTitle.status, id: id });
     const destinationColumn = tiko.columns[id];
@@ -26,13 +26,13 @@ const DnDContext = () => {
         ...newTitle,
         status: false,
         id: null,
-        newName: ""
+        newName: "",
       });
       tiko.dispatch({
         type: "NEW_COL_NAME",
         id: id,
         name: newTitle.newName,
-        items: destItems
+        items: destItems,
       });
     }
   };
@@ -41,16 +41,16 @@ const DnDContext = () => {
     console.log("66666666666666", removeId);
     tiko.dispatch({ type: "DELETE_COLUMN", result, id, removeId });
     const requestOptions = {
-      method: "DELETE"
+      method: "DELETE",
     };
 
     fetch(
       `https://siiliwall.herokuapp.com/board/${tiko.boardVal}/deletecolumn/${removeId}`,
       requestOptions
     )
-      .then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.log("Error detected: " + error));
+      .then((response) => response.text())
+      .then((data) => console.log(data))
+      .catch((error) => console.log("Error detected: " + error));
   };
 
   const addCol = () => {
@@ -64,10 +64,15 @@ const DnDContext = () => {
       </Button>
 
       <div
-        style={{ display: "flex", justifyContent: "center", height: "100%" }}
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          height: "100%",
+          margin: 20,
+        }}
       >
         <DragDropContext
-          onDragEnd={result => tiko.dispatch({ type: "MOVE", result, tiko })}
+          onDragEnd={(result) => tiko.dispatch({ type: "MOVE", result, tiko })}
         >
           {Object.entries(tiko.columns).map(([id, column]) => {
             return (
@@ -76,7 +81,7 @@ const DnDContext = () => {
                 style={{
                   display: "flex",
                   flexDirection: "column",
-                  alignItems: "center"
+                  alignItems: "left",
                 }}
               >
                 {newTitle.status && newTitle.id === id ? (
@@ -87,7 +92,7 @@ const DnDContext = () => {
                         display: "flex",
                         overflow: "auto",
                         width: "95%",
-                        marginBottom: "10px"
+                        marginBottom: "10px",
                       }}
                     >
                       <TextField
@@ -99,7 +104,7 @@ const DnDContext = () => {
                         id={id}
                         type='text'
                         defaultValue={column.name}
-                        onChange={e =>
+                        onChange={(e) =>
                           setNewTitle({ ...newTitle, newName: e.target.value })
                         }
                       ></TextField>
@@ -117,7 +122,16 @@ const DnDContext = () => {
                     </form>
                   </>
                 ) : (
-                  <h2 onClick={() => renameColumn(id)}>{column.name}</h2>
+                  <h2
+                    style={{
+                      fontSize: 20,
+                      margin: 10,
+                      padding: 5,
+                    }}
+                    onClick={() => renameColumn(id)}
+                  >
+                    {column.name}
+                  </h2>
                 )}
                 <div style={{ margin: 8 }}>
                   <Dropps
@@ -130,7 +144,7 @@ const DnDContext = () => {
                       style={{ marginTop: 10 }}
                       variant='contained'
                       color='secondary'
-                      onClick={result => {
+                      onClick={(result) => {
                         if (
                           window.confirm(
                             "Are you sure you want to delete this column?"

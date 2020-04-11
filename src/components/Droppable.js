@@ -11,14 +11,14 @@ const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
-  const addNewStickie = id => {
+  const addNewStickie = (id) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
     console.log("PPPPPPPPPPP", destinationColumn);
     const newCard = {
       id: uuid(),
       // cardName: null,
-      content: stickerInput
+      content: stickerInput,
       // cardColor: null,
       // cardOwner: null,
       // cardSize: null,
@@ -29,23 +29,23 @@ const Dropps = ({ id, column }) => {
         type: "ADD_CARD",
         id: id,
         // des: destItems,
-        item: newCard
+        item: newCard,
       });
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json; charset=utf-8"
+          "Content-Type": "application/json; charset=utf-8",
         },
-        body: JSON.stringify(newCard)
+        body: JSON.stringify(newCard),
       };
 
       fetch(
         `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
         requestOptions
       )
-        .then(response => response.text())
-        .then(data => console.log(data))
-        .catch(error => console.log("Error detected: " + error));
+        .then((response) => response.text())
+        .then((data) => console.log(data))
+        .catch((error) => console.log("Error detected: " + error));
       setInput({ id: null, status: false });
     }
     setStickerInput("");
@@ -56,21 +56,21 @@ const Dropps = ({ id, column }) => {
     context.dispatch({
       type: "DELETE",
       id,
-      item
+      item,
     });
     const requestOptions = {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json; charset=utf-8"
-      }
+        "Content-Type": "application/json; charset=utf-8",
+      },
     };
     fetch(
       `https://siiliwall.herokuapp.com/${delColumn}/deletecard/${item.id}`,
       requestOptions
     )
-      .then(response => response.text())
-      .then(data => console.log(data))
-      .catch(error => console.log("Error detected: " + error));
+      .then((response) => response.text())
+      .then((data) => console.log(data))
+      .catch((error) => console.log("Error detected: " + error));
   };
 
   return (
@@ -88,7 +88,7 @@ const Dropps = ({ id, column }) => {
                 padding: 4,
                 width: 250,
                 minHeight: 500,
-                borderRadius: "5px"
+                borderRadius: "5px",
               }}
             >
               {column.items.map((item, index) => {
@@ -101,8 +101,7 @@ const Dropps = ({ id, column }) => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={{
-                            userSelect: "none",
-                            padding: 16,
+                            padding: 10,
                             margin: "0 0 5px 0",
                             borderRadius: "5px",
                             minHeight: "50px",
@@ -110,7 +109,7 @@ const Dropps = ({ id, column }) => {
                               ? "#fff"
                               : "#fff",
                             color: "#000",
-                            ...provided.draggableProps.style
+                            ...provided.draggableProps.style,
                           }}
                         >
                           {item.content}
@@ -148,12 +147,12 @@ const Dropps = ({ id, column }) => {
                   id={id}
                   type='text'
                   value={stickerInput}
-                  onKeyPress={event => {
+                  onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       addNewStickie(id);
                     }
                   }}
-                  onChange={e => setStickerInput(e.target.value)}
+                  onChange={(e) => setStickerInput(e.target.value)}
                 ></TextField>
               )}
               <Button
