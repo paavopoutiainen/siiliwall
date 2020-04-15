@@ -11,21 +11,59 @@ const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
-
-  const addNewStickie = id => {
+  const addNewStickie = (id) => {
     setInput({ id: id, status: true });
-    const newCard = { id: uuid(), content: stickerInput };
-    console.log("NEW CARD", newCard);
+    const destinationColumn = context.columns[id].columnId;
+    const newCard = {
+      id: uuid(),
+      content: stickerInput,
+    };
     if (newCard.content) {
       context.dispatch({
         type: "ADD_CARD",
         id: id,
-        item: newCard
+        item: newCard,
       });
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+        },
+        body: JSON.stringify(newCard),
+      };
+
+      fetch(
+        `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
+        requestOptions
+      )
+        .then((response) => response.text())
+        .catch((error) => console.log("Error detected: " + error));
       setInput({ id: null, status: false });
     }
     setStickerInput("");
   };
+  const deleteCard = (id, item) => {
+    const delColumn = context.columns[id].columnId;
+    context.dispatch({
+      type: "DELETE",
+      id,
+      item,
+    });
+    const requestOptions = {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+    };
+    fetch(
+      `https://siiliwall.herokuapp.com/${delColumn}/deletecard/${item.id}`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((data) => console.log(data))
+      .catch((error) => console.log("Error detected: " + error));
+  };
+
   return (
     <div>
       <Droppable droppableId={id} key={id}>
@@ -40,7 +78,8 @@ const Dropps = ({ id, column }) => {
                   : "lightgrey",
                 padding: 4,
                 width: 250,
-                minHeight: 500
+                minHeight: 500,
+                borderRadius: "5px",
               }}
             >
               {column.items.map((item, index) => {
@@ -53,28 +92,28 @@ const Dropps = ({ id, column }) => {
                           {...provided.draggableProps}
                           {...provided.dragHandleProps}
                           style={{
-                            userSelect: "none",
-                            padding: 16,
-                            margin: "0 0 8px 0",
+                            padding: 10,
+                            margin: "0 0 5px 0",
+                            borderRadius: "5px",
                             minHeight: "50px",
                             backgroundColor: snapshot.isDragging
-                              ? "#263B4A"
-                              : "#456C86",
-                            color: "white",
-                            ...provided.draggableProps.style
+                              ? "#fff"
+                              : "#fff",
+                            color: "#000",
+                            ...provided.draggableProps.style,
                           }}
                         >
                           {item.content}
                           <IconButton
                             aria-label='delete'
-                            onClick={() =>
-                              context.dispatch({
-                                type: "DELETE",
-                                id,
-                                index,
-                                item
-                              })
-                            }
+                            onClick={() => {
+                              if (
+                                window.confirm(
+                                  "Are you sure you want to delete this item?"
+                                )
+                              )
+                                deleteCard(id, item);
+                            }}
                           >
                             <DeleteIcon
                               style={{ color: "black" }}
@@ -99,12 +138,12 @@ const Dropps = ({ id, column }) => {
                   id={id}
                   type='text'
                   value={stickerInput}
-                  onKeyPress={event => {
+                  onKeyPress={(event) => {
                     if (event.key === "Enter") {
                       addNewStickie(id);
                     }
                   }}
-                  onChange={e => setStickerInput(e.target.value)}
+                  onChange={(e) => setStickerInput(e.target.value)}
                 ></TextField>
               )}
               <Button
