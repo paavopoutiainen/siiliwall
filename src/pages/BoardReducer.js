@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React from "react";
 import uuid from "uuid/v4";
 import DnDContext from "../components/DragDropContext";
 
@@ -13,7 +13,7 @@ const Cardreducer = (columns, action) => {
       );
       return {
         ...columns,
-        ...jaha
+        ...jaha,
       };
     case "ADD_CARD":
       const destinationColumn = columns[action.id];
@@ -22,8 +22,8 @@ const Cardreducer = (columns, action) => {
         ...columns,
         [action.id]: {
           ...destinationColumn,
-          items: destItems.concat(action.item)
-        }
+          items: destItems.concat(action.item),
+        },
       };
     case "MOVE":
       if (!action.result.destination) {
@@ -41,12 +41,12 @@ const Cardreducer = (columns, action) => {
           ...columns,
           [source.droppableId]: {
             ...sourceColumn,
-            items: sourceItems
+            items: sourceItems,
           },
           [destination.droppableId]: {
             ...destColumn,
-            items: destItems
-          }
+            items: destItems,
+          },
         };
       } else {
         const column = columns[source.droppableId];
@@ -57,14 +57,34 @@ const Cardreducer = (columns, action) => {
           ...columns,
           [source.droppableId]: {
             ...column,
-            items: copiedItems
-          }
+            items: copiedItems,
+          },
         };
       }
     case "NEW_COL_NAME":
+      const putMethod = {
+        method: "PUT",
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+        body: JSON.stringify({
+          columnId: action.dest.columnId,
+          name: action.name,
+          columnLimit: action.dest.columnLimit,
+          items: action.dest.items,
+        }),
+      };
+      fetch(
+        `https://siiliwall.herokuapp.com/editcolumn/${action.dest.columnId}`,
+        putMethod
+      )
+        .then((response) => response.text())
+        .then((data) => console.log(data))
+        .catch((error) => console.log("Error detected: " + error));
+
       return {
         ...columns,
-        [action.id]: { name: action.name, items: action.items }
+        [action.id]: { name: action.name, items: action.items },
       };
     case "ADD_NEW_COL":
       const uidu = uuid();
@@ -74,80 +94,54 @@ const Cardreducer = (columns, action) => {
       const requestOptions = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json; charset=utf-8"
+          "Content-Type": "application/json; charset=utf-8",
         },
         body: JSON.stringify({
           columnId: colId,
           name: "New column",
-          items: []
-        })
+          items: [],
+        }),
       };
 
       fetch(
         `https://siiliwall.herokuapp.com/boardss/${action.tiko.boardVal}/columns`,
         requestOptions
       )
-        .then(response => response.text())
-        .catch(error => console.log("Error detected: " + error));
+        .then((response) => response.text())
+        .then((data) => console.log(data))
+        .catch((error) => console.log("Error detected: " + error));
       return {
         ...columns,
-        [colKey]: {
+        [uuid()]: {
           key: action.tiko.boardVal,
           columnId: colId,
           name: "New column",
-          items: []
-        }
+          items: [],
+        },
       };
     case "DELETE":
       const { id, content } = action.item;
       const desColumn = columns[action.id];
+      const desColId = desColumn.columnId;
       const title = desColumn.name;
       const dsItem = [...desColumn.items];
       return {
         ...columns,
         [action.id]: {
+          columnId: desColId,
           name: title,
-          items: dsItem.filter(item => item.id !== id)
-        }
+          items: dsItem.filter((item) => item.id !== id),
+        },
       };
     case "DELETE_COLUMN":
       return {
+        ...delete columns[action.id],
         ...columns,
-        ...delete columns[action.id]
       };
 
     default:
       return columns;
   }
 };
-
-function App() {
-  const [columns, dispatch] = useReducer(Cardreducer, {});
-  const [useData, setUseData] = useState({});
-  const [boardVal, setBoardVadl] = useState();
-
-  useEffect(() => {
-    const url = "http://siiliwall.herokuapp.com/boards";
-    fetch(url)
-      .then(response => response.json())
-      .then(responseJson => {
-        const result = responseJson.find(({ boardId }) => boardId);
-        const boardValue = result.boardId;
-        setBoardVadl(boardValue);
-        const tiko = Object.assign({}, result.columns);
-        dispatch({ type: "GET_DATA", tiko, result });
-        
-      })
-      .catch(error => {});
-  }, []);
-
-  return (
-    <>
-      <MyContext.Provider value={{ columns, dispatch, boardVal }}>
-        <DnDContext></DnDContext>
-      </MyContext.Provider>
-    </>
-  );
-}
 
 export default Cardreducer;

@@ -25,10 +25,10 @@ const App = () => {
 
   return (
     <>
-      <MyContext.Provider value={{ columns, dispatch }}>
+      <MyContext.Provider value={{ columns, dispatch, boardVal }}>
         <DnDContext></DnDContext>
       </MyContext.Provider>
-  </> 
+    </>
   );
 }
 
