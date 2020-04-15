@@ -3,17 +3,14 @@ import React, { useState } from "react";
 const BoardForm = () => {
     const blankBoard = { name: "" }
     const [boardList, setBoardList] = useState([{ ...blankBoard }]);
-
     const handleChange = e => {
         const updateBoard = [...boardList];
         updateBoard[e.target.dataset.idx][e.target.className] = e.target.value;
         setBoardList(updateBoard);
     }
-
     const addBoard = () => {
         setBoardList([...boardList, { ...blankBoard }]);
     }
-
     const boardItems = boardList.map((board, index) =>
     <li key={index}>
         {board.name}
