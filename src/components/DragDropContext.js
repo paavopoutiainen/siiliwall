@@ -33,6 +33,7 @@ const DnDContext = () => {
         id: id,
         name: newTitle.newName,
         items: destItems,
+        dest: destinationColumn,
       });
     }
   };
