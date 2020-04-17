@@ -16,7 +16,6 @@ const BoardForm = () => {
         {board.name}
     </li>
     );
-
     return (<form>
         <input type="button" value="Add new board" onClick={addBoard} />
         {

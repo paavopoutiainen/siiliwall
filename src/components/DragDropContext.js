@@ -51,7 +51,7 @@ const DnDContext = () => {
   const addCol = () => {
     tiko.dispatch({ type: "ADD_NEW_COL", tiko });
   };
-
+  
   return (
     <div>
       <Button variant='contained' color='primary' onClick={() => addCol()}>

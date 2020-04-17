@@ -31,7 +31,6 @@ const Dropps = ({ id, column }) => {
         },
         body: JSON.stringify(newCard),
       };
-
       fetch(
         `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
         requestOptions
@@ -63,7 +62,6 @@ const Dropps = ({ id, column }) => {
       .then((data) => console.log(data))
       .catch((error) => console.log("Error detected: " + error));
   };
-
   return (
     <div>
       <Droppable droppableId={id} key={id}>
@@ -126,7 +124,6 @@ const Dropps = ({ id, column }) => {
                   </Draggable>
                 );
               })}
-
               {provided.placeholder}
               {input.id === id && input.status === true && (
                 <TextField

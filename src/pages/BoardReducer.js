@@ -1,8 +1,4 @@
-import React from "react";
 import uuid from "uuid/v4";
-import DnDContext from "../components/DragDropContext";
-
-export const MyContext = React.createContext();
 
 const Cardreducer = (columns, action) => {
   switch (action.type) {
@@ -81,16 +77,12 @@ const Cardreducer = (columns, action) => {
         .then((response) => response.text())
         .then((data) => console.log(data))
         .catch((error) => console.log("Error detected: " + error));
-
       return {
         ...columns,
         [action.id]: { name: action.name, items: action.items },
       };
     case "ADD_NEW_COL":
-      const uidu = uuid();
       const colId = Date.now();
-      const colKey = Object.keys(action.tiko.columns).length + 1;
-
       const requestOptions = {
         method: "POST",
         headers: {
@@ -102,7 +94,6 @@ const Cardreducer = (columns, action) => {
           items: [],
         }),
       };
-
       fetch(
         `https://siiliwall.herokuapp.com/boardss/${action.tiko.boardVal}/columns`,
         requestOptions

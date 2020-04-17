@@ -6,7 +6,6 @@ export const MyContext = React.createContext();
 
 const App = () => {
   const [columns, dispatch] = useReducer(Cardreducer, {});
-  const [useData, setUseData] = useState({});
   const [boardVal, setBoardVadl] = useState();
   useEffect(() => {
     const url = "http://siiliwall.herokuapp.com/boards";
@@ -18,7 +17,6 @@ const App = () => {
         setBoardVadl(boardValue);
         const tiko = Object.assign({}, result.columns);
         dispatch({ type: "GET_DATA", tiko, result });
-        
       })
       .catch(error => {});
   }, []);
