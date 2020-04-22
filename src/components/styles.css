@@ -1,0 +1,21 @@
+.body {
+    margin: 20px;
+}
+.flex-container {
+    display: flex;
+    flex-direction: row;
+}
+.column-rename-form {
+    padding: 9px 0px 5px 0px;
+    display: "flex";
+    overflow: "auto";
+    width: "95%";
+}
+.column-name {
+    font-size: 20px;
+    margin: 10px;
+    padding: 5px;
+}
+.column-gap {
+    margin-right: 8px
+}
