@@ -4,6 +4,7 @@ import Dropps from "../components/Droppable";
 import { MyContext } from "../pages/Board";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import './styles.css';
 
 const DnDContext = () => {
   const tiko = useContext(MyContext);
@@ -53,55 +54,35 @@ const DnDContext = () => {
   };
   
   return (
-    <div>
-      <Button variant='contained' color='primary' onClick={() => addCol()}>
+    <div className='body'>
+      <Button variant='contained' color='primary' onClick={() => addCol()} style={{marginBottom: 20}}>
         Add new column
       </Button>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-start",
-          height: "100%",
-          margin: 20,
-        }}
-      >
+
+      <div className='flex-container'>
         <DragDropContext
           onDragEnd={(result) => tiko.dispatch({ type: "MOVE", result, tiko })}
         >
           {Object.entries(tiko.columns).map(([id, column]) => {
             return (
-              <div
-                key={id}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "left",
-                }}
-              >
+              <div key={id}>
                 {newTitle.status && newTitle.id === id ? (
                   <>
-                    <form
-                      style={{
-                        padding: "9px 0px 9px 0px",
-                        display: "flex",
-                        overflow: "auto",
-                        width: "95%",
-                        marginBottom: "10px",
-                      }}
-                    >
+                    <form className='column-rename-form'>
                       <TextField
                         style={{ padding: "0px 5px 0px 5px" }}
                         id='outlined-basic'
-                        label='Rename column'
+                        label='Rename Column'
                         variant='outlined'
                         size='small'
-                        id={id}
                         type='text'
+                        id={id}                      
                         defaultValue={column.name}
                         onChange={(e) =>
                           setNewTitle({ ...newTitle, newName: e.target.value })
                         }
                       ></TextField>
+
                       <Button
                         type='submit'
                         variant='contained'
@@ -114,18 +95,13 @@ const DnDContext = () => {
                     </form>
                   </>
                 ) : (
-                  <h2
-                    style={{
-                      fontSize: 20,
-                      margin: 10,
-                      padding: 5,
-                    }}
+                  <h2 className='column-name'
                     onClick={() => renameColumn(id)}
                   >
                     {column.name}
                   </h2>
                 )}
-                <div style={{ margin: 8 }}>
+                <div className='column-gap'>
                   <Dropps
                     id={id}
                     column={column}
