@@ -46,11 +46,11 @@ const DnDContext = () => {
       requestOptions
     )
       .then((response) => response.text())
-      .catch((error) => console.log("Error detected: " + error));
+      .catch((error) => {});
   };
 
   const addCol = () => {
-    boardContext.dispatch({ type: "ADD_NEW_COL", tiko: boardContext });
+    boardContext.dispatch({ type: "ADD_NEW_COL", boardContext: boardContext });
   };
   
   return (
@@ -61,7 +61,7 @@ const DnDContext = () => {
 
       <div className='flex-container'>
         <DragDropContext
-          onDragEnd={(result) => boardContext.dispatch({ type: "MOVE", result, tiko: boardContext })}
+          onDragEnd={(result) => boardContext.dispatch({ type: "MOVE", result})}
         >
           {Object.entries(boardContext.columns).map(([id, column]) => {
             return (

@@ -11,6 +11,7 @@ const Dropps = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
   const [stickerInput, setStickerInput] = useState("");
   const context = useContext(MyContext);
+  
   const addNewStickie = (id) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
@@ -36,7 +37,7 @@ const Dropps = ({ id, column }) => {
         requestOptions
       )
         .then((response) => response.text())
-        .catch((error) => console.log("Error detected: " + error));
+        .catch((error) => {});
       setInput({ id: null, status: false });
     }
     setStickerInput("");
@@ -59,8 +60,8 @@ const Dropps = ({ id, column }) => {
       requestOptions
     )
       .then((response) => response.text())
-      .then((data) => console.log(data))
-      .catch((error) => console.log("Error detected: " + error));
+      .then((data) => {})
+      .catch((error) => {});
   };
   return (
     <div>

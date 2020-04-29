@@ -1,15 +1,9 @@
-import uuid from "uuid/v4";
-
 const Cardreducer = (columns, action) => {
   switch (action.type) {
     case "GET_DATA":
       const { boardId } = action.result;
-      /* const columnKey = Object.entries(action.columnObject).map((o, index) =>
-        Object.assign({ key: boardId }, ...o)
-      ); */
       return {
         ...action.columnObject,
-        //...columnKey,
       };
     case "ADD_CARD":
       const destinationColumn = columns[action.id];
@@ -33,6 +27,12 @@ const Cardreducer = (columns, action) => {
         const destItems = [...destColumn.items];
         const [removed] = sourceItems.splice(source.index, 1);
         destItems.splice(destination.index, 0, removed);
+        fetch(
+          `https://siiliwall.herokuapp.com/${sourceColumn.columnId}/removecard/${removed.id}/moveto/${destColumn.columnId}/${destination.index}`
+        )
+          .then((response) => response.text())
+          .then((data) => {})
+          .catch((error) => {});
         return {
           ...columns,
           [source.droppableId]: {
@@ -45,10 +45,19 @@ const Cardreducer = (columns, action) => {
           },
         };
       } else {
+        const { source, destination } = action.result;
+        const sourceColumn = columns[source.droppableId];
+        const destColumn = columns[destination.droppableId];
         const column = columns[source.droppableId];
         const copiedItems = [...column.items];
         const [removed] = copiedItems.splice(source.index, 1);
         copiedItems.splice(destination.index, 0, removed);
+        fetch(
+          `https://siiliwall.herokuapp.com/${sourceColumn.columnId}/removecard/${removed.id}/moveto/${destColumn.columnId}/${destination.index}`
+        )
+          .then((response) => response.text())
+          .then((data) => {})
+          .catch((error) => {});
         return {
           ...columns,
           [source.droppableId]: {
@@ -75,11 +84,17 @@ const Cardreducer = (columns, action) => {
         putMethod
       )
         .then((response) => response.text())
-        .then((data) => console.log(data))
-        .catch((error) => console.log("Error detected: " + error));
+        .then((data) => (data))
+        .catch((error) => (error));
       return {
         ...columns,
-        [action.id]: { name: action.name, items: action.items },
+        [action.id]: {  
+          name: action.name,
+          key: action.dest.key,
+          columnId: action.dest.columnId,
+          columnLimit: action.dest.columnLimit,
+          items: action.items, 
+        },
       };
     case "ADD_NEW_COL":
       const colId = Date.now();
@@ -95,21 +110,23 @@ const Cardreducer = (columns, action) => {
         }),
       };
       fetch(
-        `https://siiliwall.herokuapp.com/boardss/${action.tiko.boardVal}/columns`,
+        `https://siiliwall.herokuapp.com/boardss/${action.boardContext.boardVal}/columns`,
         requestOptions
       )
         .then((response) => response.text())
-        .then((data) => console.log(data))
-        .catch((error) => console.log("Error detected: " + error));
-      return {
-        ...columns,
-        [uuid()]: {
+        .then((data) => (data))
+        .catch((error) => (error));
+        const columnList = Object.assign([], columns);
+        columnList.push({
           key: action.tiko.boardVal,
           columnId: colId,
           name: "New column",
           items: [],
-        },
-      };
+        });
+        const finalColumns = Object.assign({}, columnList);
+        return {
+          ...finalColumns,
+        };
     case "DELETE":
       const { id, content } = action.item;
       const desColumn = columns[action.id];
@@ -125,11 +142,12 @@ const Cardreducer = (columns, action) => {
         },
       };
     case "DELETE_COLUMN":
+      const targetList = Object.assign([], columns);
+      targetList.splice(action.id, 1);
+      const final = Object.assign({}, targetList);
       return {
-        ...delete columns[action.id],
-        ...columns,
+        ...final,
       };
-
     default:
       return columns;
   }
