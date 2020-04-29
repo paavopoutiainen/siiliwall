@@ -4,12 +4,12 @@ const Cardreducer = (columns, action) => {
   switch (action.type) {
     case "GET_DATA":
       const { boardId } = action.result;
-      const jaha = Object.entries(action.tiko).map((o, index) =>
+      /* const columnKey = Object.entries(action.columnObject).map((o, index) =>
         Object.assign({ key: boardId }, ...o)
-      );
+      ); */
       return {
-        ...columns,
-        ...jaha,
+        ...action.columnObject,
+        //...columnKey,
       };
     case "ADD_CARD":
       const destinationColumn = columns[action.id];

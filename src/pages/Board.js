@@ -4,7 +4,7 @@ import DnDContext from "../components/DragDropContext";
 
 export const MyContext = React.createContext();
 
-const App = () => {
+const Board = () => {
   const [columns, dispatch] = useReducer(Cardreducer, {});
   const [boardVal, setBoardVadl] = useState();
   useEffect(() => {
@@ -15,8 +15,8 @@ const App = () => {
         const result = responseJson.find(({ boardId }) => boardId);
         const boardValue = result.boardId;
         setBoardVadl(boardValue);
-        const tiko = Object.assign({}, result.columns);
-        dispatch({ type: "GET_DATA", tiko, result });
+        const columnObject = Object.assign({}, result.columns);
+        dispatch({ type: "GET_DATA", columnObject: columnObject, result });
       })
       .catch(error => {});
   }, []);
@@ -30,4 +30,4 @@ const App = () => {
   );
 }
 
-export default App;
+export default Board;

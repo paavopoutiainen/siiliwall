@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import './styles.css';
 
 const DnDContext = () => {
-  const tiko = useContext(MyContext);
+  const boardContext = useContext(MyContext);
   const [newTitle, setNewTitle] = useState({
     status: false,
     id: null,
@@ -16,7 +16,7 @@ const DnDContext = () => {
 
   const renameColumn = (id) => {
     setNewTitle({ ...newTitle, status: !newTitle.status, id: id });
-    const destinationColumn = tiko.columns[id]; 
+    const destinationColumn = boardContext.columns[id]; 
     const destItems = [...destinationColumn.items];
 
     if (newTitle.newName) {
@@ -26,7 +26,7 @@ const DnDContext = () => {
         id: null,
         newName: "",
       });
-      tiko.dispatch({
+      boardContext.dispatch({
         type: "NEW_COL_NAME",
         id: id,
         name: newTitle.newName,
@@ -37,12 +37,12 @@ const DnDContext = () => {
   };
 
   const deleteCol = (result, id, removeId) => {
-    tiko.dispatch({ type: "DELETE_COLUMN", result, id, removeId });
+    boardContext.dispatch({ type: "DELETE_COLUMN", result, id, removeId });
     const requestOptions = {
       method: "DELETE",
     };
     fetch(
-      `https://siiliwall.herokuapp.com/board/${tiko.boardVal}/deletecolumn/${removeId}`,
+      `https://siiliwall.herokuapp.com/board/${boardContext.boardVal}/deletecolumn/${removeId}`,
       requestOptions
     )
       .then((response) => response.text())
@@ -50,7 +50,7 @@ const DnDContext = () => {
   };
 
   const addCol = () => {
-    tiko.dispatch({ type: "ADD_NEW_COL", tiko });
+    boardContext.dispatch({ type: "ADD_NEW_COL", tiko: boardContext });
   };
   
   return (
@@ -61,9 +61,9 @@ const DnDContext = () => {
 
       <div className='flex-container'>
         <DragDropContext
-          onDragEnd={(result) => tiko.dispatch({ type: "MOVE", result, tiko })}
+          onDragEnd={(result) => boardContext.dispatch({ type: "MOVE", result, tiko: boardContext })}
         >
-          {Object.entries(tiko.columns).map(([id, column]) => {
+          {Object.entries(boardContext.columns).map(([id, column]) => {
             return (
               <div key={id}>
                 {newTitle.status && newTitle.id === id ? (
@@ -105,9 +105,8 @@ const DnDContext = () => {
                   <Dropps
                     id={id}
                     column={column}
-                    columnss={tiko.columns}
                   ></Dropps>
-                  {!tiko.columns[id].items.length && (
+                  {!boardContext.columns[id].items.length && (
                     <Button
                       style={{ marginTop: 10 }}
                       variant='contained'
