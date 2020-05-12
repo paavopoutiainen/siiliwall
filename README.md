@@ -36,7 +36,7 @@ UseReducer in use because of Hooks applied in code instead of Classes. It allows
 Routing added to continue working with boards and BoardForm for some idea testings.
 
 ## Web hosting
-We are using [Netlify](https://www.netlify.com/) to host our web project. Netlify is everything you need to build fast, modern websites: continuous deployment, serverless functions, and so much more. We decided to use this one beacause the setup is well documented and 
+We are using [Netlify](https://www.netlify.com/) to host our web project. Netlify is everything you need to build fast, modern websites: continuous deployment, serverless functions, and so much more. We decided to use this one because the setup is well documented and free to use for our purpose.
 
 ### Continous deployment with Netlify
 Create production build with `${npm run build}`. 
