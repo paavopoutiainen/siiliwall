@@ -39,18 +39,18 @@ Routing added to continue working with boards and BoardForm for some idea testin
 We are using [Netlify](https://www.netlify.com/) to host our web project. Netlify is everything you need to build fast, modern websites: continuous deployment, serverless functions, and so much more. We decided to use this one because the setup is well documented and free to use for our purpose.
 
 ### Continous deployment with Netlify
-Create production build with `${npm run build}`. 
+Create production build with `npm run build`. 
 
 Connect your Github to Netlify and follow instructions at [Deploy with Git](https://docs.netlify.com/site-deploys/create-deploys/#deploy-with-git)
 
 #### Manual deployment
-`${npm install netlify-cli -g}`Downloads all packages needed
-`${netlify deploy}` we can access netlify commands and start configuring your site. Point deploy path to ./build and follow instructions.
+`npm install netlify-cli -g` Downloads all packages needed
+`netlify deploy` we can access netlify commands and start configuring your site. Point deploy path to ./build and follow instructions.
 
 # Attention!
 While using Netlify we cannot fetch/push to our backend in Heroku because it's not using https protection. To work around that we need to remove https access to netlify from browser settings. Following instructions are for Chrome.
 
-Connect to <app name>.netlify.com
+Connect to your_app_name.netlify.com
 
 1. Press symbol that looks like a small lock in the browser search bar.
 2. Press site settings and you should be on privacy and security tab if not press it.
