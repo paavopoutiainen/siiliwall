@@ -8,7 +8,7 @@ export const MyContext = React.createContext();
 const Board = () => {
   const [columns, dispatch] = useReducer(Cardreducer, {});
   const [useData, setUseData] = useState({});
-  const [boardVal, setBoardVadl] = useState();
+  const [boardVal, setBoardVal] = useState();
 
   useEffect(() => {
     const url = "http://siiliwall.herokuapp.com/boards";
@@ -17,7 +17,7 @@ const Board = () => {
       .then(responseJson => {
         const result = responseJson.find(({ boardId }) => boardId);
         const boardValue = result.boardId;
-        setBoardVadl(boardValue);
+        setBoardVal(boardValue);
         const columnObject = Object.assign({}, result.columns);
         setUseData(columnObject);
         dispatch({ type: "GET_DATA", columnObject: columnObject, result });
@@ -33,13 +33,11 @@ const Board = () => {
         .then((responseJson) => {
           const result = responseJson.find(({ boardId }) => boardId);
           const boardValue = result.boardId;
-          setBoardVadl(boardValue);
+          setBoardVal(boardValue);
           const columnObject = Object.assign({}, result.columns);
   
           if (!_.isEqual(columnObject, useData)) {
-            console.log("päivittää");
-            dispatch({ type: "GET_DATA", columnObject, result });
-            console.log("Tämä tulee DB", responseJson);
+            dispatch({ type: "GET_DATA", columnObject, result }); 
             setUseData(columnObject);
           }
         })

@@ -118,7 +118,7 @@ const Cardreducer = (columns, action) => {
         .catch((error) => (error));
         const columnList = Object.assign([], columns);
         columnList.push({
-          key: action.tiko.boardVal,
+          key: action.boardContext.boardVal,
           columnId: colId,
           name: "New column",
           items: [],
