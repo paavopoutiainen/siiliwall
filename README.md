@@ -3,6 +3,10 @@ The Siili Wall project is a simplified Kanban-board in which the user can create
 
 The project is now set up for continuation for a future project group.
 
+Siiliwall_front used this repository as backend:
+https://github.com/a1800572/siiliwall
+But when this project moves forward, Siili has their own repositories set up for future development
+
 ## What next ->
 The aim is to start working with multiple boards. Currenlty we only have one board that has been under focus.
  - Backlog is located in Trello that is provided by Siili where you can continue working.
