@@ -7,6 +7,8 @@ Siiliwall_front used this repository as backend:
 https://github.com/a1800572/siiliwall
 But when this project moves forward, Siili has their own repositories set up for future development
 
+Netlify app: https://siiliwall.netlify.app/
+
 ## What next ->
 The aim is to start working with multiple boards. Currenlty we only have one board that has been under focus.
  - Backlog is located in Trello that is provided by Siili where you can continue working.
