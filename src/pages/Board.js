@@ -11,6 +11,7 @@ const Board = () => {
   const [boardVal, setBoardVal] = useState();
 
   useEffect(() => {
+    console.log("testing pull request")
     const url = "http://siiliwall.herokuapp.com/boards";
     fetch(url)
       .then(response => response.json())
