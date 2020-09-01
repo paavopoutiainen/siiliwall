@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const cors = require('cors')
 //Tuodaan omat middlewaret
 const middleware = require("./utils/middleware")
+const boardsRouter = require("./controllers/boards")
 
 app.use(cors())
 
@@ -12,9 +13,10 @@ app.use(bodyParser.json())
 app.use(middleware.requestLogger)
 
 app.get("/", (req, res) => {
-  console.log("here", req.body)
   res.send({msg: "Hello there is it working"})
 })
+
+app.use("/api/boards", boardsRouter)
 
 app.use(middleware.unknownEndpoint)
 
