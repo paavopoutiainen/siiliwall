@@ -12,15 +12,12 @@ class BoardService extends DataSource {
   }
 
   getBoardById(boardId) {
-    console.log(boardId)
-    let test = boards.find(board => board.id === boardId)
-    console.log(test)
     return Promise.resolve(
       boards.find(board => board.id === boardId)
     )
   }
 
-  getBoardColumns(boardId) { 
+  getColumnsByBoardId(boardId) { 
     return Promise.resolve(
       columns.filter(column => column.boardId === boardId)
     )
@@ -38,8 +35,13 @@ class BoardService extends DataSource {
   }
 
   getTasksByColumnId(columnId) {
-    let listOfTasks = tasks.filter(task => task.columnId === columnId)
+    const listOfTasks = tasks.filter(task => task.columnId === columnId)
     return Promise.resolve(listOfTasks)
+  }
+
+  getTaskById(taskId) {
+    const taskToBeReturned = tasks.find(task => task.id === taskId)
+    return Promise.resolve(taskToBeReturned)
   }
 
   getSubtasksByTaskId(taskId) {
@@ -75,32 +77,38 @@ let columns = [
   {
     id: "column1",
     name: "column1",
-    boardId: "board1"
+    boardId: "board1",
+    orderNumber: 1
   },
   {
     id: "column2",
     name: "column2",
-    boardId: "board1"
+    boardId: "board1",
+    orderNumber: 2
   },
   {
     id: "column3",
     name: "column3",
-    boardId: "board2"
+    boardId: "board2",
+    orderNumber: 1
   },
   {
     id: "column4",
     name: "column4",
-    boardId: "board2"
+    boardId: "board2",
+    orderNumber: 2
   },
   {
     id: "column5",
     name: "column5",
-    boardId: "board3"
+    boardId: "board3",
+    orderNumber: 1
   },
   {
     id: "column6",
     name: "column6",
-    boardId: "board3"
+    boardId: "board3",
+    orderNumber: 2
   }
 ]
 
