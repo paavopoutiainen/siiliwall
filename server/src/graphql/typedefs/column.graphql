@@ -1,0 +1,13 @@
+type Column {
+  id: ID!
+  name: String!
+  board: Board!
+  tasks: [Task!]!
+}
+
+type Query {
+  columnById(id: ID!): Column!
+}
+
+
+

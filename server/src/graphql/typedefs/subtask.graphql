@@ -1,0 +1,7 @@
+type Subtask {
+  id: ID!
+  name: String!
+  done: Boolean!
+  task: Task!
+  orderNumber: Int!
+}
