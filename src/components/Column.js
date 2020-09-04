@@ -1,23 +1,25 @@
 import React, { useState, useContext } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
-import { MyContext } from "../pages/Board";
+import { MyContext } from "../pages/BoardView";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
 
-const Dropps = ({ id, column }) => {
+//TODO: refactor cards to their own components
+
+const Column = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
-  const [stickerInput, setStickerInput] = useState("");
+  const [cardInput, setCardInput] = useState("");
   const context = useContext(MyContext);
   
-  const addNewStickie = (id) => {
+  const addNewCard = (id) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
     const newCard = {
       id: uuid(),
-      content: stickerInput,
+      content: cardInput,
     };
     if (newCard.content) {
       context.dispatch({
@@ -40,7 +42,7 @@ const Dropps = ({ id, column }) => {
         .catch((error) => {});
       setInput({ id: null, status: false });
     }
-    setStickerInput("");
+    setCardInput("");
   };
   const deleteCard = (id, item) => {
     const delColumn = context.columns[id].columnId;
@@ -135,13 +137,13 @@ const Dropps = ({ id, column }) => {
                   variant='outlined'
                   id={id}
                   type='text'
-                  value={stickerInput}
+                  value={cardInput}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
-                      addNewStickie(id);
+                      addNewCard(id);
                     }
                   }}
-                  onChange={(e) => setStickerInput(e.target.value)}
+                  onChange={(e) => setCardInput(e.target.value)}
                 ></TextField>
               )}
               <Button
@@ -149,7 +151,7 @@ const Dropps = ({ id, column }) => {
                 style={{ margin: 10 }}
                 variant='contained'
                 color='primary'
-                onClick={() => addNewStickie(id)}
+                onClick={() => addNewCard(id)}
               >
                 + add new
               </Button>
@@ -161,4 +163,4 @@ const Dropps = ({ id, column }) => {
   );
 };
 
-export default Dropps;
+export default Column;

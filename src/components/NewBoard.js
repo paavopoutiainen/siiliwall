@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const BoardForm = () => {
+const NewBoard = () => {
     const blankBoard = { name: "" }
     const [boardList, setBoardList] = useState([{ ...blankBoard }]);
     const handleChange = e => {
@@ -44,4 +44,4 @@ const BoardForm = () => {
     )
 }
 
-export default BoardForm;
+export default NewBoard;

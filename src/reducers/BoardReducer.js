@@ -1,4 +1,4 @@
-const Cardreducer = (columns, action) => {
+const BoardReducer = (columns, action) => {
   switch (action.type) {
     case "GET_DATA":
       const { boardId } = action.result;
@@ -153,4 +153,4 @@ const Cardreducer = (columns, action) => {
   }
 };
 
-export default Cardreducer;
+export default BoardReducer;
