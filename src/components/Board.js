@@ -1,12 +1,12 @@
 import React, { useState, useContext } from "react";
 import { DragDropContext } from "react-beautiful-dnd";
-import Dropps from "../components/Droppable";
-import { MyContext } from "../pages/Board";
+import Column from "./Column";
+import { MyContext } from "../pages/BoardView";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import './styles.css';
+import '../styles.css';
 
-const DnDContext = () => {
+const Board = () => {
   const boardContext = useContext(MyContext);
   const [newTitle, setNewTitle] = useState({
     status: false,
@@ -102,10 +102,10 @@ const DnDContext = () => {
                   </h2>
                 )}
                 <div className='column-gap'>
-                  <Dropps
+                  <Column
                     id={id}
                     column={column}
-                  ></Dropps>
+                  ></Column>
                   {!boardContext.columns[id].items.length && (
                     <Button
                       style={{ marginTop: 10 }}
@@ -133,4 +133,4 @@ const DnDContext = () => {
   );
 };
 
-export default DnDContext;
+export default Board;
