@@ -12,7 +12,6 @@ const schema = {
       return dataSources.boardService.getColumnById(root.columnId)
     },
     subtasks(root) {
-      console.log("rootssss", root)
       return dataSources.boardService.getSubtasksByTaskId(root.id)
     }
   }

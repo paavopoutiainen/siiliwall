@@ -1,26 +1,35 @@
-const { DataSource } = require("apollo-datasource");
-
-class BoardService extends DataSource {
-  constructor() {
-      super();
+class BoardService {
+  constructor({db}) {
+      this.store = db
   }
 
   initialize() {}
 
-  getBoards() {
-    return Promise.resolve(boards)
+  async getBoards() {
+    try {
+      const boardsFromDb = await this.store.Board.findAll()
+      return boardsFromDb
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  getBoardById(boardId) {
-    return Promise.resolve(
-      boards.find(board => board.id === boardId)
-    )
+  async getBoardById(boardId) {
+    try {
+      const boardFromDb = await this.store.Board.findByPk(boardId)
+      return boardFromDb
+    } catch (e) {
+      console.error(e)
+    }
   }
 
-  getColumnsByBoardId(boardId) { 
-    return Promise.resolve(
-      columns.filter(column => column.boardId === boardId)
-    )
+  async getColumnsByBoardId(boardId) { 
+    try {
+      const columnsByBoardIdFromDb = await this.store.Column.findAll({ where: { boardId: boardId } })
+      return columnsByBoardIdFromDb
+    } catch(e) {
+      console.error(e)
+    }
   }
 
   getColumnBoard(columnId) {

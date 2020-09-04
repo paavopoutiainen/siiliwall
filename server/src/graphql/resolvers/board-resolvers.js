@@ -13,7 +13,6 @@ const schema = {
 
   Board: {
     columns(root) {
-      console.log("root", root)
       return dataSources.boardService.getColumnsByBoardId(root.id)
     }
   }
