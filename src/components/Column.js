@@ -7,32 +7,32 @@ import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
 
-//TODO: refactor cards to their own components
+//TODO: refactor tasks to their own components, rename remaining cards after graphql takeover
 
 const Column = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
-  const [cardInput, setCardInput] = useState("");
+  const [taskInput, setTaskInput] = useState("");
   const context = useContext(MyContext);
   
-  const addNewCard = (id) => {
+  const addNewTask = (id) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
-    const newCard = {
+    const newTask = {
       id: uuid(),
-      content: cardInput,
+      content: taskInput,
     };
-    if (newCard.content) {
+    if (newTask.content) {
       context.dispatch({
         type: "ADD_CARD",
         id: id,
-        item: newCard,
+        item: newTask,
       });
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
-        body: JSON.stringify(newCard),
+        body: JSON.stringify(newTask),
       };
       fetch(
         `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
@@ -42,9 +42,9 @@ const Column = ({ id, column }) => {
         .catch((error) => {});
       setInput({ id: null, status: false });
     }
-    setCardInput("");
+    setTaskInput("");
   };
-  const deleteCard = (id, item) => {
+  const deleteTask = (id, item) => {
     const delColumn = context.columns[id].columnId;
     context.dispatch({
       type: "DELETE",
@@ -113,7 +113,7 @@ const Column = ({ id, column }) => {
                                   "Are you sure you want to delete this item?"
                                 )
                               )
-                                deleteCard(id, item);
+                                deleteTask(id, item);
                             }}
                           >
                             <DeleteIcon
@@ -137,13 +137,13 @@ const Column = ({ id, column }) => {
                   variant='outlined'
                   id={id}
                   type='text'
-                  value={cardInput}
+                  value={taskInput}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
-                      addNewCard(id);
+                      addNewTask(id);
                     }
                   }}
-                  onChange={(e) => setCardInput(e.target.value)}
+                  onChange={(e) => setTaskInput(e.target.value)}
                 ></TextField>
               )}
               <Button
@@ -151,7 +151,7 @@ const Column = ({ id, column }) => {
                 style={{ margin: 10 }}
                 variant='contained'
                 color='primary'
-                onClick={() => addNewCard(id)}
+                onClick={() => addNewTask(id)}
               >
                 + add new
               </Button>

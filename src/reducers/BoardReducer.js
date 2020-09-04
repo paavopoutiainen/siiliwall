@@ -1,3 +1,4 @@
+//TODO: rename cards to tasks after graphql takeover
 const BoardReducer = (columns, action) => {
   switch (action.type) {
     case "GET_DATA":
