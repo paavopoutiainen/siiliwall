@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const Board = sequelize.define('Board', {
     id: {
-      type: DataTypes.INTEGER(11),
+      type: DataTypes.INTEGER,
       allowNull: false,
       autoIncrement: true,
       primaryKey: true
