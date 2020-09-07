@@ -92,7 +92,7 @@ class BoardService {
       console.error(e)
     }
   }
-
+  //Gets the order of tasks in certain column, returns an array of taskIds in the correct order. This field is for keeping track of the order in which the tasks are displayed in the column
   async getTaskOrderOfColumn(columnId) {
     try {
       const tasks = await this.store.Task.findAll({
@@ -101,6 +101,20 @@ class BoardService {
         order: this.sequelize.literal("columnOrderNumber ASC")
       })
       const arrayOfIds = tasks.map(task => task.dataValues.id)
+      return arrayOfIds
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  async getSubtaskOrderOfTask(taskId) {
+    try {
+      const subtasks = await this.store.Subtask.findAll({
+        attributes: ["id"],
+        where: { taskId: taskId },
+        order: this.sequelize.literal("orderNumber ASC")
+      })
+      const arrayOfIds = subtasks.map(subtask => subtask.dataValues.id)
       return arrayOfIds
     } catch (e) {
       console.error(e)

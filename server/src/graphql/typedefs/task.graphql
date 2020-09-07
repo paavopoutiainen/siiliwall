@@ -5,6 +5,7 @@ type Task {
   column: Column!
   columnOrderNumber: Int!
   subtasks: [Subtask!]!
+  subtaskOrder: [ID!]! 
 }
 
 type Query {
