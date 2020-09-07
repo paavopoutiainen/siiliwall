@@ -50,7 +50,7 @@ const BoardView = () => {
   return (
     <>
       <MyContext.Provider value={{ columns, dispatch, boardVal }}>
-        <Board></Board>
+        <Board/>
       </MyContext.Provider>
     </>
   );
