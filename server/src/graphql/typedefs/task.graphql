@@ -1,0 +1,14 @@
+type Task {
+  id: ID!
+  title: String!
+  content: String!
+  column: Column!
+  columnOrderNumber: Int!
+  subtasks: [Subtask!]!
+}
+
+type Query {
+  taskById(id: ID!): Task!
+}
+
+
