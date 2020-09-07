@@ -69,9 +69,9 @@ class BoardService {
     }
   }
 
-  getSubtasksByTaskId(taskId) {
+  async getSubtasksByTaskId(taskId) {
     try {
-      const subtasksFromDb = this.store.Subtask.findAll( { where: { taskId: taskId }})
+      const subtasksFromDb = await this.store.Subtask.findAll( { where: { taskId: taskId }})
       return subtasksFromDb
     } catch (e) {
       console.error(e)
