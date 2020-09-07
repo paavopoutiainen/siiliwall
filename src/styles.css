@@ -1,6 +1,26 @@
 .body {
     margin: 20px;
 }
+
+.landingPage {
+    position: relative;
+    height: 100vh;
+}
+
+.landingPage__title {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+.landingPage__boardList {
+    position: absolute;
+    top: 35%;
+    left: 15%;
+}
+
 .flex-container {
     display: flex;
     flex-direction: row;
