@@ -1,36 +1,38 @@
 import React, { useState, useContext } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import uuid from "uuid/v4";
-import { MyContext } from "../pages/Board";
+import { MyContext } from "../pages/BoardView";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
 
-const Dropps = ({ id, column }) => {
+//TODO: refactor tasks to their own components, rename remaining cards after graphql takeover
+
+const Column = ({ id, column }) => {
   const [input, setInput] = useState({ id: null, status: false });
-  const [stickerInput, setStickerInput] = useState("");
+  const [taskInput, setTaskInput] = useState("");
   const context = useContext(MyContext);
   
-  const addNewStickie = (id) => {
+  const addNewTask = (id) => {
     setInput({ id: id, status: true });
     const destinationColumn = context.columns[id].columnId;
-    const newCard = {
+    const newTask = {
       id: uuid(),
-      content: stickerInput,
+      content: taskInput,
     };
-    if (newCard.content) {
+    if (newTask.content) {
       context.dispatch({
         type: "ADD_CARD",
         id: id,
-        item: newCard,
+        item: newTask,
       });
       const requestOptions = {
         method: "POST",
         headers: {
           "Content-Type": "application/json; charset=utf-8",
         },
-        body: JSON.stringify(newCard),
+        body: JSON.stringify(newTask),
       };
       fetch(
         `https://siiliwall.herokuapp.com/columnss/${destinationColumn}/cards`,
@@ -40,9 +42,9 @@ const Dropps = ({ id, column }) => {
         .catch((error) => {});
       setInput({ id: null, status: false });
     }
-    setStickerInput("");
+    setTaskInput("");
   };
-  const deleteCard = (id, item) => {
+  const deleteTask = (id, item) => {
     const delColumn = context.columns[id].columnId;
     context.dispatch({
       type: "DELETE",
@@ -111,7 +113,7 @@ const Dropps = ({ id, column }) => {
                                   "Are you sure you want to delete this item?"
                                 )
                               )
-                                deleteCard(id, item);
+                                deleteTask(id, item);
                             }}
                           >
                             <DeleteIcon
@@ -135,13 +137,13 @@ const Dropps = ({ id, column }) => {
                   variant='outlined'
                   id={id}
                   type='text'
-                  value={stickerInput}
+                  value={taskInput}
                   onKeyPress={(event) => {
                     if (event.key === "Enter") {
-                      addNewStickie(id);
+                      addNewTask(id);
                     }
                   }}
-                  onChange={(e) => setStickerInput(e.target.value)}
+                  onChange={(e) => setTaskInput(e.target.value)}
                 ></TextField>
               )}
               <Button
@@ -149,7 +151,7 @@ const Dropps = ({ id, column }) => {
                 style={{ margin: 10 }}
                 variant='contained'
                 color='primary'
-                onClick={() => addNewStickie(id)}
+                onClick={() => addNewTask(id)}
               >
                 + add new
               </Button>
@@ -161,4 +163,4 @@ const Dropps = ({ id, column }) => {
   );
 };
 
-export default Dropps;
+export default Column;

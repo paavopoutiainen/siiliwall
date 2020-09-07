@@ -1,9 +1,11 @@
 import React from "react";
-import BoardForm from "../components/BoardForm"
+import NewBoard from "../components/NewBoard"
 
+//future landing page where boards are created and listed
+//WIP
 const Home = () => {
     return (
-        <BoardForm />
+        <NewBoard />
     )
 }
 export default Home;

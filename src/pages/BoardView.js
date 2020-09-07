@@ -1,16 +1,17 @@
 import React, { useEffect, useReducer, useState} from "react";
-import Cardreducer from "./BoardReducer";
-import DnDContext from "../components/DragDropContext";
+import BoardReducer from "../reducers/BoardReducer";
+import Board from "../components/Board";
 import _ from "lodash";
 
 export const MyContext = React.createContext();
 
-const Board = () => {
-  const [columns, dispatch] = useReducer(Cardreducer, {});
+const BoardView = () => {
+  const [columns, dispatch] = useReducer(BoardReducer, {});
   const [useData, setUseData] = useState({});
   const [boardVal, setBoardVal] = useState();
 
   useEffect(() => {
+    console.log("testing pull request")
     const url = "http://siiliwall.herokuapp.com/boards";
     fetch(url)
       .then(response => response.json())
@@ -49,10 +50,10 @@ const Board = () => {
   return (
     <>
       <MyContext.Provider value={{ columns, dispatch, boardVal }}>
-        <DnDContext></DnDContext>
+        <Board></Board>
       </MyContext.Provider>
     </>
   );
 }
 
-export default Board;
+export default BoardView;
