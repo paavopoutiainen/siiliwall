@@ -92,6 +92,20 @@ class BoardService {
       console.error(e)
     }
   }
+
+  async getTaskOrderOfColumn(columnId) {
+    try {
+      const tasks = await this.store.Task.findAll({
+        attributes: ["id"],
+        where: { columnId: columnId },
+        order: this.sequelize.literal("columnOrderNumber ASC")
+      })
+      const arrayOfIds = tasks.map(task => task.dataValues.id)
+      return arrayOfIds
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 module.exports.BoardService = BoardService
