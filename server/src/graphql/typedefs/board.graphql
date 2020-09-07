@@ -1,0 +1,11 @@
+type Board {
+  id: ID!
+  name: String!
+  columns: [Column!]!
+}
+
+type Query {
+  allBoards: [Board!]!
+  boardById(id: ID!): Board!
+}
+
