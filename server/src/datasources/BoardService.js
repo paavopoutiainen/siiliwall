@@ -1,6 +1,7 @@
 class BoardService {
   constructor({db}) {
       this.store = db
+      this.sequelize = db.sequelize
   }
 
   initialize() {}
@@ -73,6 +74,20 @@ class BoardService {
     try {
       const subtasksFromDb = await this.store.Subtask.findAll( { where: { taskId: taskId }})
       return subtasksFromDb
+    } catch (e) {
+      console.error(e)
+    }
+  }
+  //Gets the order of columns in certain board, returns an array of columnIds in the correct order. This field is for keeping track of the order in which the columns are displayed in the board
+  async getColumnOrderOfBoard(boardId) {
+    try {
+      const columns = await this.store.Column.findAll({ 
+        attributes: ["id"], 
+        where: { boardId: boardId }, 
+        order: this.sequelize.literal("orderNumber ASC")
+      })
+      const arrayOfIds = columns.map(column => column.dataValues.id)
+      return arrayOfIds
     } catch (e) {
       console.error(e)
     }

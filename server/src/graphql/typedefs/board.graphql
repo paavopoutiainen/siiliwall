@@ -2,6 +2,7 @@ type Board {
   id: ID!
   name: String!
   columns: [Column!]!
+  columnOrder: [ID!]!
 }
 
 type Query {

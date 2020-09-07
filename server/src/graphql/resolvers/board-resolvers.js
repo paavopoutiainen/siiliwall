@@ -6,7 +6,6 @@ const schema = {
       return dataSources.boardService.getBoards()
     },
     boardById(root, args) {
-      console.log("rootAtBoardById", root)
       return dataSources.boardService.getBoardById(args.id)
     }
   },
@@ -14,6 +13,9 @@ const schema = {
   Board: {
     columns(root) {
       return dataSources.boardService.getColumnsByBoardId(root.id)
+    },
+    columnOrder(root) {
+      return dataSources.boardService.getColumnOrderOfBoard(root.id)
     }
   }
 }
