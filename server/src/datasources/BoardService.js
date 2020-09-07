@@ -32,7 +32,16 @@ class BoardService {
     }
   }
 
-  getColumnBoard(columnId) {
+  async getColumnBoardByColumnId(columnId) {
+    try {
+      const columnFromDb = await this.store.Column.findByPk(columnId)
+      const boardFromDb = await this.store.Board.findByPk(columnFromDb.boardId)
+      return boardFromDb
+    } catch (e) {
+      console.error(e)
+    }
+
+
     const column = findColumn(columnId)
     const listOfBoards = boards.find(board => board.id === column.boardId)
     return Promise.resolve(listOfBoards)

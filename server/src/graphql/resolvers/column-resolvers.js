@@ -9,7 +9,7 @@ const schema = {
 
   Column: {
     board(root) {
-      return dataSources.boardService.getColumnBoard(root.id)
+      return dataSources.boardService.getColumnBoardByColumnId(root.id)
     },
     tasks(root) {
       return dataSources.boardService.getTasksByColumnId(root.id)
