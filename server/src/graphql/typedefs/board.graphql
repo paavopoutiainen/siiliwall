@@ -2,10 +2,15 @@ type Board {
   id: ID!
   name: String!
   columns: [Column!]!
+  columnOrder: [ID!]!
 }
 
 type Query {
   allBoards: [Board!]!
   boardById(id: ID!): Board!
+}
+
+type Mutation {
+  addBoard(name: String!): Board
 }
 
