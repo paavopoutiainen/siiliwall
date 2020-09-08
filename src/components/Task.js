@@ -79,9 +79,7 @@ const Task = ({ id, column, provided, snapshot }) => {
             backgroundColor: snapshot.isDraggingOver
                 ? "lightblue"
                 : "lightgrey",
-      
             }}
-            //snapshot.isDraggingOver ? console.log('true') : console.log('false')
         >
 
             {column.items.map((item, index) => {
@@ -94,13 +92,7 @@ const Task = ({ id, column, provided, snapshot }) => {
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
-                        style={{
-                        backgroundColor: snapshot.isDragging
-                            ? "#fff"
-                            : "#fff",
-                        color: "#000",
-                        ...provided.draggableProps.style,
-                        }}
+                   
                     >
                         {item.content}
                         <IconButton
@@ -115,10 +107,7 @@ const Task = ({ id, column, provided, snapshot }) => {
                             }}
                         >
                         <DeleteIcon
-                            //This can't be changed in styles.css?
-                            //className='task-deleteIcon'
-                            style={{ color: "black" }}
-                            fontSize='small'
+                            className='task-deleteIcon'
                         />
                         </IconButton>
                     </div>
