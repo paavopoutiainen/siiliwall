@@ -129,6 +129,21 @@ class BoardService {
       console.error(e)
     }
   }
+
+  async addColumnForBoard(boardId, columnName) {
+    /*
+    New column will be given the biggest orderNumber in certain board, hence it will be displayed as the last column at the time of its creation
+    */
+    try {
+      const biggestOrderNumber = await this.store.Column.max("orderNumber", {
+        where: { boardId: boardId }
+      })
+      const addedColumn = await this.store.Column.create({ boardId: boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
+      return addedColumn
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 module.exports.BoardService = BoardService

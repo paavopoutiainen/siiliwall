@@ -11,5 +11,9 @@ type Query {
   columnById(id: ID!): Column!
 }
 
+type Mutation {
+  addColumnForBoard(boardId: ID!, columnName: String!): Column
+}
+
 
 
