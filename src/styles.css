@@ -6,7 +6,7 @@
     flex-direction: row;
 }
 .column-rename-form {
-    padding: 9px 0px 5px 0px;
+    padding: 0px 0px 5px 0px;
     display: "flex";
     overflow: "auto";
     width: "95%";
@@ -17,5 +17,17 @@
     padding: 5px;
 }
 .column-gap {
-    margin-right: 8px
+    margin-right: 8px;
+}
+
+.column-add-new-btn {
+    margin-bottom: 20px;
+}
+
+.column-rename-txtField {
+    padding: 0px 5px 0px 5px;
+}
+
+.column-delete-btn {
+    margin-top: 10px;
 }

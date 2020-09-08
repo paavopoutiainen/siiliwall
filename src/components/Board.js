@@ -5,6 +5,7 @@ import { MyContext } from "../pages/BoardView";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import '../styles.css';
+import { StylesProvider } from "@material-ui/styles";
 
 const Board = () => {
   const boardContext = useContext(MyContext);
@@ -54,8 +55,9 @@ const Board = () => {
   };
   
   return (
+    <StylesProvider injectFirst>
     <div className='body'>
-      <Button variant='contained' color='primary' onClick={() => addCol()} style={{marginBottom: 20}}>
+      <Button variant='contained' color='primary' onClick={() => addCol()} className='column-add-new-btn'>
         Add new column
       </Button>
 
@@ -70,7 +72,7 @@ const Board = () => {
                   <>
                     <form className='column-rename-form'>
                       <TextField
-                        style={{ padding: "0px 5px 0px 5px" }}
+                        className='column-rename-txtField'
                         id='outlined-basic'
                         label='Rename Column'
                         variant='outlined'
@@ -108,7 +110,7 @@ const Board = () => {
                   ></Column>
                   {!boardContext.columns[id].items.length && (
                     <Button
-                      style={{ marginTop: 10 }}
+                      className='column-delete-btn'
                       variant='contained'
                       color='secondary'
                       onClick={(result) => {
@@ -130,6 +132,7 @@ const Board = () => {
         </DragDropContext>
       </div>
     </div>
+    </StylesProvider>
   );
 };
 
