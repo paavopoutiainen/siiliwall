@@ -10,6 +10,12 @@ const schema = {
     }
   },
 
+  Mutation: {
+    addBoard(root, args) {
+      return dataSources.boardService.addBoard(args.name)
+    }
+  },
+
   Board: {
     columns(root) {
       return dataSources.boardService.getColumnsByBoardId(root.id)

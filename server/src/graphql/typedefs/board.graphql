@@ -10,3 +10,7 @@ type Query {
   boardById(id: ID!): Board!
 }
 
+type Mutation {
+  addBoard(name: String!): Board
+}
+

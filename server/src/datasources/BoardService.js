@@ -120,6 +120,15 @@ class BoardService {
       console.error(e)
     }
   }
+
+  async addBoard(boardName) {
+    try {
+      const addedBoard = await this.store.Board.create({ name: boardName })
+      return addedBoard
+    } catch(e) {
+      console.error(e)
+    }
+  }
 }
 
 module.exports.BoardService = BoardService
