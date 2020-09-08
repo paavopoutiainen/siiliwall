@@ -31,3 +31,29 @@
 .column-delete-btn {
     margin-top: 10px;
 }
+
+.column-body {
+    padding: 4px;
+    min-width: 250px;
+    min-height: 500px;
+    border-radius: 5px;
+
+}
+
+.task-body {
+    padding: 10px;
+    margin: 0 0 5px 0;
+    border-radius: 5px;
+    min-height: 50px;
+
+}
+
+/* different keyword? */
+.task-deleteIcon {
+    color: 'red';
+    
+}
+
+.task-add-new-btn {
+    margin: 10px;
+}

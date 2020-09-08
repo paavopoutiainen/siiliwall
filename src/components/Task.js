@@ -6,6 +6,8 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TextField from "@material-ui/core/TextField";
+import '../styles.css';
+import { StylesProvider } from "@material-ui/styles";
 
 //TODO: rename remaining cards after graphql takeover
 
@@ -68,19 +70,18 @@ const Task = ({ id, column, provided, snapshot }) => {
   };
 
   return (
+    <StylesProvider injectFirst>
     <div>
-        <div
+        <div className='column-body'
             {...provided.droppableProps}
             ref={provided.innerRef}
             style={{
             backgroundColor: snapshot.isDraggingOver
                 ? "lightblue"
                 : "lightgrey",
-            padding: 4,
-            width: 250,
-            minHeight: 500,
-            borderRadius: "5px",
+      
             }}
+            //snapshot.isDraggingOver ? console.log('true') : console.log('false')
         >
 
             {column.items.map((item, index) => {
@@ -89,14 +90,11 @@ const Task = ({ id, column, provided, snapshot }) => {
                 {(provided, snapshot) => {
                     return (
                     <div
+                        className='task-body'
                         ref={provided.innerRef}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         style={{
-                        padding: 10,
-                        margin: "0 0 5px 0",
-                        borderRadius: "5px",
-                        minHeight: "50px",
                         backgroundColor: snapshot.isDragging
                             ? "#fff"
                             : "#fff",
@@ -117,6 +115,8 @@ const Task = ({ id, column, provided, snapshot }) => {
                             }}
                         >
                         <DeleteIcon
+                            //This can't be changed in styles.css?
+                            //className='task-deleteIcon'
                             style={{ color: "black" }}
                             fontSize='small'
                         />
@@ -150,7 +150,7 @@ const Task = ({ id, column, provided, snapshot }) => {
 
             <Button
                 type='button'
-                style={{ margin: 10 }}
+                className='task-add-new-btn'
                 variant='contained'
                 color='primary'
                 onClick={() => addNewTask(id)}
@@ -159,6 +159,7 @@ const Task = ({ id, column, provided, snapshot }) => {
             </Button>
         </div>
     </div>
+    </StylesProvider>
   );
 };
 
