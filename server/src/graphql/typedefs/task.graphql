@@ -5,10 +5,13 @@ type Task {
   column: Column!
   columnOrderNumber: Int!
   subtasks: [Subtask!]!
+  subtaskOrder: [ID!]! 
 }
 
 type Query {
   taskById(id: ID!): Task!
 }
 
-
+type Mutation {
+  addTaskForColumn(columnId: ID!, title: String!): Task
+}

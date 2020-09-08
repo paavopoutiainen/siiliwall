@@ -7,12 +7,21 @@ const schema = {
     }
   },
 
+  Mutation: {
+    addColumnForBoard(root, { boardId, columnName }) {
+      return dataSources.boardService.addColumnForBoard(boardId, columnName)
+    }
+  },
+
   Column: {
     board(root) {
       return dataSources.boardService.getColumnBoardByColumnId(root.id)
     },
     tasks(root) {
       return dataSources.boardService.getTasksByColumnId(root.id)
+    },
+    taskOrder(root) {
+      return dataSources.boardService.getTaskOrderOfColumn(root.id)
     }
   }
 }

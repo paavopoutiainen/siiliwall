@@ -4,10 +4,15 @@ type Column {
   board: Board!
   orderNumber: Int!
   tasks: [Task!]!
+  taskOrder: [ID!]!
 }
 
 type Query {
   columnById(id: ID!): Column!
+}
+
+type Mutation {
+  addColumnForBoard(boardId: ID!, columnName: String!): Column
 }
 
 
