@@ -8,3 +8,18 @@ export const GET_ALL_BOARDS = gql`
         }
     }
 `
+export const GET_BOARD_BY_ID = gql`
+    query findBoardById($boardId: ID!) {
+        boardById(id: $boardId) {
+            name
+            columns {
+                id
+                name
+                tasks {
+                    id
+                    title
+                }
+            }
+        }
+    }
+`

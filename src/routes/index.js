@@ -1,12 +1,23 @@
 import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-//import BoardView from "../pages/BoardView"
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import LandingPage from '../pages/LandingPage'
+import BoardFromDb from '../pages/BoardFromDb'
 
 export default function Routes() {
+    const match = useRouteMatch('/boards/:id')
+    
     return (
         <Switch>
-            <Route path="/" component={LandingPage} />
+            <Route exact path="/">
+                <LandingPage />
+            </Route>
+            { match && 
+                <Route exact path="/boards/:id">
+                    <BoardFromDb id={match.params.id}/>
+                </Route>
+            }
+            
+         
         </Switch>
     )
 }

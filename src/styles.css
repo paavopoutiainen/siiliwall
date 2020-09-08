@@ -41,13 +41,13 @@ html {
     margin: 1.5rem;
 }
 
-.btn--white {
+.btn--white a{
     background-color: #777;
     color: #fff;
 }
 
-.btn:link,
-.btn:visited {
+.btn:link a,
+.btn:visited a {
     text-decoration: none;
     padding: 1.5rem 4rem;
     display: inline-block;
@@ -55,6 +55,20 @@ html {
     transition: all .2s;
     position: relative;
     font-size: 1.6rem;
+}
+
+.boardPage {
+    position: relative;
+    height: 100vh;
+}
+
+.boardPage__title {
+    position: absolute;
+    top: 25%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 2rem;
 }
 
 .flex-container {
