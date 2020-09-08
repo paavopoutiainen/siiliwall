@@ -6,42 +6,48 @@
     box-sizing: inherit;
 }
 
-html {
+html, body {
     font-size: 62.5%;
-}
-
-.body {
-    margin: 20px;
+    margin: 2rem;
     box-sizing: border-box;
 }
 
 .landingPage {
-    position: relative;
-    height: 100vh;
+    height: 100%
 }
 
 .landingPage__title {
-    position: absolute;
     top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin: 2rem;
     text-align: center;
     font-size: 2rem;
+}
+.landingPage__add {
+    text-align: center;
+    margin: 5rem;
+}
+
+.landingPage__add a {
+    text-decoration: none;
+    background-color: #fff;
+    color: #777;
+    border: 2px solid #777;
+    border-radius: 10rem;
+    padding: 1.5rem 4rem;
+    transition: all .2s;
+    font-size: 1.6rem;
 }
 
 .landingPage__boardList {
     font-size: 1.5rem;
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    text-align: center;
 }
 
 .landingPage__boardList__boardButton {
     margin: 1.5rem;
 }
 
-.btn--white a{
+.btn--gray a{
     background-color: #777;
     color: #fff;
 }
@@ -53,39 +59,15 @@ html {
     display: inline-block;
     border-radius: 10rem;
     transition: all .2s;
-    position: relative;
     font-size: 1.6rem;
 }
 
 .boardPage {
-    position: relative;
-    height: 100vh;
+    height: 100%
 }
 
 .boardPage__title {
-    position: absolute;
     top: 25%;
-    left: 50%;
-    transform: translate(-50%, -50%);
     text-align: center;
     font-size: 2rem;
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-}
-.column-rename-form {
-    padding: 0.9rem 0rem 0.5rem 0rem;
-    display: "flex";
-    overflow: "auto";
-    width: "95%";
-}
-.column-name {
-    font-size: 2rem;
-    margin: 1rem;
-    padding: 0.5rem;
-}
-.column-gap {
-    margin-right: 0.8rem
 }

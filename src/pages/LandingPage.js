@@ -15,11 +15,14 @@ const LandingPage = () => {
             <div className="landingPage__title">
                 <h1>Welcome!</h1>
             </div>
+            <div className="landingPage__add">
+                <a href="#" className="btn btn--white">Add Board</a>
+            </div>
             <div className="landingPage__boardList">
                 {data.allBoards.map(({ id, name }) => {
                     return (
                         <div className="landingPage__boardList__boardButton">
-                            <a href="#" className="btn btn--white">
+                            <a href="#" className="btn btn--gray">
                                 <Link to={`/boards/${id}`}>{name}</Link>
                             </a>
                         </div>

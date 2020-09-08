@@ -14,7 +14,7 @@ const BoardFromDb = ({ id }) => {
     if (error) return `Error: ${error.message}`
 
     const board = data.boardById
-    
+
     return (
       <div className='boardPage'>
           <div className="boardPage__title">

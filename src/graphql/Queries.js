@@ -12,6 +12,7 @@ export const GET_BOARD_BY_ID = gql`
     query findBoardById($boardId: ID!) {
         boardById(id: $boardId) {
             name
+            columnOrder
             columns {
                 id
                 name

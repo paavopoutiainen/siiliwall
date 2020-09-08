@@ -16,8 +16,6 @@ export default function Routes() {
                     <BoardFromDb id={match.params.id}/>
                 </Route>
             }
-            
-         
         </Switch>
     )
 }
