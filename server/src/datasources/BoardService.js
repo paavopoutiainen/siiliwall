@@ -132,7 +132,7 @@ class BoardService {
 
   async addColumnForBoard(boardId, columnName) {
     /*
-    New column will be given the biggest orderNumber in certain board, hence it will be displayed as the last column at the time of its creation
+    At the time of new columns' creation we want to display it as the component in the very right of the board, hence it is given the biggest orderNumber of the board
     */
     try {
       const biggestOrderNumber = await this.store.Column.max("orderNumber", {
@@ -140,6 +140,21 @@ class BoardService {
       })
       const addedColumn = await this.store.Column.create({ boardId: boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
       return addedColumn
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  async addTaskForColumn(columnId, title) {
+    /*
+    At the time of new tasks' creation we want to display it as the upper most task in its column, hence it is given the smallest columnOrderNumber of the column 
+    */
+    try {
+      const smallestOrderNumber = await this.store.Task.min("columnOrderNumber", {
+        where: { columnId: columnId }
+      })
+      const addedTask = await this.store.Task.create({ columnId: columnId, title: title, columnOrderNumber: smallestOrderNumber - 1 })
+      return addedTask
     } catch (e) {
       console.error(e)
     }

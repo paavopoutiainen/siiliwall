@@ -7,6 +7,12 @@ const schema = {
     }
   },
 
+  Mutation: {
+    addTaskForColumn(root, { columnId, title }) {
+      return dataSources.boardService.addTaskForColumn(columnId, title)
+    }
+  },
+
   Task: {
     column(root) {
       return dataSources.boardService.getColumnById(root.columnId)
