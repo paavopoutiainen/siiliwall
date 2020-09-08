@@ -1,5 +1,18 @@
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;
+}
+
+html {
+    font-size: 62.5%;
+}
+
 .body {
     margin: 20px;
+    box-sizing: border-box;
 }
 
 .landingPage {
@@ -13,12 +26,35 @@
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
+    font-size: 2rem;
 }
 
 .landingPage__boardList {
+    font-size: 1.5rem;
     position: absolute;
-    top: 35%;
-    left: 15%;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.landingPage__boardList__boardButton {
+    margin: 1.5rem;
+}
+
+.btn--white {
+    background-color: #777;
+    color: #fff;
+}
+
+.btn:link,
+.btn:visited {
+    text-decoration: none;
+    padding: 1.5rem 4rem;
+    display: inline-block;
+    border-radius: 10rem;
+    transition: all .2s;
+    position: relative;
+    font-size: 1.6rem;
 }
 
 .flex-container {
@@ -26,16 +62,16 @@
     flex-direction: row;
 }
 .column-rename-form {
-    padding: 9px 0px 5px 0px;
+    padding: 0.9rem 0rem 0.5rem 0rem;
     display: "flex";
     overflow: "auto";
     width: "95%";
 }
 .column-name {
-    font-size: 20px;
-    margin: 10px;
-    padding: 5px;
+    font-size: 2rem;
+    margin: 1rem;
+    padding: 0.5rem;
 }
 .column-gap {
-    margin-right: 8px
+    margin-right: 0.8rem
 }
