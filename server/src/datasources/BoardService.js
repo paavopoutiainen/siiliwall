@@ -52,6 +52,17 @@ class BoardService {
     }
   }
 
+  async deleteColumnById(columnId) {
+    try {
+      await this.store.Column.destroy({
+        where: {id: columnId}
+      })
+      return columnId
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
   async getTasksByColumnId(columnId) {
     try {
       const tasksFromDb = await this.store.Task.findAll({ where: { columnId: columnId }})

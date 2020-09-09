@@ -10,6 +10,9 @@ const schema = {
   Mutation: {
     addColumnForBoard(root, { boardId, columnName }) {
       return dataSources.boardService.addColumnForBoard(boardId, columnName)
+    },
+    deleteColumnById(root, { id }) {
+      return dataSources.boardService.deleteColumnById(id)
     }
   },
 
