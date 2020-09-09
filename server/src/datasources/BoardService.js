@@ -78,7 +78,10 @@ class BoardService {
       console.error(e)
     }
   }
-  //Gets the order of columns in certain board, returns an array of columnIds in the correct order. This field is for keeping track of the order in which the columns are displayed in the board
+  /*
+    Gets the order of columns in certain board, returns an array of columnIds in the correct order. 
+    This field is for keeping track of the order in which the columns are displayed in the board
+  */  
   async getColumnOrderOfBoard(boardId) {
     try {
       const columns = await this.store.Column.findAll({ 
@@ -92,7 +95,10 @@ class BoardService {
       console.error(e)
     }
   }
-  //Gets the order of tasks in certain column, returns an array of taskIds in the correct order. This field is for keeping track of the order in which the tasks are displayed in the column
+  /*
+    Gets the order of tasks in certain column, returns an array of taskIds in the correct order. 
+    This field is for keeping track of the order in which the tasks are displayed in the column
+  */
   async getTaskOrderOfColumn(columnId) {
     try {
       const tasks = await this.store.Task.findAll({
@@ -132,7 +138,8 @@ class BoardService {
 
   async addColumnForBoard(boardId, columnName) {
     /*
-    At the time of new columns' creation we want to display it as the component in the very right of the board, hence it is given the biggest orderNumber of the board
+      At the time of new columns' creation we want to display it as the component in the very right of the board, 
+      hence it is given the biggest orderNumber of the board
     */
     try {
       const biggestOrderNumber = await this.store.Column.max("orderNumber", {
@@ -147,13 +154,14 @@ class BoardService {
 
   async addTaskForColumn(columnId, title) {
     /*
-    At the time of new tasks' creation we want to display it as the upper most task in its column, hence it is given the smallest columnOrderNumber of the column 
+      At the time of new tasks' creation we want to display it as the lower most task in its column, 
+      hence it is given the biggest columnOrderNumber of the column 
     */
     try {
-      const smallestOrderNumber = await this.store.Task.min("columnOrderNumber", {
+      const smallestOrderNumber = await this.store.Task.max("columnOrderNumber", {
         where: { columnId: columnId }
       })
-      const addedTask = await this.store.Task.create({ columnId: columnId, title: title, columnOrderNumber: smallestOrderNumber - 1 })
+      const addedTask = await this.store.Task.create({ columnId: columnId, title: title, columnOrderNumber: smallestOrderNumber + 1 })
       return addedTask
     } catch (e) {
       console.error(e)
