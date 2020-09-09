@@ -3,31 +3,22 @@
 *::before {
     margin: 0;
     padding: 0;
-    box-sizing: inherit;
 }
 
 html, body {
     font-size: 62.5%;
-    margin: 2rem;
-    box-sizing: border-box;
+    height: 100%;
 }
 
 .landingPage {
-    height: 100%
+    height: 100%;
+    top: 30rem;
 }
-
 .landingPage__title {
-    top: 25%;
-    margin: 2rem;
-    text-align: center;
     font-size: 2rem;
 }
-.landingPage__add {
-    text-align: center;
-    margin: 5rem;
-}
 
-.landingPage__add a {
+.landingPage__addButton a{
     text-decoration: none;
     background-color: #fff;
     color: #777;
@@ -36,15 +27,6 @@ html, body {
     padding: 1.5rem 4rem;
     transition: all .2s;
     font-size: 1.6rem;
-}
-
-.landingPage__boardList {
-    font-size: 1.5rem;
-    text-align: center;
-}
-
-.landingPage__boardList__boardButton {
-    margin: 1.5rem;
 }
 
 .btn--gray a{
@@ -60,14 +42,4 @@ html, body {
     border-radius: 10rem;
     transition: all .2s;
     font-size: 1.6rem;
-}
-
-.boardPage {
-    height: 100%
-}
-
-.boardPage__title {
-    top: 25%;
-    text-align: center;
-    font-size: 2rem;
 }
