@@ -6,7 +6,7 @@
     flex-direction: row;
 }
 .column-rename-form {
-    padding: 9px 0px 5px 0px;
+    padding: 0px 0px 5px 0px;
     display: "flex";
     overflow: "auto";
     width: "95%";
@@ -17,5 +17,46 @@
     padding: 5px;
 }
 .column-gap {
-    margin-right: 8px
+    margin-right: 8px;
+}
+
+.column-add-new-btn {
+    margin-bottom: 20px;
+}
+
+.column-rename-txtField {
+    padding: 0px 5px 0px 5px;
+}
+
+.column-delete-btn {
+    margin-top: 10px;
+}
+
+.column-body {
+    padding: 4px;
+    min-width: 250px;
+    min-height: 500px;
+    border-radius: 5px;
+
+}
+
+.task-body {
+    padding: 10px;
+    margin: 0 0 5px 0;
+    border-radius: 5px;
+    min-height: 50px;
+    background-color: #fff;
+    color: #000;
+
+}
+
+
+.task-deleteIcon {
+    color:black;
+    font-size: medium;
+    
+}
+
+.task-add-new-btn {
+    margin: 10px;
 }
