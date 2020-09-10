@@ -4,47 +4,45 @@ import { Link } from 'react-router-dom'
 import NewBoardForm from '../components/NewBoardForm'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_BOARDS } from '../graphql/Queries'
-import { useGradientBtnStyles } from '@mui-treasury/styles/button/gradient'
+import { landingPage } from '../styles/styles'
 import '../styles.css'
+
 
 const LandingPage = () => {
     const { loading, error, data } = useQuery(GET_ALL_BOARDS)
     const [open, setOpen ] = useState(false)
-
+    const classes = landingPage()
   
     function handleClickOpen () {
         setOpen(true)
     }
-    const styles = useGradientBtnStyles()
-    const boardButton = {
-        minWidth: 200,
-        background: 'linear-gradient(to right, #FFC371, #FF5F6D)'
-    }
 
     if (loading) return <p>Loading boards...</p>
     if (error) return `Error: ${error.message}`
-    console.log(data.allBoards)
+    
     return (
         <Grid 
             container
             direction="column"
             alignItems="center"
             justify="center"
-            className="landingPage"
+            classes={{root: classes.root}}
             spacing={7}
         >
             { open && 
                 <NewBoardForm setOpen={setOpen} open={open}/>
             }
-            <Grid item className="landingPage__title" >
+            <Grid item classes={{root: classes.title}} >
                 <h1>Welcome!</h1>
             </Grid>
             <Grid item>
-                <Button onClick={handleClickOpen}>
-                    <Link className="landingPage__addButton">Add Board</Link>
-                </Button>
+                <Link className="addButton__link">
+                    <Button onClick={handleClickOpen} classes={{root: classes.addBoardButton}}>
+                        Add Board
+                    </Button>
+                </Link>
             </Grid>
-            <Grid item className="landingPage__boardList" >
+            <Grid item >
                 <Grid 
                     container
                     direction="column" 
@@ -54,10 +52,12 @@ const LandingPage = () => {
                 >
                     {data.allBoards.map(({id, name}) => {
                         return (
-                            <Grid item className="boardList__button">
-                                <Button fullWidth={true} className="gradientButton">
-                                    <Link to={`/boards/${id}`} className="boardList__button__link">{name}</Link>
-                                </Button>
+                            <Grid item classes={{root: classes.boardButtonGrid}}>
+                                <Link to={`/boards/${id}`} className="boardList__button__link" >
+                                    <Button fullWidth={true} classes={{root: classes.boardButton}}>
+                                        {name}
+                                    </Button>
+                                </Link>
                             </Grid>
                         ) 
                     })}

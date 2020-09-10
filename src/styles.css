@@ -10,38 +10,14 @@ html, body {
     height: 100%;
 }
 
-.landingPage {
-    min-height: 100vh;
-}
-
-.landingPage__title {
-    font-size: 2rem;
-}
-
-.landingPage__addButton {
-    height: 8rem;
-    line-height: 8rem;  
-    width: 8rem;  
-    font-size: 1rem;
-    font-weight: bold;
-    border-radius: 50%;
-    border: 2px solid #ff8d58;
-    color: #ff8d58;
-    text-align: center;
+.addButton__link {
     text-decoration: none;
-
+    color: #ff8d58;
+    font-size: 1.2rem;
 }
-
-.boardList__button {
-    min-width: 20rem;
-}
-.gradientButton {
-    background: linear-gradient(to right, #11998e, #38ef7d)
-}
-
 .boardList__button__link {
     text-decoration: none;
     color: #fff;
     font-size: 1.2rem;
-
+    width: 100%;
 }
