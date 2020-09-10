@@ -23,7 +23,7 @@ const LandingPage = () => {
 
     if (loading) return <p>Loading boards...</p>
     if (error) return `Error: ${error.message}`
-
+    console.log(data.allBoards)
     return (
         <Grid 
             container
