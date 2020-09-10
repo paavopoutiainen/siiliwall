@@ -1,0 +1,139 @@
+import React, { useState, useContext } from "react";
+import { DragDropContext } from "react-beautiful-dnd";
+import Column from "./Column";
+import { MyContext } from "../pages/BoardView";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import '../styles.css';
+import { StylesProvider } from "@material-ui/styles";
+
+const Board = () => {
+  const boardContext = useContext(MyContext);
+  const [newTitle, setNewTitle] = useState({
+    status: false,
+    id: null,
+    newName: "",
+  });
+
+  const renameColumn = (id) => {
+    setNewTitle({ ...newTitle, status: !newTitle.status, id: id });
+    const destinationColumn = boardContext.columns[id]; 
+    const destItems = [...destinationColumn.items];
+
+    if (newTitle.newName) {
+      setNewTitle({
+        ...newTitle,
+        status: false,
+        id: null,
+        newName: "",
+      });
+      boardContext.dispatch({
+        type: "NEW_COL_NAME",
+        id: id,
+        name: newTitle.newName,
+        items: destItems,
+        dest: destinationColumn,
+      });
+    }
+  };
+
+  const deleteCol = (result, id, removeId) => {
+    boardContext.dispatch({ type: "DELETE_COLUMN", result, id, removeId });
+    const requestOptions = {
+      method: "DELETE",
+    };
+    fetch(
+      `https://siiliwall.herokuapp.com/board/${boardContext.boardVal}/deletecolumn/${removeId}`,
+      requestOptions
+    )
+      .then((response) => response.text())
+      .catch((error) => {});
+  };
+
+  const addCol = () => {
+    boardContext.dispatch({ type: "ADD_NEW_COL", boardContext: boardContext });
+  };
+  
+  return (
+    <StylesProvider injectFirst>
+    <div className='body'>
+      <Button variant='contained' color='primary' onClick={() => addCol()} className='column-add-new-btn'>
+        Add new column
+      </Button>
+
+      <div className='flex-container'>
+        <DragDropContext
+          onDragEnd={(result) => boardContext.dispatch({ type: "MOVE", result})}
+        >
+          {Object.entries(boardContext.columns).map(([id, column]) => {
+            return (
+              <div key={id}>
+                {newTitle.status && newTitle.id === id ? (
+                  <>
+                    <form className='column-rename-form'>
+                      <TextField
+                        className='column-rename-txtField'
+                        id='outlined-basic'
+                        label='Rename Column'
+                        variant='outlined'
+                        size='small'
+                        type='text'
+                        id={id}                      
+                        defaultValue={column.name}
+                        onChange={(e) =>
+                          setNewTitle({ ...newTitle, newName: e.target.value })
+                        }
+                      ></TextField>
+
+                      <Button
+                        type='submit'
+                        variant='contained'
+                        color='primary'
+                        size='small'
+                        onClick={() => renameColumn(id, newTitle.name)}
+                      >
+                        save
+                      </Button>
+                    </form>
+                  </>
+                ) : (
+                  <h2 className='column-name'
+                    onClick={() => renameColumn(id)}
+                  >
+                    {column.name}
+                  </h2>
+                )}
+                <div className='column-gap'>
+                  <Column
+                    id={id}
+                    column={column}
+                  ></Column>
+                  {!boardContext.columns[id].items.length && (
+                    <Button
+                      className='column-delete-btn'
+                      variant='contained'
+                      color='secondary'
+                      onClick={(result) => {
+                        if (
+                          window.confirm(
+                            "Are you sure you want to delete this column?"
+                          )
+                        )
+                          deleteCol(result, id, column.columnId);
+                      }}
+                    >
+                      delete
+                    </Button>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </DragDropContext>
+      </div>
+    </div>
+    </StylesProvider>
+  );
+};
+
+export default Board;
