@@ -1,14 +1,12 @@
 import React from 'react';
-import { Router } from 'react-router-dom';
-import history from './services/history';
+import { BrowserRouter as Router } from 'react-router-dom'
 import Routes from './routes';
 
 function App() {
-  return (
-    <Router history={history}>
-      <Routes />
-    </Router>
-  );
+    return (
+      <Router >
+          <Routes />
+      </Router>
+    )
 }
-
 export default App;
