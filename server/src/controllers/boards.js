@@ -1,7 +1,7 @@
-const boardsRouter = require("express").Router()
+const boardsRouter = require('express').Router()
 
-boardsRouter.get("/", (req, res) => {
-  res.json({"msg": "Working"})
+boardsRouter.get('/', (req, res) => {
+    res.json({ msg: 'Working' })
 })
 
 module.exports = boardsRouter

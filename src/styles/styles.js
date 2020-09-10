@@ -2,15 +2,15 @@ import { makeStyles } from '@material-ui/styles'
 
 export const landingPageStyles = makeStyles({
     root: {
-        minHeight: '100vh'
+        minHeight: '100vh',
     },
 
     title: {
-        fontSize: '2rem'
+        fontSize: '2rem',
     },
 
     boardButtonGrid: {
-        minWidth: 200
+        minWidth: 200,
     },
 
     boardButton: {
@@ -26,7 +26,7 @@ export const landingPageStyles = makeStyles({
 
     addBoardButton: {
         height: '8rem',
-        width: '8rem',  
+        width: '8rem',
         fontSize: '1rem',
         fontWeight: 'bold',
         borderRadius: '50%',
@@ -34,14 +34,14 @@ export const landingPageStyles = makeStyles({
         color: '#ff8d58',
         textAlign: 'center',
         textDecoration: 'none',
-    }
+    },
 })
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh'
+        minHeight: '100vh',
     },
 
     title: {
-        fontSize: '2rem'
-    }
+        fontSize: '2rem',
+    },
 })
