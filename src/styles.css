@@ -11,35 +11,37 @@ html, body {
 }
 
 .landingPage {
-    height: 100%;
-    top: 30rem;
+    min-height: 100vh;
 }
+
 .landingPage__title {
     font-size: 2rem;
 }
 
-.landingPage__addButton a{
+.landingPage__addButton {
+    height: 8rem;
+    line-height: 8rem;  
+    width: 8rem;  
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 50%;
+    border: 2px solid #ff8d58;
+    color: #ff8d58;
+    text-align: center;
     text-decoration: none;
-    background-color: #fff;
-    color: #777;
-    border: 2px solid #777;
-    border-radius: 10rem;
-    padding: 1.5rem 4rem;
-    transition: all .2s;
-    font-size: 1.6rem;
+
 }
 
-.btn--gray a{
-    background-color: #777;
+.boardList__button {
+    min-width: 20rem;
+}
+.gradientButton {
+    background: linear-gradient(to right, #11998e, #38ef7d)
+}
+
+.boardList__button__link {
+    text-decoration: none;
     color: #fff;
-}
+    font-size: 1.2rem;
 
-.btn:link a,
-.btn:visited a {
-    text-decoration: none;
-    padding: 1.5rem 4rem;
-    display: inline-block;
-    border-radius: 10rem;
-    transition: all .2s;
-    font-size: 1.6rem;
 }
