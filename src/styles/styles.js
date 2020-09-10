@@ -1,6 +1,6 @@
 import { makeStyles } from '@material-ui/styles'
 
-export const landingPage = makeStyles({
+export const landingPageStyles = makeStyles({
     root: {
         minHeight: '100vh'
     },
@@ -34,5 +34,14 @@ export const landingPage = makeStyles({
         color: '#ff8d58',
         textAlign: 'center',
         textDecoration: 'none',
+    }
+})
+export const boardPageStyles = makeStyles({
+    root: {
+        minHeight: '100vh'
+    },
+
+    title: {
+        fontSize: '2rem'
     }
 })

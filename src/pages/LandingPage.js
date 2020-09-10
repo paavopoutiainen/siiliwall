@@ -1,17 +1,17 @@
-import React, { useEffect, useState} from "react"
+import React, { useState }  from "react"
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import NewBoardForm from '../components/NewBoardForm'
 import { useQuery } from '@apollo/client'
 import { GET_ALL_BOARDS } from '../graphql/Queries'
-import { landingPage } from '../styles/styles'
+import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 
 
 const LandingPage = () => {
     const { loading, error, data } = useQuery(GET_ALL_BOARDS)
     const [open, setOpen ] = useState(false)
-    const classes = landingPage()
+    const classes = landingPageStyles()
   
     function handleClickOpen () {
         setOpen(true)

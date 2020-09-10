@@ -1,7 +1,7 @@
 import React from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import LandingPage from '../pages/LandingPage'
-import BoardFromDb from '../pages/BoardFromDb'
+import BoardPage from '../pages/BoardPage'
 
 export default function Routes() {
     const match = useRouteMatch('/boards/:id')
@@ -13,7 +13,7 @@ export default function Routes() {
             </Route>
             { match && 
                 <Route exact path="/boards/:id">
-                    <BoardFromDb id={match.params.id}/>
+                    <BoardPage id={match.params.id}/>
                 </Route>
             }
         </Switch>
