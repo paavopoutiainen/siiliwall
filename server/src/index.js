@@ -6,9 +6,17 @@ const { ApolloServer } = require("apollo-server-express")
 const typeDefs = require("./graphql/typedefs")
 const resolvers = require("./graphql/resolvers")
 
-const server = new ApolloServer({ typeDefs, resolvers })
-server.applyMiddleware({ app, path: "/graphql" })
+const apollo = new ApolloServer({ typeDefs, resolvers })
+apollo.applyMiddleware({ app, path: "/graphql" })
 
-app.listen( {port: config.PORT }, () => {
+const httpServer = http.createServer(app)
+
+httpServer.listen( {port: config.PORT }, () => {
   console.log(`Server running on port ${config.PORT}`)
 })
+
+var closeHttpServer = function() {
+  httpServer.close();
+};
+
+module.exports = { app, closeHttpServer }
