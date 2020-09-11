@@ -5,17 +5,17 @@ import BoardPage from '../pages/BoardPage'
 
 export default function Routes() {
     const match = useRouteMatch('/boards/:id')
-    
+
     return (
         <Switch>
             <Route exact path="/">
                 <LandingPage />
             </Route>
-            { match && 
+            { match && (
                 <Route exact path="/boards/:id">
-                    <BoardPage id={match.params.id}/>
+                    <BoardPage id={match.params.id} />
                 </Route>
-            }
+            )}
         </Switch>
     )
 }

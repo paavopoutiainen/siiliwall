@@ -1,12 +1,14 @@
 import React, { useState } from 'react'
-import { Dialog, DialogActions, DialogContent, DialogContentText,
-     DialogTitle, TextField, Button } from '@material-ui/core'
+import {
+    Dialog, DialogActions, DialogContent, DialogContentText,
+    DialogTitle, TextField, Button,
+} from '@material-ui/core'
 import { useMutation } from '@apollo/client'
-import { ADD_BOARD } from '../graphql/Mutations'
+import ADD_BOARD from '../graphql/mutations'
 
 const NewBoardForm = ({ setOpen, open }) => {
     const [addBoard, { data }] = useMutation(ADD_BOARD)
-    const [name, setName] = useState("")
+    const [name, setName] = useState('')
 
     function handleChange(event) {
         setName(event.target.value)
@@ -20,20 +22,20 @@ const NewBoardForm = ({ setOpen, open }) => {
         event.preventDefault()
         addBoard({
             variables: {
-                name
-            }
+                name,
+            },
         })
-        setName("")
+        setName('')
         setOpen(false)
     }
 
     return (
-       <div>
-          <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-            <DialogTitle id="form-dialog-title">New board</DialogTitle>
+        <div>
+            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">New board</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                      Please enter the credentials for the board.
+                        Please enter the credentials for the board.
                     </DialogContentText>
                     <TextField
                         autoFocus
@@ -42,7 +44,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                         label="Name"
                         type="text"
                         fullWidth
-                        onChange={event => handleChange(event)}
+                        onChange={(event) => handleChange(event)}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -54,7 +56,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                     </Button>
                 </DialogActions>
             </Dialog>
-       </div>
+        </div>
     )
 }
 export default NewBoardForm

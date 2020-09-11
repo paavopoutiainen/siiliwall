@@ -1,29 +1,29 @@
-const dataSources  = require("../../datasources")
+const dataSources = require('../../datasources')
 
 const schema = {
-  Query: {
-    allBoards() {
-      return dataSources.boardService.getBoards()
+    Query: {
+        allBoards() {
+            return dataSources.boardService.getBoards()
+        },
+        boardById(root, args) {
+            return dataSources.boardService.getBoardById(args.id)
+        },
     },
-    boardById(root, args) {
-      return dataSources.boardService.getBoardById(args.id)
-    }
-  },
 
-  Mutation: {
-    addBoard(root, args) {
-      return dataSources.boardService.addBoard(args.name)
-    }
-  },
-
-  Board: {
-    columns(root) {
-      return dataSources.boardService.getColumnsByBoardId(root.id)
+    Mutation: {
+        addBoard(root, args) {
+            return dataSources.boardService.addBoard(args.name)
+        },
     },
-    columnOrder(root) {
-      return dataSources.boardService.getColumnOrderOfBoard(root.id)
-    }
-  }
+
+    Board: {
+        columns(root) {
+            return dataSources.boardService.getColumnsByBoardId(root.id)
+        },
+        columnOrder(root) {
+            return dataSources.boardService.getColumnOrderOfBoard(root.id)
+        },
+    },
 }
 
 module.exports = schema

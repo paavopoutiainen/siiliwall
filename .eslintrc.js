@@ -1,35 +1,51 @@
-// eslint-disable-next-line no-undef
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true
+    env: {
+        commonjs: true,
+        es6: true,
+        node: true,
+        browser: true,
     },
-    'extends': [
-        'eslint:recommended',
-        'plugin:react/recommended'
+    extends: [
+        'airbnb',
+        'airbnb/hooks',
     ],
-    'parserOptions': {
-        'ecmaFeatures': {
-            'jsx': true
+    parserOptions: {
+        ecmaFeatures: {
+            jsx: true,
         },
-        'ecmaVersion': 12,
-        'sourceType': 'module'
+        ecmaVersion: 12,
+        sourceType: 'module',
     },
-    'plugins': [
-        'react'
+    plugins: [
+        'react',
     ],
-    'rules': {
-        'indent': [
+    rules: {
+        indent: [
             'error',
-            4
+            4,
         ],
-        'quotes': [
+        'react/jsx-indent': ['error', 4],
+        'react/jsx-indent-props': ['error', 4],
+        quotes: [
             'error',
-            'single'
+            'single',
         ],
-        'semi': [
+        semi: [
             'error',
-            'never'
-        ]
-    }
+            'never',
+        ],
+        'linebreak-style': 0,
+        eqeqeq: 'error',
+        'no-trailing-spaces': 'error',
+        'object-curly-spacing': [
+            'error', 'always',
+        ],
+        'arrow-spacing': [
+            'error', { before: true, after: true },
+        ],
+        'no-console': 0,
+        'no-case-declarations': 0,
+        'no-else-return': 0,
+        'react/prop-types': 0,
+    },
 }
