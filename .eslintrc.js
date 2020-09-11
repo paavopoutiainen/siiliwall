@@ -1,9 +1,9 @@
-// eslint-disable-next-line no-undef
 module.exports = {
     env: {
         commonjs: true,
         es6: true,
         node: true,
+        browser: true,
     },
     extends: [
         'eslint:recommended',
@@ -34,6 +34,10 @@ module.exports = {
         semi: [
             'error',
             'never',
+        ],
+        'linebreak-style': [
+            'error',
+            'unix',
         ],
         eqeqeq: 'error',
         'no-trailing-spaces': 'error',
