@@ -35,10 +35,6 @@ module.exports = {
             'error',
             'never',
         ],
-        'linebreak-style': [
-            'error',
-            'unix',
-        ],
         eqeqeq: 'error',
         'no-trailing-spaces': 'error',
         'object-curly-spacing': [
