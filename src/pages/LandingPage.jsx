@@ -3,7 +3,7 @@ import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import NewBoardForm from '../components/NewBoardForm'
-import { GET_ALL_BOARDS } from '../graphql/Queries'
+import { GET_ALL_BOARDS } from '../graphql/queries'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 

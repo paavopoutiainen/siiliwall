@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { useQuery } from '@apollo/client'
-import { GET_BOARD_BY_ID } from '../graphql/Queries'
+import { GET_BOARD_BY_ID } from '../graphql/queries'
 import { boardPageStyles } from '../styles/styles'
 import '../styles.css'
 

@@ -6,7 +6,6 @@ module.exports = {
         browser: true,
     },
     extends: [
-        'eslint:recommended',
         'airbnb',
         'airbnb/hooks',
     ],
@@ -35,7 +34,7 @@ module.exports = {
             'error',
             'never',
         ],
-        'linebreak-style': ['', 'unix'],
+        'linebreak-style': 0,
         eqeqeq: 'error',
         'no-trailing-spaces': 'error',
         'object-curly-spacing': [
