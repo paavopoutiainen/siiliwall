@@ -1,24 +1,14 @@
-const { app, closeHttpServer } = require("../src/index.js")
+const { app } = require("../src/index.js")
 const request = require('supertest')(app);
-const db = require("../models/index.js")
-const dummyData = require("../dummyData")
+const { initializeDb, afterTests } = require("./utils");
+const db = require("../models/index.js");
 
 describe("With initial test data in the database, queries", () => {
-  beforeAll(async () => {
-    return await db.sequelize.sync({force: true}).then(() => {
-      dummyData.boards.forEach(board => {
-        db.Board.create(board)
-      })
-      dummyData.columns.forEach(column => {
-        db.Column.create(column)
-      })
-      dummyData.tasks.forEach(task => {
-        db.Task.create(task)
-      })
-      dummyData.subtasks.forEach(subtask => {
-        db.Subtask.create(subtask)
-      })
-    })
+  /*
+    Reinitialize the database before each test in this describe block
+  */
+  beforeEach(async () => {
+    return initializeDb()
   })
 
   test("Boards are returned as JSON", async () => {
@@ -51,8 +41,6 @@ describe("With initial test data in the database, queries", () => {
 })
 
 afterAll(async () => {
-  closeHttpServer()
-  await db.sequelize.drop()
-  return await db.sequelize.close()
+  return afterTests()
 })
 
