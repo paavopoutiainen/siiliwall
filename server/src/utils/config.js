@@ -1,7 +1,7 @@
-require("dotenv").config()
+require('dotenv').config()
 
-let PORT = process.env.PORT
+const { PORT } = process.env
 
 module.exports = {
-  PORT
+    PORT,
 }

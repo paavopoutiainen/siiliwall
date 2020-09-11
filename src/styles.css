@@ -1,62 +1,23 @@
-.body {
-    margin: 20px;
-}
-.flex-container {
-    display: flex;
-    flex-direction: row;
-}
-.column-rename-form {
-    padding: 0px 0px 5px 0px;
-    display: "flex";
-    overflow: "auto";
-    width: "95%";
-}
-.column-name {
-    font-size: 20px;
-    margin: 10px;
-    padding: 5px;
-}
-.column-gap {
-    margin-right: 8px;
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
 }
 
-.column-add-new-btn {
-    margin-bottom: 20px;
+html, body {
+    font-size: 62.5%;
+    height: 100%;
 }
 
-.column-rename-txtField {
-    padding: 0px 5px 0px 5px;
+.addButton__link {
+    text-decoration: none;
+    color: #ff8d58;
+    font-size: 1.2rem;
 }
-
-.column-delete-btn {
-    margin-top: 10px;
-}
-
-.column-body {
-    padding: 4px;
-    min-width: 250px;
-    min-height: 500px;
-    border-radius: 5px;
-
-}
-
-.task-body {
-    padding: 10px;
-    margin: 0 0 5px 0;
-    border-radius: 5px;
-    min-height: 50px;
-    background-color: #fff;
-    color: #000;
-
-}
-
-
-.task-deleteIcon {
-    color:black;
-    font-size: medium;
-    
-}
-
-.task-add-new-btn {
-    margin: 10px;
+.boardList__button__link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 1.2rem;
+    width: 100%;
 }
