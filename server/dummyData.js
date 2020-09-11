@@ -25,12 +25,12 @@ let columns = [
   {
     name: "column3",
     boardId: 2,
-    orderNumber: 1
+    orderNumber: 2
   },
   {
     name: "column4",
     boardId: 2,
-    orderNumber: 2
+    orderNumber: 1
   },
   {
     name: "column5",

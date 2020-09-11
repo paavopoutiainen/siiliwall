@@ -36,6 +36,7 @@ export const landingPageStyles = makeStyles({
         textDecoration: 'none',
     }
 })
+
 export const boardPageStyles = makeStyles({
     root: {
         minHeight: '100vh'
@@ -43,5 +44,13 @@ export const boardPageStyles = makeStyles({
 
     title: {
         fontSize: '2rem'
+    },
+
+    column: {
+        backgroundColor: '#EBECF0',
+        height: 600,
+        width: 350,
+        margin: 6,
+        borderRadius: 6
     }
 })
