@@ -36,6 +36,32 @@ describe('With initial test data in the database, queries', () => {
         const board = response.body.data.boardById
         expect(board.id).toBe('1')
     })
+
+    test('task is returned as JSON', async () => {
+        await request
+            .post('/graphql')
+            .send({ query: '{ taskById(id: "2") { id } }' })
+            .expect(200)
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('taskById query returns one task with the given id of 3', async () => {
+        const response = await request
+            .post('/graphql')
+            .send({ query: '{ taskById(id: "3") { id } }' })
+
+        const task = response.body.data.taskById
+        expect(task.id).toBe('3')
+    })
+
+    test('subtasks array of task can be accessed in the response of taskById query', async () => {
+        const response = await request
+            .post('/graphql')
+            .send({ query: '{ taskById(id: "3") { id title subtasks {id} } }' })
+
+        const task = response.body.data.taskById
+        expect(Array.isArray([task.subtasks])).toBe(true)
+    })
 })
 
 afterAll(() => afterTests())
