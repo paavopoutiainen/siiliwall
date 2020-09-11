@@ -1,4 +1,4 @@
-import React from "react"
+import React from 'react'
 import { Grid } from '@material-ui/core'
 import Board from '../components/Board'
 import { boardPageStyles } from '../styles/styles'
