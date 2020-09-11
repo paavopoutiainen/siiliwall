@@ -20,14 +20,26 @@ describe('With initial test data in the database, queries', () => {
             .expect('Content-Type', /application\/json/)
     })
 
-    test('allBoards query returns three boards in an array', async () => {
+    test('allBoards query returns all the boards in the database', async () => {
         const response = await request
             .post('/graphql')
             .send({ query: '{ allBoards { id name columnOrder } }' })
             .expect('Content-Type', /application\/json/)
 
         const { allBoards } = response.body.data
-        expect(allBoards).toHaveLength(3)
+
+        const boardsInTheDatabase = await boardsInTheDb()
+        expect(allBoards).toHaveLength(boardsInTheDatabase.length)
+    })
+
+    test('allBoards query returns an array of boards inside the JSON', async () => {
+        const response = await request
+            .post('/graphql')
+            .send({ query: '{ allBoards { id name columnOrder } }' })
+            .expect('Content-Type', /application\/json/)
+
+        const { allBoards } = response.body.data
+        expect(Array.isArray([allBoards])).toBe(true)
     })
 
     test('boardById query returns one board with the given id', async () => {
