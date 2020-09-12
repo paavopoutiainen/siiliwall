@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const { app } = require('../src/index.js')
 const {
-    initializeDb, afterTests, boardsInTheDb, initialBoards, columnsOfBoardInTheDb,
+    initializeDb, afterTests, boardsInTheDb, initialBoards, columnsOfBoardInTheDb, columnsInTheDb,
 } = require('./utils')
 
 const request = supertest(app)
@@ -115,6 +115,35 @@ describe('mutations', () => {
 
         const columnsAtEnd = await columnsOfBoardInTheDb(2)
         expect(columnsAtStart.length + 1).toEqual(columnsAtEnd.length)
+    })
+
+    test('deleteColumnById mutation responds with JSON', async () => {
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation { deleteColumnById(id: "2") }' })
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('deleteColumnById mutation deletes one column from the database', async () => {
+        const columnsAtStart = await columnsInTheDb()
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation{ deleteColumnById(id: "2") }' })
+
+        const columnsAtEnd = await columnsInTheDb()
+
+        expect(columnsAtStart.length - 1).toEqual(columnsAtEnd.length)
+    })
+
+    test('deleteColumnById mutation deletes column with the correct id from the database', async () => {
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation{ deleteColumnById(id: "2") }' })
+
+        const columnsAtEnd = await columnsInTheDb()
+        const stillExists = columnsAtEnd.some((column) => column.id === 2)
+
+        expect(stillExists).toBe(false)
     })
 })
 
