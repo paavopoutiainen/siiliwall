@@ -1,7 +1,13 @@
 const supertest = require('supertest')
 const { app } = require('../src/index.js')
 const {
-    initializeDb, afterTests, boardsInTheDb, initialBoards, columnsOfBoardInTheDb, columnsInTheDb,
+    initializeDb,
+    afterTests,
+    boardsInTheDb,
+    initialBoards,
+    columnsOfBoardInTheDb,
+    columnsInTheDb,
+    tasksOfColumnInTheDb,
 } = require('./utils')
 
 const request = supertest(app)
@@ -144,6 +150,23 @@ describe('mutations', () => {
         const stillExists = columnsAtEnd.some((column) => column.id === 2)
 
         expect(stillExists).toBe(false)
+    })
+
+    test('addTaskForColumn mutation responds with JSON', async () => {
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation { addTaskForColumn(columnId: "3", title: "newTask") { id } }' })
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('task can be added for certain column by using addTaskForColumn mutation', async () => {
+        const tasksAtStart = await tasksOfColumnInTheDb(3)
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation { addTaskForColumn(columnId: "3", title: "newTask") { id } }' })
+
+        const tasksAtEnd = await tasksOfColumnInTheDb(3)
+        expect(tasksAtStart.length + 1).toEqual(tasksAtEnd.length)
     })
 })
 
