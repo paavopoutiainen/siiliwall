@@ -1,7 +1,7 @@
 const supertest = require('supertest')
 const { app } = require('../src/index.js')
 const {
-    initializeDb, afterTests, boardsInTheDb, initialBoards,
+    initializeDb, afterTests, boardsInTheDb, initialBoards, columnsOfBoardInTheDb,
 } = require('./utils')
 
 const request = supertest(app)
@@ -98,6 +98,23 @@ describe('mutations', () => {
 
         const boardsAtEnd = await boardsInTheDb()
         expect(initialBoards.length + 1).toEqual(boardsAtEnd.length)
+    })
+
+    test('addColumnForBoard mutation responds with JSON', async () => {
+        await request
+            .post('/graphql')
+            .send({ query: '{ mutation addBoard(name: "newBoard") { id } }' })
+            .expect('Content-Type', /application\/json/)
+    })
+
+    test('column can be added for certain board by using addColumnForBoard mutation', async () => {
+        const columnsAtStart = await columnsOfBoardInTheDb(2)
+        await request
+            .post('/graphql')
+            .send({ query: 'mutation{ addColumnForBoard(boardId: "2", columnName: "newColumn") { id } }' })
+
+        const columnsAtEnd = await columnsOfBoardInTheDb(2)
+        expect(columnsAtStart.length + 1).toEqual(columnsAtEnd.length)
     })
 })
 

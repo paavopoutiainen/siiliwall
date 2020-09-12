@@ -60,8 +60,17 @@ const boardsInTheDb = async () => {
     }
 }
 
+const columnsOfBoardInTheDb = async (id) => {
+    try {
+        const columns = await db.Column.findAll({ where: { boardId: id } })
+        return columns
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 const initialBoards = dummyData.boards
 
 module.exports = {
-    initializeDb, afterTests, boardsInTheDb, initialBoards,
+    initializeDb, afterTests, boardsInTheDb, initialBoards, columnsOfBoardInTheDb,
 }
