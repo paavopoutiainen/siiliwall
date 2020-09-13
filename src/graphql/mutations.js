@@ -7,4 +7,13 @@ const ADD_BOARD = gql`
         }
     }
 `
+
+export const CHANGE_TASKORDER_FOR_ONE_COLUMN = gql`
+    mutation changeTaskOrderForOneColumn($orderArray: [ID!]!, $columnId: ID!) {
+        changeTaskOrderForOneColumn(newOrder: $orderArray, columnId: $columnId) {
+            id
+            taskOrder
+        }
+    }
+`
 export default ADD_BOARD
