@@ -6,22 +6,23 @@ import TaskList from './TaskList'
 
 const Column = ({ column }) => {
     const classes = boardPageStyles()
+    const { tasks, taskOrder } = column
 
     return (
         <Grid
-            container
             item
+            container
             direction="column"
             classes={{ root: classes.column }}
             alignItems="center"
         >
-            <Grid item container classes={{ root: classes.title }}>
-                <h1>{column.name}</h1>
+            <Grid item container>
+                <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
                     <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
-                        <TaskList tasks={column.tasks} taskOrder={column.taskOrder} />
+                        <TaskList tasks={tasks} taskOrder={taskOrder} />
                         {provided.placeholder}
                     </Grid>
                 )}

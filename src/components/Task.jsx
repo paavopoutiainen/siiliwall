@@ -10,9 +10,9 @@ const Task = ({ task, index }) => {
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
                 <Grid
-                    classes={{ root: classes.task }}
                     item
                     container
+                    classes={{ root: classes.task }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}

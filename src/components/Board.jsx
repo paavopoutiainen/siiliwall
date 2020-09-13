@@ -39,7 +39,7 @@ const Board = ({ id }) => {
         }
 
         if (destination.droppableId === source.droppableId && destination.index === source.index) {
-
+            return
         }
 
         // When task is moved within one column
@@ -56,7 +56,8 @@ const Board = ({ id }) => {
                     columnId: column.id,
                 },
             })
-            // TODO, update the column in the cache with data returned by the mutation instead of refetching
+            // TODO, update the column in the cache with data
+            // returned by the mutation instead of refetching
             refetch()
         }
 
@@ -79,9 +80,9 @@ const Board = ({ id }) => {
                 container
                 direction="column"
                 classes={{ root: classes.root }}
-                spacing={3}
+                spacing={2}
             >
-                <Grid item classes={{ root: classes.title }} xs={12}>
+                <Grid container item direction="row" justify="center" classes={{ root: classes.boardTitle }}>
                     <h1>{board.name}</h1>
                 </Grid>
                 <DragDropContext onDragEnd={onDragEnd}>
@@ -91,7 +92,6 @@ const Board = ({ id }) => {
                 </DragDropContext>
             </Grid>
         </div>
-
     )
 }
 export default Board
