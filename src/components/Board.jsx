@@ -23,20 +23,22 @@ const Board = ({ id }) => {
     const { columns } = board
 
     return (
-        <Grid
-            container
-            direction="column"
-            classes={{ root: classes.root }}
-        >
-            <Grid container direction="row" justify="center">
-                <Grid item classes={{ root: classes.title }}>
+        <div style={{ padding: 20 }}>
+            <Grid
+                container
+                direction="column"
+                classes={{ root: classes.root }}
+                spacing={3}
+            >
+                <Grid item classes={{ root: classes.title }} xs={12}>
                     <h1>{board.name}</h1>
                 </Grid>
+                <Grid item container direction="row">
+                    <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                </Grid>
             </Grid>
-            <Grid container direction="row">
-                <ColumnList columns={columns} columnOrder={columnOrderArray} />
-            </Grid>
-        </Grid>
+        </div>
+
     )
 }
 export default Board
