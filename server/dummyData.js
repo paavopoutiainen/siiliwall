@@ -67,19 +67,19 @@ const tasks = [
         title: 'task4',
         content: 'task4',
         columnId: 3,
-        columnOrderNumber: 3,
+        columnOrderNumber: 2,
     },
     {
         title: 'task5',
         content: 'task5',
         columnId: 3,
-        columnOrderNumber: 1,
+        columnOrderNumber: 3,
     },
     {
         title: 'task6',
         content: 'task6',
         columnId: 3,
-        columnOrderNumber: 2,
+        columnOrderNumber: 1,
     },
 ]
 
