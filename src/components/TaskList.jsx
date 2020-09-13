@@ -1,6 +1,4 @@
 import React from 'react'
-import { Droppable } from 'react-beautiful-dnd'
-import { Grid } from '@material-ui/core'
 import Task from './Task'
 
 const TaskList = ({ tasks, taskOrder }) => {

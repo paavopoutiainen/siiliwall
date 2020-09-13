@@ -7,15 +7,24 @@ const Task = ({ task, index }) => {
     const classes = boardPageStyles()
 
     return (
-        <Grid
-            classes={{ root: classes.task }}
-            item
-            container
-        >
-            <Grid classes={{ root: classes.taskTitle }}>
-                <h1>{task.title}</h1>
-            </Grid>
-        </Grid>
+        <Draggable draggableId={task.id} index={index}>
+            {(provided) => (
+                <Grid
+                    classes={{ root: classes.task }}
+                    item
+                    container
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    ref={provided.innerRef}
+                >
+                    <Grid classes={{ root: classes.taskTitle }}>
+                        <h1>{task.title}</h1>
+                    </Grid>
+                </Grid>
+            )}
+
+        </Draggable>
+
     )
 }
 

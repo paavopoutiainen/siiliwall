@@ -1,6 +1,7 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { useQuery } from '@apollo/client'
+import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
@@ -22,6 +23,10 @@ const Board = ({ id }) => {
     const columnOrderArray = board.columnOrder
     const { columns } = board
 
+    const onDragEnd = () => {
+        console.log('here')
+    }
+
     return (
         <div style={{ padding: 20 }}>
             <Grid
@@ -33,9 +38,11 @@ const Board = ({ id }) => {
                 <Grid item classes={{ root: classes.title }} xs={12}>
                     <h1>{board.name}</h1>
                 </Grid>
-                <Grid item container direction="row">
-                    <ColumnList columns={columns} columnOrder={columnOrderArray} />
-                </Grid>
+                <DragDropContext onDragEnd={onDragEnd}>
+                    <Grid item container direction="row">
+                        <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                    </Grid>
+                </DragDropContext>
             </Grid>
         </div>
 
