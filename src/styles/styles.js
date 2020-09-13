@@ -50,7 +50,16 @@ export const boardPageStyles = makeStyles({
         backgroundColor: '#EBECF0',
         height: 600,
         width: 350,
-        margin: 6,
+        margin: 5,
         borderRadius: 6,
+        padding: 10,
+    },
+    task: {
+        backgroundColor: '#fff',
+        height: 50,
+        width: '90%',
+        margin: 5,
+        borderRadius: 4,
+        padding: 5,
     },
 })
