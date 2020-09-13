@@ -34,11 +34,9 @@ const LandingPage = () => {
                 <h1>Welcome!</h1>
             </Grid>
             <Grid item>
-                <Link className="addButton__link">
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }}>
-                        Add Board
-                    </Button>
-                </Link>
+                <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }}>
+                    Add Board
+                </Button>
             </Grid>
             <Grid item>
                 <Grid

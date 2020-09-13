@@ -7,7 +7,7 @@ const TaskList = ({ tasks, taskOrder }) => {
     return (
         <>
             {newTaskOrder.map((task) => (
-                <Task task={task} key={taskOrder} />
+                <Task task={task} key={task.id} />
             ))}
         </>
     )
