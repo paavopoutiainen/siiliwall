@@ -42,8 +42,16 @@ export const boardPageStyles = makeStyles({
         minHeight: '100vh',
     },
 
-    title: {
-        fontSize: '2rem',
+    boardTitle: {
+        fontSize: '2.3rem',
+    },
+
+    columnTitle: {
+        fontSize: '1.3rem',
+    },
+
+    taskTitle: {
+        fontSize: '0.9rem',
     },
 
     column: {
@@ -52,13 +60,12 @@ export const boardPageStyles = makeStyles({
         width: 350,
         margin: 5,
         borderRadius: 6,
-        padding: 10,
+        padding: 5,
     },
     task: {
-        backgroundColor: '#fff',
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         height: 50,
-        width: '90%',
-        margin: 5,
+        margin: 3,
         borderRadius: 4,
         padding: 5,
     },

@@ -8,11 +8,13 @@ const Task = ({ task }) => {
     return (
         <Grid
             item
+            container
             classes={{ root: classes.task }}
         >
-            <h1>
-                {task.title}
-            </h1>
+            <Grid classes={{ root: classes.taskTitle }}>
+                <h1>{task.title}</h1>
+            </Grid>
+
         </Grid>
     )
 }
