@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 const db = require('../models/index.js')
 const dummyData = require('../dummyData')
 const { closeHttpServer } = require('../src/index.js')
