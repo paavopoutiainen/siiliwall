@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
+import { useMutation } from '@apollo/client'
 import { Grid, TextField, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
-import { useMutation } from '@apollo/client'
 import { ADD_TASK } from '../graphql/mutations'
 
 const Column = ({ column }) => {
@@ -16,12 +16,12 @@ const Column = ({ column }) => {
         setTitle(event.target.value)
     }
 
-   async function handleSave(event) {
+    async function handleSave(event) {
         event.preventDefault()
         addTask({
             variables: {
                 columnId: column.id,
-                title: title,
+                title,
             },
         })
         setTitle('')
