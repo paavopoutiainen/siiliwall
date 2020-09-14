@@ -32,21 +32,40 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
+const initializeDb = async () => {
+    try {
+        await db.sequelize.sync({ force: true })
+        await Promise.all(
+            dummyData.boards.map(async (board) => {
+                const resolved = await db.Board.create(board)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.columns.map(async (column) => {
+                const resolved = await db.Column.create(column)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.tasks.map(async (task) => {
+                const resolved = await db.Task.create(task)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.subtasks.map(async (subtask) => {
+                const resolved = await db.Subtask.create(subtask)
+                return resolved
+            }),
+        )
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 if (env === 'development') {
-    db.sequelize.sync({ force: true }).then(() => {
-        dummyData.boards.forEach((board) => {
-            db.Board.create(board)
-        })
-        dummyData.columns.forEach((column) => {
-            db.Column.create(column)
-        })
-        dummyData.tasks.forEach((task) => {
-            db.Task.create(task)
-        })
-        dummyData.subtasks.forEach((subtask) => {
-            db.Subtask.create(subtask)
-        })
-    })
+    initializeDb()
 }
 
 module.exports = db
