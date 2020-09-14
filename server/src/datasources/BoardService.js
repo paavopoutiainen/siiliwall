@@ -175,7 +175,8 @@ class BoardService {
                 where: { columnId },
             })
             const addedTask = await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
-            return addedTask
+            const columnFromDb = await this.store.Column.findByPk(columnId)
+            return columnFromDb
         } catch (e) {
             console.error(e)
         }

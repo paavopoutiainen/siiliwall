@@ -52,6 +52,7 @@ const Column = ({ column }) => {
                 name="title"
                 label="Name"
                 type="text"
+                value={title}
                 fullWidth
                 onChange={(event) => handleChange(event)}
             />

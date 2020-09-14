@@ -21,7 +21,12 @@ export const ADD_TASK = gql`
     mutation createTask($columnId: ID!, $title: String!) {
         addTaskForColumn(columnId: $columnId, title: $title) {
             id
-            title
+            name
+            taskOrder
+            tasks{
+                id
+                title
+            }
         }
     }
 `
