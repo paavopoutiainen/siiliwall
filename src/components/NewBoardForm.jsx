@@ -10,7 +10,6 @@ import { GET_ALL_BOARDS } from '../graphql/queries'
 const NewBoardForm = ({ setOpen, open }) => {
     const [addBoard] = useMutation(ADD_BOARD, {
         refetchQueries: [{ query: GET_ALL_BOARDS }],
-
     })
     const [name, setName] = useState('')
 

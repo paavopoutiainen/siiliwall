@@ -20,7 +20,7 @@ const LandingPage = () => {
     if (error) return `Error: ${error.message}`
 
     return (
-        <div style={{ padding: 30 }}>
+        <div className="container">
             <Grid
                 container
                 direction="column"

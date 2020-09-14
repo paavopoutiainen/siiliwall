@@ -8,15 +8,15 @@ export const ADD_BOARD = gql`
     }
 `
 
-export const CHANGE_TASKORDER_FOR_ONE_COLUMN = gql`
-    mutation changeTaskOrderForOneColumn($orderArray: [ID!]!, $columnId: ID!) {
-        changeTaskOrderForOneColumn(newOrder: $orderArray, columnId: $columnId) {
+export const CHANGE_TASKORDER_IN_COLUMN = gql`
+    mutation changeTaskOrderInColumn($orderArray: [ID!]!, $columnId: ID!) {
+        changeTaskOrderInColumn(newOrder: $orderArray, columnId: $columnId) {
             id
             taskOrder
         }
     }
 `
-export default ADD_BOARD
+
 export const ADD_TASK = gql`
     mutation createTask($columnId: ID!, $title: String!) {
         addTaskForColumn(columnId: $columnId, title: $title) {

@@ -3,10 +3,9 @@ import { Grid } from '@material-ui/core'
 import { useQuery, useMutation } from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
-
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
-import { CHANGE_TASKORDER_FOR_ONE_COLUMN } from '../graphql/mutations'
+import { CHANGE_TASKORDER_IN_COLUMN } from '../graphql/mutations'
 import '../styles.css'
 
 const Board = ({ id }) => {
@@ -18,7 +17,7 @@ const Board = ({ id }) => {
         },
     })
 
-    const [changeTaskOrderForOneColumn, dataOfMutation] = useMutation(CHANGE_TASKORDER_FOR_ONE_COLUMN)
+    const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
     const classes = boardPageStyles()
 
     if (loading) return <h1>Loading board..</h1>
@@ -49,16 +48,13 @@ const Board = ({ id }) => {
             newTaskOrder.splice(source.index, 1)
             newTaskOrder.splice(destination.index, 0, draggableId)
 
-            await changeTaskOrderForOneColumn({
+            await changeTaskOrderInColumn({
                 variables: {
                     orderArray: newTaskOrder,
                     columnId: column.id,
                 },
             })
             // TODO, figure out if the cache can be updated here before the mutation is sent
-            // Now there is a lag when showing the new order of tasks in the client
-            // When reordering the tasks the cache is updated and the new order is shown
-            // only once the response arrives from the server, this needs to be fixed
         }
 
         // When task is moved into another column
@@ -75,7 +71,7 @@ const Board = ({ id }) => {
     }
 
     return (
-        <div style={{ padding: 20 }}>
+        <div className="container">
             <Grid
                 container
                 direction="column"
