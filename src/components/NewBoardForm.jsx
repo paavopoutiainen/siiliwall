@@ -4,10 +4,10 @@ import {
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
 import { useMutation } from '@apollo/client'
-import ADD_BOARD from '../graphql/mutations'
+import { ADD_BOARD } from '../graphql/mutations'
 
 const NewBoardForm = ({ setOpen, open }) => {
-    const [addBoard, { data }] = useMutation(ADD_BOARD)
+    const [addBoard] = useMutation(ADD_BOARD)
     const [name, setName] = useState('')
 
     function handleChange(event) {
