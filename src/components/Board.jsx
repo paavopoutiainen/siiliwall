@@ -11,7 +11,7 @@ import '../styles.css'
 
 const Board = ({ id }) => {
     const {
-        loading, error, data, refetch,
+        loading, error, data,
     } = useQuery(GET_BOARD_BY_ID, {
         variables: {
             boardId: id,
@@ -56,9 +56,10 @@ const Board = ({ id }) => {
                     columnId: column.id,
                 },
             })
-            // TODO, update the column in the cache with data
-            // returned by the mutation instead of refetching
-            refetch()
+            // TODO, figure out if the cache can be updated here before the mutation is sent
+            // Now there is a lag when showing the new order of tasks in the client
+            // When reordering the tasks the cache is updated and the new order is shown
+            // only once the response arrives from the server, this needs to be fixed
         }
 
         // When task is moved into another column
@@ -70,7 +71,7 @@ const Board = ({ id }) => {
 
             newTaskOrderOfSourceColumn.splice(source.index, 1)
             newTaskOrderOfDestinationColumn.splice(destination.index, 0, draggableId)
-            // TODO, call for mutation
+            // TODO, write a mutation and call for it
         }
     }
 
