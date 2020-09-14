@@ -10,6 +10,10 @@ html, body {
     height: 100%;
 }
 
+.container {
+    padding:30px;
+}
+
 .addButton__link {
     text-decoration: none;
     color: #ff8d58;

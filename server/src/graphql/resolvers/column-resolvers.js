@@ -14,6 +14,9 @@ const schema = {
         deleteColumnById(root, { id }) {
             return dataSources.boardService.deleteColumnById(id)
         },
+        changeTaskOrderInColumn(root, args) {
+            return dataSources.boardService.reOrderColumnsTasks(args.newOrder, args.columnId)
+        },
     },
 
     Column: {

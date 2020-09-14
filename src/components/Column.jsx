@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Droppable } from 'react-beautiful-dnd'
 import { useMutation } from '@apollo/client'
 import { Grid, TextField, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
@@ -8,8 +9,7 @@ import { ADD_TASK } from '../graphql/mutations'
 const Column = ({ column }) => {
     const [addTask] = useMutation(ADD_TASK)
     const classes = boardPageStyles()
-    const { tasks } = column
-    const taskOrderArray = column.taskOrder
+    const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
 
     function handleChange(event) {
@@ -33,19 +33,26 @@ const Column = ({ column }) => {
             container
             direction="column"
             classes={{ root: classes.column }}
+            alignItems="center"
         >
             <Grid item container>
                 <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
             </Grid>
+            <Droppable droppableId={column.id}>
+                {(provided) => (
+                    <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
+                        <TaskList tasks={tasks} taskOrder={taskOrder} />
+                        {provided.placeholder}
+                    </Grid>
+                )}
 
-            <Grid item container>
-                <TaskList tasks={tasks} taskOrder={taskOrderArray} />
-            </Grid>
+            </Droppable>
             <TextField
                 margin="dense"
                 name="title"
                 label="Name"
                 type="text"
+                value={title}
                 fullWidth
                 onChange={(event) => handleChange(event)}
             />
