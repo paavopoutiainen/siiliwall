@@ -5,9 +5,13 @@ import {
 } from '@material-ui/core'
 import { useMutation } from '@apollo/client'
 import { ADD_BOARD } from '../graphql/mutations'
+import { GET_ALL_BOARDS } from '../graphql/queries'
 
 const NewBoardForm = ({ setOpen, open }) => {
-    const [addBoard] = useMutation(ADD_BOARD)
+    const [addBoard] = useMutation(ADD_BOARD, {
+        refetchQueries: [{ query: GET_ALL_BOARDS }],
+
+    })
     const [name, setName] = useState('')
 
     function handleChange(event) {
