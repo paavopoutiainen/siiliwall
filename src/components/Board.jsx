@@ -31,7 +31,6 @@ const Board = ({ id }) => {
 
     // TODO, move this function into utils folder
     const onDragEnd = async (result) => {
-        console.log('here', result)
         const { destination, source, draggableId } = result
 
         if (!destination) {
