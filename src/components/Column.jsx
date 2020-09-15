@@ -7,7 +7,7 @@ import TaskList from './TaskList'
 import { ADD_TASK } from '../graphql/mutations'
 import DropdownMenu from './DropdownMenu'
 
-const Column = ({ column }) => {
+const Column = ({ column, key }) => {
     const [addTask] = useMutation(ADD_TASK)
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
@@ -38,7 +38,7 @@ const Column = ({ column }) => {
         >
             <Grid item container direction="row" justify="space-between">
                 <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
-                <Grid item><DropdownMenu /></Grid>
+                <Grid item><DropdownMenu id={key} /></Grid>
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (

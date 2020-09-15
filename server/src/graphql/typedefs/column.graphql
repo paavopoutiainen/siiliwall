@@ -16,6 +16,3 @@ type Mutation {
   deleteColumnById(id: ID!): ID
   changeTaskOrderInColumn(newOrder: [ID!], columnId: ID!): Column
 }
-
-
-

@@ -2,16 +2,30 @@ import React, { useState } from 'react'
 import { Menu, MenuItem, Button, ListItemIcon, ListItemText } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
+import { DELETE_COLUMN } from '../graphql/mutations'
+import { useMutation } from '@apollo/client'
 
-const DropdownMenu = () => {
+const DropdownMenu = ({ key }) => {
+    const [deleteColumn] = useMutation(DELETE_COLUMN) // deleteData?
     const [anchorEl, setAnchorEl] = useState(null)
 
     function handleClick(event) {
         setAnchorEl(event.currentTarget)
     }
+
     function handleClose() {
+        deleteColumnById()
         setAnchorEl(null)
     }
+
+    function deleteColumnById(key) {
+        deleteColumn({
+            variables: {
+                columnId: key
+            }
+        })
+    }
+
     return (
         <div>
             <Button
@@ -31,9 +45,9 @@ const DropdownMenu = () => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem>
+                <MenuItem onClick={handleClose} >
                     <ListItemIcon>
-                        <Delete onClick={handleClose} fontSize="medium" />
+                        <Delete fontSize="medium" />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
