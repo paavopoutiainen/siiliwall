@@ -69,5 +69,5 @@ export const boardPageStyles = makeStyles({
         margin: 3,
         borderRadius: 4,
         padding: 5,
-    },
+    }
 })

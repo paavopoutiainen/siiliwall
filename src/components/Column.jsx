@@ -5,6 +5,7 @@ import { Grid, TextField, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import { ADD_TASK } from '../graphql/mutations'
+import DropdownMenu from './DropdownMenu'
 
 const Column = ({ column }) => {
     const [addTask] = useMutation(ADD_TASK)
@@ -35,8 +36,9 @@ const Column = ({ column }) => {
             classes={{ root: classes.column }}
             alignItems="center"
         >
-            <Grid item container>
+            <Grid item container direction="row" justify="space-between">
                 <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
+                <Grid item><DropdownMenu /></Grid>
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
