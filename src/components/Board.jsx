@@ -1,6 +1,8 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { useQuery, useMutation } from '@apollo/client'
+import {
+    useQuery, useMutation, useApolloClient, gql,
+} from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
 import { boardPageStyles } from '../styles/styles'
@@ -18,6 +20,7 @@ const Board = ({ id }) => {
     })
 
     const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
+    const client = useApolloClient()
     const classes = boardPageStyles()
 
     if (loading) return <h1>Loading board..</h1>
@@ -48,13 +51,25 @@ const Board = ({ id }) => {
             newTaskOrder.splice(source.index, 1)
             newTaskOrder.splice(destination.index, 0, draggableId)
 
+            const columnId = `Column:${column.id}`
+            client.writeFragment({
+                id: columnId,
+                fragment: gql`
+                    fragment taskOrder on Column {
+                        taskOrder
+                    }
+                `,
+                data: {
+                    taskOrder: newTaskOrder,
+                },
+            })
+
             await changeTaskOrderInColumn({
                 variables: {
                     orderArray: newTaskOrder,
                     columnId: column.id,
                 },
             })
-            // TODO, figure out if the cache can be updated here before the mutation is sent
         }
 
         // When task is moved into another column
