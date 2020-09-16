@@ -5,7 +5,7 @@ import {
     useMutation, useApolloClient, gql,
 } from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { GET_BOARD_BY_ID } from '../graphql/board/boardQueries'
+import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
 import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS } from '../graphql/mutations'
@@ -77,7 +77,7 @@ const Board = ({ id }) => {
             newTaskOrderOfDestinationColumn.splice(destination.index, 0, draggableId)
 
             // Find from the cache the board
-            const dataInCache = client.readQuery({ query: GET_BOARD_BY_ID, variables: { boardId: board.id } })
+            const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { boardId: board.id } })
 
             // Find from the cache the columns being manipulated
             const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
