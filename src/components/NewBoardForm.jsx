@@ -6,7 +6,7 @@ import {
 import { useAddBoard } from '../graphql/board/hooks/useAddBoard'
 
 const NewBoardForm = ({ setOpen, open }) => {
-    const addBoard = useAddBoard()
+    const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
 
     const handleChange = (event) => {

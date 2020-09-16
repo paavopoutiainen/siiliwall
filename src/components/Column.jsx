@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Droppable } from 'react-beautiful-dnd'
 import { Grid, TextField, Button } from '@material-ui/core'
-import { useAddTask } from '../graphql/task/useAddTask'
+import useAddTask from '../graphql/task/hooks/useAddTask'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 
@@ -9,7 +9,7 @@ const Column = ({ column }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
-    const addtask = useAddTask()
+    const [addTask] = useAddTask()
     const isEnabled = title.length > 0
 
     const handleChange = (event) => {
@@ -18,7 +18,7 @@ const Column = ({ column }) => {
 
     const handleSave = (event) => {
         event.preventDefault()
-        addtask({
+        addTask({
             variables: {
                 columnId: column.id,
                 title,
