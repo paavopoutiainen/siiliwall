@@ -1,22 +1,21 @@
 import React, { useState } from 'react'
 import { Droppable } from 'react-beautiful-dnd'
-import { useMutation } from '@apollo/client'
 import { Grid, TextField, Button } from '@material-ui/core'
+import useAddTask from '../graphql/task/useAddTask'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
-import { ADD_TASK } from '../graphql/mutations'
 
 const Column = ({ column }) => {
-    const [addTask] = useMutation(ADD_TASK)
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
+    const { addTask } = useAddTask()
 
-    function handleChange(event) {
+    const handleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    async function handleSave(event) {
+    const handleSave = (event) => {
         event.preventDefault()
         addTask({
             variables: {
@@ -54,7 +53,7 @@ const Column = ({ column }) => {
                 type="text"
                 value={title}
                 fullWidth
-                onChange={(event) => handleChange(event)}
+                onChange={handleChange}
             />
             <Button onClick={handleSave} color="primary">
                 Add
