@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const dataSources = require('../../datasources')
 
 const schema = {
@@ -15,7 +16,15 @@ const schema = {
             return dataSources.boardService.deleteColumnById(id)
         },
         changeTaskOrderInColumn(root, args) {
-            return dataSources.boardService.reOrderColumnsTasks(args.newOrder, args.columnId)
+            return dataSources.boardService.reOrderTasksOfColumn(args.newOrder, args.columnId)
+        },
+        async changeTaskOrdersInColumns(root, {
+            taskId, sourceColumnId, destColumnId, sourceTaskOrder, destTaskOrder,
+        }) {
+            await dataSources.boardService.changeTasksColumnId(taskId, destColumnId)
+            const sourceColumn = await dataSources.boardService.reOrderTasksOfColumn(sourceTaskOrder, sourceColumnId)
+            const destColumn = await dataSources.boardService.reOrderTasksOfColumn(destTaskOrder, destColumnId)
+            return [sourceColumn, destColumn]
         },
     },
 

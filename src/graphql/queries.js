@@ -9,8 +9,9 @@ export const GET_ALL_BOARDS = gql`
     }
 `
 export const GET_BOARD_BY_ID = gql`
-    query findBoardById($boardId: ID!) {
+    query boardById($boardId: ID!) {
         boardById(id: $boardId) {
+            id
             name
             columnOrder
             columns {
