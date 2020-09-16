@@ -56,7 +56,7 @@ const Column = ({ column }) => {
                     type="text"
                     value={title}
                     fullWidth
-                    onChange={(event) => handleChange(event)}
+                    onChange={handleChange}
                 />
                 <Button disabled={!isEnabled} onClick={handleSave} color="primary">
                     Add
