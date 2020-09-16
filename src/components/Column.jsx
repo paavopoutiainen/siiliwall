@@ -41,6 +41,7 @@ const Column = ({ column }) => {
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
                         <TaskList tasks={tasks} taskOrder={taskOrder} />
                         {provided.placeholder}
@@ -50,6 +51,7 @@ const Column = ({ column }) => {
             </Droppable>
             <Grid item container>
                 <TextField
+                    autoComplete="off"
                     margin="dense"
                     name="title"
                     label="Name"

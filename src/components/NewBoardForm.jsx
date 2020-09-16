@@ -41,6 +41,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                         Please enter the credentials for the board.
                     </DialogContentText>
                     <TextField
+                        autoComplete="off"
                         autoFocus
                         margin="dense"
                         name="name"
