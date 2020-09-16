@@ -90,6 +90,17 @@ class BoardService {
         }
     }
 
+    async deleteTaskById(taskId) {
+        try {
+            await this.store.Task.destroy({
+                where: { id: taskId },
+            })
+            return taskId
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
     /*
     Gets the order of columns in certain board, returns an array of columnIds in the correct order.
     This field is for keeping track of the order in which the columns are displayed in the board
