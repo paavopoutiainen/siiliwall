@@ -12,7 +12,7 @@ type Query {
 }
 
 type Mutation {
-  addColumnForBoard(boardId: ID!, columnName: String!): Column
+  addColumnForBoard(boardId: ID!, columnName: String!): Board
   deleteColumnById(id: ID!): ID
   changeTaskOrderInColumn(newOrder: [ID!], columnId: ID!): Column
 }

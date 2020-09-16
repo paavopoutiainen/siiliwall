@@ -30,3 +30,17 @@ export const ADD_TASK = gql`
         }
     }
 `
+
+export const ADD_COLUMN = gql`
+    mutation addColumnForBoard($boardId: ID!, $columnName: String!) {
+        addColumnForBoard(boardId: $boardId, columnName: $columnName) {
+            id
+            name
+            columns{
+                id
+                name
+            }
+            columnOrder
+        }
+    }
+`

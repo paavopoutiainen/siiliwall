@@ -1,5 +1,5 @@
-import React from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, TextField, Button } from '@material-ui/core'
 import {
     useQuery, useMutation, useApolloClient, gql,
 } from '@apollo/client'
@@ -7,7 +7,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
-import { CHANGE_TASKORDER_IN_COLUMN } from '../graphql/mutations'
+import { CHANGE_TASKORDER_IN_COLUMN, ADD_COLUMN } from '../graphql/mutations'
 import '../styles.css'
 
 const Board = ({ id }) => {
@@ -22,6 +22,22 @@ const Board = ({ id }) => {
     const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
     const client = useApolloClient()
     const classes = boardPageStyles()
+    const [columnName, setColumnName] = useState('')
+    const [addColumn] = useMutation(ADD_COLUMN)
+
+    const handleChange = (event) => {
+        setColumnName(event.target.value)
+    }
+
+    const handleSave = () => {
+        addColumn({
+            variables: {
+                boardId: id,
+                columnName,
+            },
+        })
+        setColumnName('')
+    }
 
     if (loading) return <h1>Loading board..</h1>
     if (error) return `Error: ${error.message}`
@@ -99,6 +115,23 @@ const Board = ({ id }) => {
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid item container direction="row">
                         <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                        <Grid item>
+                            <TextField
+                                margin="dense"
+                                name="title"
+                                label="Name"
+                                type="text"
+                                value={columnName}
+                                fullWidth
+                                onChange={handleChange}
+                            />
+                            <Button
+                                color="primary"
+                                onClick={handleSave}
+                            >
+                                Add
+                            </Button>
+                        </Grid>
                     </Grid>
                 </DragDropContext>
             </Grid>

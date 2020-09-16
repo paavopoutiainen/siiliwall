@@ -169,8 +169,9 @@ class BoardService {
             const biggestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
-            const addedColumn = await this.store.Column.create({ boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
-            return addedColumn
+            await this.store.Column.create({ boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
+            const boardFromDb = await this.store.Board.findByPk(boardId)
+            return boardFromDb
         } catch (e) {
             console.error(e)
         }
@@ -185,7 +186,7 @@ class BoardService {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
-            const addedTask = await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
+            await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
             const columnFromDb = await this.store.Column.findByPk(columnId)
             return columnFromDb
         } catch (e) {
