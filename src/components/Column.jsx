@@ -11,12 +11,13 @@ const Column = ({ column }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
+    const isEnabled = title.length > 0
 
-    function handleChange(event) {
+    const handleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    async function handleSave(event) {
+    const handleSave = (event) => {
         event.preventDefault()
         addTask({
             variables: {
@@ -47,18 +48,20 @@ const Column = ({ column }) => {
                 )}
 
             </Droppable>
-            <TextField
-                margin="dense"
-                name="title"
-                label="Name"
-                type="text"
-                value={title}
-                fullWidth
-                onChange={(event) => handleChange(event)}
-            />
-            <Button onClick={handleSave} color="primary">
-                Add
-            </Button>
+            <Grid item container>
+                <TextField
+                    margin="dense"
+                    name="title"
+                    label="Name"
+                    type="text"
+                    value={title}
+                    fullWidth
+                    onChange={(event) => handleChange(event)}
+                />
+                <Button disabled={!isEnabled} onClick={handleSave} color="primary">
+                    Add
+                </Button>
+            </Grid>
         </Grid>
     )
 }
