@@ -10,6 +10,7 @@ const Column = ({ column }) => {
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
     const { addTask } = useAddTask()
+    const isEnabled = title.length > 0
 
     const handleChange = (event) => {
         setTitle(event.target.value)
@@ -39,6 +40,7 @@ const Column = ({ column }) => {
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
+                    // eslint-disable-next-line react/jsx-props-no-spreading
                     <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
                         <TaskList tasks={tasks} taskOrder={taskOrder} />
                         {provided.placeholder}
@@ -46,18 +48,21 @@ const Column = ({ column }) => {
                 )}
 
             </Droppable>
-            <TextField
-                margin="dense"
-                name="title"
-                label="Name"
-                type="text"
-                value={title}
-                fullWidth
-                onChange={handleChange}
-            />
-            <Button onClick={handleSave} color="primary">
-                Add
-            </Button>
+            <Grid item container>
+                <TextField
+                    autoComplete="off"
+                    margin="dense"
+                    name="title"
+                    label="Name"
+                    type="text"
+                    value={title}
+                    fullWidth
+                    onChange={handleChange}
+                />
+                <Button disabled={!isEnabled} onClick={handleSave} color="primary">
+                    Add
+                </Button>
+            </Grid>
         </Grid>
     )
 }
