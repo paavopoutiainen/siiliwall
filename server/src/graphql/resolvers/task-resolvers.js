@@ -11,6 +11,9 @@ const schema = {
         addTaskForColumn(root, { columnId, title }) {
             return dataSources.boardService.addTaskForColumn(columnId, title)
         },
+        deleteTaskById(root, { id }) {
+            return dataSources.boardService.deleteTaskById(id)
+        },
     },
 
     Task: {
