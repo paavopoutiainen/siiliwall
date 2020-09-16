@@ -10,7 +10,6 @@ const Column = ({ column }) => {
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
     const [addTask] = useAddTask()
-    const isEnabled = title.length > 0
 
     const handleChange = (event) => {
         setTitle(event.target.value)
@@ -59,7 +58,7 @@ const Column = ({ column }) => {
                     fullWidth
                     onChange={handleChange}
                 />
-                <Button disabled={!isEnabled} onClick={handleSave} color="primary">
+                <Button disabled={!title.length} onClick={handleSave} color="primary">
                     Add
                 </Button>
             </Grid>

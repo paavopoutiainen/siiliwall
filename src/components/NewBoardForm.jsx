@@ -51,7 +51,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button disabled={!name.length} onClick={handleSave} color="primary">
                         Add
                     </Button>
                 </DialogActions>
