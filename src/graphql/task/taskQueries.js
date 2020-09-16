@@ -1,13 +1,4 @@
-// tämä tiedosto tulee poistumaan kokonaan
 import { gql } from '@apollo/client'
-
-export const ADD_BOARD = gql`
-    mutation createBoard($name: String!) {
-        addBoard(name: $name) {
-            name
-        }
-    }
-`
 
 export const CHANGE_TASKORDER_IN_COLUMN = gql`
     mutation changeTaskOrderInColumn($orderArray: [ID!]!, $columnId: ID!) {

@@ -1,4 +1,3 @@
-// tämä tiedosto poistuu kokonaan
 import { gql } from '@apollo/client'
 
 export const GET_ALL_BOARDS = gql`
@@ -24,6 +23,13 @@ export const GET_BOARD_BY_ID = gql`
                     title
                 }
             }
+        }
+    }
+`
+export const ADD_BOARD = gql`
+    mutation createBoard($name: String!) {
+        addBoard(name: $name) {
+            name
         }
     }
 `
