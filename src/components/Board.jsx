@@ -2,36 +2,28 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import {
-    useQuery, useMutation, useApolloClient, gql,
+    useMutation, useApolloClient, gql,
 } from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { GET_BOARD_BY_ID } from '../graphql/queries'
+import { GET_BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
 import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS } from '../graphql/mutations'
+import { useBoardById } from '../graphql/board/hooks/useBoardById'
 import '../styles.css'
 
 const Board = ({ id }) => {
-    const {
-        loading, error, data,
-    } = useQuery(GET_BOARD_BY_ID, {
-        variables: {
-            boardId: id,
-        },
-    })
+    const { data, loading } = useBoardById(id)
 
     const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
     const [changeTaskOrdersInColumns] = useMutation(CHANGE_TASKORDER_IN_TWO_COLUMNS)
     const client = useApolloClient()
     const classes = boardPageStyles()
 
-    if (loading) return <h1>Loading board..</h1>
-    if (error) return `Error: ${error.message}`
+    if (loading) return null
 
     const board = data.boardById
-
-    const columnOrderArray = board.columnOrder
-    const { columns } = board
+    const { columnOrder, columns } = board
 
     // TODO, move this function into utils folder
     const onDragEnd = async (result) => {
@@ -155,7 +147,7 @@ const Board = ({ id }) => {
                 </Grid>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid item container direction="row">
-                        <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                        <ColumnList columns={columns} columnOrder={columnOrder} />
                     </Grid>
                 </DragDropContext>
             </Grid>
