@@ -23,7 +23,28 @@ const Board = ({ id }) => {
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
-    const [addColumn] = useMutation(ADD_COLUMN)
+    const [addColumn] = useMutation(ADD_COLUMN, {
+        update: async (cache, response) => {
+            const cached = cache.readQuery({ query: GET_BOARD_BY_ID, variables: { boardId: id } })
+            const { columns, columnOrder } = cached.boardById
+            const newColumns = columns.concat(response.data.addColumnForBoard)
+            const newColumnOrder = columnOrder.concat(response.data.addColumnForBoard.id)
+
+            client.writeFragment({
+                id: `Board:${id}`,
+                fragment: gql`
+                    fragment columnUpdate on Board {
+                        columnOrder
+                        columns
+                    }
+                `,
+                data: {
+                    columnOrder: newColumnOrder,
+                    columns: newColumns,
+                },
+            })
+        },
+    })
 
     const handleChange = (event) => {
         setColumnName(event.target.value)

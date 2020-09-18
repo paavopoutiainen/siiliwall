@@ -3,6 +3,7 @@ import { gql } from '@apollo/client'
 export const ADD_BOARD = gql`
     mutation createBoard($name: String!) {
         addBoard(name: $name) {
+            id
             name
         }
     }
@@ -36,11 +37,6 @@ export const ADD_COLUMN = gql`
         addColumnForBoard(boardId: $boardId, columnName: $columnName) {
             id
             name
-            columns{
-                id
-                name
-            }
-            columnOrder
         }
     }
 `

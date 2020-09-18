@@ -169,9 +169,8 @@ class BoardService {
             const biggestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
-            await this.store.Column.create({ boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
-            const boardFromDb = await this.store.Board.findByPk(boardId)
-            return boardFromDb
+            const addedColumn = await this.store.Column.create({ boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
+            return addedColumn
         } catch (e) {
             console.error(e)
         }
