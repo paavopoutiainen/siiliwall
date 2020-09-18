@@ -1,14 +1,15 @@
 /* eslint-disable max-len */
-import React from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, TextField, Button } from '@material-ui/core'
 import {
-    useQuery, useMutation, useApolloClient, gql,
+    useQuery, useMutation, useApolloClient,
 } from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
+import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
-import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS } from '../graphql/mutations'
+import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS, ADD_COLUMN } from '../graphql/mutations'
 import '../styles.css'
 
 const Board = ({ id }) => {
@@ -24,6 +25,38 @@ const Board = ({ id }) => {
     const [changeTaskOrdersInColumns] = useMutation(CHANGE_TASKORDER_IN_TWO_COLUMNS)
     const client = useApolloClient()
     const classes = boardPageStyles()
+    const [columnName, setColumnName] = useState('')
+    const [addColumn] = useMutation(ADD_COLUMN, {
+        update: async (cache, response) => {
+            const cached = cache.readQuery({ query: GET_BOARD_BY_ID, variables: { boardId: id } })
+            const { columns, columnOrder } = cached.boardById
+            const newColumns = columns.concat(response.data.addColumnForBoard)
+            const newColumnOrder = columnOrder.concat(response.data.addColumnForBoard.id)
+
+            client.writeFragment({
+                id: `Board:${id}`,
+                fragment: COLUMNORDER_AND_COLUMNS,
+                data: {
+                    columnOrder: newColumnOrder,
+                    columns: newColumns,
+                },
+            })
+        },
+    })
+
+    const handleChange = (event) => {
+        setColumnName(event.target.value)
+    }
+
+    const handleSave = () => {
+        addColumn({
+            variables: {
+                boardId: id,
+                columnName,
+            },
+        })
+        setColumnName('')
+    }
 
     if (loading) return <h1>Loading board..</h1>
     if (error) return `Error: ${error.message}`
@@ -56,11 +89,7 @@ const Board = ({ id }) => {
             const columnId = `Column:${column.id}`
             client.writeFragment({
                 id: columnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                    }
-                `,
+                fragment: TASKORDER,
                 data: {
                     taskOrder: newTaskOrder,
                 },
@@ -104,12 +133,7 @@ const Board = ({ id }) => {
             // update the manipulated columns in the cache
             client.writeFragment({
                 id: sourceColumnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                        tasks
-                    }
-                `,
+                fragment: TASKORDER_AND_TASKS,
                 data: {
                     taskOrder: newTaskOrderOfSourceColumn,
                     tasks: updatedTasksOfSourceColumn,
@@ -118,12 +142,7 @@ const Board = ({ id }) => {
 
             client.writeFragment({
                 id: destinationColumnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                        tasks
-                    }
-                `,
+                fragment: TASKORDER_AND_TASKS,
                 data: {
                     taskOrder: newTaskOrderOfDestinationColumn,
                     tasks: updatedTasksOfDestinationColumn,
@@ -156,6 +175,23 @@ const Board = ({ id }) => {
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid item container direction="row">
                         <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                        <Grid item>
+                            <TextField
+                                margin="dense"
+                                name="title"
+                                label="Name"
+                                type="text"
+                                value={columnName}
+                                fullWidth
+                                onChange={handleChange}
+                            />
+                            <Button
+                                color="primary"
+                                onClick={handleSave}
+                            >
+                                Add
+                            </Button>
+                        </Grid>
                     </Grid>
                 </DragDropContext>
             </Grid>
