@@ -3,7 +3,7 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText,
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
-import { useAddBoard } from '../graphql/board/hooks/useAddBoard'
+import useAddBoard from '../graphql/board/hooks/useAddBoard'
 
 const NewBoardForm = ({ setOpen, open }) => {
     const [addBoard] = useAddBoard()

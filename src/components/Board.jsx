@@ -2,41 +2,24 @@
 import React, { useState } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
 import { DragDropContext } from 'react-beautiful-dnd'
-import { useMutation, useApolloClient } from '@apollo/client'
+import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
-import { useBoardById } from '../graphql/board/hooks/useBoardById'
-import { BOARD_BY_ID } from '../graphql/board/boardQueries'
-import { COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
-import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS, ADD_COLUMN } from '../graphql/mutations'
+import useBoardById from '../graphql/board/hooks/useBoardById'
+import useMoveTaskInColumn from '../graphql/task/hooks/useMoveTaskInColumn'
+import useMoveTaskFromColumn from '../graphql/task/hooks/useMoveTaskFromColumn'
+import useAddColumn from '../graphql/column/hooks/useAddColumn'
 import { onDragEnd } from '../utils/onDragEnd'
 import '../styles.css'
 
 const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
-
-    const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
-    const [changeTaskOrdersInColumns] = useMutation(CHANGE_TASKORDER_IN_TWO_COLUMNS)
+    const [changeTaskOrderInColumn] = useMoveTaskInColumn()
+    const [changeTaskOrdersInColumns] = useMoveTaskFromColumn()
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
-    const [addColumn] = useMutation(ADD_COLUMN, {
-        update: async (cache, response) => {
-            const cached = cache.readQuery({ query: BOARD_BY_ID, variables: { boardId: id } })
-            const { columns, columnOrder } = cached.boardById
-            const newColumns = columns.concat(response.data.addColumnForBoard)
-            const newColumnOrder = columnOrder.concat(response.data.addColumnForBoard.id)
-
-            client.writeFragment({
-                id: `Board:${id}`,
-                fragment: COLUMNORDER_AND_COLUMNS,
-                data: {
-                    columnOrder: newColumnOrder,
-                    columns: newColumns,
-                },
-            })
-        },
-    })
+    const [addColumn] = useAddColumn(id)
 
     const handleChange = (event) => {
         setColumnName(event.target.value)

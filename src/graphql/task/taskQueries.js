@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const CHANGE_TASKORDER_IN_COLUMN = gql`
+export const MOVE_TASK_IN_COLUMN = gql`
     mutation changeTaskOrderInColumn($orderArray: [ID!]!, $columnId: ID!) {
         changeTaskOrderInColumn(newOrder: $orderArray, columnId: $columnId) {
             id
@@ -9,7 +9,7 @@ export const CHANGE_TASKORDER_IN_COLUMN = gql`
     }
 `
 
-export const CHANGE_TASKORDER_IN_TWO_COLUMNS = gql`
+export const MOVE_TASK_FROM_COLUMN = gql`
     mutation changeTaskOrdersInColumns($taskId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTaskOrder: [ID!], $destTaskOrder: [ID!]) {
         changeTaskOrdersInColumns(taskId: $taskId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTaskOrder: $sourceTaskOrder, destTaskOrder: $destTaskOrder) {
             id
@@ -32,5 +32,11 @@ export const ADD_TASK = gql`
                 title
             }
         }
+    }
+`
+
+export const DELETE_TASK = gql`
+    mutation deleteTask($taskId: ID!) {
+        deleteTaskById(id: $taskId)
     }
 `

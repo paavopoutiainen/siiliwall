@@ -1,10 +1,9 @@
-/* eslint-disable import/prefer-default-export */
 import {
     useQuery,
 } from '@apollo/client'
 import { BOARD_BY_ID } from '../boardQueries'
 
-export const useBoardById = (id) => {
+const useBoardById = (id) => {
     const {
         loading, error, data,
     } = useQuery(BOARD_BY_ID, {
@@ -14,3 +13,5 @@ export const useBoardById = (id) => {
     })
     return { data, error, loading }
 }
+
+export default useBoardById
