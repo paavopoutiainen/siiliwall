@@ -4,6 +4,7 @@ import { Grid, TextField, Button } from '@material-ui/core'
 import useAddTask from '../graphql/task/hooks/useAddTask'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
+import DropdownColumn from './DropdownColumn'
 
 const Column = ({ column }) => {
     const classes = boardPageStyles()
@@ -34,14 +35,15 @@ const Column = ({ column }) => {
             classes={{ root: classes.column }}
             alignItems="center"
         >
-            <Grid item container>
+            <Grid item container direction="row" justify="space-between">
                 <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
+                <Grid item><DropdownColumn columnId={column.id} boardId={column.board.id} /></Grid>
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
                     // eslint-disable-next-line react/jsx-props-no-spreading
                     <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
-                        <TaskList tasks={tasks} taskOrder={taskOrder} />
+                        <TaskList tasks={tasks} taskOrder={taskOrder} columnId={column.id} />
                         {provided.placeholder}
                     </Grid>
                 )}
@@ -65,5 +67,4 @@ const Column = ({ column }) => {
         </Grid>
     )
 }
-
 export default Column

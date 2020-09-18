@@ -12,5 +12,4 @@ const ColumnList = ({ columns, columnOrder }) => {
         </>
     )
 }
-
 export default ColumnList

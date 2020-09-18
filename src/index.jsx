@@ -5,7 +5,24 @@ import App from './App'
 
 const client = new ApolloClient({
     uri: 'http://localhost:4001/graphql',
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+        typePolicies: {
+            Column: {
+                fields: {
+                    tasks: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        },
+                    },
+                    taskOrder: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        },
+                    },
+                },
+            },
+        },
+    }),
 })
 
 ReactDOM.render(<ApolloProvider client={client}><App /></ApolloProvider>, document.getElementById('root'))

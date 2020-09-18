@@ -27,7 +27,7 @@ const LandingPage = () => {
                 classes={{ root: classes.root }}
                 spacing={7}
             >
-                { open
+                {open
                     && <NewBoardForm setOpen={setOpen} open={open} />}
                 <Grid item classes={{ root: classes.title }}>
                     <h1>Welcome!</h1>

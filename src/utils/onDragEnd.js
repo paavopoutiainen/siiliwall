@@ -1,9 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
-import {
-    gql,
-} from '@apollo/client'
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
+import { TASKORDER_AND_TASKS, TASKORDER } from '../graphql/fragments'
 
 export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrdersInColumns, client, columns, board) => {
     const { destination, source, draggableId } = result
@@ -23,11 +21,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
         const columnId = `Column:${column.id}`
         client.writeFragment({
             id: columnId,
-            fragment: gql`
-              fragment taskOrder on Column {
-                  taskOrder
-              }
-          `,
+            fragment: TASKORDER,
             data: {
                 taskOrder: newTaskOrder,
             },
@@ -71,12 +65,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
         // update the manipulated columns in the cache
         client.writeFragment({
             id: sourceColumnId,
-            fragment: gql`
-              fragment taskOrder on Column {
-                  taskOrder
-                  tasks
-              }
-          `,
+            fragment: TASKORDER_AND_TASKS,
             data: {
                 taskOrder: newTaskOrderOfSourceColumn,
                 tasks: updatedTasksOfSourceColumn,
@@ -85,12 +74,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
 
         client.writeFragment({
             id: destinationColumnId,
-            fragment: gql`
-              fragment taskOrder on Column {
-                  taskOrder
-                  tasks
-              }
-          `,
+            fragment: TASKORDER_AND_TASKS,
             data: {
                 taskOrder: newTaskOrderOfDestinationColumn,
                 tasks: updatedTasksOfDestinationColumn,
