@@ -185,7 +185,7 @@ class BoardService {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
-            const addedTask = await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
+            await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
             const columnFromDb = await this.store.Column.findByPk(columnId)
             return columnFromDb
         } catch (e) {
@@ -194,14 +194,24 @@ class BoardService {
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array
-    async reOrderColumnsTasks(newOrderArray, columnId) {
-        await Promise.all(newOrderArray.map(async (id, index) => {
-            const task = await this.store.Task.findByPk(id)
-            task.columnOrderNumber = index
-            await task.save()
-        }))
-        const column = await this.store.Column.findByPk(columnId)
-        return column
+    async reOrderTasksOfColumn(newOrderArray, columnId) {
+        try {
+            await Promise.all(newOrderArray.map(async (id, index) => {
+                const task = await this.store.Task.findByPk(id)
+                task.columnOrderNumber = index
+                await task.save()
+            }))
+            const column = await this.store.Column.findByPk(columnId)
+            return column
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    async changeTasksColumnId(taskId, columnId) {
+        const task = await this.store.Task.findByPk(taskId)
+        task.columnId = columnId
+        await task.save()
     }
 }
 
