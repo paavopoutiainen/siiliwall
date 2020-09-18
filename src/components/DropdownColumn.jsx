@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid } from '@material-ui/core'
+import {
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
+} from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { DELETE_COLUMN } from '../graphql/mutations'
 import { useMutation, useApolloClient } from '@apollo/client'
+import { DELETE_COLUMN } from '../graphql/mutations'
 import { COLUMNORDER } from '../graphql/fragments'
 
 const DropdownColumn = ({ columnId, boardId }) => {
@@ -14,17 +16,11 @@ const DropdownColumn = ({ columnId, boardId }) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const handleClose = () => {
-        deleteColumnById()
-        deleteColumnFromCache()
-        setAnchorEl(null)
-    }
-
     const deleteColumnById = () => {
         deleteColumn({
             variables: {
-                columnId: columnId
-            }
+                columnId,
+            },
         })
     }
 
@@ -33,7 +29,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
         const boardIdForCache = `Board:${boardId}`
         const data = client.readFragment({
             id: boardIdForCache,
-            fragment: COLUMNORDER
+            fragment: COLUMNORDER,
         })
         const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
 
@@ -41,10 +37,16 @@ const DropdownColumn = ({ columnId, boardId }) => {
             id: boardIdForCache,
             fragment: COLUMNORDER,
             data: {
-                columnOrder: newColumnOrder
-            }
+                columnOrder: newColumnOrder,
+            },
         })
         client.cache.evict({ id: idToBeDeleted })
+    }
+
+    const handleClose = () => {
+        deleteColumnById()
+        deleteColumnFromCache()
+        setAnchorEl(null)
     }
 
     return (
@@ -68,7 +70,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 onSelect
                 selected
             >
-                <MenuItem onClick={handleClose} >
+                <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>

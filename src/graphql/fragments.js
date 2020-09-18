@@ -14,13 +14,13 @@ export const TASKORDER = gql`
     }
 `
 export const COLUMNORDER = gql`
-fragment columnUpdate on Board {
+fragment columnOrder on Board {
     columnOrder
 }
 `
 
 export const COLUMNORDER_AND_COLUMNS = gql`
-fragment columnUpdate on Board {
+fragment columnOrderAndColumns on Board {
     columnOrder
     columns
 }

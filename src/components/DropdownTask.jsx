@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
-import { Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid } from '@material-ui/core'
+import {
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
+} from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
+import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_TASK } from '../graphql/mutations'
 import { TASKORDER } from '../graphql/fragments'
-
-import { useMutation, useApolloClient } from '@apollo/client'
 
 const DropdownTask = ({ columnId, taskId }) => {
     const [deleteTask] = useMutation(DELETE_TASK)
@@ -16,17 +17,11 @@ const DropdownTask = ({ columnId, taskId }) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const handleClose = () => {
-        deleteTaskById()
-        deleteTaskFromCache()
-        setAnchorEl(null)
-    }
-
     const deleteTaskById = () => {
         deleteTask({
             variables: {
-                taskId: taskId
-            }
+                taskId,
+            },
         })
     }
 
@@ -35,7 +30,7 @@ const DropdownTask = ({ columnId, taskId }) => {
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TASKORDER
+            fragment: TASKORDER,
         })
         const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
 
@@ -47,6 +42,12 @@ const DropdownTask = ({ columnId, taskId }) => {
             },
         })
         client.cache.evict({ id: idToBeDeleted })
+    }
+
+    const handleClose = () => {
+        deleteTaskById()
+        deleteTaskFromCache()
+        setAnchorEl(null)
     }
 
     return (
@@ -68,7 +69,7 @@ const DropdownTask = ({ columnId, taskId }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem onClick={handleClose} >
+                <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>

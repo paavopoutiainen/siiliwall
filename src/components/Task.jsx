@@ -9,12 +9,13 @@ const Task = ({ task, index, columnId }) => {
     const { title } = task
     const titleLimit = 27
 
-    const add3Dots = (title, titleLimit) => {
-        let dots = '...'
-        if (title.length > titleLimit) {
-            title = title.substring(0, titleLimit) + dots
+    const add3Dots = (titleParam, titleLimitParam) => {
+        let checkedTitle = titleParam
+        const dots = '...'
+        if (titleParam.length > titleLimit) {
+            checkedTitle = title.substring(0, titleLimitParam) + dots
         }
-        return title
+        return checkedTitle
     }
 
     return (
