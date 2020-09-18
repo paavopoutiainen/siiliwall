@@ -3,14 +3,13 @@ import { Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid } from '@mater
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { DELETE_COLUMN } from '../graphql/mutations'
-import { useMutation, useApolloClient, gql } from '@apollo/client'
-import { boardPageStyles } from '../styles/styles'
+import { useMutation, useApolloClient } from '@apollo/client'
+import { COLUMNORDER } from '../graphql/fragments'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [deleteColumn] = useMutation(DELETE_COLUMN)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
-    const classes = boardPageStyles()
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -34,21 +33,13 @@ const DropdownColumn = ({ columnId, boardId }) => {
         const boardIdForCache = `Board:${boardId}`
         const data = client.readFragment({
             id: boardIdForCache,
-            fragment: gql`
-                fragment columnOrder on Board {
-                    columnOrder
-                }
-            `
+            fragment: COLUMNORDER
         })
         const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
 
         client.writeFragment({
             id: boardIdForCache,
-            fragment: gql`
-                fragment columnOrder on Board {
-                    columnOrder
-                }
-            `,
+            fragment: COLUMNORDER,
             data: {
                 columnOrder: newColumnOrder
             }

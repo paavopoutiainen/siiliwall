@@ -3,7 +3,9 @@ import { Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid } from '@mater
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { DELETE_TASK } from '../graphql/mutations'
-import { useMutation, useApolloClient, gql } from '@apollo/client'
+import { TASKORDER } from '../graphql/fragments'
+
+import { useMutation, useApolloClient } from '@apollo/client'
 
 const DropdownTask = ({ columnId, taskId }) => {
     const [deleteTask] = useMutation(DELETE_TASK)
@@ -33,21 +35,13 @@ const DropdownTask = ({ columnId, taskId }) => {
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: gql`
-                fragment taskOrder on Column {
-                    taskOrder
-                }
-            `
+            fragment: TASKORDER
         })
         const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
 
         client.writeFragment({
             id: columnIdForCache,
-            fragment: gql`
-                fragment taskOrder on Column {
-                    taskOrder
-                }
-            `,
+            fragment: TASKORDER,
             data: {
                 taskOrder: newTaskOrder,
             },
