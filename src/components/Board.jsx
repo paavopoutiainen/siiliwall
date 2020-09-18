@@ -27,9 +27,10 @@ const Board = ({ id }) => {
     if (error) return `Error: ${error.message}`
 
     const board = data.boardById
-
     const columnOrderArray = board.columnOrder
     const { columns } = board
+
+    const newColumnOrder = columns.map((column) => columnOrderArray.filter((id) => id === column.id)).flat()
 
     // TODO, move this function into utils folder
     const onDragEnd = async (result) => {
@@ -98,7 +99,7 @@ const Board = ({ id }) => {
                 </Grid>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid item container direction="row">
-                        <ColumnList columns={columns} columnOrder={columnOrderArray} />
+                        <ColumnList columns={columns} columnOrder={newColumnOrder} />
                     </Grid>
                 </DragDropContext>
             </Grid>

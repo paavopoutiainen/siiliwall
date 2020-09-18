@@ -30,6 +30,12 @@ export const ADD_TASK = gql`
         }
     }
 `
+export const DELETE_TASK = gql`
+    mutation deleteTask($taskId: ID!) {
+        deleteTaskById(id: $taskId)
+    }
+`
+
 export const DELETE_COLUMN = gql`
     mutation deleteColumn($columnId: ID!) {
         deleteColumnById(id: $columnId)
