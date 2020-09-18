@@ -60,7 +60,11 @@ const Column = ({ column }) => {
                     fullWidth
                     onChange={handleChange}
                 />
-                <Button disabled={!title.length} onClick={handleSave} color="primary">
+                <Button
+                    disabled={!title.length}
+                    onClick={handleSave}
+                    color="primary"
+                >
                     Add
                 </Button>
             </Grid>

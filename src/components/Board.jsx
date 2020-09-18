@@ -82,6 +82,7 @@ const Board = ({ id }) => {
                                 onChange={handleChange}
                             />
                             <Button
+                                disabled={!columnName.length}
                                 color="primary"
                                 onClick={handleSave}
                             >
