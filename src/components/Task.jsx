@@ -6,6 +6,16 @@ import DropdownMenu from './DropdownMenu'
 
 const Task = ({ task, index }) => {
     const classes = boardPageStyles()
+    const { title } = task
+    const titleLimit = 27
+
+    const add3Dots = (title, titleLimit) => {
+        let dots = '...'
+        if (title.length > titleLimit) {
+            title = title.substring(0, titleLimit) + dots
+        }
+        return title
+    }
 
     return (
         <Draggable draggableId={task.id} index={index}>
@@ -24,10 +34,8 @@ const Task = ({ task, index }) => {
                         container
                         direction="row"
                         justify="space-between"
-                        alignItems="flex-start"
-                        classes={{ root: classes.taskHeader }}
                     >
-                        <Grid item><h1>{task.title}</h1></Grid>
+                        <Grid item classes={{ root: classes.taskTitle }}><h1>{add3Dots(title, titleLimit)}</h1></Grid>
                         <Grid item><DropdownMenu taskId={task.id} /></Grid>
                     </Grid>
                 </Grid>

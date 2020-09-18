@@ -72,7 +72,7 @@ export const boardPageStyles = makeStyles({
         padding: 5,
     },
 
-    taskHeader: {
+    taskTitle: {
         fontSize: '0.9rem',
     }
 })
