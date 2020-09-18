@@ -18,6 +18,18 @@ export const CHANGE_TASKORDER_IN_COLUMN = gql`
     }
 `
 
+export const CHANGE_TASKORDER_IN_TWO_COLUMNS = gql`
+    mutation changeTaskOrdersInColumns($taskId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTaskOrder: [ID!], $destTaskOrder: [ID!]) {
+        changeTaskOrdersInColumns(taskId: $taskId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTaskOrder: $sourceTaskOrder, destTaskOrder: $destTaskOrder) {
+            id
+            taskOrder
+            tasks {
+                id
+            }
+        }
+    }    
+`
+
 export const ADD_TASK = gql`
     mutation createTask($columnId: ID!, $title: String!) {
         addTaskForColumn(columnId: $columnId, title: $title) {

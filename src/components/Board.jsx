@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
 import {
@@ -7,7 +8,7 @@ import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
-import { CHANGE_TASKORDER_IN_COLUMN, ADD_COLUMN } from '../graphql/mutations'
+import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS, ADD_COLUMN } from '../graphql/mutations'
 import '../styles.css'
 
 const Board = ({ id }) => {
@@ -20,6 +21,7 @@ const Board = ({ id }) => {
     })
 
     const [changeTaskOrderInColumn] = useMutation(CHANGE_TASKORDER_IN_COLUMN)
+    const [changeTaskOrdersInColumns] = useMutation(CHANGE_TASKORDER_IN_TWO_COLUMNS)
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
@@ -118,7 +120,62 @@ const Board = ({ id }) => {
 
             newTaskOrderOfSourceColumn.splice(source.index, 1)
             newTaskOrderOfDestinationColumn.splice(destination.index, 0, draggableId)
-            // TODO, write a mutation and call for it
+
+            // Find from the cache the board
+            const dataInCache = client.readQuery({ query: GET_BOARD_BY_ID, variables: { boardId: board.id } })
+
+            // Find from the cache the columns being manipulated
+            const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
+            const destinationColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === destinationColumn.id)
+
+            // Find the task being moved using draggableId
+            const taskBeingMoved = sourceColumnFromCache.tasks.find((task) => task.id === draggableId)
+
+            // From the source column filter out the moved task using draggableId
+            const updatedTasksOfSourceColumn = sourceColumnFromCache.tasks.filter((task) => task.id !== draggableId)
+            // To the destination column add the moved task
+            const updatedTasksOfDestinationColumn = destinationColumnFromCache.tasks.concat(taskBeingMoved)
+
+            const sourceColumnId = `Column:${sourceColumn.id}`
+            const destinationColumnId = `Column:${destinationColumn.id}`
+            // update the manipulated columns in the cache
+            client.writeFragment({
+                id: sourceColumnId,
+                fragment: gql`
+                    fragment taskOrder on Column {
+                        taskOrder
+                        tasks
+                    }
+                `,
+                data: {
+                    taskOrder: newTaskOrderOfSourceColumn,
+                    tasks: updatedTasksOfSourceColumn,
+                },
+            })
+
+            client.writeFragment({
+                id: destinationColumnId,
+                fragment: gql`
+                    fragment taskOrder on Column {
+                        taskOrder
+                        tasks
+                    }
+                `,
+                data: {
+                    taskOrder: newTaskOrderOfDestinationColumn,
+                    tasks: updatedTasksOfDestinationColumn,
+                },
+            })
+
+            await changeTaskOrdersInColumns({
+                variables: {
+                    taskId: draggableId,
+                    sourceColumnId: sourceColumn.id,
+                    destColumnId: destinationColumn.id,
+                    sourceTaskOrder: newTaskOrderOfSourceColumn,
+                    destTaskOrder: newTaskOrderOfDestinationColumn,
+                },
+            })
         }
     }
 
