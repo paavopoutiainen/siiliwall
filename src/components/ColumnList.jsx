@@ -6,7 +6,6 @@ const ColumnList = ({ columns, columnOrder }) => {
 
     return (
         <>
-
             {newColumnOrder.map((column) => (
                 <Column column={column} key={column.id} />
             ))}

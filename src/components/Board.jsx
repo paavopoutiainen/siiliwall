@@ -30,8 +30,6 @@ const Board = ({ id }) => {
     const columnOrderArray = board.columnOrder
     const { columns } = board
 
-    const newColumnOrder = columns.map((column) => columnOrderArray.filter((id) => id === column.id)).flat()
-
     // TODO, move this function into utils folder
     const onDragEnd = async (result) => {
         const { destination, source, draggableId } = result
@@ -48,7 +46,6 @@ const Board = ({ id }) => {
         if (destination.droppableId === source.droppableId) {
             const column = columns.find((col) => col.id === source.droppableId)
             const newTaskOrder = Array.from(column.taskOrder)
-
             newTaskOrder.splice(source.index, 1)
             newTaskOrder.splice(destination.index, 0, draggableId)
 
@@ -99,7 +96,7 @@ const Board = ({ id }) => {
                 </Grid>
                 <DragDropContext onDragEnd={onDragEnd}>
                     <Grid item container direction="row">
-                        <ColumnList columns={columns} columnOrder={newColumnOrder} />
+                        <ColumnList columns={columns} columnOrder={columnOrderArray} />
                     </Grid>
                 </DragDropContext>
             </Grid>

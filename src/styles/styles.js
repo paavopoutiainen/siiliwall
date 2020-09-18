@@ -43,8 +43,7 @@ export const landingPageStyles = makeStyles({
 
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
-        backgroundColor: 'lightgrey'
+        minHeight: '100vh'
     },
 
     boardTitle: {
@@ -74,5 +73,8 @@ export const boardPageStyles = makeStyles({
 
     taskTitle: {
         fontSize: '0.9rem',
+    },
+    dropDownMenu: {
+        backgroundColor: '!important lightgrey'
     }
 })

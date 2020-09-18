@@ -1,19 +1,17 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Droppable } from 'react-beautiful-dnd'
 import { useMutation } from '@apollo/client'
 import { Grid, TextField, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import { ADD_TASK } from '../graphql/mutations'
-import DropdownMenu from './DropdownMenu'
+import DropdownColumn from './DropdownColumn'
 
 const Column = ({ column }) => {
     const [addTask] = useMutation(ADD_TASK)
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
-
-    const newTaskOrder = tasks.map((task) => taskOrder.filter((id) => id === task.id)).flat()
 
     function handleChange(event) {
         setTitle(event.target.value)
@@ -40,12 +38,12 @@ const Column = ({ column }) => {
         >
             <Grid item container direction="row" justify="space-between">
                 <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
-                <Grid item><DropdownMenu columnId={column.id} /></Grid>
+                <Grid item><DropdownColumn columnId={column.id} boardId={column.board.id} /></Grid>
             </Grid>
             <Droppable droppableId={column.id}>
                 {(provided) => (
                     <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
-                        <TaskList tasks={tasks} taskOrder={newTaskOrder} />
+                        <TaskList tasks={tasks} taskOrder={taskOrder} columnId={column.id} />
                         {provided.placeholder}
                     </Grid>
                 )}
@@ -66,5 +64,4 @@ const Column = ({ column }) => {
         </Grid>
     )
 }
-
 export default Column

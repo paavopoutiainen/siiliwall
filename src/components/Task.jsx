@@ -2,9 +2,9 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../styles/styles'
-import DropdownMenu from './DropdownMenu'
+import DropdownTask from './DropdownTask'
 
-const Task = ({ task, index }) => {
+const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
     const { title } = task
     const titleLimit = 27
@@ -36,7 +36,7 @@ const Task = ({ task, index }) => {
                         justify="space-between"
                     >
                         <Grid item classes={{ root: classes.taskTitle }}><h1>{add3Dots(title, titleLimit)}</h1></Grid>
-                        <Grid item><DropdownMenu taskId={task.id} /></Grid>
+                        <Grid item><DropdownTask taskId={task.id} columnId={columnId} /></Grid>
                     </Grid>
                 </Grid>
             )}

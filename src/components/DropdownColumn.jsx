@@ -1,29 +1,23 @@
 import React, { useState } from 'react'
-import { Menu, MenuItem, Button, ListItemIcon, ListItemText } from '@material-ui/core'
+import { Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { DELETE_COLUMN, DELETE_TASK } from '../graphql/mutations'
-import { useMutation, useApolloClient } from '@apollo/client'
+import { DELETE_COLUMN } from '../graphql/mutations'
+import { useMutation, useApolloClient, gql } from '@apollo/client'
+import { boardPageStyles } from '../styles/styles'
 
-const DropdownMenu = ({ columnId, taskId }) => {
+const DropdownColumn = ({ columnId, boardId }) => {
     const [deleteColumn] = useMutation(DELETE_COLUMN)
-    const [deleteTask] = useMutation(DELETE_TASK)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
-
+    const classes = boardPageStyles()
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
     const handleClose = () => {
-        if (columnId) {
-            deleteColumnById()
-            deleteColumnFromCache()
-        }
-        if (taskId) {
-            deleteTaskById()
-            deleteTaskFromCache()
-        }
+        deleteColumnById()
+        deleteColumnFromCache()
         setAnchorEl(null)
     }
 
@@ -37,24 +31,33 @@ const DropdownMenu = ({ columnId, taskId }) => {
 
     const deleteColumnFromCache = () => {
         const idToBeDeleted = `Column:${columnId}`
-        client.cache.evict({ id: idToBeDeleted })
-    }
+        const boardIdForCache = `Board:${boardId}`
+        const data = client.readFragment({
+            id: boardIdForCache,
+            fragment: gql`
+                fragment columnOrder on Board {
+                    columnOrder
+                }
+            `
+        })
+        const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
 
-    const deleteTaskById = () => {
-        deleteTask({
-            variables: {
-                taskId: taskId
+        client.writeFragment({
+            id: boardIdForCache,
+            fragment: gql`
+                fragment columnOrder on Board {
+                    columnOrder
+                }
+            `,
+            data: {
+                columnOrder: newColumnOrder
             }
         })
-    }
-
-    const deleteTaskFromCache = () => {
-        const idToBeDeleted = `Task:${taskId}`
         client.cache.evict({ id: idToBeDeleted })
     }
 
     return (
-        <div>
+        <Grid item>
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
@@ -71,6 +74,8 @@ const DropdownMenu = ({ columnId, taskId }) => {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 getContentAnchorEl={null}
                 elevation={0}
+                onSelect
+                selected
             >
                 <MenuItem onClick={handleClose} >
                     <ListItemIcon>
@@ -79,7 +84,7 @@ const DropdownMenu = ({ columnId, taskId }) => {
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
-        </div>
+        </Grid>
     )
 }
-export default DropdownMenu
+export default DropdownColumn
