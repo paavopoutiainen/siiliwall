@@ -2,10 +2,11 @@
 import React, { useState } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
 import {
-    useQuery, useMutation, useApolloClient, gql,
+    useQuery, useMutation, useApolloClient,
 } from '@apollo/client'
 import { DragDropContext } from 'react-beautiful-dnd'
 import { GET_BOARD_BY_ID } from '../graphql/queries'
+import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
 import { CHANGE_TASKORDER_IN_COLUMN, CHANGE_TASKORDER_IN_TWO_COLUMNS, ADD_COLUMN } from '../graphql/mutations'
@@ -34,12 +35,7 @@ const Board = ({ id }) => {
 
             client.writeFragment({
                 id: `Board:${id}`,
-                fragment: gql`
-                    fragment columnUpdate on Board {
-                        columnOrder
-                        columns
-                    }
-                `,
+                fragment: COLUMNORDER_AND_COLUMNS,
                 data: {
                     columnOrder: newColumnOrder,
                     columns: newColumns,
@@ -93,11 +89,7 @@ const Board = ({ id }) => {
             const columnId = `Column:${column.id}`
             client.writeFragment({
                 id: columnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                    }
-                `,
+                fragment: TASKORDER,
                 data: {
                     taskOrder: newTaskOrder,
                 },
@@ -141,12 +133,7 @@ const Board = ({ id }) => {
             // update the manipulated columns in the cache
             client.writeFragment({
                 id: sourceColumnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                        tasks
-                    }
-                `,
+                fragment: TASKORDER_AND_TASKS,
                 data: {
                     taskOrder: newTaskOrderOfSourceColumn,
                     tasks: updatedTasksOfSourceColumn,
@@ -155,12 +142,7 @@ const Board = ({ id }) => {
 
             client.writeFragment({
                 id: destinationColumnId,
-                fragment: gql`
-                    fragment taskOrder on Column {
-                        taskOrder
-                        tasks
-                    }
-                `,
+                fragment: TASKORDER_AND_TASKS,
                 data: {
                     taskOrder: newTaskOrderOfDestinationColumn,
                     tasks: updatedTasksOfDestinationColumn,
