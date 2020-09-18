@@ -5,7 +5,7 @@ import {
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_TASK } from '../graphql/mutations'
+import { DELETE_TASK } from '../graphql/task/taskQueries'
 import { TASKORDER } from '../graphql/fragments'
 
 const DropdownTask = ({ columnId, taskId }) => {

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import { useQuery } from '@apollo/client'
+import useAllBoards from '../graphql/board/hooks/useAllBoards'
+
 import NewBoardForm from '../components/NewBoardForm'
-import { GET_ALL_BOARDS } from '../graphql/queries'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 
 const LandingPage = () => {
-    const { loading, error, data } = useQuery(GET_ALL_BOARDS)
+    const { data, loading } = useAllBoards()
     const [open, setOpen] = useState(false)
     const classes = landingPageStyles()
 
@@ -16,8 +16,7 @@ const LandingPage = () => {
         setOpen(true)
     }
 
-    if (loading) return <p>Loading boards...</p>
-    if (error) return `Error: ${error.message}`
+    if (loading) return null
 
     return (
         <div className="container">
@@ -39,24 +38,23 @@ const LandingPage = () => {
                         Add Board
                     </Button>
                 </Grid>
-                <Grid item>
-                    <Grid
-                        container
-                        direction="column"
-                        alignItems="center"
-                        className="boardList"
-                        spacing={2}
-                    >
-                        {data.allBoards.map(({ id, name }) => (
-                            <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
-                                <Link to={`/boards/${id}`} className="boardList__button__link">
-                                    <Button fullWidth classes={{ root: classes.boardButton }}>
-                                        {name}
-                                    </Button>
-                                </Link>
-                            </Grid>
-                        ))}
-                    </Grid>
+                <Grid
+                    item
+                    container
+                    direction="column"
+                    alignItems="center"
+                    className="boardList"
+                    spacing={2}
+                >
+                    {data.allBoards.map(({ id, name }) => (
+                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                            <Link to={`/boards/${id}`} className="boardList__button__link">
+                                <Button fullWidth classes={{ root: classes.boardButton }}>
+                                    {name}
+                                </Button>
+                            </Link>
+                        </Grid>
+                    ))}
                 </Grid>
             </Grid>
         </div>

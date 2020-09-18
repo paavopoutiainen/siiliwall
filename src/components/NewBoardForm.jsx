@@ -3,25 +3,21 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText,
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
-import { useMutation } from '@apollo/client'
-import { ADD_BOARD } from '../graphql/mutations'
-import { GET_ALL_BOARDS } from '../graphql/queries'
+import useAddBoard from '../graphql/board/hooks/useAddBoard'
 
 const NewBoardForm = ({ setOpen, open }) => {
-    const [addBoard] = useMutation(ADD_BOARD, {
-        refetchQueries: [{ query: GET_ALL_BOARDS }],
-    })
+    const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
 
-    function handleChange(event) {
+    const handleChange = (event) => {
         setName(event.target.value)
     }
 
-    function handleClose() {
+    const handleClose = () => {
         setOpen(false)
     }
 
-    async function handleSave(event) {
+    const handleSave = async (event) => {
         event.preventDefault()
         addBoard({
             variables: {
@@ -55,7 +51,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button onClick={handleSave} color="primary">
+                    <Button disabled={!name.length} onClick={handleSave} color="primary">
                         Add
                     </Button>
                 </DialogActions>

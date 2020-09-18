@@ -7,6 +7,20 @@ const client = new ApolloClient({
     uri: 'http://localhost:4001/graphql',
     cache: new InMemoryCache({
         typePolicies: {
+            Board: {
+                fields: {
+                    columns: {
+                        merge(existing, incoming = []) {
+                            return [...incoming]
+                        },
+                    },
+                    columnOrder: {
+                        merge(existing, incoming = []) {
+                            return [...incoming]
+                        },
+                    },
+                },
+            },
             Column: {
                 fields: {
                     tasks: {

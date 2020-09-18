@@ -5,7 +5,7 @@ import {
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_COLUMN } from '../graphql/mutations'
+import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import { COLUMNORDER } from '../graphql/fragments'
 
 const DropdownColumn = ({ columnId, boardId }) => {
@@ -67,7 +67,6 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 getContentAnchorEl={null}
                 elevation={0}
-                onSelect
                 selected
             >
                 <MenuItem onClick={handleClose}>

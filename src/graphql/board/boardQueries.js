@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client'
 
-export const GET_ALL_BOARDS = gql`
+export const ALL_BOARDS = gql`
     query {
         allBoards {
            id
@@ -8,7 +8,7 @@ export const GET_ALL_BOARDS = gql`
         }
     }
 `
-export const GET_BOARD_BY_ID = gql`
+export const BOARD_BY_ID = gql`
     query boardById($boardId: ID!) {
         boardById(id: $boardId) {
             id
@@ -17,16 +17,23 @@ export const GET_BOARD_BY_ID = gql`
             columns {
                 id
                 name
+                taskOrder
                 board {
                     id
                     columnOrder
                 }
-                taskOrder
                 tasks {
                     id
                     title
                 }
             }
+        }
+    }
+`
+export const ADD_BOARD = gql`
+    mutation createBoard($name: String!) {
+        addBoard(name: $name) {
+            name
         }
     }
 `
