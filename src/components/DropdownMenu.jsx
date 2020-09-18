@@ -2,56 +2,55 @@ import React, { useState } from 'react'
 import { Menu, MenuItem, Button, ListItemIcon, ListItemText } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { DELETE_COLUMN } from '../graphql/mutations'
+import { DELETE_COLUMN, DELETE_TASK } from '../graphql/mutations'
 import { useMutation, useApolloClient } from '@apollo/client'
 
-const DropdownMenu = ({ id, board }) => {
+const DropdownMenu = ({ columnId, taskId }) => {
     const [deleteColumn] = useMutation(DELETE_COLUMN)
+    const [deleteTask] = useMutation(DELETE_TASK)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
 
-    function handleClick(event) {
+    const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    function handleClose() {
-        deleteColumnById()
-        updateCache()
+    const handleClose = () => {
+        if (columnId) {
+            deleteColumnById()
+            deleteColumnFromCache()
+        }
+        if (taskId) {
+            deleteTaskById()
+            deleteTaskFromCache()
+        }
         setAnchorEl(null)
     }
 
-    function deleteColumnById() {
+    const deleteColumnById = () => {
         deleteColumn({
             variables: {
-                columnId: id
+                columnId: columnId
             }
         })
     }
-    // Halutaan poistaa cachen board oliosta columnOrder taulukosta se columnId mikä poistettiin tietokannasta
 
-    console.log(client.cache.data.data.ROOT_QUERY)
+    const deleteColumnFromCache = () => {
+        const idToBeDeleted = `Column:${columnId}`
+        client.cache.evict({ id: idToBeDeleted })
+    }
 
-    // const dataInCache = client.readQuery({ query: GET_BOARD_BY_ID, variables: { boardId: boardId } })
-    /*const columnOrder = dataInCache.boardById.columnOrder
-    console.log(columnOrder)*/
-    /*const newColumnOrder = []
-    client.writeFragment({
-        id: boardId,
-        fragment: gql`
-            fragment columnOrder on Board {
-                columnOrder
+    const deleteTaskById = () => {
+        deleteTask({
+            variables: {
+                taskId: taskId
             }
-        `,
-        data: {
-            columnOrder: newColumnOrder,
-        }
-    })*/
-    console.log(board)
-    function updateCache() {
+        })
+    }
 
-
-        const columnId = `Column:${id}`
-        client.cache.evict({ id: columnId })
+    const deleteTaskFromCache = () => {
+        const idToBeDeleted = `Task:${taskId}`
+        client.cache.evict({ id: idToBeDeleted })
     }
 
     return (
