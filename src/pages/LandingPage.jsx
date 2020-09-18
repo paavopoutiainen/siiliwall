@@ -29,8 +29,8 @@ const LandingPage = () => {
                 classes={{ root: classes.root }}
                 spacing={7}
             >
-                { open
-                && <NewBoardForm setOpen={setOpen} open={open} />}
+                {open
+                    && <NewBoardForm setOpen={setOpen} open={open} />}
                 <Grid item classes={{ root: classes.title }}>
                     <h1>Welcome!</h1>
                 </Grid>
@@ -60,7 +60,6 @@ const LandingPage = () => {
                 </Grid>
             </Grid>
         </div>
-
     )
 }
 export default LandingPage

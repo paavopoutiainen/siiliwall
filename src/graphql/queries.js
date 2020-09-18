@@ -17,6 +17,10 @@ export const GET_BOARD_BY_ID = gql`
             columns {
                 id
                 name
+                board {
+                    id
+                    columnOrder
+                }
                 taskOrder
                 tasks {
                     id

@@ -12,6 +12,10 @@ export const landingPageStyles = makeStyles({
     boardButtonGrid: {
         minWidth: 200,
     },
+    boardButtonGridLongText: {
+        maxHeight: 200,
+        maxWidth: 200
+    },
 
     boardButton: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
@@ -39,7 +43,7 @@ export const landingPageStyles = makeStyles({
 
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100vh'
     },
 
     boardTitle: {
@@ -48,10 +52,6 @@ export const boardPageStyles = makeStyles({
 
     columnTitle: {
         fontSize: '1.3rem',
-    },
-
-    taskTitle: {
-        fontSize: '0.9rem',
     },
 
     column: {
@@ -70,4 +70,11 @@ export const boardPageStyles = makeStyles({
         borderRadius: 4,
         padding: 5,
     },
+
+    taskTitle: {
+        fontSize: '0.9rem',
+    },
+    dropDownMenu: {
+        backgroundColor: '!important lightgrey'
+    }
 })

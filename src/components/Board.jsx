@@ -62,7 +62,6 @@ const Board = ({ id }) => {
     if (error) return `Error: ${error.message}`
 
     const board = data.boardById
-
     const columnOrderArray = board.columnOrder
     const { columns } = board
 
@@ -82,7 +81,6 @@ const Board = ({ id }) => {
         if (destination.droppableId === source.droppableId) {
             const column = columns.find((col) => col.id === source.droppableId)
             const newTaskOrder = Array.from(column.taskOrder)
-
             newTaskOrder.splice(source.index, 1)
             newTaskOrder.splice(destination.index, 0, draggableId)
 
