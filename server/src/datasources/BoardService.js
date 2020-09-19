@@ -237,6 +237,18 @@ class BoardService {
         task.columnId = columnId
         await task.save()
     }
+
+    async reOrderColumns(columnOrder) {
+        try {
+            await Promise.all(columnOrder.map(async (id, index) => {
+                const column = await this.store.Column.findByPk(id)
+                column.orderNumber = index
+                await column.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
+    }
 }
 
 module.exports.BoardService = BoardService

@@ -26,6 +26,10 @@ const schema = {
             const destColumn = await dataSources.boardService.reOrderTasksOfColumn(destTaskOrder, destColumnId)
             return [sourceColumn, destColumn]
         },
+        async moveColumn(root, { boardId, newColumnOrder }) {
+            await dataSources.boardService.reOrderColumns(newColumnOrder)
+            return boardId
+        },
     },
 
     Column: {
