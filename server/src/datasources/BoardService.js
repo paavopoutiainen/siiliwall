@@ -7,49 +7,54 @@ class BoardService {
     initialize() {}
 
     async getBoards() {
+        let boardsFromDb
         try {
-            const boardsFromDb = await this.store.Board.findAll()
-            return boardsFromDb
+            boardsFromDb = await this.store.Board.findAll()
         } catch (e) {
             console.error(e)
         }
+        return boardsFromDb
     }
 
     async getBoardById(boardId) {
+        let boardFromDb
         try {
-            const boardFromDb = await this.store.Board.findByPk(boardId)
-            return boardFromDb
+            boardFromDb = await this.store.Board.findByPk(boardId)
         } catch (e) {
             console.error(e)
         }
+        return boardFromDb
     }
 
     async getColumnsByBoardId(boardId) {
+        let columnsByBoardIdFromDb
         try {
-            const columnsByBoardIdFromDb = await this.store.Column.findAll({ where: { boardId } })
-            return columnsByBoardIdFromDb
+            columnsByBoardIdFromDb = await this.store.Column.findAll({ where: { boardId } })
         } catch (e) {
             console.error(e)
         }
+        return columnsByBoardIdFromDb
     }
 
     async getColumnBoardByColumnId(columnId) {
+        let boardFromDb
         try {
             const columnFromDb = await this.store.Column.findByPk(columnId)
-            const boardFromDb = await this.store.Board.findByPk(columnFromDb.boardId)
-            return boardFromDb
+            boardFromDb = await this.store.Board.findByPk(columnFromDb.boardId)
         } catch (e) {
             console.error(e)
         }
+        return boardFromDb
     }
 
     async getColumnById(columnId) {
+        let columnFromDb
         try {
-            const columnFromDb = await this.store.Column.findByPk(columnId)
-            return columnFromDb
+            columnFromDb = await this.store.Column.findByPk(columnId)
         } catch (e) {
             console.error(e)
         }
+        return columnFromDb
     }
 
     async deleteColumnById(columnId) {
@@ -57,37 +62,40 @@ class BoardService {
             await this.store.Column.destroy({
                 where: { id: columnId },
             })
-            return columnId
         } catch (e) {
             console.error(e)
         }
+        return columnId
     }
 
     async getTasksByColumnId(columnId) {
+        let tasksFromDb
         try {
-            const tasksFromDb = await this.store.Task.findAll({ where: { columnId } })
-            return tasksFromDb
+            tasksFromDb = await this.store.Task.findAll({ where: { columnId } })
         } catch (e) {
             console.error(e)
         }
+        return tasksFromDb
     }
 
     async getTaskById(taskId) {
+        let taskFromDb
         try {
-            const taskFromDb = await this.store.Task.findByPk(taskId)
-            return taskFromDb
+            taskFromDb = await this.store.Task.findByPk(taskId)
         } catch (e) {
             console.error(e)
         }
+        return taskFromDb
     }
 
     async getSubtasksByTaskId(taskId) {
+        let subtasksFromDb
         try {
-            const subtasksFromDb = await this.store.Subtask.findAll({ where: { taskId } })
-            return subtasksFromDb
+            subtasksFromDb = await this.store.Subtask.findAll({ where: { taskId } })
         } catch (e) {
             console.error(e)
         }
+        return subtasksFromDb
     }
 
     async deleteTaskById(taskId) {
@@ -95,10 +103,10 @@ class BoardService {
             await this.store.Task.destroy({
                 where: { id: taskId },
             })
-            return taskId
         } catch (e) {
             console.error(e)
         }
+        return taskId
     }
 
     /*
@@ -106,17 +114,18 @@ class BoardService {
     This field is for keeping track of the order in which the columns are displayed in the board
   */
     async getColumnOrderOfBoard(boardId) {
+        let arrayOfIds
         try {
             const columns = await this.store.Column.findAll({
                 attributes: ['id'],
                 where: { boardId },
                 order: this.sequelize.literal('orderNumber ASC'),
             })
-            const arrayOfIds = columns.map((column) => column.dataValues.id)
-            return arrayOfIds
+            arrayOfIds = columns.map((column) => column.dataValues.id)
         } catch (e) {
             console.error(e)
         }
+        return arrayOfIds
     }
 
     /*
@@ -124,56 +133,65 @@ class BoardService {
     This field is for keeping track of the order in which the tasks are displayed in the column
   */
     async getTaskOrderOfColumn(columnId) {
+        let arrayOfIds
         try {
             const tasks = await this.store.Task.findAll({
                 attributes: ['id'],
                 where: { columnId },
                 order: this.sequelize.literal('columnOrderNumber ASC'),
             })
-            const arrayOfIds = tasks.map((task) => task.dataValues.id)
-            return arrayOfIds
+            arrayOfIds = tasks.map((task) => task.dataValues.id)
         } catch (e) {
             console.error(e)
         }
+        return arrayOfIds
     }
 
     async getSubtaskOrderOfTask(taskId) {
+        let arrayOfIds
         try {
             const subtasks = await this.store.Subtask.findAll({
                 attributes: ['id'],
                 where: { taskId },
                 order: this.sequelize.literal('orderNumber ASC'),
             })
-            const arrayOfIds = subtasks.map((subtask) => subtask.dataValues.id)
-            return arrayOfIds
+            arrayOfIds = subtasks.map((subtask) => subtask.dataValues.id)
         } catch (e) {
             console.error(e)
         }
+        return arrayOfIds
     }
 
     async addBoard(boardName) {
+        let addedBoard
         try {
-            const addedBoard = await this.store.Board.create({ name: boardName })
-            return addedBoard
+            addedBoard = await this.store.Board.create({ name: boardName })
         } catch (e) {
             console.error(e)
         }
+        return addedBoard
     }
 
     async addColumnForBoard(boardId, columnName) {
     /*
-      At the time of new columns' creation we want to display it as the component in the very right of the board,
+      At the time of new columns' creation we want to display it as
+      the component in the very right of the board,
       hence it is given the biggest orderNumber of the board
     */
+        let addedColumn
         try {
             const biggestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
-            const addedColumn = await this.store.Column.create({ boardId, name: columnName, orderNumber: biggestOrderNumber + 1 })
-            return addedColumn
+            addedColumn = await this.store.Column.create({
+                boardId,
+                name: columnName,
+                orderNumber: biggestOrderNumber + 1,
+            })
         } catch (e) {
             console.error(e)
         }
+        return addedColumn
     }
 
     async addTaskForColumn(columnId, title) {
@@ -181,37 +199,55 @@ class BoardService {
       At the time of new tasks' creation we want to display it as the lower most task in its column,
       hence it is given the biggest columnOrderNumber of the column
     */
+        let columnFromDb
         try {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
-            await this.store.Task.create({ columnId, title, columnOrderNumber: smallestOrderNumber + 1 })
-            const columnFromDb = await this.store.Column.findByPk(columnId)
-            return columnFromDb
+            await this.store.Task.create({
+                columnId,
+                title,
+                columnOrderNumber: smallestOrderNumber + 1,
+            })
+            columnFromDb = await this.store.Column.findByPk(columnId)
         } catch (e) {
             console.error(e)
         }
+        return columnFromDb
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array
     async reOrderTasksOfColumn(newOrderArray, columnId) {
+        let column
         try {
             await Promise.all(newOrderArray.map(async (id, index) => {
                 const task = await this.store.Task.findByPk(id)
                 task.columnOrderNumber = index
                 await task.save()
             }))
-            const column = await this.store.Column.findByPk(columnId)
-            return column
+            column = await this.store.Column.findByPk(columnId)
         } catch (e) {
             console.log(e)
         }
+        return column
     }
 
     async changeTasksColumnId(taskId, columnId) {
         const task = await this.store.Task.findByPk(taskId)
         task.columnId = columnId
         await task.save()
+    }
+
+    async reOrderColumns(columnOrder) {
+        try {
+            await Promise.all(columnOrder.map(async (id, index) => {
+                const column = await this.store.Column.findByPk(id)
+                column.orderNumber = index
+                await column.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 
