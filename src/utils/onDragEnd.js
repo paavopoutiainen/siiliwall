@@ -3,7 +3,7 @@
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { TASKORDER_AND_TASKS, TASKORDER } from '../graphql/fragments'
 
-export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrdersInColumns, client, columns, board) => {
+export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, client, columns, board) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
@@ -27,7 +27,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
             },
         })
 
-        await changeTaskOrderInColumn({
+        await moveTaskInColumn({
             variables: {
                 orderArray: newTaskOrder,
                 columnId: column.id,
@@ -81,7 +81,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
             },
         })
 
-        await changeTaskOrdersInColumns({
+        await moveTaskFromColumn({
             variables: {
                 taskId: draggableId,
                 sourceColumnId: sourceColumn.id,

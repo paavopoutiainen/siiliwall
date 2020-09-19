@@ -14,8 +14,8 @@ import '../styles.css'
 
 const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
-    const [changeTaskOrderInColumn] = useMoveTaskInColumn()
-    const [changeTaskOrdersInColumns] = useMoveTaskFromColumn()
+    const [moveTaskInColumn] = useMoveTaskInColumn()
+    const [moveTaskFromColumn] = useMoveTaskFromColumn()
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
@@ -51,7 +51,7 @@ const Board = ({ id }) => {
                 <Grid container item direction="row" justify="center" classes={{ root: classes.boardTitle }}>
                     <h1>{board.name}</h1>
                 </Grid>
-                <DragDropContext onDragEnd={(result) => onDragEnd(result, changeTaskOrderInColumn, changeTaskOrdersInColumns, client, columns, board)}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, client, columns, board)}>
                     <Grid item container direction="row">
                         <ColumnList columns={columns} columnOrder={columnOrder} />
                         <Grid item>
