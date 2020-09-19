@@ -45,13 +45,14 @@ const NewBoardForm = ({ setOpen, open }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChange(event)}
+                        id="inputName"
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length} onClick={handleSave} color="primary">
+                    <Button disabled={!name.length} onClick={handleSave} color="primary" id="addBoard">
                         Add
                     </Button>
                 </DialogActions>
