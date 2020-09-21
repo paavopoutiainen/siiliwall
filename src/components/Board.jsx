@@ -56,32 +56,33 @@ const Board = ({ id }) => {
                 </Grid>
                 <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
                     <Grid item container direction="row">
-                        <Droppable droppableId={id} direction="horisontal" type="column">
+                        <Droppable droppableId={id} direction="horizontal" type="column">
                             {(provided) => (
                                 <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
                                     <ColumnList columns={columns} columnOrder={columnOrder} />
                                     {provided.placeholder}
+                                    <Grid item>
+                                        <TextField
+                                            margin="dense"
+                                            name="title"
+                                            label="Name"
+                                            type="text"
+                                            value={columnName}
+                                            fullWidth
+                                            onChange={handleChange}
+                                        />
+                                        <Button
+                                            disabled={!columnName.length}
+                                            color="primary"
+                                            onClick={handleSave}
+                                        >
+                                            Add
+                                        </Button>
+                                    </Grid>
                                 </Grid>
                             )}
                         </Droppable>
-                        <Grid item>
-                            <TextField
-                                margin="dense"
-                                name="title"
-                                label="Name"
-                                type="text"
-                                value={columnName}
-                                fullWidth
-                                onChange={handleChange}
-                            />
-                            <Button
-                                disabled={!columnName.length}
-                                color="primary"
-                                onClick={handleSave}
-                            >
-                                Add
-                            </Button>
-                        </Grid>
+
                     </Grid>
                 </DragDropContext>
             </Grid>
