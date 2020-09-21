@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4')
+
 class BoardService {
     constructor({ db }) {
         this.store = db
@@ -165,7 +167,7 @@ class BoardService {
     async addBoard(boardName) {
         let addedBoard
         try {
-            addedBoard = await this.store.Board.create({ name: boardName })
+            addedBoard = await this.store.Board.create({ id: uuid(), name: boardName })
         } catch (e) {
             console.error(e)
         }
@@ -184,6 +186,7 @@ class BoardService {
                 where: { boardId },
             })
             addedColumn = await this.store.Column.create({
+                id: uuid(),
                 boardId,
                 name: columnName,
                 orderNumber: biggestOrderNumber + 1,
@@ -205,6 +208,7 @@ class BoardService {
                 where: { columnId },
             })
             await this.store.Task.create({
+                id: uuid(),
                 columnId,
                 title,
                 columnOrderNumber: smallestOrderNumber + 1,
