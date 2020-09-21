@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
@@ -8,7 +9,6 @@ const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
     const { title } = task
     const titleLimit = 27
-
     const add3Dots = (titleParam, titleLimitParam) => {
         let checkedTitle = titleParam
         const dots = '...'
@@ -36,7 +36,16 @@ const Task = ({ task, index, columnId }) => {
                         direction="row"
                         justify="space-between"
                     >
-                        <Grid item classes={{ root: classes.taskTitle }}><h1>{add3Dots(title, titleLimit)}</h1></Grid>
+                        <Grid item classes={{ root: classes.taskTitle }}>
+                            <h1>{add3Dots(title, titleLimit)}</h1>
+                            {task.size ? (
+                                <h3>
+                                    diff:
+                                    {' '}
+                                    {task.size}
+                                </h3>
+                            ) : null}
+                        </Grid>
                         <Grid item><DropdownTask taskId={task.id} columnId={columnId} /></Grid>
                     </Grid>
                 </Grid>

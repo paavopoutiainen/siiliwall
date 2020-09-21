@@ -10,11 +10,8 @@ const Column = ({ column }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
+    const [size, setSize] = useState(2)
     const [addTask] = useAddTask()
-
-    const handleChange = (event) => {
-        setTitle(event.target.value)
-    }
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -22,9 +19,11 @@ const Column = ({ column }) => {
             variables: {
                 columnId: column.id,
                 title,
+                size,
             },
         })
         setTitle('')
+        setSize(2)
     }
 
     return (
@@ -58,7 +57,17 @@ const Column = ({ column }) => {
                     type="text"
                     value={title}
                     fullWidth
-                    onChange={handleChange}
+                    onChange={(event) => setTitle(event.target.value)}
+                />
+                <TextField
+                    autoComplete="off"
+                    margin="dense"
+                    name="size"
+                    label="Size"
+                    type="number"
+                    value={size}
+                    fullWidth
+                    onChange={(event) => setSize(parseFloat(event.target.value))}
                 />
                 <Button
                     disabled={!title.length}

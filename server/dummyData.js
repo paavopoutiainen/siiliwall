@@ -48,18 +48,21 @@ const tasks = [
     {
         title: 'task1',
         content: 'task1',
+        size: 1.1,
         columnId: 1,
         columnOrderNumber: 2,
     },
     {
         title: 'task2',
         content: 'task2',
+        size: 2,
         columnId: 1,
         columnOrderNumber: 1,
     },
     {
         title: 'task3',
         content: 'task3',
+        size: 3.1415,
         columnId: 2,
         columnOrderNumber: 1,
     },
