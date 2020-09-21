@@ -20,6 +20,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             },
         })
         toggleDialog()
+        setTitle('')
     }
 
     return (
