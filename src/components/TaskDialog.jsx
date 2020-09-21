@@ -4,7 +4,7 @@ import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTi
 import useAddTask from '../graphql/task/hooks/useAddTask'
 
 const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
-    const [addTask] = useAddTask()
+    const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
 
     const handleChange = (event) => {

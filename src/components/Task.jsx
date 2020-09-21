@@ -38,7 +38,12 @@ const Task = ({ task, index, columnId }) => {
                         direction="row"
                         justify="space-between"
                     >
-                        <Grid item classes={{ root: classes.taskTitle }}><h1>{add3Dots(title, titleLimit)}</h1></Grid>
+                        <Grid
+                            item
+                            classes={{ root: classes.taskTitle }}
+                        >
+                            <h1>{add3Dots(title, titleLimit)}</h1>
+                        </Grid>
                         <Grid item><DropdownTask taskId={task.id} columnId={columnId} /></Grid>
                     </Grid>
                 </Grid>

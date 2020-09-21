@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
     const Subtask = sequelize.define('Subtask', {
         id: {
-            type: DataTypes.INTEGER(11),
+            type: DataTypes.UUID,
             allowNull: false,
-            autoIncrement: true,
             primaryKey: true,
         },
         orderNumber: DataTypes.INTEGER,
