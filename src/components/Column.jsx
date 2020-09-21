@@ -1,31 +1,18 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react'
 import { Droppable } from 'react-beautiful-dnd'
-import { Grid, TextField, Button } from '@material-ui/core'
-import useAddTask from '../graphql/task/hooks/useAddTask'
+import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import DropdownColumn from './DropdownColumn'
+import TaskDialog from './TaskDialog'
 
 const Column = ({ column }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
-    const [title, setTitle] = useState('')
-    const [addTask] = useAddTask()
+    const [dialogStatus, setDialogStatus] = useState(false)
 
-    const handleChange = (event) => {
-        setTitle(event.target.value)
-    }
-
-    const handleSave = (event) => {
-        event.preventDefault()
-        addTask({
-            variables: {
-                columnId: column.id,
-                title,
-            },
-        })
-        setTitle('')
-    }
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     return (
         <Grid
@@ -50,22 +37,12 @@ const Column = ({ column }) => {
 
             </Droppable>
             <Grid item container>
-                <TextField
-                    autoComplete="off"
-                    margin="dense"
-                    name="title"
-                    label="Name"
-                    type="text"
-                    value={title}
-                    fullWidth
-                    onChange={handleChange}
-                />
+                <TaskDialog dialogStatus={dialogStatus} toggleDialog={toggleDialog} column={column} />
                 <Button
-                    disabled={!title.length}
-                    onClick={handleSave}
+                    onClick={toggleDialog}
                     color="primary"
                 >
-                    Add
+                    Add task
                 </Button>
             </Grid>
         </Grid>
