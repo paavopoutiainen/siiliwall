@@ -13,7 +13,7 @@ const Column = ({ column, index }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
     const [title, setTitle] = useState('')
-    const [addTask] = useAddTask()
+    const [addTask] = useAddTask(column.id)
 
     const handleChange = (event) => {
         setTitle(event.target.value)

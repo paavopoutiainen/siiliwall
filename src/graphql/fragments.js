@@ -4,7 +4,9 @@ import { gql } from '@apollo/client'
 export const TASKORDER_AND_TASKS = gql`
     fragment taskOrderAndTasks on Column {
         taskOrder
-        tasks
+        tasks {
+            id
+        }
     }
 `
 
