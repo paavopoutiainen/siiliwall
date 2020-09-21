@@ -14,8 +14,8 @@ export const TASKORDER = gql`
     }
 `
 export const COLUMNORDER = gql`
-fragment columnOrder on Board {
-    columnOrder
+    fragment columnOrder on Board {
+        columnOrder
 }
 `
 

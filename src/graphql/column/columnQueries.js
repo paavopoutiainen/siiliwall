@@ -12,9 +12,7 @@ export const ADD_COLUMN = gql`
 
 export const MOVE_COLUMN = gql`
     mutation moveColumn($orderArray: [ID!]!, $boardId: ID!) {
-        moveColumn(newColumnOrder: $orderArray, boardId: $boardId) {
-            id
-        }
+        moveColumn(boardId: $boardId, newColumnOrder: $orderArray)
     }
 `
 

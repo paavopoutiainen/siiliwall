@@ -6,8 +6,6 @@ import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER } from '../graphql/fragment
 export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board) => {
     const { destination, source, draggableId } = result
 
-    console.log(result)
-
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
@@ -33,6 +31,7 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
                 boardId: board.id,
             },
         })
+        return
     }
 
     // When task is moved within one column
