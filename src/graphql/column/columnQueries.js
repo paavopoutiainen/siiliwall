@@ -10,6 +10,14 @@ export const ADD_COLUMN = gql`
     }
 `
 
+export const MOVE_COLUMN = gql`
+    mutation moveColumn($orderArray: [ID!]!, $boardId: ID!) {
+        moveColumn(newColumnOrder: $orderArray, boardId: $boardId) {
+            id
+        }
+    }
+`
+
 export const DELETE_COLUMN = gql`
     mutation deleteColumn($columnId: ID!) {
         deleteColumnById(id: $columnId)

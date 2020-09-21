@@ -1,13 +1,15 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable max-len */
 import React, { useState } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import ColumnList from './ColumnList'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useMoveTaskInColumn from '../graphql/task/hooks/useMoveTaskInColumn'
 import useMoveTaskFromColumn from '../graphql/task/hooks/useMoveTaskFromColumn'
+import useMoveColumn from '../graphql/column/hooks/useMoveColumn'
 import useAddColumn from '../graphql/column/hooks/useAddColumn'
 import { onDragEnd } from '../utils/onDragEnd'
 import '../styles.css'
@@ -16,6 +18,7 @@ const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
     const [moveTaskInColumn] = useMoveTaskInColumn()
     const [moveTaskFromColumn] = useMoveTaskFromColumn()
+    const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
@@ -51,9 +54,16 @@ const Board = ({ id }) => {
                 <Grid container item direction="row" justify="center" classes={{ root: classes.boardTitle }}>
                     <h1>{board.name}</h1>
                 </Grid>
-                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, client, columns, board)}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
                     <Grid item container direction="row">
-                        <ColumnList columns={columns} columnOrder={columnOrder} />
+                        <Droppable droppableId={id} direction="horisontal" type="column">
+                            {(provided) => (
+                                <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
+                                    <ColumnList columns={columns} columnOrder={columnOrder} />
+                                    {provided.placeholder}
+                                </Grid>
+                            )}
+                        </Droppable>
                         <Grid item>
                             <TextField
                                 margin="dense"

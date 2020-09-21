@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
@@ -36,7 +37,12 @@ const Task = ({ task, index, columnId }) => {
                         direction="row"
                         justify="space-between"
                     >
-                        <Grid item classes={{ root: classes.taskTitle }}><h1>{add3Dots(title, titleLimit)}</h1></Grid>
+                        <Grid
+                            item
+                            classes={{ root: classes.taskTitle }}
+                        >
+                            <h1>{add3Dots(title, titleLimit)}</h1>
+                        </Grid>
                         <Grid item><DropdownTask taskId={task.id} columnId={columnId} /></Grid>
                     </Grid>
                 </Grid>
