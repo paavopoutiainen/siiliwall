@@ -202,22 +202,21 @@ class BoardService {
       At the time of new tasks' creation we want to display it as the lower most task in its column,
       hence it is given the biggest columnOrderNumber of the column
     */
-        let columnFromDb
+        let addedTask
         try {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
-            await this.store.Task.create({
+            addedTask = await this.store.Task.create({
                 id: uuid(),
                 columnId,
                 title,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
-            columnFromDb = await this.store.Column.findByPk(columnId)
         } catch (e) {
             console.error(e)
         }
-        return columnFromDb
+        return addedTask
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array

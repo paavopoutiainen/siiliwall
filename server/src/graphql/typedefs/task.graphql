@@ -13,6 +13,6 @@ type Query {
 }
 
 type Mutation {
-  addTaskForColumn(columnId: ID!, title: String!): Column
+  addTaskForColumn(columnId: ID!, title: String!): Task
   deleteTaskById(id: ID!) : ID
 }
