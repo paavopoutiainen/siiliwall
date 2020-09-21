@@ -4,7 +4,6 @@
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
-import useAddTask from '../graphql/task/hooks/useAddTask'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import DropdownColumn from './DropdownColumn'
