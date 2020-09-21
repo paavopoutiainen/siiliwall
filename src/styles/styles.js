@@ -74,7 +74,13 @@ export const boardPageStyles = makeStyles({
     taskTitle: {
         fontSize: '0.9rem',
     },
-    dropDownMenu: {
-        backgroundColor: '!important lightgrey'
+    snackbar: {
+        maxWidth: 350
+    },
+    snackbarButtonUndo: {
+        color: 'white'
+    },
+    snackbarButtonDelete: {
+        color: 'red'
     }
 })

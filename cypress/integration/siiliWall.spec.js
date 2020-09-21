@@ -1,4 +1,3 @@
-const { getAllBoards, addBoard } = require('../utils')
 
 describe('Loads landingPage', () => {
     it('loads the page', () => {
@@ -9,14 +8,6 @@ describe('Loads landingPage', () => {
     })
     it('renders the add button', () => {
         cy.get('#addButton')
-    })
-    it('renders the boards from database', () => {
-        cy.request(
-            {
-                url: '/graphql',
-                body: { getAllBoards }
-            }
-        )
     })
 })
 
@@ -36,12 +27,20 @@ describe('A board can be added to the boardlist and rendered', () => {
     it('the add button can be clicked', () => {
         cy.get('#addBoard').click()
     })
-    it('the new board is rendered to the end of the board list', () => {
-        cy.request(
-            {
-                url: '/graphql',
-                body: { addBoard }
-            }
-        )
+})
+
+describe('Navigation to the boardPage is possible', () => {
+    it('pressing the created board', () => {
+        cy.get('.boardList__button__link').last().click()
+    })
+})
+
+describe('Column can be created and rendered', () => {
+    const columnNames = ['To Do', 'In progress', 'Done']
+    it('creating 3 columns for the page', () => {
+        for (let i = 0; i < columnNames.length; i++) {
+            cy.get('#inputColumnName').type(columnNames[i]).should('have.value', columnNames[i])
+            cy.get('#addColumnButton').click()
+        }
     })
 })

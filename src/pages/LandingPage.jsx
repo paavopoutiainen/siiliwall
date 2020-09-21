@@ -46,7 +46,7 @@ const LandingPage = () => {
                     spacing={2}
                 >
                     {data.allBoards.map(({ id, name }) => (
-                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id} className="boardButton">
+                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id} >
                             <Link to={`/boards/${id}`} className="boardList__button__link">
                                 <Button fullWidth classes={{ root: classes.boardButton }}>
                                     {name}
