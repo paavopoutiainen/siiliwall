@@ -1,83 +1,66 @@
+/* eslint-disable max-len */
+/* eslint-disable no-shadow */
+/* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
-import { Droppable } from 'react-beautiful-dnd'
-import { Grid, TextField, Button } from '@material-ui/core'
-import useAddTask from '../graphql/task/hooks/useAddTask'
+import { Droppable, Draggable } from 'react-beautiful-dnd'
+import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import DropdownColumn from './DropdownColumn'
+import TaskDialog from './TaskDialog'
 
-const Column = ({ column }) => {
+const Column = ({ column, index }) => {
     const classes = boardPageStyles()
     const { tasks, taskOrder } = column
-    const [title, setTitle] = useState('')
-    const [size, setSize] = useState(2)
-    const [addTask] = useAddTask()
+    const [dialogStatus, setDialogStatus] = useState(false)
 
-    const handleSave = (event) => {
-        event.preventDefault()
-        addTask({
-            variables: {
-                columnId: column.id,
-                title,
-                size,
-            },
-        })
-        setTitle('')
-        setSize(2)
-    }
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     return (
-        <Grid
-            item
-            container
-            direction="column"
-            classes={{ root: classes.column }}
-            alignItems="center"
-        >
-            <Grid item container direction="row" justify="space-between">
-                <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
-                <Grid item><DropdownColumn columnId={column.id} boardId={column.board.id} /></Grid>
-            </Grid>
-            <Droppable droppableId={column.id}>
-                {(provided) => (
-                    // eslint-disable-next-line react/jsx-props-no-spreading
-                    <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
-                        <TaskList tasks={tasks} taskOrder={taskOrder} columnId={column.id} />
-                        {provided.placeholder}
-                    </Grid>
-                )}
-
-            </Droppable>
-            <Grid item container>
-                <TextField
-                    autoComplete="off"
-                    margin="dense"
-                    name="title"
-                    label="Name"
-                    type="text"
-                    value={title}
-                    fullWidth
-                    onChange={(event) => setTitle(event.target.value)}
-                />
-                <TextField
-                    autoComplete="off"
-                    margin="dense"
-                    name="size"
-                    label="Size"
-                    type="number"
-                    value={size}
-                    fullWidth
-                    onChange={(event) => setSize(parseFloat(event.target.value))}
-                />
-                <Button
-                    disabled={!title.length}
-                    onClick={handleSave}
-                    color="primary"
+        <Draggable draggableId={column.id} index={index}>
+            {(provided) => (
+                <Grid
+                    item
+                    container
+                    direction="column"
+                    classes={{ root: classes.column }}
+                    alignItems="center"
+                    {...provided.draggableProps}
+                    ref={provided.innerRef}
                 >
-                    Add
-                </Button>
-            </Grid>
-        </Grid>
+                    <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                        <Grid item classes={{ root: classes.columnTitle }}>
+                            <h1>{column.name}</h1>
+                        </Grid>
+                        <Grid item>
+                            <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                        </Grid>
+                    </Grid>
+                    <Droppable droppableId={column.id} type="task">
+                        {(provided) => (
+                            <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
+                                <TaskList tasks={tasks} taskOrder={taskOrder} columnId={column.id} />
+                                {provided.placeholder}
+                            </Grid>
+                        )}
+
+                    </Droppable>
+                    <Grid item container>
+                        <TaskDialog
+                            dialogStatus={dialogStatus}
+                            toggleDialog={toggleDialog}
+                            column={column}
+                        />
+                        <Button
+                            onClick={toggleDialog}
+                            color="primary"
+                        >
+                            Add task
+                        </Button>
+                    </Grid>
+                </Grid>
+            )}
+        </Draggable>
     )
 }
 export default Column

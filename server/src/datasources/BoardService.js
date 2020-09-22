@@ -1,3 +1,5 @@
+const uuid = require('uuid/v4')
+
 class BoardService {
     constructor({ db }) {
         this.store = db
@@ -165,7 +167,7 @@ class BoardService {
     async addBoard(boardName) {
         let addedBoard
         try {
-            addedBoard = await this.store.Board.create({ name: boardName })
+            addedBoard = await this.store.Board.create({ id: uuid(), name: boardName })
         } catch (e) {
             console.error(e)
         }
@@ -184,6 +186,7 @@ class BoardService {
                 where: { boardId },
             })
             addedColumn = await this.store.Column.create({
+                id: uuid(),
                 boardId,
                 name: columnName,
                 orderNumber: biggestOrderNumber + 1,
@@ -199,21 +202,21 @@ class BoardService {
       At the time of new tasks' creation we want to display it as the lower most task in its column,
       hence it is given the biggest columnOrderNumber of the column
     */
-        let columnFromDb
+        let addedTask
         try {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
-            await this.store.Task.create({
+            addedTask = await this.store.Task.create({
+                id: uuid(),
                 columnId,
                 title,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
-            columnFromDb = await this.store.Column.findByPk(columnId)
         } catch (e) {
             console.error(e)
         }
-        return columnFromDb
+        return addedTask
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array
