@@ -6,9 +6,17 @@ import useAddTask from '../graphql/task/hooks/useAddTask'
 const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
+    const [size, setSize] = useState(null)
 
     const handleChange = (event) => {
         setTitle(event.target.value)
+    }
+    const handleSizeChange = (event) => {
+        if (event.target.value === '') {
+            setSize(null)
+            return
+        }
+        setSize(parseFloat(event.target.value))
     }
 
     const handleSave = (event) => {
@@ -17,10 +25,12 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             variables: {
                 columnId: column.id,
                 title,
+                size,
             },
         })
         toggleDialog()
         setTitle('')
+        setSize(null)
     }
 
     return (
@@ -43,6 +53,16 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         value={title}
                         fullWidth
                         onChange={handleChange}
+                    />
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
+                        name="size"
+                        label="Size"
+                        type="number"
+                        value={size || ''}
+                        fullWidth
+                        onChange={handleSizeChange}
                     />
                 </DialogContent>
                 <DialogActions>

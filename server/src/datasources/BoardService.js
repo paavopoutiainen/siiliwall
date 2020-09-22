@@ -197,7 +197,7 @@ class BoardService {
         return addedColumn
     }
 
-    async addTaskForColumn(columnId, title) {
+    async addTaskForColumn(columnId, title, size) {
     /*
       At the time of new tasks' creation we want to display it as the lower most task in its column,
       hence it is given the biggest columnOrderNumber of the column
@@ -211,6 +211,7 @@ class BoardService {
                 id: uuid(),
                 columnId,
                 title,
+                size,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
         } catch (e) {

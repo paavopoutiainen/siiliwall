@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         swimlaneOrderNumber: DataTypes.INTEGER,
         color: DataTypes.STRING,
-        size: DataTypes.INTEGER,
+        size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,
     })
     Task.associate = (models) => {

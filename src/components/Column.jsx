@@ -1,5 +1,5 @@
-/* eslint-disable no-shadow */
 /* eslint-disable max-len */
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
@@ -29,8 +29,12 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                 >
                     <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
-                        <Grid item classes={{ root: classes.columnTitle }}><h1>{column.name}</h1></Grid>
-                        <Grid item><DropdownColumn columnId={column.id} boardId={column.board.id} /></Grid>
+                        <Grid item classes={{ root: classes.columnTitle }}>
+                            <h1>{column.name}</h1>
+                        </Grid>
+                        <Grid item>
+                            <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                        </Grid>
                     </Grid>
                     <Droppable droppableId={column.id} type="task">
                         {(provided) => (
@@ -42,7 +46,11 @@ const Column = ({ column, index }) => {
 
                     </Droppable>
                     <Grid item container>
-                        <TaskDialog dialogStatus={dialogStatus} toggleDialog={toggleDialog} column={column} />
+                        <TaskDialog
+                            dialogStatus={dialogStatus}
+                            toggleDialog={toggleDialog}
+                            column={column}
+                        />
                         <Button
                             onClick={toggleDialog}
                             color="primary"
@@ -53,7 +61,6 @@ const Column = ({ column, index }) => {
                 </Grid>
             )}
         </Draggable>
-
     )
 }
 export default Column
