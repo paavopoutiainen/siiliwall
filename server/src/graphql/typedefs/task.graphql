@@ -1,7 +1,8 @@
 type Task {
   id: ID!
   title: String!
-  content: String!
+  content: String
+  owner: String
   size: Float
   column: Column!
   columnOrderNumber: Int!
@@ -14,6 +15,6 @@ type Query {
 }
 
 type Mutation {
-  addTaskForColumn(columnId: ID!, title: String!, size: Float): Task
+  addTaskForColumn(columnId: ID!, title: String!, size: Float, owner: String, content: String ): Task
   deleteTaskById(id: ID!) : ID
 }

@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
         content: {
             type: DataTypes.STRING,
         },
+        owner: {
+            type: DataTypes.STRING,
+        },
         columnOrderNumber: {
             type: DataTypes.INTEGER,
         },
