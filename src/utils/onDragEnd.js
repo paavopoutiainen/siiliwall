@@ -1,14 +1,38 @@
 /* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
-import { TASKORDER_AND_TASKS, TASKORDER } from '../graphql/fragments'
+import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER } from '../graphql/fragments'
 
-export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrdersInColumns, client, columns, board) => {
+export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    // When user is moving column
+    if (result.type === 'column') {
+        const newColumnOrder = Array.from(board.columnOrder)
+        newColumnOrder.splice(source.index, 1)
+        newColumnOrder.splice(destination.index, 0, draggableId)
+
+        const boardId = `Board:${board.id}`
+        client.writeFragment({
+            id: boardId,
+            fragment: COLUMNORDER,
+            data: {
+                columnOrder: newColumnOrder,
+            },
+        })
+
+        await moveColumn({
+            variables: {
+                orderArray: newColumnOrder,
+                boardId: board.id,
+            },
+        })
+        return
+    }
 
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
@@ -27,7 +51,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
             },
         })
 
-        await changeTaskOrderInColumn({
+        await moveTaskInColumn({
             variables: {
                 orderArray: newTaskOrder,
                 columnId: column.id,
@@ -81,7 +105,7 @@ export const onDragEnd = async (result, changeTaskOrderInColumn, changeTaskOrder
             },
         })
 
-        await changeTaskOrdersInColumns({
+        await moveTaskFromColumn({
             variables: {
                 taskId: draggableId,
                 sourceColumnId: sourceColumn.id,

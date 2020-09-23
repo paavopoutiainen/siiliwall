@@ -14,8 +14,9 @@ type Query {
 type Mutation {
   addColumnForBoard(boardId: ID!, columnName: String!): Column
   deleteColumnById(id: ID!): ID
-  changeTaskOrderInColumn(newOrder: [ID!], columnId: ID!): Column
-  changeTaskOrdersInColumns(taskId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTaskOrder: [ID!], destTaskOrder: [ID!]): [Column!]!
+  moveTaskInColumn(newOrder: [ID!], columnId: ID!): Column
+  moveTaskFromColumn(taskId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTaskOrder: [ID!], destTaskOrder: [ID!]): [Column!]!
+  moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
 }
 
 

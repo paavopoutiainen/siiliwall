@@ -1,9 +1,8 @@
 module.exports = (sequelize, DataTypes) => {
     const Board = sequelize.define('Board', {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.UUID,
             allowNull: false,
-            autoIncrement: true,
             primaryKey: true,
         },
         name: {
@@ -14,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
     Board.associate = (models) => {
         Board.hasMany(models.Column, {
             foreignKey: 'boardId',
+        })
+        // Board has one creator user
+        Board.belongsTo(models.User, {
+            foreignKey: 'creatorId',
         })
     }
     return Board

@@ -25,6 +25,8 @@ export const BOARD_BY_ID = gql`
                 tasks {
                     id
                     title
+                    size
+                    owner
                 }
             }
         }

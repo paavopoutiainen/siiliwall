@@ -14,7 +14,7 @@ export const landingPageStyles = makeStyles({
     },
     boardButtonGridLongText: {
         maxHeight: 200,
-        maxWidth: 200
+        maxWidth: 200,
     },
 
     boardButton: {
@@ -43,7 +43,11 @@ export const landingPageStyles = makeStyles({
 
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh'
+        minHeight: '100vh',
+    },
+
+    columnRow: {
+        flexWrap: 'nowrap',
     },
 
     boardTitle: {
