@@ -77,10 +77,7 @@ export const boardPageStyles = makeStyles({
     snackbar: {
         maxWidth: 350
     },
-    snackbarButtonUndo: {
-        color: 'white'
-    },
     snackbarButtonDelete: {
-        color: 'red'
+        color: 'white'
     }
 })

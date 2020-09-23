@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, Snackbar
 } from '@material-ui/core'
+import Alert from '@material-ui/lab/Alert'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { useMutation, useApolloClient } from '@apollo/client'
@@ -92,19 +93,24 @@ const DropdownColumn = ({ columnId, boardId }) => {
             <Snackbar
                 classes={{ root: classes.snackbar }}
                 open={open}
-                message={<span id="snackbarMessage">{snackbarMsg}</span>}
-                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-                action={
-                    <Grid item>
-                        <Button color="secondary" size="large" onClick={() => handleClose('UNDO')} classes={{ root: classes.snackbarButtonUndo }}>
-                            UNDO
-                        </Button>
-                        <Button color="secondary" size="large" onClick={() => handleClose('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
-                            DELETE
-                        </Button>
+                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+            >
+                <Alert variant="outlined" severity="error">
+                    <Grid item container direction="column">
+                        <Grid item>
+                            <span id="snackbarMessage">{snackbarMsg}</span>
+                        </Grid>
+                        <Grid item container direction="row" justify="flex-end">
+                            <Button variant="contained" onClick={() => handleClose('UNDO')}>
+                                UNDO
+                            </Button>
+                            <Button color="secondary" variant="contained" onClick={() => handleClose('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
+                                DELETE
+                            </Button>
+                        </Grid>
                     </Grid>
-                }
-            />
+                </Alert>
+            </Snackbar>
         </Grid>
     )
 }
