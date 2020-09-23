@@ -17,21 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         },
     })
     User.associate = (models) => {
-        // User may have created multiple boards
-        User.hasMany(models.Board, {
-            foreignKey: 'creatorId',
-        })
-        // User may be working on multiple boards
-        User.belongsToMany(models.Board, {
-            through: 'user_board',
-        })
         // User may have created multiple tasks
         User.hasMany(models.Task, {
-            foreignKey: 'creatorId',
+            foreignKey: 'ownerId',
         })
         // User may be working on multiple tasks
         User.belongsToMany(models.Task, {
-            through: 'user_task',
+            through: models.UserTask,
+            foreignKey: 'userId',
         })
     }
 

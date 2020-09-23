@@ -36,6 +36,12 @@ const initializeDb = async () => {
     try {
         await db.sequelize.sync({ force: true })
         await Promise.all(
+            dummyData.users.map(async (user) => {
+                const resolved = await db.User.create(user)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.boards.map(async (board) => {
                 const resolved = await db.Board.create(board)
                 return resolved
@@ -53,6 +59,7 @@ const initializeDb = async () => {
                 return resolved
             }),
         )
+        await db.UserTask.create({ userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6' })
         await Promise.all(
             dummyData.subtasks.map(async (subtask) => {
                 const resolved = await db.Subtask.create(subtask)

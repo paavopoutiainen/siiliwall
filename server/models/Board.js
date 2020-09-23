@@ -18,10 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         Board.belongsTo(models.User, {
             foreignKey: 'creatorId',
         })
-        // Board may have many users working on it
-        Board.belongsToMany(models.User, {
-            through: 'user_board',
-        })
     }
     return Board
 }
