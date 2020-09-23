@@ -13,6 +13,11 @@ const schema = {
         }) {
             return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
         },
+        editTaskById(root, {
+            id, title, size, owner, content,
+        }) {
+            return dataSources.boardService.editTaskById(id, title, size, owner, content)
+        },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
         },

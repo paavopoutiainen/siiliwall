@@ -3,15 +3,18 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import Delete from '@material-ui/icons/Delete'
+import { Delete, Edit } from '@material-ui/icons'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import { TASKORDER } from '../graphql/fragments'
+import TaskEditDialog from './TaskEditDialog'
 
 const DropdownTask = ({ columnId, taskId }) => {
     const [deleteTask] = useMutation(DELETE_TASK)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
+    const [dialogStatus, setDialogStatus] = useState(false)
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -50,6 +53,18 @@ const DropdownTask = ({ columnId, taskId }) => {
         setAnchorEl(null)
     }
 
+    const handleEdit = () => {
+        toggleDialog()
+        // callback taskista?
+        return (
+            <TaskEditDialog
+                dialogStatus={dialogStatus}
+                toggleDialog={toggleDialog}
+                editId={taskId}
+            />
+        )
+    }
+
     return (
         <Grid item>
             <Button
@@ -69,6 +84,12 @@ const DropdownTask = ({ columnId, taskId }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
+                <MenuItem onClick={handleEdit}>
+                    <ListItemIcon>
+                        <Edit fontSize="default" />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit" />
+                </MenuItem>
                 <MenuItem onClick={handleClose}>
                     <ListItemIcon>
                         <Delete fontSize="default" />

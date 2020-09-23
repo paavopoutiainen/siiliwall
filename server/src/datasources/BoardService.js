@@ -100,6 +100,18 @@ class BoardService {
         return subtasksFromDb
     }
 
+    async editTaskById(taskId, title, size, owner, content) {
+        let updatedTask
+        try {
+            updatedTask = await this.store.Task.save({
+                id: taskId, title, content, owner, size,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return updatedTask
+    }
+
     async deleteTaskById(taskId) {
         try {
             await this.store.Task.destroy({
