@@ -112,7 +112,6 @@ class BoardService {
         } catch (e) {
             console.error(e)
         }
-        console.log('updated ', task)
         return task
     }
 

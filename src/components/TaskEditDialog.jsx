@@ -7,7 +7,6 @@ import useEditTask from '../graphql/task/hooks/useEditTask'
 const TaskDialog = ({
     dialogStatus, editId, toggleDialog, task,
 }) => {
-    console.log(task)
     const [editTask] = useEditTask()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
