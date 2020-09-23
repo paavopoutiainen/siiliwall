@@ -44,7 +44,10 @@ export const landingPageStyles = makeStyles({
 export const boardPageStyles = makeStyles({
     root: {
         minHeight: '100vh',
-        width: '2000px',
+    },
+
+    columnRow: {
+        flexWrap: 'nowrap',
     },
 
     boardTitle: {
