@@ -7,10 +7,16 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
+    const [owner, setOwner] = useState('')
 
     const handleChange = (event) => {
         setTitle(event.target.value)
     }
+
+    const handleOwnerChange = (event) => {
+        setOwner(event.target.value)
+    }
+
     const handleSizeChange = (event) => {
         if (event.target.value === '') {
             setSize(null)
@@ -26,11 +32,13 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 columnId: column.id,
                 title,
                 size,
+                owner,
             },
         })
         toggleDialog()
         setTitle('')
         setSize(null)
+        setOwner('')
     }
 
     return (
@@ -53,6 +61,16 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         value={title}
                         fullWidth
                         onChange={handleChange}
+                    />
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
+                        name="owner"
+                        label="Owner"
+                        type="text"
+                        value={owner}
+                        fullWidth
+                        onChange={handleOwnerChange}
                     />
                     <TextField
                         autoComplete="off"
