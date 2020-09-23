@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core'
 import useEditTask from '../graphql/task/hooks/useEditTask'
 
-const TaskDialog = ({
+const TaskEditDialog = ({
     dialogStatus, editId, toggleDialog, task,
 }) => {
     const [editTask] = useEditTask()
@@ -105,4 +105,4 @@ const TaskDialog = ({
         </Grid>
     )
 }
-export default TaskDialog
+export default TaskEditDialog

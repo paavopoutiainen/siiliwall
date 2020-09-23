@@ -1,4 +1,3 @@
-const { TitleTwoTone } = require('@material-ui/icons')
 const { v4: uuid } = require('uuid')
 
 class BoardService {
