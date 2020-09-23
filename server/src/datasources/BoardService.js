@@ -1,5 +1,5 @@
 const { TitleTwoTone } = require('@material-ui/icons')
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 
 class BoardService {
     constructor({ db }) {
@@ -7,7 +7,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() {}
+    initialize() { }
 
     async getBoards() {
         let boardsFromDb
@@ -190,11 +190,11 @@ class BoardService {
     }
 
     async addColumnForBoard(boardId, columnName) {
-    /*
-      At the time of new columns' creation we want to display it as
-      the component in the very right of the board,
-      hence it is given the biggest orderNumber of the board
-    */
+        /*
+          At the time of new columns' creation we want to display it as
+          the component in the very right of the board,
+          hence it is given the biggest orderNumber of the board
+        */
         let addedColumn
         try {
             const biggestOrderNumber = await this.store.Column.max('orderNumber', {
@@ -213,10 +213,10 @@ class BoardService {
     }
 
     async addTaskForColumn(columnId, title, size, owner, content) {
-    /*
-      At the time of new tasks' creation we want to display it as the lower most task in its column,
-      hence it is given the biggest columnOrderNumber of the column
-    */
+        /*
+          At the time of new tasks' creation we want to display it as the lower most task in its column,
+          hence it is given the biggest columnOrderNumber of the column
+        */
         let addedTask
         try {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
