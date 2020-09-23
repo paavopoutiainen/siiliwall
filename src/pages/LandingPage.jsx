@@ -11,6 +11,7 @@ const LandingPage = () => {
     const { data, loading } = useAllBoards()
     const [open, setOpen] = useState(false)
     const classes = landingPageStyles()
+    console.log(data)
 
     function handleClickOpen() {
         setOpen(true)

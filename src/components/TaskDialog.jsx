@@ -1,20 +1,25 @@
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import Select from 'react-select'
 import useAddTask from '../graphql/task/hooks/useAddTask'
+import useAllUsers from '../graphql/user/hooks/useAllUsers'
 
 const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+    const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState('')
 
+    if (loading) return null
+
     const handleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    const handleOwnerChange = (event) => {
-        setOwner(event.target.value)
+    const handleOwnerChange = (action) => {
+        console.log(action)
     }
 
     const handleSizeChange = (event) => {
@@ -41,11 +46,17 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         setOwner('')
     }
 
+    const modifiedData = data.allUsers.map((user) => {
+        const newObject = { value: user.userName, label: user.userName}
+        return newObject
+    })
+
     return (
         <Grid>
             <Dialog
                 fullWidth
                 maxWidth="md"
+                paper={{ minHeight: 50 }}
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
@@ -62,15 +73,18 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         fullWidth
                         onChange={handleChange}
                     />
-                    <TextField
-                        autoComplete="off"
-                        margin="dense"
+                    <Select
+                        className="basic-single"
+                        classNamePrefix="select"
+                        defaultValue={owner}
+                        isClearable
+                        isSearchable
                         name="owner"
-                        label="Owner"
-                        type="text"
+                        inputValue={owner}
                         value={owner}
-                        fullWidth
+                        options={modifiedData}
                         onChange={handleOwnerChange}
+                        onInputChange={handleOwnerChange}
                     />
                     <TextField
                         autoComplete="off"

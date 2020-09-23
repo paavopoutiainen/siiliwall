@@ -255,6 +255,16 @@ class BoardService {
             console.log(e)
         }
     }
+
+    async getUsers() {
+        let usersFromDb
+        try {
+            usersFromDb = await this.store.User.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return usersFromDb
+    }
 }
 
 module.exports.BoardService = BoardService
