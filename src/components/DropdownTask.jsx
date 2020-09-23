@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import Delete from '@material-ui/icons/Delete'
+import { Delete, Edit } from '@material-ui/icons'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import { TASKORDER } from '../graphql/fragments'
 
-const DropdownTask = ({ columnId, taskId }) => {
+const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [deleteTask] = useMutation(DELETE_TASK)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
@@ -24,6 +24,12 @@ const DropdownTask = ({ columnId, taskId }) => {
             },
         })
     }
+
+    useEffect(() => {
+        if (handleEdit) {
+            setAnchorEl(null)
+        }
+    }, [handleEdit])
 
     const deleteTaskFromCache = () => {
         const idToBeDeleted = `Task:${taskId}`
@@ -44,7 +50,7 @@ const DropdownTask = ({ columnId, taskId }) => {
         client.cache.evict({ id: idToBeDeleted })
     }
 
-    const handleClose = () => {
+    const handleDelete = () => {
         deleteTaskById()
         deleteTaskFromCache()
         setAnchorEl(null)
@@ -69,7 +75,13 @@ const DropdownTask = ({ columnId, taskId }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleEdit}>
+                    <ListItemIcon>
+                        <Edit fontSize="default" />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit" />
+                </MenuItem>
+                <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
