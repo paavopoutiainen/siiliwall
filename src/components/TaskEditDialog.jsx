@@ -3,10 +3,14 @@ import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
 import useEditTask from '../graphql/task/hooks/useEditTask'
+import useTaskById from '../graphql/task/hooks/useTaskById'
 
-const TaskDialog = ({ dialogStatus, editId, toggleDialog }) => {
-    const [task] = useTaskById(editId)
-    const [editTask] = useEditTask(editId)
+const TaskDialog = ({
+    dialogStatus, editId, toggleDialog, task,
+}) => {
+    // const { task } = useTaskById(editId)
+    console.log(task)
+    const [editTask] = useEditTask()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [owner, setOwner] = useState(task?.owner ? task.owner : '')
@@ -93,7 +97,7 @@ const TaskDialog = ({ dialogStatus, editId, toggleDialog }) => {
                         Cancel
                     </Button>
                     <Button
-                        disabled={!title.length}
+                        disabled={!title?.length}
                         onClick={handleSave}
                         color="primary"
                     >

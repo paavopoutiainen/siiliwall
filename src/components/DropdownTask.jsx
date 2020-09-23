@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
@@ -7,14 +7,11 @@ import { Delete, Edit } from '@material-ui/icons'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import { TASKORDER } from '../graphql/fragments'
-import TaskEditDialog from './TaskEditDialog'
 
-const DropdownTask = ({ columnId, taskId }) => {
+const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [deleteTask] = useMutation(DELETE_TASK)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
-    const [dialogStatus, setDialogStatus] = useState(false)
-    const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -27,6 +24,12 @@ const DropdownTask = ({ columnId, taskId }) => {
             },
         })
     }
+
+    useEffect(() => {
+        if (handleEdit) {
+            setAnchorEl(null)
+        }
+    }, [handleEdit])
 
     const deleteTaskFromCache = () => {
         const idToBeDeleted = `Task:${taskId}`
@@ -47,22 +50,10 @@ const DropdownTask = ({ columnId, taskId }) => {
         client.cache.evict({ id: idToBeDeleted })
     }
 
-    const handleClose = () => {
+    const handleDelete = () => {
         deleteTaskById()
         deleteTaskFromCache()
         setAnchorEl(null)
-    }
-
-    const handleEdit = () => {
-        toggleDialog()
-        // callback taskista?
-        return (
-            <TaskEditDialog
-                dialogStatus={dialogStatus}
-                toggleDialog={toggleDialog}
-                editId={taskId}
-            />
-        )
     }
 
     return (
@@ -90,7 +81,7 @@ const DropdownTask = ({ columnId, taskId }) => {
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleDelete}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
