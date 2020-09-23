@@ -42,18 +42,18 @@ const Task = ({ task, index, columnId }) => {
                         <Grid item classes={{ root: classes.taskTitle }}>
                             <h1>{add3Dots(title, titleLimit)}</h1>
                             {task.owner ? (
-                                <h3>
+                                <h2>
                                     owner:
                                     {' '}
                                     {task.owner}
-                                </h3>
+                                </h2>
                             ) : null}
                             {task.size ? (
-                                <h3>
+                                <h2>
                                     size:
                                     {' '}
                                     {task.size}
-                                </h3>
+                                </h2>
                             ) : null}
                         </Grid>
                         <Grid item>
