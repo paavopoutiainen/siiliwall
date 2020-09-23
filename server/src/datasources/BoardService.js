@@ -1,3 +1,4 @@
+const { TitleTwoTone } = require('@material-ui/icons')
 const uuid = require('uuid/v4')
 
 class BoardService {
@@ -100,16 +101,19 @@ class BoardService {
         return subtasksFromDb
     }
 
-    async editTaskById(taskId, title, size, owner, content) {
-        let updatedTask
+    async editTaskById(taskId, title, size, owner) {
+        let task
         try {
-            updatedTask = await this.store.Task.save({
-                id: taskId, title, content, owner, size,
-            })
+            task = await this.store.Task.findByPk(taskId)
+            task.title = title
+            task.size = size
+            task.owner = owner
+            await task.save()
         } catch (e) {
             console.error(e)
         }
-        return updatedTask
+        console.log('updated ', task)
+        return task
     }
 
     async deleteTaskById(taskId) {

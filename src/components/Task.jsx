@@ -50,7 +50,7 @@ const Task = ({ task, index, columnId }) => {
                             ) : null}
                             {task.size ? (
                                 <h3>
-                                    diff:
+                                    size:
                                     {' '}
                                     {task.size}
                                 </h3>

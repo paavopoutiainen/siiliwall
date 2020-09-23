@@ -7,13 +7,17 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
-    const [owner, setOwner] = useState('')
+    const [owner, setOwner] = useState(null)
 
     const handleChange = (event) => {
         setTitle(event.target.value)
     }
 
     const handleOwnerChange = (event) => {
+        if (event.target.value === '') {
+            setOwner(null)
+            return
+        }
         setOwner(event.target.value)
     }
 
@@ -38,7 +42,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         toggleDialog()
         setTitle('')
         setSize(null)
-        setOwner('')
+        setOwner(null)
     }
 
     return (
@@ -68,7 +72,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         name="owner"
                         label="Owner"
                         type="text"
-                        value={owner}
+                        value={owner || ''}
                         fullWidth
                         onChange={handleOwnerChange}
                     />
