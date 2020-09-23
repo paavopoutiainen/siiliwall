@@ -14,13 +14,11 @@ module.exports = (sequelize, DataTypes) => {
         Board.hasMany(models.Column, {
             foreignKey: 'boardId',
         })
-    }
-    /* Board.associate = (models) => {
+        // Board has one creator user
         Board.belongsTo(models.User, {
-            foreignKey: 'userId',
+            foreignKey: 'creatorId',
         })
-    } */
-    Board.associate = (models) => {
+        // Board may have many users working on it
         Board.belongsToMany(models.User, {
             through: 'user_board',
         })

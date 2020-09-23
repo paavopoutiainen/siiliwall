@@ -15,16 +15,17 @@ module.exports = (sequelize, DataTypes) => {
         email: {
             type: DataTypes.STRING,
         },
-    })/*
+    })
     User.associate = (models) => {
+        // User may have created multiple boards
         User.hasMany(models.Board, {
-            foreignKey: 'userId',
+            foreignKey: 'creatorId',
         })
-    } */
-    User.associate = (models) => {
+        // User may be working on multiple boards
         User.belongsToMany(models.Board, {
             through: 'user_board',
         })
     }
+
     return User
 }
