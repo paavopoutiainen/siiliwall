@@ -14,6 +14,10 @@ module.exports = (sequelize, DataTypes) => {
         Board.hasMany(models.Column, {
             foreignKey: 'boardId',
         })
+        // Board has one creator user
+        Board.belongsTo(models.User, {
+            foreignKey: 'creatorId',
+        })
     }
     return Board
 }
