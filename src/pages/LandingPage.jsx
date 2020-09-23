@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useAllBoards from '../graphql/board/hooks/useAllBoards'
@@ -18,6 +18,10 @@ const LandingPage = () => {
 
     if (loading) return null
 
+    const boardOrder = data.allBoards.map((board) => board.orderNumber)
+    const ascBoardOrder = boardOrder.sort((a, b) => a - b)
+    const boards = data.allBoards
+    const newBoardOrder = ascBoardOrder.map((id) => boards.find((board) => board.orderNumber === id))
     return (
         <div className="container">
             <Grid
@@ -29,6 +33,7 @@ const LandingPage = () => {
                 spacing={7}
             >
                 {open
+
                     && <NewBoardForm setOpen={setOpen} open={open} />}
                 <Grid item classes={{ root: classes.title }}>
                     <h1 id="landingTitle" >Welcome!</h1>
@@ -45,7 +50,7 @@ const LandingPage = () => {
                     alignItems="center"
                     spacing={2}
                 >
-                    {data.allBoards.map(({ id, name }) => (
+                    {newBoardOrder.map(({ id, name }) => (
                         <Grid item classes={{ root: classes.boardButtonGrid }} key={id} >
                             <Link to={`/boards/${id}`} className="boardList__button__link">
                                 <Button fullWidth classes={{ root: classes.boardButton }}>

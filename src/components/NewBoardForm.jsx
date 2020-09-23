@@ -4,11 +4,12 @@ import {
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
 import useAddBoard from '../graphql/board/hooks/useAddBoard'
+const { v4: uuid } = require('uuid')
 
 const NewBoardForm = ({ setOpen, open }) => {
+    const id = uuid()
     const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
-
     const handleChange = (event) => {
         setName(event.target.value)
     }
@@ -17,11 +18,11 @@ const NewBoardForm = ({ setOpen, open }) => {
         setOpen(false)
     }
 
-    const handleSave = async (event) => {
-        event.preventDefault()
+    const handleSave = () => {
         addBoard({
             variables: {
-                name,
+                id: id,
+                name
             },
         })
         setName('')

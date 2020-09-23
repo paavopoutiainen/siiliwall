@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit } from '@material-ui/icons'
+import { Delete, Edit, Archive } from '@material-ui/icons'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import { TASKORDER } from '../graphql/fragments'
@@ -100,6 +100,12 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                         <Delete fontSize="default" />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Archive fontSize="default" />
+                    </ListItemIcon>
+                    <ListItemText primary="Archive" />
                 </MenuItem>
             </Menu>
             <Snackbar

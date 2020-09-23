@@ -70,11 +70,13 @@ const Board = ({ id }) => {
                                             value={columnName}
                                             fullWidth
                                             onChange={handleChange}
+                                            id="inputColumnName"
                                         />
                                         <Button
                                             disabled={!columnName.length}
                                             color="primary"
                                             onClick={handleSave}
+                                            id="addColumnButton"
                                         >
                                             Add
                                         </Button>

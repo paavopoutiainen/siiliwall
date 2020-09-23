@@ -182,7 +182,12 @@ class BoardService {
     async addBoard(boardName) {
         let addedBoard
         try {
-            addedBoard = await this.store.Board.create({ id: uuid(), name: boardName })
+            const biggestOrderNumber = await this.store.Board.max('orderNumber')
+            addedBoard = await this.store.Board.create({
+                id: uuid(),
+                name: boardName,
+                orderNumber: biggestOrderNumber + 1
+            })
         } catch (e) {
             console.error(e)
         }

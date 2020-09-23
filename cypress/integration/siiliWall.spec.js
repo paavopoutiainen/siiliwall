@@ -21,7 +21,6 @@ describe('A board can be added to the boardlist and rendered', () => {
         cy.focused().should('have.id', 'inputName')
     })
     it('accepts input', () => {
-
         cy.get('#inputName').type(typedtext).should('have.value', typedtext)
     })
     it('the add button can be clicked', () => {
