@@ -46,6 +46,7 @@ const tasks = [
     {
         title: 'task1',
         content: 'task1',
+        size: 1.1,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 2,
         id: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
@@ -53,6 +54,7 @@ const tasks = [
     {
         title: 'task2',
         content: 'task2',
+        size: 2,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 1,
         id: 'd29fc7da-93a1-40ec-8c56-7b619445465b',

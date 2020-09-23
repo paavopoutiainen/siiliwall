@@ -8,8 +8,10 @@ const schema = {
     },
 
     Mutation: {
-        addTaskForColumn(root, { columnId, title }) {
-            return dataSources.boardService.addTaskForColumn(columnId, title)
+        addTaskForColumn(root, {
+            columnId, title, size, owner, content,
+        }) {
+            return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)

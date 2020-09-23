@@ -12,12 +12,15 @@ module.exports = (sequelize, DataTypes) => {
         content: {
             type: DataTypes.STRING,
         },
+        owner: {
+            type: DataTypes.STRING,
+        },
         columnOrderNumber: {
             type: DataTypes.INTEGER,
         },
         swimlaneOrderNumber: DataTypes.INTEGER,
         color: DataTypes.STRING,
-        size: DataTypes.INTEGER,
+        size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,
     })
     Task.associate = (models) => {
