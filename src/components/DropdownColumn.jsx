@@ -1,17 +1,22 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, Snackbar
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import { COLUMNORDER } from '../graphql/fragments'
+import { boardPageStyles } from '../styles/styles'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [deleteColumn] = useMutation(DELETE_COLUMN)
     const [anchorEl, setAnchorEl] = useState(null)
     const client = useApolloClient()
+    const classes = boardPageStyles()
+    const [open, setOpen] = useState(false)
+    const snackbarMsg = `This action will permanently remove the selected column from your project and can't be later examined! Are you sure you want to delete it?`
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
@@ -43,10 +48,18 @@ const DropdownColumn = ({ columnId, boardId }) => {
         client.cache.evict({ id: idToBeDeleted })
     }
 
-    const handleClose = () => {
-        deleteColumnById()
-        deleteColumnFromCache()
+    const openSnackbar = () => {
+        setOpen(true)
         setAnchorEl(null)
+    }
+
+    const handleClose = (option) => {
+        if (option === 'DELETE') {
+            deleteColumnById()
+            deleteColumnFromCache()
+        } else {
+            setOpen(false)
+        }
     }
 
     return (
@@ -69,13 +82,29 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 elevation={0}
                 selected
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={openSnackbar}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
+            <Snackbar
+                classes={{ root: classes.snackbar }}
+                open={open}
+                message={<span id="snackbarMessage">{snackbarMsg}</span>}
+                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+                action={
+                    <Grid item>
+                        <Button color="secondary" size="large" onClick={() => handleClose('UNDO')} classes={{ root: classes.snackbarButtonUndo }}>
+                            UNDO
+                        </Button>
+                        <Button color="secondary" size="large" onClick={() => handleClose('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
+                            DELETE
+                        </Button>
+                    </Grid>
+                }
+            />
         </Grid>
     )
 }
