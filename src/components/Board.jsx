@@ -51,14 +51,14 @@ const Board = ({ id }) => {
                 classes={{ root: classes.root }}
                 spacing={2}
             >
-                <Grid container item direction="row" justify="center" classes={{ root: classes.boardTitle }}>
+                <Grid container item direction="row" classes={{ root: classes.boardTitle }}>
                     <h1>{board.name}</h1>
                 </Grid>
                 <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
                     <Grid item container direction="row">
                         <Droppable droppableId={id} direction="horizontal" type="column">
                             {(provided) => (
-                                <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
+                                <Grid classes={{ root: classes.columnRow }} item container {...provided.droppableProps} ref={provided.innerRef}>
                                     <ColumnList columns={columns} columnOrder={columnOrder} />
                                     {provided.placeholder}
                                     <Grid item>
