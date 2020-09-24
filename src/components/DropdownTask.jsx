@@ -1,58 +1,18 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, Snackbar
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid
 } from '@material-ui/core'
-import Alert from '@material-ui/lab/Alert'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit, Archive } from '@material-ui/icons'
-import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_TASK } from '../graphql/task/taskQueries'
-import { TASKORDER } from '../graphql/fragments'
-import { boardPageStyles } from '../styles/styles'
+import { Delete, Edit } from '@material-ui/icons'
+import AlertBox from './AlertBox'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
-    const client = useApolloClient()
-    const classes = boardPageStyles()
-    const [deleteTask] = useMutation(DELETE_TASK)
-    const [anchorEl, setAnchorEl] = useState(null)
+    //const [deleteTask] = useMutation(DELETE_TASK)
     const [open, setOpen] = useState(false)
-    const snackbarMsg = `This action will permanently remove the selected task from your project and can't be later examined! Are you sure you want to delete it?`
+    const [anchorEl, setAnchorEl] = useState(null)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
-    }
-
-    const deleteTaskById = () => {
-        deleteTask({
-            variables: {
-                taskId,
-            },
-        })
-    }
-
-    useEffect(() => {
-        if (handleEdit) {
-            setAnchorEl(null)
-        }
-    }, [handleEdit])
-
-    const deleteTaskFromCache = () => {
-        const idToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-        })
-        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
-
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-            data: {
-                taskOrder: newTaskOrder,
-            },
-        })
-        client.cache.evict({ id: idToBeDeleted })
     }
 
     const openSnackbar = () => {
@@ -60,14 +20,11 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
         setAnchorEl(null)
     }
 
-    const handleDelete = (option) => {
-        if (option === 'DELETE') {
-            deleteTaskById()
-            deleteTaskFromCache()
-        } else {
-            setOpen(false)
+    useEffect(() => {
+        if (handleEdit) {
+            setAnchorEl(null)
         }
-    }
+    }, [handleEdit])
 
 
     return (
@@ -101,34 +58,8 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Archive fontSize="default" />
-                    </ListItemIcon>
-                    <ListItemText primary="Archive" />
-                </MenuItem>
             </Menu>
-            <Snackbar
-                classes={{ root: classes.snackbar }}
-                open={open}
-                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
-            >
-                <Alert variant="outlined" severity="error">
-                    <Grid item container direction="column">
-                        <Grid item>
-                            <span id="snackbarMessage">{snackbarMsg}</span>
-                        </Grid>
-                        <Grid item container direction="row" justify="flex-end">
-                            <Button variant="contained" onClick={() => handleDelete('UNDO')}>
-                                UNDO
-                            </Button>
-                            <Button color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
-                                DELETE
-                            </Button>
-                        </Grid>
-                    </Grid>
-                </Alert>
-            </Snackbar>
+            <AlertBox open={open} setOpen={setOpen} columnId={columnId} taskId={taskId} />
         </Grid>
     )
 }

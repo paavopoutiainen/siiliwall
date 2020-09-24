@@ -10,7 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/uuid": "^8.3.0",
     "apollo-server-express": "^2.17.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

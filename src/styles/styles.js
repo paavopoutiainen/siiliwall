@@ -82,5 +82,16 @@ export const boardPageStyles = makeStyles({
     },
     snackbarButtonDelete: {
         color: 'white'
+    },
+    alertBox: {
+        zIndex: 1
+    },
+    invisible: {
+        height: '100vh',
+        left: 0,
+        position: 'fixed',
+        top: 0,
+        width: '100vw',
+        zIndex: 0
     }
 })
