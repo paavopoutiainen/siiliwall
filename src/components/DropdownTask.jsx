@@ -9,14 +9,24 @@ import AlertBox from './AlertBox'
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
+    const [action, setAction] = useState(null)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openSnackbar = () => {
-        setOpen(true)
-        setAnchorEl(null)
+    const openSnackbar = (order) => {
+        if (order === 'DELETE_TASK') {
+            setAction('DELETE_TASK')
+            setOpen(true)
+            setAnchorEl(null)
+        }
+        if (order === 'ARCHIVE_TASK') {
+            setAction('ARCHIVE_TASK')
+            setOpen(true)
+            setAnchorEl(null)
+        }
+
     }
 
     useEffect(() => {
@@ -50,13 +60,13 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem onClick={archivingTimeCreation}>
+                <MenuItem onClick={() => openSnackbar('ARCHIVE_TASK')}>
                     <ListItemIcon>
                         <Archive />
                     </ListItemIcon>
                     <ListItemText primary="Archive" />
                 </MenuItem>
-                <MenuItem onClick={openSnackbar}>
+                <MenuItem onClick={() => openSnackbar('DELETE_TASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>
@@ -68,7 +78,7 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 setOpen={setOpen}
                 taskId={taskId}
                 columnId={columnId}
-                action="DELETE_TASK"
+                action={action}
             />
         </Grid>
     )
