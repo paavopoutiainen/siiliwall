@@ -3,11 +3,13 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit } from '@material-ui/icons'
+import { Delete, Edit, Archive } from '@material-ui/icons'
 import AlertBox from './AlertBox'
-import { DELETE_TASK } from '../graphql/task/taskQueries'
+import { DELETE_TASK/*, EDIT_TASK */ } from '../graphql/task/taskQueries'
+import useTaskById from '../graphql/task/hooks/useTaskById'
 import { TASKORDER } from '../graphql/fragments'
 import { useMutation, useApolloClient } from '@apollo/client'
+import useEditTask from '../graphql/task/hooks/useEditTask'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [open, setOpen] = useState(false)
@@ -15,6 +17,8 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const alertMsg = "This action will permanently delete this task from the board and can't be later examined! Are you sure you want to delete it?"
     const client = useApolloClient()
     const [deleteTask] = useMutation(DELETE_TASK)
+    const [editTask] = useEditTask()
+    const { data, loading } = useTaskById(taskId)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -24,6 +28,7 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
         setOpen(true)
         setAnchorEl(null)
     }
+
     const deleteTaskById = () => {
         deleteTask({
             variables: {
@@ -57,6 +62,23 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
         }
     }, [handleEdit])
 
+    if (loading) return null
+
+    // Adding current time to the deletedAt attribute of the Task module
+    const archivingTimeCreation = () => {
+        let task = data.taskById
+        let date = new Date().toString()
+        let deletedAt = date.slice(0, 24)
+        editTask({
+            variables: {
+                taskId: task.id,
+                title: task.title,
+                size: task.size,
+                owner: task.owner,
+                deletedAt: deletedAt
+            }
+        })
+    }
 
     return (
         <Grid item>
@@ -79,13 +101,19 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
             >
                 <MenuItem onClick={handleEdit}>
                     <ListItemIcon>
-                        <Edit fontSize="default" />
+                        <Edit />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
+                <MenuItem onClick={archivingTimeCreation}>
+                    <ListItemIcon>
+                        <Archive />
+                    </ListItemIcon>
+                    <ListItemText primary="Archive" />
+                </MenuItem>
                 <MenuItem onClick={openSnackbar}>
                     <ListItemIcon>
-                        <Delete fontSize="default" />
+                        <Delete />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
