@@ -78,13 +78,13 @@ export const boardPageStyles = makeStyles({
         fontSize: '0.9rem',
     },
     snackbar: {
-        maxWidth: 350
+        maxWidth: 350,
     },
     snackbarButtonDelete: {
-        color: 'white'
+        color: 'white',
     },
     alertBox: {
-        zIndex: 1
+        zIndex: 1,
     },
     invisible: {
         height: '100vh',
@@ -92,6 +92,6 @@ export const boardPageStyles = makeStyles({
         position: 'fixed',
         top: 0,
         width: '100vw',
-        zIndex: 0
-    }
+        zIndex: 0,
+    },
 })
