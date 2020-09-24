@@ -185,7 +185,7 @@ class BoardService {
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
-                orderNumber: biggestOrderNumber + 1
+                orderNumber: biggestOrderNumber + 1,
             })
         } catch (e) {
             console.error(e)
@@ -273,6 +273,17 @@ class BoardService {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    async archiveTaskById(taskId) {
+        try {
+            const task = await this.store.Task.findByPk(taskId)
+            task.deletedAt = new Date()
+            await task.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return taskId
     }
 }
 

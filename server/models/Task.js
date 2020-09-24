@@ -22,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
         color: DataTypes.STRING,
         size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,
-        deletedAt: DataTypes.DATE
+        deletedAt: DataTypes.DATE,
     })
     Task.associate = (models) => {
         Task.belongsTo(models.Column, {
