@@ -5,11 +5,16 @@ import {
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Delete, Edit } from '@material-ui/icons'
 import AlertBox from './AlertBox'
+import { DELETE_TASK } from '../graphql/task/taskQueries'
+import { TASKORDER } from '../graphql/fragments'
+import { useMutation, useApolloClient } from '@apollo/client'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
-    //const [deleteTask] = useMutation(DELETE_TASK)
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
+    const alertMsg = "This action will permanently delete this task from the board and can't be later examined! Are you sure you want to delete it?"
+    const client = useApolloClient()
+    const [deleteTask] = useMutation(DELETE_TASK)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -18,6 +23,32 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const openSnackbar = () => {
         setOpen(true)
         setAnchorEl(null)
+    }
+    const deleteTaskById = () => {
+        deleteTask({
+            variables: {
+                taskId,
+            },
+        })
+    }
+
+    const deleteTaskFromCache = () => {
+        const idToBeDeleted = `Task:${taskId}`
+        const columnIdForCache = `Column:${columnId}`
+        const data = client.readFragment({
+            id: columnIdForCache,
+            fragment: TASKORDER,
+        })
+        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
+
+        client.writeFragment({
+            id: columnIdForCache,
+            fragment: TASKORDER,
+            data: {
+                taskOrder: newTaskOrder,
+            },
+        })
+        client.cache.evict({ id: idToBeDeleted })
     }
 
     useEffect(() => {
@@ -59,7 +90,14 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
-            <AlertBox open={open} setOpen={setOpen} columnId={columnId} taskId={taskId} />
+            <AlertBox
+                open={open}
+                setOpen={setOpen}
+                alertMsg={alertMsg}
+                deleteTaskById={deleteTaskById}
+                deleteTaskFromCache={deleteTaskFromCache}
+                type={'TASK'}
+            />
         </Grid>
     )
 }
