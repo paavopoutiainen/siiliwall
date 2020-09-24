@@ -1,20 +1,14 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import AlertBox from './AlertBox'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER } from '../graphql/fragments'
+import AlertBox from './AlertBox'
 
 const DropdownColumn = ({ columnId, boardId }) => {
-    const client = useApolloClient()
     const [anchorEl, setAnchorEl] = useState(null)
     const [open, setOpen] = useState(false)
-    const alertMsg = `This action will permanently remove the selected column and the tasks inside the column from your board and can't be later examined! Are you sure you want to delete it?`
-    const [deleteColumn] = useMutation(DELETE_COLUMN)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
@@ -23,33 +17,6 @@ const DropdownColumn = ({ columnId, boardId }) => {
     const openSnackbar = () => {
         setOpen(true)
         setAnchorEl(null)
-    }
-
-    const deleteColumnById = () => {
-        deleteColumn({
-            variables: {
-                columnId,
-            },
-        })
-    }
-
-    const deleteColumnFromCache = () => {
-        const idToBeDeleted = `Column:${columnId}`
-        const boardIdForCache = `Board:${boardId}`
-        const data = client.readFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER,
-        })
-        const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
-
-        client.writeFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER,
-            data: {
-                columnOrder: newColumnOrder,
-            },
-        })
-        client.cache.evict({ id: idToBeDeleted })
     }
 
     return (
@@ -82,10 +49,9 @@ const DropdownColumn = ({ columnId, boardId }) => {
             <AlertBox
                 open={open}
                 setOpen={setOpen}
-                alertMsg={alertMsg}
-                deleteColumnById={deleteColumnById}
-                deleteColumnFromCache={deleteColumnFromCache}
-                type={'COLUMN'}
+                columnId={columnId}
+                boardId={boardId}
+                action="DELETE_COLUMN"
             />
         </Grid>
     )
