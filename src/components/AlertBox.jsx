@@ -30,6 +30,7 @@ const AlertBox = ({
             break
         case 'ARCHIVE_TASK':
             alertMsg = alertMsgArchiveTask
+            break
         default:
             break
     }
@@ -135,7 +136,7 @@ const AlertBox = ({
                             <Button variant="contained" onClick={() => handleDelete('UNDO')}>
                                 UNDO
                             </Button>
-                            {action === 'DELETE_TASK' ?
+                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' ?
                                 <Button color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
                                     DELETE
                                 </Button>

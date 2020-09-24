@@ -16,17 +16,9 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     }
 
     const openSnackbar = (order) => {
-        if (order === 'DELETE_TASK') {
-            setAction('DELETE_TASK')
-            setOpen(true)
-            setAnchorEl(null)
-        }
-        if (order === 'ARCHIVE_TASK') {
-            setAction('ARCHIVE_TASK')
-            setOpen(true)
-            setAnchorEl(null)
-        }
-
+        setAction(order)
+        setOpen(true)
+        setAnchorEl(null)
     }
 
     useEffect(() => {

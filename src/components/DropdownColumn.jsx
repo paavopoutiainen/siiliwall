@@ -9,12 +9,14 @@ import AlertBox from './AlertBox'
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [open, setOpen] = useState(false)
+    const [action, setAction] = useState(null)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openSnackbar = () => {
+    const openSnackbar = (order) => {
+        setAction(order)
         setOpen(true)
         setAnchorEl(null)
     }
@@ -39,7 +41,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 elevation={0}
                 selected
             >
-                <MenuItem onClick={openSnackbar}>
+                <MenuItem onClick={() => openSnackbar('DELETE_COLUMN')}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
@@ -51,7 +53,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 setOpen={setOpen}
                 columnId={columnId}
                 boardId={boardId}
-                action="DELETE_COLUMN"
+                action={action}
             />
         </Grid>
     )

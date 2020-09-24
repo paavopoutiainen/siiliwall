@@ -12,6 +12,7 @@ const useArchiveTask = (columnId) => {
             })
             const { tasks, taskOrder } = cached
             const taskIdToBeRemoved = response.data.archiveTaskById
+            const taskIdForCache = `Task:${taskIdToBeRemoved}`
             const newTasks = tasks.filter((task) => task.id !== taskIdToBeRemoved)
             const newTaskOrder = taskOrder.filter((id) => id !== taskIdToBeRemoved)
 
@@ -22,6 +23,9 @@ const useArchiveTask = (columnId) => {
                     taskOrder: newTaskOrder,
                     tasks: newTasks
                 }
+            })
+            cache.evict({
+                id: taskIdForCache
             })
         }
     })
