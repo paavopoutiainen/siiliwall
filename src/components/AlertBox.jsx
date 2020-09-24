@@ -28,7 +28,7 @@ const AlertBox = ({ open, setOpen, alertMsg, deleteTaskById, deleteTaskFromCache
                 anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
             >
                 <Alert variant="filled" severity="error">
-                    <Grid item container direction="column">
+                    <Grid item container direction="column" spacing={2}>
                         <Grid item>
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
