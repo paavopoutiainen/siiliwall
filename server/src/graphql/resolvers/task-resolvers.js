@@ -24,6 +24,9 @@ const schema = {
         archiveTaskById(root, { id }) {
             return dataSources.boardService.archiveTaskById(id)
         },
+        restoreTaskById(root, { id }) {
+            return dataSources.boardService.restoreTaskById(id)
+        },
     },
 
     Task: {

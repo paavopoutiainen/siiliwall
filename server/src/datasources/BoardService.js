@@ -285,6 +285,18 @@ class BoardService {
         }
         return taskId
     }
+
+    async restoreTaskById(taskId) {
+        let updatedTask
+        try {
+            const task = await this.store.Task.findByPk(taskId)
+            task.deletedAt = null
+            updatedTask = await task.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return updatedTask
+    }
 }
 
 module.exports.BoardService = BoardService
