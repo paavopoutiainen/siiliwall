@@ -3,7 +3,7 @@ import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useAllBoards from '../graphql/board/hooks/useAllBoards'
 
-import NewBoardForm from '../components/NewBoardForm'
+import NewBoardForm from '../components/board/NewBoardForm'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 
@@ -19,6 +19,8 @@ const LandingPage = () => {
 
     if (loading) return null
 
+    const boardsInOrder = data.allBoards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
+
     return (
         <div className="container">
             <Grid
@@ -30,12 +32,13 @@ const LandingPage = () => {
                 spacing={7}
             >
                 {open
+
                     && <NewBoardForm setOpen={setOpen} open={open} />}
                 <Grid item classes={{ root: classes.title }}>
-                    <h1>Welcome!</h1>
+                    <h1 id="landingTitle" >Welcome!</h1>
                 </Grid>
-                <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }}>
+                <Grid item >
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }} id="addButton">
                         Add Board
                     </Button>
                 </Grid>
@@ -44,11 +47,10 @@ const LandingPage = () => {
                     container
                     direction="column"
                     alignItems="center"
-                    className="boardList"
                     spacing={2}
                 >
-                    {data.allBoards.map(({ id, name }) => (
-                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    {boardsInOrder.map(({ id, name }) => (
+                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id} >
                             <Link to={`/boards/${id}`} className="boardList__button__link">
                                 <Button fullWidth classes={{ root: classes.boardButton }}>
                                     {name}

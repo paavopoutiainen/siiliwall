@@ -7,5 +7,4 @@ const useAllBoards = () => {
     const { loading, error, data } = useQuery(ALL_BOARDS)
     return { loading, error, data }
 }
-
 export default useAllBoards

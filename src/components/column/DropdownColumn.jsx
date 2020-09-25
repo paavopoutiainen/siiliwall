@@ -4,49 +4,20 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_TASK } from '../graphql/task/taskQueries'
-import { TASKORDER } from '../graphql/fragments'
+import AlertBox from '../AlertBox'
 
-const DropdownTask = ({ columnId, taskId }) => {
-    const [deleteTask] = useMutation(DELETE_TASK)
+const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const client = useApolloClient()
+    const [open, setOpen] = useState(false)
+    const [action, setAction] = useState(null)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const deleteTaskById = () => {
-        deleteTask({
-            variables: {
-                taskId,
-            },
-        })
-    }
-
-    const deleteTaskFromCache = () => {
-        const idToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-        })
-        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
-
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-            data: {
-                taskOrder: newTaskOrder,
-            },
-        })
-        client.cache.evict({ id: idToBeDeleted })
-    }
-
-    const handleClose = () => {
-        deleteTaskById()
-        deleteTaskFromCache()
+    const openSnackbar = (order) => {
+        setAction(order)
+        setOpen(true)
         setAnchorEl(null)
     }
 
@@ -68,15 +39,23 @@ const DropdownTask = ({ columnId, taskId }) => {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 getContentAnchorEl={null}
                 elevation={0}
+                selected
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => openSnackbar('DELETE_COLUMN')}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
+            <AlertBox
+                open={open}
+                setOpen={setOpen}
+                columnId={columnId}
+                boardId={boardId}
+                action={action}
+            />
         </Grid>
     )
 }
-export default DropdownTask
+export default DropdownColumn

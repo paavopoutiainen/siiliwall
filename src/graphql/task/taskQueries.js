@@ -15,14 +15,26 @@ export const MOVE_TASK_FROM_COLUMN = gql`
         }
     }    
 `
-
-export const ADD_TASK = gql`
-    mutation createTask($columnId: ID!, $title: String!, $size: Float, $owner: String) {
-        addTaskForColumn(columnId: $columnId, title: $title, size: $size, owner: $owner) {
+export const TASK_BY_ID = gql`
+    query taskById($taskId: ID!) {
+        taskById(id: $taskId) {
             id
             title
             size
             owner
+            content
+        }
+    }
+`
+
+export const ADD_TASK = gql`
+    mutation createTask($columnId: ID!, $title: String!, $size: Float, $owner: String, $content: String) {
+        addTaskForColumn(columnId: $columnId, title: $title, size: $size, owner: $owner, content: $content) {
+            id
+            title
+            size
+            owner
+            content
         }
     }
 `
@@ -30,5 +42,21 @@ export const ADD_TASK = gql`
 export const DELETE_TASK = gql`
     mutation deleteTask($taskId: ID!) {
         deleteTaskById(id: $taskId)
+    }
+`
+
+export const EDIT_TASK = gql`
+    mutation editTask($taskId: ID!, $title: String!, $size: Float, $owner: String) {
+        editTaskById(id: $taskId, title: $title, size: $size, owner: $owner) {
+            id
+            title
+            size
+            owner
+        }
+    }
+`
+export const ARCHIVE_TASK = gql`
+    mutation archiveTask($taskId: ID!) {
+        archiveTaskById(id: $taskId)
     }
 `

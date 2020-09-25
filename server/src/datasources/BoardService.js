@@ -1,4 +1,4 @@
-const uuid = require('uuid/v4')
+const { v4: uuid } = require('uuid')
 
 class BoardService {
     constructor({ db }) {
@@ -6,7 +6,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() {}
+    initialize() { }
 
     async getBoards() {
         let boardsFromDb
@@ -73,7 +73,7 @@ class BoardService {
     async getTasksByColumnId(columnId) {
         let tasksFromDb
         try {
-            tasksFromDb = await this.store.Task.findAll({ where: { columnId } })
+            tasksFromDb = await this.store.Task.findAll({ where: { columnId, deletedAt: null } })
         } catch (e) {
             console.error(e)
         }
@@ -98,6 +98,20 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async editTaskById(taskId, title, size, owner) {
+        let task
+        try {
+            task = await this.store.Task.findByPk(taskId)
+            task.title = title
+            task.size = size
+            task.owner = owner
+            await task.save()
+        } catch (e) {
+            console.error(e)
+        }
+        return task
     }
 
     async deleteTaskById(taskId) {
@@ -139,7 +153,7 @@ class BoardService {
         try {
             const tasks = await this.store.Task.findAll({
                 attributes: ['id'],
-                where: { columnId },
+                where: { columnId, deletedAt: null },
                 order: this.sequelize.literal('columnOrderNumber ASC'),
             })
             arrayOfIds = tasks.map((task) => task.dataValues.id)
@@ -167,7 +181,12 @@ class BoardService {
     async addBoard(boardName) {
         let addedBoard
         try {
-            addedBoard = await this.store.Board.create({ id: uuid(), name: boardName })
+            const biggestOrderNumber = await this.store.Board.max('orderNumber')
+            addedBoard = await this.store.Board.create({
+                id: uuid(),
+                name: boardName,
+                orderNumber: biggestOrderNumber + 1,
+            })
         } catch (e) {
             console.error(e)
         }
@@ -175,11 +194,11 @@ class BoardService {
     }
 
     async addColumnForBoard(boardId, columnName) {
-    /*
-      At the time of new columns' creation we want to display it as
-      the component in the very right of the board,
-      hence it is given the biggest orderNumber of the board
-    */
+        /*
+          At the time of new columns' creation we want to display it as
+          the component in the very right of the board,
+          hence it is given the biggest orderNumber of the board
+        */
         let addedColumn
         try {
             const biggestOrderNumber = await this.store.Column.max('orderNumber', {
@@ -198,10 +217,10 @@ class BoardService {
     }
 
     async addTaskForColumn(columnId, title, size, owner, content) {
-    /*
-      At the time of new tasks' creation we want to display it as the lower most task in its column,
-      hence it is given the biggest columnOrderNumber of the column
-    */
+        /*
+          At the time of new tasks' creation we want to display it as the lower most task in its column,
+          hence it is given the biggest columnOrderNumber of the column
+        */
         let addedTask
         try {
             const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
@@ -256,14 +275,27 @@ class BoardService {
         }
     }
 
-    async getUsers() {
-        let usersFromDb
+    async archiveTaskById(taskId) {
         try {
-            usersFromDb = await this.store.User.findAll()
+            const task = await this.store.Task.findByPk(taskId)
+            task.deletedAt = new Date()
+            await task.save()
         } catch (e) {
-            console.error(e)
+            console.log(e)
         }
-        return usersFromDb
+        return taskId
+    }
+
+    async restoreTaskById(taskId) {
+        let updatedTask
+        try {
+            const task = await this.store.Task.findByPk(taskId)
+            task.deletedAt = null
+            updatedTask = await task.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return updatedTask
     }
 }
 

@@ -13,8 +13,19 @@ const schema = {
         }) {
             return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
         },
+        editTaskById(root, {
+            id, title, size, owner,
+        }) {
+            return dataSources.boardService.editTaskById(id, title, size, owner)
+        },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
+        },
+        archiveTaskById(root, { id }) {
+            return dataSources.boardService.archiveTaskById(id)
+        },
+        restoreTaskById(root, { id }) {
+            return dataSources.boardService.restoreTaskById(id)
         },
     },
 
