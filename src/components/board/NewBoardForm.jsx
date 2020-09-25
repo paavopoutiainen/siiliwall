@@ -3,12 +3,11 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText,
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
-import useAddBoard from '../graphql/board/hooks/useAddBoard'
+import useAddBoard from '../../graphql/board/hooks/useAddBoard'
 
 const NewBoardForm = ({ setOpen, open }) => {
     const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
-
     const handleChange = (event) => {
         setName(event.target.value)
     }
@@ -17,8 +16,7 @@ const NewBoardForm = ({ setOpen, open }) => {
         setOpen(false)
     }
 
-    const handleSave = async (event) => {
-        event.preventDefault()
+    const handleSave = () => {
         addBoard({
             variables: {
                 name,
@@ -45,13 +43,14 @@ const NewBoardForm = ({ setOpen, open }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChange(event)}
+                        id="inputName"
                     />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length} onClick={handleSave} color="primary">
+                    <Button disabled={!name.length} onClick={handleSave} color="primary" id="addBoard">
                         Add
                     </Button>
                 </DialogActions>

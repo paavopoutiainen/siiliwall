@@ -69,7 +69,6 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        height: 50,
         margin: 3,
         borderRadius: 4,
         padding: 5,
@@ -83,8 +82,25 @@ export const boardPageStyles = makeStyles({
         backgroundColor: '!important lightgrey',
     },
 
-    addTaskDialog: {
-        minHeight: 80,
-        maxHeight: 80,
+    snackbar: {
+        maxWidth: 350,
     },
+
+    snackbarButtonDelete: {
+        color: 'white',
+    },
+
+    alertBox: {
+        zIndex: 1,
+    },
+
+    invisible: {
+        height: '100vh',
+        left: 0,
+        position: 'fixed',
+        top: 0,
+        width: '100vw',
+        zIndex: 0,
+    },
+
 })

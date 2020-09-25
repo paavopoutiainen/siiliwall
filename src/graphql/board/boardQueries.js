@@ -5,6 +5,7 @@ export const ALL_BOARDS = gql`
         allBoards {
            id
            name
+           orderNumber
         }
     }
 `
@@ -33,8 +34,9 @@ export const BOARD_BY_ID = gql`
     }
 `
 export const ADD_BOARD = gql`
-    mutation createBoard($name: String!) {
+    mutation addBoard($name: String!) {
         addBoard(name: $name) {
+            id
             name
         }
     }

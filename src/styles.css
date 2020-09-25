@@ -19,6 +19,7 @@ html, body {
     color: #ff8d58;
     font-size: 1.2rem;
 }
+
 .boardList__button__link {
     text-decoration: none;
     color: #fff;
@@ -28,4 +29,8 @@ html, body {
 
 .MuiDialog-paper {
     height: 60%;
+}
+
+#alertMessage {
+    font-size: 1.3rem;
 }

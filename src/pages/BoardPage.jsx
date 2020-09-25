@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import Board from '../components/Board'
+import Board from '../components/board/Board'
 import { boardPageStyles } from '../styles/styles'
 import '../styles.css'
 

@@ -2,16 +2,16 @@
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
 import Select from 'react-select'
-import '../styles.css'
-import useAddTask from '../graphql/task/hooks/useAddTask'
-import useAllUsers from '../graphql/user/hooks/useAllUsers'
+import '../../styles.css'
+import useAddTask from '../../graphql/task/hooks/useAddTask'
+import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
-    const [owner, setOwner] = useState('')
+    const [owner, setOwner] = useState(null)
 
     if (loading) return null
 
@@ -44,7 +44,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         toggleDialog()
         setTitle('')
         setSize(null)
-        setOwner('')
+        setOwner(null)
     }
 
     const modifiedData = data.allUsers.map((user) => {
