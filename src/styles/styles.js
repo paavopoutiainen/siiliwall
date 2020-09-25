@@ -78,7 +78,13 @@ export const boardPageStyles = makeStyles({
     taskTitle: {
         fontSize: '0.9rem',
     },
+
     dropDownMenu: {
         backgroundColor: '!important lightgrey',
+    },
+
+    addTaskDialog: {
+        minHeight: 80,
+        maxHeight: 80,
     },
 })

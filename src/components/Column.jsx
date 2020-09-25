@@ -7,7 +7,7 @@ import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../styles/styles'
 import TaskList from './TaskList'
 import DropdownColumn from './DropdownColumn'
-import TaskDialog from './TaskDialog'
+import AddTaskDialog from './AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -46,7 +46,7 @@ const Column = ({ column, index }) => {
 
                     </Droppable>
                     <Grid item container>
-                        <TaskDialog
+                        <AddTaskDialog
                             dialogStatus={dialogStatus}
                             toggleDialog={toggleDialog}
                             column={column}
