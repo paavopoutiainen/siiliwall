@@ -3,7 +3,7 @@ import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useAllBoards from '../graphql/board/hooks/useAllBoards'
 
-import NewBoardForm from '../components/NewBoardForm'
+import NewBoardForm from '../components/board/NewBoardForm'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 

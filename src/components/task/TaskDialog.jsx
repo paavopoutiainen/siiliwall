@@ -1,7 +1,7 @@
 /* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
-import useAddTask from '../graphql/task/hooks/useAddTask'
+import useAddTask from '../../graphql/task/hooks/useAddTask'
 
 const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [addTask] = useAddTask(column.id)

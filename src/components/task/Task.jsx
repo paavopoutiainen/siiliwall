@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
-import { boardPageStyles } from '../styles/styles'
+import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './TaskEditDialog'
 

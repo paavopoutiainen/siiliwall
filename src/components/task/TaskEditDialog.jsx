@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
-import useEditTask from '../graphql/task/hooks/useEditTask'
+import useEditTask from '../../graphql/task/hooks/useEditTask'
 
 const TaskEditDialog = ({
     dialogStatus, editId, toggleDialog, task,
