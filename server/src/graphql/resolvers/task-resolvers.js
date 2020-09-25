@@ -21,6 +21,12 @@ const schema = {
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
         },
+        archiveTaskById(root, { id }) {
+            return dataSources.boardService.archiveTaskById(id)
+        },
+        restoreTaskById(root, { id }) {
+            return dataSources.boardService.restoreTaskById(id)
+        },
     },
 
     Task: {

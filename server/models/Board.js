@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        orderNumber: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+        }
     })
     Board.associate = (models) => {
         Board.hasMany(models.Column, {

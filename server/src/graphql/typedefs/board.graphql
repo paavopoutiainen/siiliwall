@@ -1,6 +1,7 @@
 type Board {
   id: ID!
   name: String!
+  orderNumber: Int!
   columns: [Column!]!
   columnOrder: [ID!]!
 }

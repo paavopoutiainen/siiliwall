@@ -1,28 +1,24 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit } from '@material-ui/icons'
-import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_TASK } from '../../graphql/task/taskQueries'
-import { TASKORDER } from '../../graphql/fragments'
+import { Delete, Edit, Archive } from '@material-ui/icons'
+import AlertBox from '../AlertBox'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
-    const [deleteTask] = useMutation(DELETE_TASK)
+    const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
-    const client = useApolloClient()
+    const [action, setAction] = useState(null)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const deleteTaskById = () => {
-        deleteTask({
-            variables: {
-                taskId,
-            },
-        })
+    const openSnackbar = (order) => {
+        setAction(order)
+        setOpen(true)
+        setAnchorEl(null)
     }
 
     useEffect(() => {
@@ -30,31 +26,6 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
             setAnchorEl(null)
         }
     }, [handleEdit])
-
-    const deleteTaskFromCache = () => {
-        const idToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-        })
-        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
-
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TASKORDER,
-            data: {
-                taskOrder: newTaskOrder,
-            },
-        })
-        client.cache.evict({ id: idToBeDeleted })
-    }
-
-    const handleDelete = () => {
-        deleteTaskById()
-        deleteTaskFromCache()
-        setAnchorEl(null)
-    }
 
     return (
         <Grid item>
@@ -77,17 +48,30 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
             >
                 <MenuItem onClick={handleEdit}>
                     <ListItemIcon>
-                        <Edit fontSize="default" />
+                        <Edit />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem onClick={handleDelete}>
+                <MenuItem onClick={() => openSnackbar('ARCHIVE_TASK')}>
                     <ListItemIcon>
-                        <Delete fontSize="default" />
+                        <Archive />
+                    </ListItemIcon>
+                    <ListItemText primary="Archive" />
+                </MenuItem>
+                <MenuItem onClick={() => openSnackbar('DELETE_TASK')}>
+                    <ListItemIcon>
+                        <Delete />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
+            <AlertBox
+                open={open}
+                setOpen={setOpen}
+                taskId={taskId}
+                columnId={columnId}
+                action={action}
+            />
         </Grid>
     )
 }

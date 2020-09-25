@@ -4,48 +4,20 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import { useMutation, useApolloClient } from '@apollo/client'
-import { DELETE_COLUMN } from '../../graphql/column/columnQueries'
-import { COLUMNORDER } from '../../graphql/fragments'
+import AlertBox from '../AlertBox'
 
 const DropdownColumn = ({ columnId, boardId }) => {
-    const [deleteColumn] = useMutation(DELETE_COLUMN)
     const [anchorEl, setAnchorEl] = useState(null)
-    const client = useApolloClient()
+    const [open, setOpen] = useState(false)
+    const [action, setAction] = useState(null)
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const deleteColumnById = () => {
-        deleteColumn({
-            variables: {
-                columnId,
-            },
-        })
-    }
-
-    const deleteColumnFromCache = () => {
-        const idToBeDeleted = `Column:${columnId}`
-        const boardIdForCache = `Board:${boardId}`
-        const data = client.readFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER,
-        })
-        const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
-
-        client.writeFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER,
-            data: {
-                columnOrder: newColumnOrder,
-            },
-        })
-        client.cache.evict({ id: idToBeDeleted })
-    }
-
-    const handleClose = () => {
-        deleteColumnById()
-        deleteColumnFromCache()
+    const openSnackbar = (order) => {
+        setAction(order)
+        setOpen(true)
         setAnchorEl(null)
     }
 
@@ -69,13 +41,20 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 elevation={0}
                 selected
             >
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={() => openSnackbar('DELETE_COLUMN')}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
+            <AlertBox
+                open={open}
+                setOpen={setOpen}
+                columnId={columnId}
+                boardId={boardId}
+                action={action}
+            />
         </Grid>
     )
 }
