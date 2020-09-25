@@ -27,10 +27,6 @@ html, body {
     width: 100%;
 }
 
-.MuiDialog-paper {
-    height: 60%;
-}
-
 #alertMessage {
     font-size: 1.3rem;
 }

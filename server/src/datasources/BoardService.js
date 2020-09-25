@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
 
@@ -7,7 +8,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() { }
+    initialize() {}
 
     async getBoards() {
         let boardsFromDb
