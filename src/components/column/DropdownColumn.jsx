@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
-import AlertBox from './AlertBox'
+import AlertBox from '../AlertBox'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)

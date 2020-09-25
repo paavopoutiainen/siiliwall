@@ -3,11 +3,9 @@ import {
     Dialog, DialogActions, DialogContent, DialogContentText,
     DialogTitle, TextField, Button,
 } from '@material-ui/core'
-import useAddBoard from '../graphql/board/hooks/useAddBoard'
-const { v4: uuid } = require('uuid')
+import useAddBoard from '../../graphql/board/hooks/useAddBoard'
 
 const NewBoardForm = ({ setOpen, open }) => {
-    const id = uuid()
     const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
     const handleChange = (event) => {
@@ -21,8 +19,7 @@ const NewBoardForm = ({ setOpen, open }) => {
     const handleSave = () => {
         addBoard({
             variables: {
-                id: id,
-                name
+                name,
             },
         })
         setName('')

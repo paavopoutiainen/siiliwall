@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Delete, Edit, Archive } from '@material-ui/icons'
-import AlertBox from './AlertBox'
+import AlertBox from '../AlertBox'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [open, setOpen] = useState(false)
