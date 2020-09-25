@@ -20,6 +20,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     }
 
     const handleOwnerChange = (action) => {
+        console.log(action.value)
         setOwner(action.value)
     }
 
@@ -38,7 +39,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 columnId: column.id,
                 title,
                 size,
-                owner,
+                ownerId: owner,
             },
         })
         toggleDialog()
@@ -48,7 +49,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     }
 
     const modifiedData = data.allUsers.map((user) => {
-        const newObject = { value: user.userName, label: user.userName }
+        const newObject = { value: user.id, label: user.userName }
         return newObject
     })
 

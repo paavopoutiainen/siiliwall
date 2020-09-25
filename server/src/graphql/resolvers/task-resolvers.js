@@ -9,9 +9,10 @@ const schema = {
 
     Mutation: {
         addTaskForColumn(root, {
-            columnId, title, size, owner, content,
+            columnId, title, size, ownerId, content,
         }) {
-            return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
+            return dataSources.boardService
+                .addTaskForColumn(columnId, title, size, ownerId, content)
         },
         editTaskById(root, {
             id, title, size, owner,
