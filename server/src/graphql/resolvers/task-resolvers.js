@@ -15,9 +15,9 @@ const schema = {
                 .addTaskForColumn(columnId, title, size, ownerId, content)
         },
         editTaskById(root, {
-            id, title, size, owner,
+            id, title, size, ownerId,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, owner)
+            return dataSources.boardService.editTaskById(id, title, size, ownerId)
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)

@@ -102,13 +102,13 @@ class BoardService {
         return subtasksFromDb
     }
 
-    async editTaskById(taskId, title, size, owner) {
+    async editTaskById(taskId, title, size, ownerId) {
         let task
         try {
             task = await this.store.Task.findByPk(taskId)
             task.title = title
             task.size = size
-            task.owner = owner
+            task.ownerId = ownerId
             await task.save()
         } catch (e) {
             console.error(e)

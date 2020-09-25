@@ -18,7 +18,7 @@ type Query {
 
 type Mutation {
   addTaskForColumn(columnId: ID!, title: String!, size: Float, ownerId: ID, content: String ): Task
-  editTaskById(id: ID!, title: String!, size: Float, owner: String, content: String): Task
+  editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, content: String): Task
   deleteTaskById(id: ID!): ID
   archiveTaskById(id: ID!): ID
   restoreTaskById(id: ID!): Task

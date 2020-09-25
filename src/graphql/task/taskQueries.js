@@ -21,7 +21,7 @@ export const TASK_BY_ID = gql`
             id
             title
             size
-            owner
+            ownerId
             content
         }
     }
@@ -46,12 +46,12 @@ export const DELETE_TASK = gql`
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Float, $owner: String) {
-        editTaskById(id: $taskId, title: $title, size: $size, owner: $owner) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Float, $ownerId: ID) {
+        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId) {
             id
             title
             size
-            owner
+            ownerId
         }
     }
 `

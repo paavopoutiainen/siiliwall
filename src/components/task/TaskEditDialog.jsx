@@ -2,26 +2,27 @@ import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
+import Select from 'react-select'
 import useEditTask from '../../graphql/task/hooks/useEditTask'
+import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const TaskEditDialog = ({
     dialogStatus, editId, toggleDialog, task,
 }) => {
     const [editTask] = useEditTask()
+    const { loading, data } = useAllUsers()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [owner, setOwner] = useState(task?.owner ? task.owner : null)
+
+    if (loading) return null
 
     const handleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    const handleOwnerChange = (event) => {
-        if (event.target.value === '') {
-            setOwner(null)
-            return
-        }
-        setOwner(event.target.value)
+    const handleOwnerChange = (action) => {
+        setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
@@ -39,11 +40,16 @@ const TaskEditDialog = ({
                 taskId: editId,
                 title,
                 size,
-                owner,
+                ownerId: owner,
             },
         })
         toggleDialog()
     }
+
+    const modifiedData = data.allUsers.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
 
     return (
         <Grid>
@@ -66,14 +72,9 @@ const TaskEditDialog = ({
                         fullWidth
                         onChange={handleChange}
                     />
-                    <TextField
-                        autoComplete="off"
-                        margin="dense"
-                        name="owner"
-                        label="Owner"
-                        type="text"
-                        value={owner || ''}
-                        fullWidth
+                    <Select
+                        placeholder="Select owner"
+                        options={modifiedData}
                         onChange={handleOwnerChange}
                     />
                     <TextField

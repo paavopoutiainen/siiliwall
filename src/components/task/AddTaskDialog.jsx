@@ -20,7 +20,6 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     }
 
     const handleOwnerChange = (action) => {
-        console.log(action.value)
         setOwner(action.value)
     }
 
