@@ -73,11 +73,6 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         fullWidth
                         onChange={handleTitleChange}
                     />
-                    <Select
-                        placeholder="Select owner"
-                        options={modifiedData}
-                        onChange={handleOwnerChange}
-                    />
                     <TextField
                         autoComplete="off"
                         margin="dense"
@@ -87,6 +82,12 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         value={size || ''}
                         fullWidth
                         onChange={handleSizeChange}
+                    />
+                    <Select
+                        className="selectField"
+                        placeholder="Select owner"
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
                     />
                 </DialogContent>
                 <DialogActions>

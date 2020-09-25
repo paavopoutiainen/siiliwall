@@ -30,3 +30,7 @@ html, body {
 #alertMessage {
     font-size: 1.3rem;
 }
+
+.selectField {
+    margin-top: 12px;
+}

@@ -72,11 +72,6 @@ const TaskEditDialog = ({
                         fullWidth
                         onChange={handleChange}
                     />
-                    <Select
-                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
-                        options={modifiedData}
-                        onChange={handleOwnerChange}
-                    />
                     <TextField
                         autoComplete="off"
                         margin="dense"
@@ -86,6 +81,12 @@ const TaskEditDialog = ({
                         value={size || ''}
                         fullWidth
                         onChange={handleSizeChange}
+                    />
+                    <Select
+                        className="selectField"
+                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
                     />
                 </DialogContent>
                 <DialogActions>
