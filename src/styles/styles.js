@@ -69,7 +69,6 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        height: 50,
         margin: 3,
         borderRadius: 4,
         padding: 5,

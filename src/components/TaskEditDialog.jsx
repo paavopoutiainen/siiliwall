@@ -1,18 +1,16 @@
-/* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
-import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
-import Select from 'react-select'
-import useAddTask from '../graphql/task/hooks/useAddTask'
-import useAllUsers from '../graphql/user/hooks/useAllUsers'
+import {
+    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
+} from '@material-ui/core'
+import useEditTask from '../graphql/task/hooks/useEditTask'
 
-const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
-    const { loading, data } = useAllUsers()
-    const [addTask] = useAddTask(column.id)
-    const [title, setTitle] = useState('')
-    const [size, setSize] = useState(null)
-    const [owner, setOwner] = useState(null)
-
-    if (loading) return null
+const TaskEditDialog = ({
+    dialogStatus, editId, toggleDialog, task,
+}) => {
+    const [editTask] = useEditTask()
+    const [title, setTitle] = useState(task?.title)
+    const [size, setSize] = useState(task?.size ? task.size : null)
+    const [owner, setOwner] = useState(task?.owner ? task.owner : null)
 
     const handleChange = (event) => {
         setTitle(event.target.value)
@@ -36,36 +34,27 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleSave = (event) => {
         event.preventDefault()
-        addTask({
+        editTask({
             variables: {
-                columnId: column.id,
+                taskId: editId,
                 title,
                 size,
                 owner,
             },
         })
         toggleDialog()
-        setTitle('')
-        setSize(null)
-        setOwner(null)
     }
-
-    const modifiedData = data.allUsers.map((user) => {
-        const newObject = { value: user.userName, label: user.userName}
-        return newObject
-    })
 
     return (
         <Grid>
             <Dialog
                 fullWidth
                 maxWidth="md"
-                paper={{ minHeight: 50 }}
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
             >
-                <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
+                <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoComplete="off"
@@ -77,19 +66,15 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         fullWidth
                         onChange={handleChange}
                     />
-                    <Select
-                        className="basic-single"
-                        classNamePrefix="select"
-                        defaultValue={owner}
-                        isClearable
-                        isSearchable
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
                         name="owner"
                         label="Owner"
                         type="text"
                         value={owner || ''}
                         fullWidth
                         onChange={handleOwnerChange}
-                        onInputChange={handleOwnerChange}
                     />
                     <TextField
                         autoComplete="off"
@@ -110,15 +95,14 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         Cancel
                     </Button>
                     <Button
-                        disabled={!title.length}
                         onClick={handleSave}
                         color="primary"
                     >
-                        Create task
+                        Submit edit
                     </Button>
                 </DialogActions>
             </Dialog>
         </Grid>
     )
 }
-export default TaskDialog
+export default TaskEditDialog
