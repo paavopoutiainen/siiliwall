@@ -13,7 +13,7 @@ const TaskEditDialog = ({
     const { loading, data } = useAllUsers()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
-    const [owner, setOwner] = useState(task?.owner ? task.owner : null)
+    const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
 
     if (loading) return null
 
@@ -73,7 +73,7 @@ const TaskEditDialog = ({
                         onChange={handleChange}
                     />
                     <Select
-                        placeholder="Select owner"
+                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
                         options={modifiedData}
                         onChange={handleOwnerChange}
                     />

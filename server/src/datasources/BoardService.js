@@ -287,6 +287,16 @@ class BoardService {
         return usersFromDb
     }
 
+    async getOwnerOfTask(ownerId) {
+        let owner
+        try {
+            owner = await this.store.User.findByPk(ownerId)
+        } catch (e) {
+            console.log(e)
+        }
+        return owner
+    }
+
     async archiveTaskById(taskId) {
         try {
             const task = await this.store.Task.findByPk(taskId)

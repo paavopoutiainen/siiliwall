@@ -2,8 +2,7 @@ type Task {
   id: ID!
   title: String!
   content: String
-  owner: String
-  ownerId: ID
+  owner: User
   size: Float
   column: Column!
   columnOrderNumber: Int!

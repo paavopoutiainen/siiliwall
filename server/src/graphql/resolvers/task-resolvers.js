@@ -40,6 +40,12 @@ const schema = {
         subtaskOrder(root) {
             return dataSources.boardService.getSubtaskOrderOfTask(root.id)
         },
+        owner(root) {
+            if (!root.ownerId) {
+                return null
+            }
+            return dataSources.boardService.getOwnerOfTask(root.ownerId)
+        },
     },
 }
 

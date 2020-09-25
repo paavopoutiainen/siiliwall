@@ -21,7 +21,9 @@ export const TASK_BY_ID = gql`
             id
             title
             size
-            ownerId
+            owner{
+                id
+            }
             content
         }
     }
@@ -33,7 +35,10 @@ export const ADD_TASK = gql`
             id
             title
             size
-            ownerId
+            owner {
+                id 
+                userName
+            }
             content
         }
     }
@@ -51,7 +56,10 @@ export const EDIT_TASK = gql`
             id
             title
             size
-            ownerId
+            owner {
+                id
+                userName
+            }
         }
     }
 `
