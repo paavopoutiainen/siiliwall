@@ -73,7 +73,7 @@ class BoardService {
     async getTasksByColumnId(columnId) {
         let tasksFromDb
         try {
-            tasksFromDb = await this.store.Task.findAll({ where: { columnId } })
+            tasksFromDb = await this.store.Task.findAll({ where: { columnId, deletedAt: null } })
         } catch (e) {
             console.error(e)
         }
@@ -153,7 +153,7 @@ class BoardService {
         try {
             const tasks = await this.store.Task.findAll({
                 attributes: ['id'],
-                where: { columnId },
+                where: { columnId, deletedAt: null },
                 order: this.sequelize.literal('columnOrderNumber ASC'),
             })
             arrayOfIds = tasks.map((task) => task.dataValues.id)

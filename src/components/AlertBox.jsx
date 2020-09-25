@@ -22,24 +22,24 @@ const AlertBox = ({
     let alertMsg
 
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    default:
+        break
     }
 
     const archiveTaskById = () => {
         archiveTask({
             variables: {
-                taskId
-            }
+                taskId,
+            },
         })
     }
 
@@ -97,8 +97,6 @@ const AlertBox = ({
         client.cache.evict({ id: idToBeDeleted })
     }
 
-
-
     const handleDelete = (option) => {
         if (action === 'DELETE_TASK' && option === 'DELETE') {
             deleteTaskById()
@@ -136,18 +134,20 @@ const AlertBox = ({
                             <Button variant="contained" onClick={() => handleDelete('UNDO')}>
                                 UNDO
                             </Button>
-                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' ?
-                                <Button color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
-                                    DELETE
-                                </Button>
-                                : null
-                            }
-                            {action === 'ARCHIVE_TASK' ?
-                                <Button variant="contained" onClick={() => handleArchive('ARCHIVE')}>
-                                    ARCHIVE
-                                </Button>
-                                : null
-                            }
+                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
+                                ? (
+                                    <Button color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
+                                        DELETE
+                                    </Button>
+                                )
+                                : null}
+                            {action === 'ARCHIVE_TASK'
+                                ? (
+                                    <Button variant="contained" onClick={() => handleArchive('ARCHIVE')}>
+                                        ARCHIVE
+                                    </Button>
+                                )
+                                : null}
                         </Grid>
                     </Grid>
                 </Alert>

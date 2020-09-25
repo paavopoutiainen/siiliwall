@@ -8,7 +8,7 @@ const useArchiveTask = (columnId) => {
             const columnIdForCache = `Column:${columnId}`
             const cached = cache.readFragment({
                 id: columnIdForCache,
-                fragment: TASKORDER_AND_TASKS
+                fragment: TASKORDER_AND_TASKS,
             })
             const { tasks, taskOrder } = cached
             const taskIdToBeRemoved = response.data.archiveTaskById
@@ -21,13 +21,13 @@ const useArchiveTask = (columnId) => {
                 fragment: TASKORDER_AND_TASKS,
                 data: {
                     taskOrder: newTaskOrder,
-                    tasks: newTasks
-                }
+                    tasks: newTasks,
+                },
             })
             cache.evict({
-                id: taskIdForCache
+                id: taskIdForCache,
             })
-        }
+        },
     })
     return retVal
 }
