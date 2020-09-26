@@ -2,10 +2,11 @@
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
 import Select from 'react-select'
+import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
@@ -14,16 +15,12 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     if (loading) return null
 
-    const handleChange = (event) => {
+    const handleTitleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    const handleOwnerChange = (event) => {
-        if (event.target.value === '') {
-            setOwner(null)
-            return
-        }
-        setOwner(event.target.value)
+    const handleOwnerChange = (action) => {
+        setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
@@ -41,7 +38,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 columnId: column.id,
                 title,
                 size,
-                owner,
+                ownerId: owner,
             },
         })
         toggleDialog()
@@ -51,7 +48,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     }
 
     const modifiedData = data.allUsers.map((user) => {
-        const newObject = { value: user.userName, label: user.userName }
+        const newObject = { value: user.id, label: user.userName }
         return newObject
     })
 
@@ -60,7 +57,6 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             <Dialog
                 fullWidth
                 maxWidth="md"
-                paper={{ minHeight: 50 }}
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
@@ -75,20 +71,7 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         type="text"
                         value={title}
                         fullWidth
-                        onChange={handleChange}
-                    />
-                    <Select
-                        className="basic-single"
-                        classNamePrefix="select"
-                        defaultValue={owner}
-                        isClearable
-                        isSearchable
-                        name="owner"
-                        inputValue={owner}
-                        value={owner}
-                        options={modifiedData}
-                        onChange={handleOwnerChange}
-                        onInputChange={handleOwnerChange}
+                        onChange={handleTitleChange}
                     />
                     <TextField
                         autoComplete="off"
@@ -99,6 +82,12 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         value={size || ''}
                         fullWidth
                         onChange={handleSizeChange}
+                    />
+                    <Select
+                        className="selectField"
+                        placeholder="Select owner"
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -120,4 +109,4 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         </Grid>
     )
 }
-export default TaskDialog
+export default AddTaskDialog

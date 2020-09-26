@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
 
 class BoardService {
@@ -6,7 +8,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() { }
+    initialize() {}
 
     async getBoards() {
         let boardsFromDb
@@ -100,13 +102,13 @@ class BoardService {
         return subtasksFromDb
     }
 
-    async editTaskById(taskId, title, size, owner) {
+    async editTaskById(taskId, title, size, ownerId) {
         let task
         try {
             task = await this.store.Task.findByPk(taskId)
             task.title = title
             task.size = size
-            task.owner = owner
+            task.ownerId = ownerId
             await task.save()
         } catch (e) {
             console.error(e)
@@ -216,7 +218,7 @@ class BoardService {
         return addedColumn
     }
 
-    async addTaskForColumn(columnId, title, size, owner, content) {
+    async addTaskForColumn(columnId, title, size, ownerId, content) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
@@ -231,7 +233,7 @@ class BoardService {
                 columnId,
                 title,
                 size,
-                owner,
+                ownerId,
                 content,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
@@ -273,6 +275,26 @@ class BoardService {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    async getUsers() {
+        let usersFromDb
+        try {
+            usersFromDb = await this.store.User.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return usersFromDb
+    }
+
+    async getOwnerOfTask(ownerId) {
+        let owner
+        try {
+            owner = await this.store.User.findByPk(ownerId)
+        } catch (e) {
+            console.log(e)
+        }
+        return owner
     }
 
     async archiveTaskById(taskId) {

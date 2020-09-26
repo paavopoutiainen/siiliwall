@@ -43,16 +43,12 @@ const Task = ({ task, index, columnId }) => {
                             <h1>{add3Dots(title, titleLimit)}</h1>
                             {task.owner ? (
                                 <h2>
-                                    owner:
-                                    {' '}
-                                    {task.owner}
+                                    {`owner: ${task.owner.userName}`}
                                 </h2>
                             ) : null}
                             {task.size ? (
                                 <h2>
-                                    size:
-                                    {' '}
-                                    {task.size}
+                                    {`size: ${task.size}`}
                                 </h2>
                             ) : null}
                         </Grid>

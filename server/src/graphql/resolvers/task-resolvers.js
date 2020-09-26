@@ -9,14 +9,15 @@ const schema = {
 
     Mutation: {
         addTaskForColumn(root, {
-            columnId, title, size, owner, content,
+            columnId, title, size, ownerId, content,
         }) {
-            return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
+            return dataSources.boardService
+                .addTaskForColumn(columnId, title, size, ownerId, content)
         },
         editTaskById(root, {
-            id, title, size, owner,
+            id, title, size, ownerId,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, owner)
+            return dataSources.boardService.editTaskById(id, title, size, ownerId)
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
@@ -38,6 +39,12 @@ const schema = {
         },
         subtaskOrder(root) {
             return dataSources.boardService.getSubtaskOrderOfTask(root.id)
+        },
+        owner(root) {
+            if (!root.ownerId) {
+                return null
+            }
+            return dataSources.boardService.getOwnerOfTask(root.ownerId)
         },
     },
 }

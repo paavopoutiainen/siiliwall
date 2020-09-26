@@ -19,12 +19,18 @@ html, body {
     color: #ff8d58;
     font-size: 1.2rem;
 }
+
 .boardList__button__link {
     text-decoration: none;
     color: #fff;
     font-size: 1.2rem;
     width: 100%;
 }
+
 #alertMessage {
     font-size: 1.3rem;
+}
+
+.selectField {
+    margin-top: 12px;
 }

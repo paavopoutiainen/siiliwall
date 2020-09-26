@@ -27,7 +27,10 @@ export const BOARD_BY_ID = gql`
                     id
                     title
                     size
-                    owner
+                    owner {
+                        id
+                        userName
+                    }
                 }
             }
         }
