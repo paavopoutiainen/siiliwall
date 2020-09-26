@@ -267,8 +267,8 @@ class BoardService {
         let addedMember
         try {
             addedMember = await this.store.UserTask.create({
-                taskId,
                 userId,
+                taskId,
             })
         } catch (e) {
             console.error(e)
