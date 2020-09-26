@@ -8,6 +8,11 @@ const schema = {
     },
 
     Mutation: {
+        addMemberForTask(root, {
+            id, userId,
+        }) {
+            return dataSources.boardService.addMemberForTask(id, userId)
+        },
         addTaskForColumn(root, {
             columnId, title, size, ownerId, content,
         }) {
@@ -45,6 +50,9 @@ const schema = {
                 return null
             }
             return dataSources.boardService.getOwnerOfTask(root.ownerId)
+        },
+        members(root) {
+            return dataSources.boardService.getMembersByTaskId(root.id)
         },
     },
 }

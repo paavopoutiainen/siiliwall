@@ -92,6 +92,16 @@ class BoardService {
         return taskFromDb
     }
 
+    async getUserById(userId) {
+        let userFromDb
+        try {
+            userFromDb = await this.store.User.findByPk(userId)
+        } catch (e) {
+            console.log(e)
+        }
+        return userFromDb
+    }
+
     async getSubtasksByTaskId(taskId) {
         let subtasksFromDb
         try {
@@ -100,6 +110,16 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getMembersByTaskId(taskId) {
+        let membersFromDb
+        try {
+            membersFromDb = await this.store.UserTask.findByPk({ where: { taskId } })
+        } catch (e) {
+            console.error(e)
+        }
+        return membersFromDb
     }
 
     async editTaskById(taskId, title, size, ownerId) {
@@ -241,6 +261,19 @@ class BoardService {
             console.error(e)
         }
         return addedTask
+    }
+
+    async addMemberForTask(taskId, userId) {
+        let addedMember
+        try {
+            addedMember = await this.store.UserTask.create({
+                taskId,
+                userId,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedMember
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array

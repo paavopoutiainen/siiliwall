@@ -9,10 +9,12 @@ type Task {
   subtasks: [Subtask!]!
   subtaskOrder: [ID!]!
   deletedAt: String
+  members: [User!]!
 }
 
 type Query {
   taskById(id: ID!): Task!
+  taskMembers: [Task!]! 
 }
 
 type Mutation {
@@ -21,4 +23,5 @@ type Mutation {
   deleteTaskById(id: ID!): ID
   archiveTaskById(id: ID!): ID
   restoreTaskById(id: ID!): Task
+  addMemberForTask(id: ID!, userId: ID!): Task
 }

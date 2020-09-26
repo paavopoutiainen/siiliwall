@@ -5,6 +5,9 @@ const schema = {
         allUsers() {
             return dataSources.boardService.getUsers()
         },
+        userById(root, args) {
+            return dataSources.boardService.getUserById(args.id)
+        },
     },
 }
 
