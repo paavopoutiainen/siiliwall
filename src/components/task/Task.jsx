@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
-import { boardPageStyles } from '../styles/styles'
+import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './TaskEditDialog'
 
@@ -43,16 +43,12 @@ const Task = ({ task, index, columnId }) => {
                             <h1>{add3Dots(title, titleLimit)}</h1>
                             {task.owner ? (
                                 <h2>
-                                    owner:
-                                    {' '}
-                                    {task.owner}
+                                    {`owner: ${task.owner.userName}`}
                                 </h2>
                             ) : null}
                             {task.size ? (
                                 <h2>
-                                    size:
-                                    {' '}
-                                    {task.size}
+                                    {`size: ${task.size}`}
                                 </h2>
                             ) : null}
                         </Grid>

@@ -4,15 +4,15 @@ import React, { useState } from 'react'
 import { Grid, TextField, Button } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
-import { boardPageStyles } from '../styles/styles'
-import ColumnList from './ColumnList'
-import useBoardById from '../graphql/board/hooks/useBoardById'
-import useMoveTaskInColumn from '../graphql/task/hooks/useMoveTaskInColumn'
-import useMoveTaskFromColumn from '../graphql/task/hooks/useMoveTaskFromColumn'
-import useMoveColumn from '../graphql/column/hooks/useMoveColumn'
-import useAddColumn from '../graphql/column/hooks/useAddColumn'
-import { onDragEnd } from '../utils/onDragEnd'
-import '../styles.css'
+import { boardPageStyles } from '../../styles/styles'
+import ColumnList from '../column/ColumnList'
+import useBoardById from '../../graphql/board/hooks/useBoardById'
+import useMoveTaskInColumn from '../../graphql/task/hooks/useMoveTaskInColumn'
+import useMoveTaskFromColumn from '../../graphql/task/hooks/useMoveTaskFromColumn'
+import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
+import useAddColumn from '../../graphql/column/hooks/useAddColumn'
+import { onDragEnd } from '../../utils/onDragEnd'
+import '../../styles.css'
 
 const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
@@ -70,11 +70,13 @@ const Board = ({ id }) => {
                                             value={columnName}
                                             fullWidth
                                             onChange={handleChange}
+                                            id="inputColumnName"
                                         />
                                         <Button
                                             disabled={!columnName.length}
                                             color="primary"
                                             onClick={handleSave}
+                                            id="addColumnButton"
                                         >
                                             Add
                                         </Button>
@@ -82,7 +84,6 @@ const Board = ({ id }) => {
                                 </Grid>
                             )}
                         </Droppable>
-
                     </Grid>
                 </DragDropContext>
             </Grid>

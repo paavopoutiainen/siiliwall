@@ -1,27 +1,26 @@
+/* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
-import {
-    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
-} from '@material-ui/core'
-import useEditTask from '../graphql/task/hooks/useEditTask'
+import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import Select from 'react-select'
+import '../../styles.css'
+import useAddTask from '../../graphql/task/hooks/useAddTask'
+import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const TaskEditDialog = ({
-    dialogStatus, editId, toggleDialog, task,
-}) => {
-    const [editTask] = useEditTask()
-    const [title, setTitle] = useState(task?.title)
-    const [size, setSize] = useState(task?.size ? task.size : null)
-    const [owner, setOwner] = useState(task?.owner ? task.owner : null)
+const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+    const { loading, data } = useAllUsers()
+    const [addTask] = useAddTask(column.id)
+    const [title, setTitle] = useState('')
+    const [size, setSize] = useState(null)
+    const [owner, setOwner] = useState(null)
 
-    const handleChange = (event) => {
+    if (loading) return null
+
+    const handleTitleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    const handleOwnerChange = (event) => {
-        if (event.target.value === '') {
-            setOwner(null)
-            return
-        }
-        setOwner(event.target.value)
+    const handleOwnerChange = (action) => {
+        setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
@@ -34,16 +33,24 @@ const TaskEditDialog = ({
 
     const handleSave = (event) => {
         event.preventDefault()
-        editTask({
+        addTask({
             variables: {
-                taskId: editId,
+                columnId: column.id,
                 title,
                 size,
-                owner,
+                ownerId: owner,
             },
         })
         toggleDialog()
+        setTitle('')
+        setSize(null)
+        setOwner(null)
     }
+
+    const modifiedData = data.allUsers.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
 
     return (
         <Grid>
@@ -54,7 +61,7 @@ const TaskEditDialog = ({
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
             >
-                <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
+                <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoComplete="off"
@@ -64,17 +71,7 @@ const TaskEditDialog = ({
                         type="text"
                         value={title}
                         fullWidth
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        autoComplete="off"
-                        margin="dense"
-                        name="owner"
-                        label="Owner"
-                        type="text"
-                        value={owner || ''}
-                        fullWidth
-                        onChange={handleOwnerChange}
+                        onChange={handleTitleChange}
                     />
                     <TextField
                         autoComplete="off"
@@ -86,6 +83,12 @@ const TaskEditDialog = ({
                         fullWidth
                         onChange={handleSizeChange}
                     />
+                    <Select
+                        className="selectField"
+                        placeholder="Select owner"
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -95,14 +98,15 @@ const TaskEditDialog = ({
                         Cancel
                     </Button>
                     <Button
+                        disabled={!title.length}
                         onClick={handleSave}
                         color="primary"
                     >
-                        Submit edit
+                        Create task
                     </Button>
                 </DialogActions>
             </Dialog>
         </Grid>
     )
 }
-export default TaskEditDialog
+export default AddTaskDialog

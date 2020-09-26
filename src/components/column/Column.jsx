@@ -1,13 +1,12 @@
-/* eslint-disable max-len */
 /* eslint-disable no-shadow */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
-import { boardPageStyles } from '../styles/styles'
-import TaskList from './TaskList'
+import { boardPageStyles } from '../../styles/styles'
+import TaskList from '../task/TaskList'
 import DropdownColumn from './DropdownColumn'
-import TaskDialog from './TaskDialog'
+import AddTaskDialog from '../task/AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -38,15 +37,24 @@ const Column = ({ column, index }) => {
                     </Grid>
                     <Droppable droppableId={column.id} type="task">
                         {(provided) => (
-                            <Grid item container {...provided.droppableProps} ref={provided.innerRef}>
-                                <TaskList tasks={tasks} taskOrder={taskOrder} columnId={column.id} />
+                            <Grid
+                                item
+                                container
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                <TaskList
+                                    tasks={tasks}
+                                    taskOrder={taskOrder}
+                                    columnId={column.id}
+                                />
                                 {provided.placeholder}
                             </Grid>
                         )}
 
                     </Droppable>
                     <Grid item container>
-                        <TaskDialog
+                        <AddTaskDialog
                             dialogStatus={dialogStatus}
                             toggleDialog={toggleDialog}
                             column={column}
