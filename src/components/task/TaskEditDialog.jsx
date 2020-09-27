@@ -1,8 +1,10 @@
+/* eslint-disable max-len */
 import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
 import Select from 'react-select'
+import makeAnimated from 'react-select/animated'
 import useEditTask from '../../graphql/task/hooks/useEditTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
@@ -14,6 +16,9 @@ const TaskEditDialog = ({
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
+    const [members, setMembers] = useState([])
+    const arrayOfOldMemberIds = task.members.map((user) => user.id)
+    const animatedComponents = makeAnimated()
 
     if (loading) return null
 
@@ -22,6 +27,7 @@ const TaskEditDialog = ({
     }
 
     const handleOwnerChange = (action) => {
+        console.log(action.value)
         setOwner(action.value)
     }
 
@@ -33,6 +39,10 @@ const TaskEditDialog = ({
         setSize(parseFloat(event.target.value))
     }
 
+    const handleMembersChange = (event) => {
+        setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
+
     const handleSave = (event) => {
         event.preventDefault()
         editTask({
@@ -41,15 +51,25 @@ const TaskEditDialog = ({
                 title,
                 size,
                 ownerId: owner,
+                oldMemberIds: arrayOfOldMemberIds,
+                newMemberIds: members,
             },
         })
         toggleDialog()
     }
 
+    // Modifiying userData to be of form expected by the react select component
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
+    const chosenMembersData = task.members.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
+    // data for showing only the members not yet chosen
+    const modifiedMemberOptions = modifiedData.filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
     return (
         <Grid>
@@ -87,6 +107,16 @@ const TaskEditDialog = ({
                         placeholder={task?.owner ? task.owner.userName : 'Select owner'}
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                    />
+                    <Select
+                        className="selectField"
+                        closeMenuOnSelect={false}
+                        placeholder="Select members"
+                        options={modifiedMemberOptions}
+                        defaultValue={chosenMembersData}
+                        components={animatedComponents}
+                        isMulti
+                        onChange={handleMembersChange}
                     />
                 </DialogContent>
                 <DialogActions>
