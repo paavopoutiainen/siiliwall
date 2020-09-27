@@ -6,6 +6,8 @@ import {
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import useEditTask from '../../graphql/task/hooks/useEditTask'
+import { boardPageStyles } from '../../styles/styles'
+
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const TaskEditDialog = ({
@@ -19,6 +21,7 @@ const TaskEditDialog = ({
     const [members, setMembers] = useState([])
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
     const animatedComponents = makeAnimated()
+    const classes = boardPageStyles()
 
     if (loading) return null
 
@@ -78,6 +81,7 @@ const TaskEditDialog = ({
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
+                classes={{ paper: classes.dialogPaper }}
             >
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>

@@ -102,5 +102,8 @@ export const boardPageStyles = makeStyles({
         width: '100vw',
         zIndex: 0,
     },
-
+    dialogPaper: {
+        minHeight: '80vh',
+        maxHeight: '80vh',
+    },
 })

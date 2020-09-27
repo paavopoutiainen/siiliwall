@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
 import Select from 'react-select'
+import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
@@ -12,6 +13,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState(null)
+    const classes = boardPageStyles()
 
     if (loading) return null
 
@@ -60,6 +62,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
+                classes={{ paper: classes.dialogPaper }}
             >
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
