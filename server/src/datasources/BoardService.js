@@ -130,7 +130,10 @@ class BoardService {
         return members
     }
 
-    async editTaskById(taskId, title, size, ownerId) {
+    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds) {
+        // Logic for figuring out who was deleted and who was added as a new member for the task
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let task
         try {
             task = await this.store.Task.findByPk(taskId)
@@ -138,6 +141,20 @@ class BoardService {
             task.size = size
             task.ownerId = ownerId
             await task.save()
+            // Updating usertasks junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                const resp = await this.addMemberForTask(task.id, userId)
+                return resp
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                const resp = await this.store.UserTask.destroy({
+                    where: {
+                        userId,
+                        taskId: task.id,
+                    },
+                })
+                return resp
+            }))
         } catch (e) {
             console.error(e)
         }
@@ -271,7 +288,6 @@ class BoardService {
                     return members
                 }),
             )
-
         } catch (e) {
             console.error(e)
         }
