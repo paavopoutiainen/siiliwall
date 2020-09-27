@@ -27,7 +27,6 @@ const TaskEditDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        console.log(action.value)
         setOwner(action.value)
     }
 
