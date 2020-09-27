@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const dataSources = require('../../datasources')
 
 const schema = {
@@ -20,9 +21,9 @@ const schema = {
                 .addTaskForColumn(columnId, title, size, ownerId, content, memberIds)
         },
         editTaskById(root, {
-            id, title, size, ownerId,
+            id, title, size, ownerId, oldMemberIds, newMemberIds,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, ownerId)
+            return dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds)
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
