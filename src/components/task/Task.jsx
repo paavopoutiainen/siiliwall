@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
-import TaskEditDialog from './TaskEditDialog'
+import TaskEditDialog from './EditTaskDialog'
 
 const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
@@ -43,23 +43,24 @@ const Task = ({ task, index, columnId }) => {
                         container
                         direction="row"
                         justify="space-between"
+                        classes={{ root: classes.taskInner }}
                     >
-                        <Grid item classes={{ root: classes.taskTitle }}>
-                            <h1>{add3Dots(title, titleLimit)}</h1>
+                        <Grid item>
+                            <h3>{add3Dots(title, titleLimit)}</h3>
                             {task.owner ? (
-                                <h2>
+                                <p>
                                     {`owner: ${task.owner.userName}`}
-                                </h2>
+                                </p>
                             ) : null}
                             {task.size ? (
-                                <h2>
+                                <p>
                                     {`size: ${task.size}`}
-                                </h2>
+                                </p>
                             ) : null}
-                            {task.members ? (
-                                <h2>
-                                    {`members:  ${chosenMembersData.map((user) => user.label )}`}
-                                </h2>
+                            {task.members.length !== 0 ? (
+                                <p>
+                                    {`members:  ${chosenMembersData.map((user) => ` ${user.label}`)}`}
+                                </p>
                             ) : null}
                         </Grid>
                         <Grid item>

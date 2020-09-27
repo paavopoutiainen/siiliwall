@@ -28,8 +28,8 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                 >
                     <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
-                        <Grid item classes={{ root: classes.columnTitle }}>
-                            <h1>{column.name}</h1>
+                        <Grid item>
+                            <h2>{column.name}</h2>
                         </Grid>
                         <Grid item>
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />

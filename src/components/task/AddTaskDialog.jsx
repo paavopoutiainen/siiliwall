@@ -104,6 +104,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         placeholder="Select members"
                         options={modifiedData}
                         onChange={handleMembersChange}
+                        closeMenuOnSelect={false}
                     />
                 </DialogContent>
                 <DialogActions>

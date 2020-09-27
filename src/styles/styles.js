@@ -25,13 +25,14 @@ export const landingPageStyles = makeStyles({
         height: 48,
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-        fontSize: '1.4rem',
+        fontSize: '0.9rem',
+        minWidth: '16rem',
     },
 
     addBoardButton: {
-        height: '8rem',
-        width: '8rem',
-        fontSize: '1rem',
+        height: '6rem',
+        width: '6rem',
+        fontSize: '0.7rem',
         fontWeight: 'bold',
         borderRadius: '50%',
         border: '2px solid #ff8d58',
@@ -50,14 +51,6 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
-    boardTitle: {
-        fontSize: '2.3rem',
-    },
-
-    columnTitle: {
-        fontSize: '1.3rem',
-    },
-
     column: {
         backgroundColor: '#EBECF0',
         height: 600,
@@ -74,8 +67,8 @@ export const boardPageStyles = makeStyles({
         padding: 5,
     },
 
-    taskTitle: {
-        fontSize: '0.9rem',
+    taskInner: {
+        flexWrap: 'nowrap',
     },
 
     dropDownMenu: {
@@ -84,10 +77,6 @@ export const boardPageStyles = makeStyles({
 
     snackbar: {
         maxWidth: 350,
-    },
-
-    snackbarButtonDelete: {
-        color: 'white',
     },
 
     alertBox: {

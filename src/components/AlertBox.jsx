@@ -131,19 +131,19 @@ const AlertBox = ({
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
                         <Grid item container direction="row" justify="flex-end">
-                            <Button variant="contained" onClick={() => handleDelete('UNDO')}>
+                            <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')}>
                                 UNDO
                             </Button>
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
                                 ? (
-                                    <Button color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.snackbarButtonDelete }}>
+                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')}>
                                         DELETE
                                     </Button>
                                 )
                                 : null}
                             {action === 'ARCHIVE_TASK'
                                 ? (
-                                    <Button variant="contained" onClick={() => handleArchive('ARCHIVE')}>
+                                    <Button size="small" variant="contained" onClick={() => handleArchive('ARCHIVE')}>
                                         ARCHIVE
                                     </Button>
                                 )

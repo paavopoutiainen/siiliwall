@@ -10,7 +10,7 @@ import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const TaskEditDialog = ({
+const EditTaskDialog = ({
     dialogStatus, editId, toggleDialog, task,
 }) => {
     const [editTask] = useEditTask()
@@ -140,4 +140,4 @@ const TaskEditDialog = ({
         </Grid>
     )
 }
-export default TaskEditDialog
+export default EditTaskDialog
