@@ -271,7 +271,6 @@ class BoardService {
                     return members
                 }),
             )
-
         } catch (e) {
             console.error(e)
         }
