@@ -14,6 +14,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState(null)
     const classes = boardPageStyles()
+    const [members, setMembers] = useState([])
 
     if (loading) return null
 
@@ -32,6 +33,9 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         }
         setSize(parseFloat(event.target.value))
     }
+    const handleMembersChange = (event) => {
+        setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -41,12 +45,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 title,
                 size,
                 ownerId: owner,
+                memberIds: members,
             },
         })
         toggleDialog()
         setTitle('')
         setSize(null)
         setOwner(null)
+        setMembers([])
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -91,6 +97,13 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                    />
+                    <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select members"
+                        options={modifiedData}
+                        onChange={handleMembersChange}
                     />
                 </DialogContent>
                 <DialogActions>
