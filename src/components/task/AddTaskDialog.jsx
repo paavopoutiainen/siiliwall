@@ -31,6 +31,9 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         }
         setSize(parseFloat(event.target.value))
     }
+    const handleMembersChange = (event) => {
+        setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -40,13 +43,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 title,
                 size,
                 ownerId: owner,
-                members,
+                memberIds: members,
             },
         })
         toggleDialog()
         setTitle('')
         setSize(null)
         setOwner(null)
+        setMembers([])
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -96,6 +100,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         className="selectField"
                         placeholder="Select members"
                         options={modifiedData}
+                        onChange={handleMembersChange}
                     />
                 </DialogContent>
                 <DialogActions>

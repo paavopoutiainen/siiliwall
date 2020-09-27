@@ -21,6 +21,11 @@ const Task = ({ task, index, columnId }) => {
         return checkedTitle
     }
 
+    const chosenMembersData = task.members.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
+
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -49,6 +54,11 @@ const Task = ({ task, index, columnId }) => {
                             {task.size ? (
                                 <h2>
                                     {`size: ${task.size}`}
+                                </h2>
+                            ) : null}
+                            {task.members ? (
+                                <h2>
+                                    {`members:  ${chosenMembersData.map((user) => user.label )}`}
                                 </h2>
                             ) : null}
                         </Grid>

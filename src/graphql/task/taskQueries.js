@@ -33,8 +33,8 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $content: String, $members: [ID!]) {
-        addTaskForColumn(columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, content: $content, members: $members) {
+    mutation createTask($columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $content: String, $memberIds: [ID!]) {
+        addTaskForColumn(columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, content: $content, memberIds: $memberIds) {
             id
             title
             size
