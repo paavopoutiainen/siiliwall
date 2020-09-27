@@ -113,13 +113,21 @@ class BoardService {
     }
 
     async getMembersByTaskId(taskId) {
-        let membersFromDb
+        let rowsFromDb
+        let members
         try {
-            membersFromDb = await this.store.UserTask.findByPk({ where: { taskId } })
+            rowsFromDb = await this.store.UserTask.findAll({ where: { taskId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
         } catch (e) {
             console.error(e)
         }
-        return membersFromDb
+        return members
     }
 
     async editTaskById(taskId, title, size, ownerId) {
@@ -238,7 +246,7 @@ class BoardService {
         return addedColumn
     }
 
-    async addTaskForColumn(columnId, title, size, ownerId, content) {
+    async addTaskForColumn(columnId, title, size, ownerId, content, memberIds) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
@@ -257,6 +265,13 @@ class BoardService {
                 content,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    const members = await this.addMemberForTask(addedTask.id, memberId)
+                    return members
+                }),
+            )
+
         } catch (e) {
             console.error(e)
         }
@@ -264,16 +279,17 @@ class BoardService {
     }
 
     async addMemberForTask(taskId, userId) {
-        let addedMember
+        let task
         try {
-            addedMember = await this.store.UserTask.create({
+            await this.store.UserTask.create({
                 userId,
                 taskId,
             })
+            task = await this.store.Task.findByPk(taskId)
         } catch (e) {
             console.error(e)
         }
-        return addedMember
+        return task
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array

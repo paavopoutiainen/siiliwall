@@ -14,10 +14,10 @@ const schema = {
             return dataSources.boardService.addMemberForTask(id, userId)
         },
         addTaskForColumn(root, {
-            columnId, title, size, ownerId, content,
+            columnId, title, size, ownerId, content, memberIds,
         }) {
             return dataSources.boardService
-                .addTaskForColumn(columnId, title, size, ownerId, content)
+                .addTaskForColumn(columnId, title, size, ownerId, content, memberIds)
         },
         editTaskById(root, {
             id, title, size, ownerId,

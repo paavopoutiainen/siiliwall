@@ -14,11 +14,10 @@ type Task {
 
 type Query {
   taskById(id: ID!): Task!
-  taskMembers: [Task!]! 
 }
 
 type Mutation {
-  addTaskForColumn(columnId: ID!, title: String!, size: Float, ownerId: ID, content: String ): Task
+  addTaskForColumn(columnId: ID!, title: String!, size: Float, ownerId: ID, content: String, memberIds: [ID] ): Task
   editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, content: String): Task
   deleteTaskById(id: ID!): ID
   archiveTaskById(id: ID!): ID
