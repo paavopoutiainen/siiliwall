@@ -12,6 +12,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState(null)
+    const [members, setMembers] = useState([])
 
     if (loading) return null
 
@@ -39,6 +40,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 title,
                 size,
                 ownerId: owner,
+                members,
             },
         })
         toggleDialog()
@@ -88,6 +90,12 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                    />
+                    <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select members"
+                        options={modifiedData}
                     />
                 </DialogContent>
                 <DialogActions>
