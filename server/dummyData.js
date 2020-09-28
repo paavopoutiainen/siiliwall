@@ -1,7 +1,13 @@
 // dummy data
-const boards = [{ id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576' },
-    { id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', name: 'devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e' },
-    { id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', name: 'jeejeeBOard3', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6' }]
+const boards = [{
+    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 1,
+},
+{
+    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', name: 'devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 2,
+},
+{
+    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', name: 'jeejeeBOard3', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 3,
+}]
 
 const users = [
     {
@@ -165,6 +171,17 @@ const subtasks = [
 
 ]
 
+const usertasks = [
+    {
+        userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
+    },
+    {
+        userId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
+    },
+]
+
 module.exports = {
-    boards, columns, tasks, subtasks, users,
+    boards, columns, tasks, subtasks, users, usertasks,
 }

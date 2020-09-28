@@ -1,0 +1,11 @@
+type User {
+  id: ID!
+  userName: String!
+  email: String
+  tasks: [Task!]!
+}
+
+type Query {
+  allUsers: [User!]!
+  userById(id: ID!): User!
+}

@@ -51,7 +51,7 @@ const Board = ({ id }) => {
                 classes={{ root: classes.root }}
                 spacing={2}
             >
-                <Grid container item direction="row" classes={{ root: classes.boardTitle }}>
+                <Grid container item direction="row">
                     <h1>{board.name}</h1>
                 </Grid>
                 <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
@@ -70,11 +70,13 @@ const Board = ({ id }) => {
                                             value={columnName}
                                             fullWidth
                                             onChange={handleChange}
+                                            id="inputColumnName"
                                         />
                                         <Button
                                             disabled={!columnName.length}
                                             color="primary"
                                             onClick={handleSave}
+                                            id="addColumnButton"
                                         >
                                             Add
                                         </Button>
@@ -82,7 +84,6 @@ const Board = ({ id }) => {
                                 </Grid>
                             )}
                         </Droppable>
-
                     </Grid>
                 </DragDropContext>
             </Grid>

@@ -12,9 +12,6 @@ module.exports = (sequelize, DataTypes) => {
         content: {
             type: DataTypes.STRING,
         },
-        owner: {
-            type: DataTypes.STRING,
-        },
         columnOrderNumber: {
             type: DataTypes.INTEGER,
         },
@@ -22,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         color: DataTypes.STRING,
         size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,
+        deletedAt: DataTypes.DATE,
     })
     Task.associate = (models) => {
         Task.belongsTo(models.Column, {

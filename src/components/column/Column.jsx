@@ -6,7 +6,7 @@ import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
 import TaskList from '../task/TaskList'
 import DropdownColumn from './DropdownColumn'
-import TaskAddDialog from '../task/TaskAddDialog'
+import AddTaskDialog from '../task/AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -28,8 +28,8 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                 >
                     <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
-                        <Grid item classes={{ root: classes.columnTitle }}>
-                            <h1>{column.name}</h1>
+                        <Grid item>
+                            <h2>{column.name}</h2>
                         </Grid>
                         <Grid item>
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />
@@ -54,7 +54,7 @@ const Column = ({ column, index }) => {
 
                     </Droppable>
                     <Grid item container>
-                        <TaskAddDialog
+                        <AddTaskDialog
                             dialogStatus={dialogStatus}
                             toggleDialog={toggleDialog}
                             column={column}

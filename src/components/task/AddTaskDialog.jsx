@@ -1,25 +1,28 @@
 import React, { useState } from 'react'
-import {
-    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
-} from '@material-ui/core'
+import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import Select from 'react-select'
+import { boardPageStyles } from '../../styles/styles'
+import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
+import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
+const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+    const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState(null)
+    const classes = boardPageStyles()
+    const [members, setMembers] = useState([])
 
-    const handleChange = (event) => {
+    if (loading) return null
+
+    const handleTitleChange = (event) => {
         setTitle(event.target.value)
     }
 
-    const handleOwnerChange = (event) => {
-        if (event.target.value === '') {
-            setOwner(null)
-            return
-        }
-        setOwner(event.target.value)
+    const handleOwnerChange = (action) => {
+        setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
@@ -29,6 +32,9 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
         }
         setSize(parseFloat(event.target.value))
     }
+    const handleMembersChange = (event) => {
+        setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -37,14 +43,21 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
                 columnId: column.id,
                 title,
                 size,
-                owner,
+                ownerId: owner,
+                memberIds: members,
             },
         })
         toggleDialog()
         setTitle('')
         setSize(null)
         setOwner(null)
+        setMembers([])
     }
+
+    const modifiedData = data.allUsers.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
 
     return (
         <Grid>
@@ -54,6 +67,7 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
                 onClose={toggleDialog}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
+                classes={{ paper: classes.dialogPaper }}
             >
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
@@ -67,17 +81,7 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
                         type="text"
                         value={title}
                         fullWidth
-                        onChange={handleChange}
-                    />
-                    <TextField
-                        autoComplete="off"
-                        margin="dense"
-                        name="owner"
-                        label="Owner"
-                        type="text"
-                        value={owner || ''}
-                        fullWidth
-                        onChange={handleOwnerChange}
+                        onChange={handleTitleChange}
                     />
                     <TextField
                         autoComplete="off"
@@ -88,6 +92,20 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
                         value={size || ''}
                         fullWidth
                         onChange={handleSizeChange}
+                    />
+                    <Select
+                        className="selectField"
+                        placeholder="Select owner"
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
+                    />
+                    <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select members"
+                        options={modifiedData}
+                        onChange={handleMembersChange}
+                        closeMenuOnSelect={false}
                     />
                 </DialogContent>
                 <DialogActions>
@@ -109,4 +127,4 @@ const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
         </Grid>
     )
 }
-export default TaskAddDialog
+export default AddTaskDialog
