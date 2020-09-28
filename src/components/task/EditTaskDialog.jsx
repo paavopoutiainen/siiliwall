@@ -18,11 +18,10 @@ const EditTaskDialog = ({
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
-    const [members, setMembers] = useState([])
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
+    const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
-
     if (loading) return null
 
     const handleChange = (event) => {
