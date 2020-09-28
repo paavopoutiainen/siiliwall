@@ -21,8 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     })
 
     UserTask.associate = (models) => {
-        UserTask.belongsTo(models.Task, { foreignKey: 'taskId', targetKey: 'id' })
-        UserTask.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id' })
+        UserTask.belongsTo(models.Task, { foreignKey: 'taskId', targetKey: 'id', onDelete: 'cascade' })
+        UserTask.belongsTo(models.User, { foreignKey: 'userId', targetKey: 'id', onDelete: 'cascade' })
     }
 
     return UserTask
