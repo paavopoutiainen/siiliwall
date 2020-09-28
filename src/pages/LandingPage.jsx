@@ -34,9 +34,9 @@ const LandingPage = () => {
 
                     && <NewBoardForm setOpen={setOpen} open={open} />}
                 <Grid item classes={{ root: classes.title }}>
-                    <h1 id="landingTitle" >Welcome!</h1>
+                    <h1 id="landingTitle">Welcome!</h1>
                 </Grid>
-                <Grid item >
+                <Grid item>
                     <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }} id="addButton">
                         Add Board
                     </Button>
@@ -49,7 +49,7 @@ const LandingPage = () => {
                     spacing={2}
                 >
                     {boardsInOrder.map(({ id, name }) => (
-                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id} >
+                        <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
                             <Link to={`/boards/${id}`} className="boardList__button__link">
                                 <Button fullWidth classes={{ root: classes.boardButton }}>
                                     {name}

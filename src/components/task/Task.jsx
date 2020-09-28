@@ -4,7 +4,7 @@ import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
-import TaskEditDialog from './TaskEditDialog'
+import TaskEditDialog from './EditTaskDialog'
 
 const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
@@ -20,6 +20,11 @@ const Task = ({ task, index, columnId }) => {
         }
         return checkedTitle
     }
+
+    const chosenMembersData = task.members.map((user) => {
+        const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
 
     return (
         <Draggable draggableId={task.id} index={index}>
@@ -38,22 +43,24 @@ const Task = ({ task, index, columnId }) => {
                         container
                         direction="row"
                         justify="space-between"
+                        classes={{ root: classes.taskInner }}
                     >
-                        <Grid item classes={{ root: classes.taskTitle }}>
-                            <h1>{add3Dots(title, titleLimit)}</h1>
+                        <Grid item>
+                            <h3>{add3Dots(title, titleLimit)}</h3>
                             {task.owner ? (
-                                <h2>
-                                    owner:
-                                    {' '}
-                                    {task.owner}
-                                </h2>
+                                <p>
+                                    {`owner: ${task.owner.userName}`}
+                                </p>
                             ) : null}
                             {task.size ? (
-                                <h2>
-                                    size:
-                                    {' '}
-                                    {task.size}
-                                </h2>
+                                <p>
+                                    {`size: ${task.size}`}
+                                </p>
+                            ) : null}
+                            {task.members.length !== 0 ? (
+                                <p>
+                                    {`members:  ${chosenMembersData.map((user) => ` ${user.label}`)}`}
+                                </p>
                             ) : null}
                         </Grid>
                         <Grid item>

@@ -1,3 +1,5 @@
+/* eslint-disable class-methods-use-this */
+/* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
 
 class BoardService {
@@ -6,7 +8,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() { }
+    initialize() {}
 
     async getBoards() {
         let boardsFromDb
@@ -90,6 +92,16 @@ class BoardService {
         return taskFromDb
     }
 
+    async getUserById(userId) {
+        let userFromDb
+        try {
+            userFromDb = await this.store.User.findByPk(userId)
+        } catch (e) {
+            console.log(e)
+        }
+        return userFromDb
+    }
+
     async getSubtasksByTaskId(taskId) {
         let subtasksFromDb
         try {
@@ -100,14 +112,49 @@ class BoardService {
         return subtasksFromDb
     }
 
-    async editTaskById(taskId, title, size, owner) {
+    async getMembersByTaskId(taskId) {
+        let rowsFromDb
+        let members
+        try {
+            rowsFromDb = await this.store.UserTask.findAll({ where: { taskId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return members
+    }
+
+    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds) {
+        // Logic for figuring out who was deleted and who was added as a new member for the task
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let task
         try {
             task = await this.store.Task.findByPk(taskId)
             task.title = title
             task.size = size
-            task.owner = owner
+            task.ownerId = ownerId
             await task.save()
+            // Updating usertasks junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                const resp = await this.addMemberForTask(task.id, userId)
+                return resp
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                const resp = await this.store.UserTask.destroy({
+                    where: {
+                        userId,
+                        taskId: task.id,
+                    },
+                })
+                return resp
+            }))
         } catch (e) {
             console.error(e)
         }
@@ -216,7 +263,7 @@ class BoardService {
         return addedColumn
     }
 
-    async addTaskForColumn(columnId, title, size, owner, content) {
+    async addTaskForColumn(columnId, title, size, ownerId, content, memberIds) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
@@ -231,14 +278,34 @@ class BoardService {
                 columnId,
                 title,
                 size,
-                owner,
+                ownerId,
                 content,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    const members = await this.addMemberForTask(addedTask.id, memberId)
+                    return members
+                }),
+            )
         } catch (e) {
             console.error(e)
         }
         return addedTask
+    }
+
+    async addMemberForTask(taskId, userId) {
+        let task
+        try {
+            await this.store.UserTask.create({
+                userId,
+                taskId,
+            })
+            task = await this.store.Task.findByPk(taskId)
+        } catch (e) {
+            console.error(e)
+        }
+        return task
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array
@@ -273,6 +340,26 @@ class BoardService {
         } catch (e) {
             console.log(e)
         }
+    }
+
+    async getUsers() {
+        let usersFromDb
+        try {
+            usersFromDb = await this.store.User.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return usersFromDb
+    }
+
+    async getOwnerOfTask(ownerId) {
+        let owner
+        try {
+            owner = await this.store.User.findByPk(ownerId)
+        } catch (e) {
+            console.log(e)
+        }
+        return owner
     }
 
     async archiveTaskById(taskId) {

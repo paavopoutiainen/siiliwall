@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const dataSources = require('../../datasources')
 
 const schema = {
@@ -8,15 +9,21 @@ const schema = {
     },
 
     Mutation: {
-        addTaskForColumn(root, {
-            columnId, title, size, owner, content,
+        addMemberForTask(root, {
+            id, userId,
         }) {
-            return dataSources.boardService.addTaskForColumn(columnId, title, size, owner, content)
+            return dataSources.boardService.addMemberForTask(id, userId)
+        },
+        addTaskForColumn(root, {
+            columnId, title, size, ownerId, content, memberIds,
+        }) {
+            return dataSources.boardService
+                .addTaskForColumn(columnId, title, size, ownerId, content, memberIds)
         },
         editTaskById(root, {
-            id, title, size, owner,
+            id, title, size, ownerId, oldMemberIds, newMemberIds,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, owner)
+            return dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds)
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
@@ -38,6 +45,15 @@ const schema = {
         },
         subtaskOrder(root) {
             return dataSources.boardService.getSubtaskOrderOfTask(root.id)
+        },
+        owner(root) {
+            if (!root.ownerId) {
+                return null
+            }
+            return dataSources.boardService.getOwnerOfTask(root.ownerId)
+        },
+        members(root) {
+            return dataSources.boardService.getMembersByTaskId(root.id)
         },
     },
 }

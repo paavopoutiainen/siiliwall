@@ -35,6 +35,15 @@ const client = new ApolloClient({
                     },
                 },
             },
+            Task: {
+                fields: {
+                    members: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        },
+                    },
+                },
+            },
         },
     }),
 })
