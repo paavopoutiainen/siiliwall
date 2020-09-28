@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import {
+    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
+} from '@material-ui/core'
 import Select from 'react-select'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
