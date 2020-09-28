@@ -48,5 +48,6 @@ module.exports = {
         'no-case-declarations': 0,
         'no-else-return': 0,
         'react/prop-types': 0,
+        'react/jsx-boolean-value': 0,
     },
 }

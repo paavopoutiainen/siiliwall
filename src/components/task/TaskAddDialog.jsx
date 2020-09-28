@@ -1,9 +1,10 @@
-/* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
-import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import {
+    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
+} from '@material-ui/core'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 
-const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+const TaskAddDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
     const [size, setSize] = useState(null)
@@ -58,6 +59,8 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 <DialogContent>
                     <TextField
                         autoComplete="off"
+                        autoFocus={true}
+                        required={true}
                         margin="dense"
                         name="title"
                         label="Name"
@@ -106,4 +109,4 @@ const TaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         </Grid>
     )
 }
-export default TaskDialog
+export default TaskAddDialog

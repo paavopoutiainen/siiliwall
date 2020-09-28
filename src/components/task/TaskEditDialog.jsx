@@ -58,6 +58,8 @@ const TaskEditDialog = ({
                 <DialogContent>
                     <TextField
                         autoComplete="off"
+                        autoFocus={true}
+                        required={true}
                         margin="dense"
                         name="title"
                         label="Name"
