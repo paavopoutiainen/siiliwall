@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Grid, Snackbar, Button } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
@@ -22,18 +22,19 @@ const AlertBox = ({
     let alertMsg
 
     switch (action) {
-    case 'DELETE_COLUMN':
-        alertMsg = alertMsgDeleteColumn
-        break
-    case 'DELETE_TASK':
-        alertMsg = alertMsgDeleteTask
-        break
-    case 'ARCHIVE_TASK':
-        alertMsg = alertMsgArchiveTask
-        break
-    default:
-        break
+        case 'DELETE_COLUMN':
+            alertMsg = alertMsgDeleteColumn
+            break
+        case 'DELETE_TASK':
+            alertMsg = alertMsgDeleteTask
+            break
+        case 'ARCHIVE_TASK':
+            alertMsg = alertMsgArchiveTask
+            break
+        default:
+            break
     }
+
 
     const archiveTaskById = () => {
         archiveTask({
@@ -118,12 +119,25 @@ const AlertBox = ({
         }
     }
 
+
+    useEffect(() => {
+        const boardEl = document.getElementById('boardElement')
+        if (open === true) {
+            boardEl.style.pointerEvents = 'none'
+            boardEl.style.backgroundColor = 'rgba(200, 200, 200, .8)'
+        } else {
+            boardEl.style.pointerEvents = 'auto'
+            boardEl.style.backgroundColor = 'rgba(255, 255, 255, 1)'
+        }
+    }, [open])
+
     return (
-        <Grid item classes={{ root: classes.alertBox }}>
+        <Grid item>
             <Snackbar
-                classes={{ root: classes.snackbar }}
+                classes={open ? { root: classes.snackbarFocus } : { root: classes.snackbarUnfocus }}
                 open={open}
-                anchorOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
+                id="snackbarElement"
             >
                 <Alert variant="filled" severity="error">
                     <Grid item container direction="column" spacing={2}>
@@ -131,19 +145,19 @@ const AlertBox = ({
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
                         <Grid item container direction="row" justify="flex-end">
-                            <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')}>
+                            <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
                             </Button>
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
                                 ? (
-                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')}>
+                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.deleteAlertButton }}>
                                         DELETE
                                     </Button>
                                 )
                                 : null}
                             {action === 'ARCHIVE_TASK'
                                 ? (
-                                    <Button size="small" variant="contained" onClick={() => handleArchive('ARCHIVE')}>
+                                    <Button size="small" variant="contained" onClick={() => handleArchive('ARCHIVE')} classes={{ root: classes.archiveAlertButton }}>
                                         ARCHIVE
                                     </Button>
                                 )
@@ -152,9 +166,6 @@ const AlertBox = ({
                     </Grid>
                 </Alert>
             </Snackbar>
-            {open
-                ? <Grid classes={{ root: classes.invisible }} onClick={() => setOpen(false)} />
-                : null}
         </Grid>
     )
 }
