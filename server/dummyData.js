@@ -101,7 +101,7 @@ const tasks = [
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 2,
         id: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
-        creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e',
+        ownerId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e',
     },
     {
         title: 'task2',
@@ -110,7 +110,7 @@ const tasks = [
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 1,
         id: 'd29fc7da-93a1-40ec-8c56-7b619445465b',
-        creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
     },
     {
         title: 'task3',
@@ -118,7 +118,7 @@ const tasks = [
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
         columnOrderNumber: 1,
         id: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
-        creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
     },
     {
         title: 'task4',
@@ -126,7 +126,7 @@ const tasks = [
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
         columnOrderNumber: 2,
         id: '6e766c63-0684-4cf2-8a46-868cfaf84033',
-        creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
     },
     {
         title: 'task5',
@@ -134,7 +134,7 @@ const tasks = [
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
         columnOrderNumber: 3,
         id: 'e12d6ed1-c275-4047-8f3c-b50050bada6d',
-        creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
     {
         title: 'task6',
@@ -142,7 +142,7 @@ const tasks = [
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
         columnOrderNumber: 1,
         id: '7b29f130-fc89-4f16-b0ef-71a06e09110c',
-        creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
 ]
 
@@ -154,6 +154,7 @@ const subtasks = [
         columnOrderNumber: 2,
         id: '7ccd9f9b-a706-4fa7-a99c-d07136606840',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
     },
     {
         name: 'subtask2',
@@ -162,6 +163,7 @@ const subtasks = [
         columnOrderNumber: 1,
         id: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
     },
     {
         name: 'subtask3',
@@ -170,8 +172,20 @@ const subtasks = [
         columnOrderNumber: 1,
         id: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
+        ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
 
+]
+
+const userSubtasks = [
+    {
+        userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
+    },
+    {
+        userId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        subtaskId: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
+    },
 ]
 
 const usertasks = [
@@ -186,5 +200,5 @@ const usertasks = [
 ]
 
 module.exports = {
-    boards, columns, tasks, subtasks, users, usertasks,
+    boards, columns, tasks, subtasks, users, usertasks, userSubtasks,
 }
