@@ -4,6 +4,7 @@ type Column {
   board: Board!
   orderNumber: Int!
   tasks: [Task!]!
+  subtasks: [Subtask!]!
   taskOrder: [ID!]!
   subtaskOrder: [ID!]!
 }

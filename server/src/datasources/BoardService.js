@@ -82,6 +82,16 @@ class BoardService {
         return tasksFromDb
     }
 
+    async getSubtasksByColumnId(columnId) {
+        let subtasksFromDb
+        try {
+            subtasksFromDb = await this.store.Subtask.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return subtasksFromDb
+    }
+
     async getTaskById(taskId) {
         let taskFromDb
         try {

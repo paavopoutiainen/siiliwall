@@ -39,6 +39,9 @@ const schema = {
         tasks(root) {
             return dataSources.boardService.getTasksByColumnId(root.id)
         },
+        subtasks(root) {
+            return dataSources.boardService.getSubtasksByColumnId(root.id)
+        },
         taskOrder(root) {
             return dataSources.boardService.getTaskOrderOfColumn(root.id)
         },
