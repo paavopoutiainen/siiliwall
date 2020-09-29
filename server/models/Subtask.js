@@ -5,16 +5,23 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
         },
-        orderNumber: DataTypes.INTEGER,
+        columnOrderNumber: DataTypes.INTEGER,
         done: DataTypes.BOOLEAN,
         name: {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        description: {
+            type: DataTypes.STRING,
+        },
+        deletedAt: DataTypes.DATE,
     })
     Subtask.associate = (models) => {
         Subtask.belongsTo(models.Task, {
             foreignKey: 'taskId',
+        })
+        Subtask.belongsTo(models.Column, {
+            foreignKey: 'columnId',
         })
     }
     return Subtask

@@ -210,6 +210,21 @@ class BoardService {
         return arrayOfIds
     }
 
+    async getSubtaskOrderOfColumn(columnId) {
+        let arrayOfIds
+        try {
+            const subtasks = await this.store.Subtask.findAll({
+                attributes: ['id'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            arrayOfIds = subtasks.map((task) => task.dataValues.id)
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfIds
+    }
+
     async getSubtaskOrderOfTask(taskId) {
         let arrayOfIds
         try {

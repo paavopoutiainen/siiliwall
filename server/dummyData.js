@@ -151,22 +151,25 @@ const subtasks = [
         name: 'subtask1',
         done: true,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
-        orderNumber: 2,
+        columnOrderNumber: 2,
         id: '7ccd9f9b-a706-4fa7-a99c-d07136606840',
+        columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
     },
     {
         name: 'subtask2',
         done: false,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
-        orderNumber: 2,
+        columnOrderNumber: 1,
         id: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
+        columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
     },
     {
         name: 'subtask3',
         done: true,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
-        orderNumber: 1,
+        columnOrderNumber: 1,
         id: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
     },
 
 ]
