@@ -21,20 +21,30 @@ const AlertBox = ({
     const alertMsgArchiveTask = 'The task is removed from the board, but can be examined through the archive setting.'
     let alertMsg
 
-    switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        default:
-            break
-    }
+    useEffect(() => {
+        const boardEl = document.getElementById('boardElement')
+        if (open === true) {
+            boardEl.style.pointerEvents = 'none'
+            boardEl.style.backgroundColor = 'rgba(200, 200, 200, .8)'
+        } else {
+            boardEl.style.pointerEvents = 'auto'
+            boardEl.style.backgroundColor = 'rgba(255, 255, 255, 1)'
+        }
+    }, [open])
 
+    switch (action) {
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    default:
+        break
+    }
 
     const archiveTaskById = () => {
         archiveTask({
@@ -118,18 +128,6 @@ const AlertBox = ({
             setOpen(false)
         }
     }
-
-
-    useEffect(() => {
-        const boardEl = document.getElementById('boardElement')
-        if (open === true) {
-            boardEl.style.pointerEvents = 'none'
-            boardEl.style.backgroundColor = 'rgba(200, 200, 200, .8)'
-        } else {
-            boardEl.style.pointerEvents = 'auto'
-            boardEl.style.backgroundColor = 'rgba(255, 255, 255, 1)'
-        }
-    }, [open])
 
     return (
         <Grid item>

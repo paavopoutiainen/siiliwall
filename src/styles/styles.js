@@ -83,17 +83,17 @@ export const boardPageStyles = makeStyles({
 
     undoAlertButton: {
         pointerEvents: 'auto',
-        margin: 5
+        margin: 5,
     },
 
     deleteAlertButton: {
         pointerEvents: 'auto',
-        margin: 5
+        margin: 5,
     },
 
     archiveAlertButton: {
         pointerEvents: 'auto',
-        margin: 5
+        margin: 5,
     },
 
     invisible: {
