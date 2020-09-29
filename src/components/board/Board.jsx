@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable max-len */
 import React, { useState } from 'react'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid, TextField, Button, FormControlLabel, Switch } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
@@ -51,8 +51,13 @@ const Board = ({ id }) => {
                 classes={{ root: classes.root }}
                 spacing={2}
             >
-                <Grid container item direction="row">
+                <Grid container item direction="column">
                     <h1>{board.name}</h1>
+                    <FormControlLabel
+                        control={<Switch />}
+                        label="Show swimlanes"
+                        labelPlacement="end"
+                    />
                 </Grid>
                 <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
                     <Grid item container direction="row">
