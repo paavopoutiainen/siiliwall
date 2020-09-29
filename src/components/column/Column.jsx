@@ -5,12 +5,15 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
 import TaskList from '../task/TaskList'
+import SubtaskList from '../subtask/SubtaskList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
-    const { tasks, taskOrder } = column
+    const {
+        tasks, taskOrder, subtasks, subtaskOrder,
+    } = column
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -46,6 +49,24 @@ const Column = ({ column, index }) => {
                                 <TaskList
                                     tasks={tasks}
                                     taskOrder={taskOrder}
+                                    columnId={column.id}
+                                />
+                                {provided.placeholder}
+                            </Grid>
+                        )}
+
+                    </Droppable>
+                    <Droppable droppableId={`subtask${column.id}`} type="subtask">
+                        {(provided) => (
+                            <Grid
+                                item
+                                container
+                                {...provided.droppableProps}
+                                ref={provided.innerRef}
+                            >
+                                <SubtaskList
+                                    subtasks={subtasks}
+                                    subtaskOrder={subtaskOrder}
                                     columnId={column.id}
                                 />
                                 {provided.placeholder}
