@@ -25,6 +25,9 @@ const Board = ({ id }) => {
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
     const [addColumn] = useAddColumn(id)
+    const [snackbarStatus, setSnackbarStatus] = useState(false)
+
+    const toggleSnackbar = () => setSnackbarStatus(!snackbarStatus)
 
     const handleChange = (event) => {
         setColumnName(event.target.value)
