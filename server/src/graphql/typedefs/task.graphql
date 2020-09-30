@@ -3,7 +3,7 @@ type Task {
   title: String!
   content: String
   owner: User
-  size: Float
+  size: Int
   column: Column!
   columnOrderNumber: Int!
   subtasks: [Subtask!]!
@@ -17,8 +17,8 @@ type Query {
 }
 
 type Mutation {
-  addTaskForColumn(columnId: ID!, title: String!, size: Float, ownerId: ID, content: String, memberIds: [ID!] ): Task
-  editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, content: String, oldMemberIds: [ID!], newMemberIds: [ID!]): Task
+  addTaskForColumn(columnId: ID!, title: String!, size: Int, ownerId: ID, content: String, memberIds: [ID!] ): Task
+  editTaskById(id: ID!, title: String!, size: Int, ownerId: ID, content: String, oldMemberIds: [ID!], newMemberIds: [ID!]): Task
   deleteTaskById(id: ID!): ID
   archiveTaskById(id: ID!): ID
   restoreTaskById(id: ID!): Task

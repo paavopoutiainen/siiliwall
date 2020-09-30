@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
+import * as yup from 'yup'
 import Select from 'react-select'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
@@ -32,11 +33,16 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             setSize(null)
             return
         }
-        setSize(parseFloat(event.target.value))
+        setSize(event.target.value)
     }
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
+
+    const addTaskSchema = yup.object().shape({
+        title: yup.string().trim().required(),
+        size: yup.number().integer().min(1).max(10),
+    })
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -55,6 +61,8 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         setOwner(null)
         setMembers([])
     }
+
+    const validate = addTaskSchema.isValid(title, size).then(handleSave)
 
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
@@ -119,7 +127,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                     </Button>
                     <Button
                         disabled={!title.length}
-                        onClick={handleSave}
+                        onClick={validate}
                         color="primary"
                     >
                         Create task
@@ -129,4 +137,5 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         </Grid>
     )
 }
+
 export default AddTaskDialog

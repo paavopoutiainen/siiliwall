@@ -33,7 +33,7 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $content: String, $memberIds: [ID!]) {
+    mutation createTask($columnId: ID!, $title: String!, $size: Integer, $ownerId: ID, $content: String, $memberIds: [ID!]) {
         addTaskForColumn(columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, content: $content, memberIds: $memberIds) {
             id
             title
@@ -58,7 +58,7 @@ export const DELETE_TASK = gql`
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Float, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!]) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Integer, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!]) {
         editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds) {
             id
             title
