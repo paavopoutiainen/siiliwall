@@ -8,7 +8,7 @@ class BoardService {
         this.sequelize = db.sequelize
     }
 
-    initialize() {}
+    initialize() { }
 
     async getBoards() {
         let boardsFromDb
@@ -306,6 +306,21 @@ class BoardService {
             console.error(e)
         }
         return task
+    }
+
+    async addSubtaskForTask(taskId, columnId, content) {
+        let addedSubtask
+        try {
+            addedSubtask = await this.store.Task.create({
+                id: uuid(),
+                content,
+                taskId,
+                columnId
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedSubtask
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array

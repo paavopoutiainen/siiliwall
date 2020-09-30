@@ -3,7 +3,7 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit, Archive } from '@material-ui/icons'
+import { Delete, Edit, Archive, Add } from '@material-ui/icons'
 import AlertBox from '../AlertBox'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
@@ -48,6 +48,12 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
+                <MenuItem>
+                    <ListItemIcon>
+                        <Add />
+                    </ListItemIcon>
+                    <ListItemText primary="Create subtask" />
+                </MenuItem>
                 <MenuItem onClick={handleEdit}>
                     <ListItemIcon>
                         <Edit />

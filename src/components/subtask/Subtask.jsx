@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Card, CardHeader, CardContent, CardActions, Grid, Typography } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
 

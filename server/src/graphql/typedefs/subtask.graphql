@@ -1,7 +1,12 @@
 type Subtask {
   id: ID!
   name: String!
+  content: String!
   done: Boolean!
   task: Task!
   orderNumber: Int!
+}
+
+type Mutation {
+  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!): Subtask
 }
