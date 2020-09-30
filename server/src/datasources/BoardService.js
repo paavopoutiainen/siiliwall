@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
+const { tasks } = require('../../dummyData')
 
 class BoardService {
     constructor({ db }) {
@@ -282,11 +283,11 @@ class BoardService {
     async addBoard(boardName) {
         let addedBoard
         try {
-            const biggestOrderNumber = await this.store.Board.max('orderNumber')
+            const largestOrderNumber = await this.store.Board.max('orderNumber')
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
-                orderNumber: biggestOrderNumber + 1,
+                orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
             console.error(e)
@@ -302,14 +303,14 @@ class BoardService {
         */
         let addedColumn
         try {
-            const biggestOrderNumber = await this.store.Column.max('orderNumber', {
+            const largestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
             addedColumn = await this.store.Column.create({
                 id: uuid(),
                 boardId,
                 name: columnName,
-                orderNumber: biggestOrderNumber + 1,
+                orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
             console.error(e)
@@ -324,7 +325,7 @@ class BoardService {
         */
         let addedTask
         try {
-            const smallestOrderNumber = await this.store.Task.max('columnOrderNumber', {
+            const largestOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: { columnId },
             })
             addedTask = await this.store.Task.create({
@@ -334,7 +335,7 @@ class BoardService {
                 size,
                 ownerId,
                 content,
-                columnOrderNumber: smallestOrderNumber + 1,
+                columnOrderNumber: largestOrderNumber + 1,
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {
@@ -362,15 +363,51 @@ class BoardService {
         return task
     }
 
-    async addSubtaskForTask(taskId, columnId, content) {
+    async addMemberForSubtask(subtaskId, userId) {
+        let subtask
+        try {
+            await this.store.UserSubtask.create({
+                userId,
+                subtaskId
+            })
+            subtask = await this.store.Subtask.findByPk(subtaskId)
+        } catch (e) {
+            console.error(e)
+        }
+        return subtask
+    }
+
+    async addSubtaskForTask(taskId, columnId, ownerId, memberIds, content) {
+        const largestColumnOrderNumberForTask = await this.store.Task.max({
+            attributes: ['columnOrderNumber'],
+            where: {
+                columnId: columnId
+            }
+        })
+        const largestColumnOrderNumberForSubask = await this.store.Subtask.max({
+            attributes: ['columnOrderNumber'],
+            where: {
+                columnId: columnId
+            }
+        })
+        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubask)
+
         let addedSubtask
         try {
             addedSubtask = await this.store.Task.create({
                 id: uuid(),
                 content,
                 taskId,
-                columnId
+                columnId,
+                ownerId,
+                columnOrderNumber: largestColumnOrderNumber + 1
             })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    const members = await this.addMemberForSubtask(addedSubtask.id, memberId)
+                    return members
+                })
+            )
         } catch (e) {
             console.error(e)
         }
