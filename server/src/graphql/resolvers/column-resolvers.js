@@ -15,8 +15,11 @@ const schema = {
         deleteColumnById(root, { id }) {
             return dataSources.boardService.deleteColumnById(id)
         },
-        moveTaskInColumn(root, args) {
+        /* moveTaskInColumn(root, args) {
             return dataSources.boardService.reOrderTasksOfColumn(args.newOrder, args.columnId)
+        }, */
+        moveTicketInColumn(root, args) {
+            return dataSources.boardService.reOrderTicketsOfColumn(args.newOrder, args.columnId)
         },
         async moveTaskFromColumn(root, {
             taskId, sourceColumnId, destColumnId, sourceTaskOrder, destTaskOrder,

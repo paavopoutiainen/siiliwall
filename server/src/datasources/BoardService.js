@@ -378,6 +378,27 @@ class BoardService {
         return column
     }
 
+    async reOrderTicketsOfColumn(newOrderArray, columnId) {
+        let column
+        try {
+            await Promise.all(newOrderArray.map(async (obj, index) => {
+                if (obj.type === 'task') {
+                    const task = await this.store.Task.findByPk(obj.ticketId)
+                    task.columnOrderNumber = index
+                    await task.save()
+                } else if (obj.type === 'subtask') {
+                    const subtask = await this.store.Subtask.findByPk(obj.ticketId)
+                    subtask.columnOrderNumber = index
+                    await subtask.save()
+                }
+            }))
+            column = await this.store.Column.findByPk(columnId)
+        } catch (e) {
+            console.log(e)
+        }
+        return column
+    }
+
     async changeTasksColumnId(taskId, columnId) {
         const task = await this.store.Task.findByPk(taskId)
         task.columnId = columnId
