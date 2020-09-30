@@ -1,9 +1,11 @@
 /* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
-import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER } from '../graphql/fragments'
+import {
+    TASKORDER_AND_TASKS, TICKETORDER, COLUMNORDER,
+} from '../graphql/fragments'
 
-export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board) => {
+export const onDragEnd = async (result, moveTicketInColumn, moveTaskFromColumn, moveColumn, client, columns, board) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
@@ -37,23 +39,27 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === source.droppableId)
-        const newTaskOrder = Array.from(column.taskOrder)
+        // tästä newTicketOrderista pitäis nyt siis saada jotenkin pois se typename attribuutti
+        const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+        // const newTicketOrder = ticketOrder)
 
-        newTaskOrder.splice(source.index, 1)
-        newTaskOrder.splice(destination.index, 0, draggableId)
+        // const movedTicket = newTicketOrder[source.index]
+
+        const movedTicket = newTicketOrder.splice(source.index, 1)
+        newTicketOrder.splice(destination.index, 0, movedTicket[0])
 
         const columnId = `Column:${column.id}`
         client.writeFragment({
             id: columnId,
-            fragment: TASKORDER,
+            fragment: TICKETORDER,
             data: {
-                taskOrder: newTaskOrder,
+                ticketOrder: newTicketOrder,
             },
         })
 
-        await moveTaskInColumn({
+        await moveTicketInColumn({
             variables: {
-                orderArray: newTaskOrder,
+                orderArray: newTicketOrder,
                 columnId: column.id,
             },
         })

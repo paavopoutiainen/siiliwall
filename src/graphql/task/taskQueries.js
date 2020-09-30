@@ -1,13 +1,13 @@
 import { gql } from '@apollo/client'
 
-export const MOVE_TASK_IN_COLUMN = gql`
-    mutation moveTaskInColumn($orderArray: [ID!]!, $columnId: ID!) {
-        moveTaskInColumn(newOrder: $orderArray, columnId: $columnId) {
+export const MOVE_TICKET_IN_COLUMN = gql`
+    
+    mutation moveTicketkInColumn($orderArray: [TicketOrderInput!]!, $columnId: ID!) {
+        moveTicketInColumn(newOrder: $orderArray, columnId: $columnId) {
             id
         }
     }
 `
-
 export const MOVE_TASK_FROM_COLUMN = gql`
     mutation moveTaskFromColumn($taskId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTaskOrder: [ID!], $destTaskOrder: [ID!]) {
         moveTaskFromColumn(taskId: $taskId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTaskOrder: $sourceTaskOrder, destTaskOrder: $destTaskOrder) {
