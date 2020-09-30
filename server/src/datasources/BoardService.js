@@ -82,6 +82,16 @@ class BoardService {
         return tasksFromDb
     }
 
+    async getSubtasksByColumnId(columnId) {
+        let subtasksFromDb
+        try {
+            subtasksFromDb = await this.store.Subtask.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return subtasksFromDb
+    }
+
     async getTaskById(taskId) {
         let taskFromDb
         try {
@@ -208,6 +218,50 @@ class BoardService {
             console.error(e)
         }
         return arrayOfIds
+    }
+
+    async getSubtaskOrderOfColumn(columnId) {
+        let arrayOfIds
+        try {
+            const subtasks = await this.store.Subtask.findAll({
+                attributes: ['id'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            arrayOfIds = subtasks.map((task) => task.dataValues.id)
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfIds
+    }
+
+    async getTicketOrderOfColumn(columnId) {
+        let arrayOfObjectsInOrder
+        try {
+            const subtasks = await this.store.Subtask.findAll({
+                attributes: ['id', 'columnOrderNumber'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            const arrayOfSubtaskObjects = subtasks.map((subtask) => ({ ticketId: subtask.dataValues.id, type: 'subtask', columnOrderNumber: subtask.dataValues.columnOrderNumber }))
+
+            const tasks = await this.store.Task.findAll({
+                attributes: ['id', 'columnOrderNumber'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            const arrayOfTaskObjects = tasks.map((task) => ({ ticketId: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
+
+            arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
+                .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
+                .map((obj) => {
+                    delete obj.columnOrderNumber
+                    return { ...obj }
+                })
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfObjectsInOrder
     }
 
     async getSubtaskOrderOfTask(taskId) {

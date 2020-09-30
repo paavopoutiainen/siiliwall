@@ -19,6 +19,10 @@ export const BOARD_BY_ID = gql`
                 id
                 name
                 taskOrder
+                ticketOrder {
+                    ticketId 
+                    type
+                }
                 board {
                     id
                     columnOrder
@@ -28,12 +32,20 @@ export const BOARD_BY_ID = gql`
                     title
                     size
                     owner {
-                        id
-                        userName
+                      id
+                      userName
                     }
                     members {
                         id
                         userName
+                    }
+                }
+                subtasks {
+                    id
+                    name
+                    task {
+                        id
+                        title
                     }
                 }
             }

@@ -67,14 +67,22 @@ export const boardPageStyles = makeStyles({
         padding: 5,
     },
 
-    taskInner: {
-        flexWrap: 'nowrap',
+    subtask: {
+        background: 'linear-gradient(45deg, #5bc489 30%, #009c8f 90%)',
+        margin: 3,
+        borderRadius: 4,
+        padding: 5,
     },
 
+<<<<<<< HEAD
     subtaskComponent: {
         borderRadius: 5,
         backgroundColor: '#fff',
         height: 150
+=======
+    taskInner: {
+        flexWrap: 'nowrap',
+>>>>>>> 5d75791d19e88271b072c9536cf0ca7604c48158
     },
 
     subtaskHeader: {
