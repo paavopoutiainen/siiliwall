@@ -48,6 +48,9 @@ const schema = {
         subtaskOrder(root) {
             return dataSources.boardService.getSubtaskOrderOfColumn(root.id)
         },
+        ticketOrder(root) {
+            return dataSources.boardService.getTicketOrderOfColumn(root.id)
+        },
     },
 }
 

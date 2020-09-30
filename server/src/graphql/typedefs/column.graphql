@@ -1,3 +1,13 @@
+enum AllowedTicketType {
+  task
+  subtask
+}
+
+type TicketOrderObject {
+  id: ID!
+  type: AllowedTicketType
+}
+
 type Column {
   id: ID!
   name: String!
@@ -7,6 +17,7 @@ type Column {
   subtasks: [Subtask!]!
   taskOrder: [ID!]!
   subtaskOrder: [ID!]!
+  ticketOrder: [TicketOrderObject!]!
 }
 
 type Query {

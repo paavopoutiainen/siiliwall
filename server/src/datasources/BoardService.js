@@ -235,6 +235,35 @@ class BoardService {
         return arrayOfIds
     }
 
+    async getTicketOrderOfColumn(columnId) {
+        let arrayOfObjectsInOrder
+        try {
+            const subtasks = await this.store.Subtask.findAll({
+                attributes: ['id', 'columnOrderNumber'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            const arrayOfSubtaskObjects = subtasks.map((subtask) => ({ id: subtask.dataValues.id, type: 'subtask', columnOrderNumber: subtask.dataValues.columnOrderNumber }))
+
+            const tasks = await this.store.Task.findAll({
+                attributes: ['id', 'columnOrderNumber'],
+                where: { columnId, deletedAt: null },
+                order: this.sequelize.literal('columnOrderNumber ASC'),
+            })
+            const arrayOfTaskObjects = tasks.map((task) => ({ id: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
+
+            arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
+                .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
+                .map((obj) => {
+                    delete obj.columnOrderNumber
+                    return { ...obj }
+                })
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfObjectsInOrder
+    }
+
     async getSubtaskOrderOfTask(taskId) {
         let arrayOfIds
         try {
