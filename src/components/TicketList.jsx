@@ -10,7 +10,7 @@ const TicketList = ({
             const foundTask = tasks.find((task) => task.id === obj.ticketId)
             return { ...foundTask, type: 'task' }
         } else if (obj.type === 'subtask') {
-            const foundSubtask = subtasks.find((subtask) => subtask.id)
+            const foundSubtask = subtasks.find((subtask) => subtask.id === obj.ticketId)
             return { ...foundSubtask, type: 'subtask' }
         }
     })
