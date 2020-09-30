@@ -3,9 +3,8 @@ const dataSources = require('../../datasources')
 const schema = {
 
     Subtask: {
-        // task(root) {
-        task() {
-            return dataSources.boardService.get
+        task(root) {
+            return dataSources.boardService.getTaskById(root.taskId)
         },
     },
 }
