@@ -97,7 +97,7 @@ const tasks = [
     {
         title: 'task1',
         content: 'task1',
-        size: 1.1,
+        size: 1,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 2,
         id: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
@@ -123,6 +123,7 @@ const tasks = [
     {
         title: 'task4',
         content: 'task4',
+        size: 4,
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
         columnOrderNumber: 2,
         id: '6e766c63-0684-4cf2-8a46-868cfaf84033',

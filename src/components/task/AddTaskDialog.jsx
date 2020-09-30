@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
-import * as yup from 'yup'
 import Select from 'react-select'
+import { sizeSchema, titleSchema, taskSchema } from './validationSchema'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
@@ -17,11 +17,18 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [owner, setOwner] = useState(null)
     const classes = boardPageStyles()
     const [members, setMembers] = useState([])
+    const [sizeError, setSizeError] = useState('')
+    const [titleError, setTitleError] = useState('')
 
     if (loading) return null
 
     const handleTitleChange = (event) => {
-        setTitle(event.target.value)
+        const input = event.target.value
+        titleSchema.validate(input).catch((err) => {
+            setTitleError(err.message)
+        })
+        setTitle(input)
+        setTitleError('')
     }
 
     const handleOwnerChange = (action) => {
@@ -33,36 +40,38 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             setSize(null)
             return
         }
-        setSize(event.target.value)
+        const input = parseInt(event.target.value, 10)
+        sizeSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setSize(input)
+        setSizeError('')
     }
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
-    const addTaskSchema = yup.object().shape({
-        title: yup.string().trim().required(),
-        size: yup.number().integer().min(1).max(10),
-    })
-
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault()
-        addTask({
-            variables: {
-                columnId: column.id,
-                title,
-                size,
-                ownerId: owner,
-                memberIds: members,
-            },
-        })
-        toggleDialog()
-        setTitle('')
-        setSize(null)
-        setOwner(null)
-        setMembers([])
-    }
+        const isValid = await taskSchema.isValid({ title, size })
+        if (isValid) {
+            addTask({
+                variables: {
+                    columnId: column.id,
+                    title,
+                    size,
+                    ownerId: owner,
+                    memberIds: members,
+                },
+            })
 
-    const validate = addTaskSchema.isValid(title, size).then(handleSave)
+            toggleDialog()
+            setTitle('')
+            setSize(null)
+            setOwner(null)
+            setMembers([])
+        }
+    }
 
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
@@ -82,18 +91,23 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
                     <TextField
+                        error={titleError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         autoFocus={true}
                         required={true}
                         margin="dense"
                         name="title"
-                        label="Name"
+                        label="Title"
                         type="text"
                         value={title}
                         fullWidth
+                        helperText={titleError}
                         onChange={handleTitleChange}
                     />
                     <TextField
+                        error={sizeError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="size"
@@ -101,6 +115,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         type="number"
                         value={size || ''}
                         fullWidth
+                        helperText={sizeError}
                         onChange={handleSizeChange}
                     />
                     <Select
@@ -126,8 +141,8 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         Cancel
                     </Button>
                     <Button
-                        disabled={!title.length}
-                        onClick={validate}
+                        disabled={!title.length || sizeError.length > 0 || titleError.length > 0}
+                        onClick={handleSave}
                         color="primary"
                     >
                         Create task
