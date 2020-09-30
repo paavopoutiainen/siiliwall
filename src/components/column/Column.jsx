@@ -6,13 +6,14 @@ import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
 import TaskList from '../task/TaskList'
 import SubtaskList from '../subtask/SubtaskList'
+import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
     const {
-        tasks, taskOrder, subtasks, subtaskOrder,
+        tasks, ticketOrder, subtasks,
     } = column
     const [dialogStatus, setDialogStatus] = useState(false)
 
@@ -38,6 +39,7 @@ const Column = ({ column, index }) => {
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />
                         </Grid>
                     </Grid>
+
                     <Droppable droppableId={column.id} type="task">
                         {(provided) => (
                             <Grid
@@ -46,34 +48,17 @@ const Column = ({ column, index }) => {
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >
-                                <TaskList
+                                <TicketList
                                     tasks={tasks}
-                                    taskOrder={taskOrder}
-                                    columnId={column.id}
-                                />
-                                {provided.placeholder}
-                            </Grid>
-                        )}
-
-                    </Droppable>
-                    <Droppable droppableId={`subtask${column.id}`} type="subtask">
-                        {(provided) => (
-                            <Grid
-                                item
-                                container
-                                {...provided.droppableProps}
-                                ref={provided.innerRef}
-                            >
-                                <SubtaskList
                                     subtasks={subtasks}
-                                    subtaskOrder={subtaskOrder}
+                                    ticketOrder={ticketOrder}
                                     columnId={column.id}
                                 />
                                 {provided.placeholder}
                             </Grid>
                         )}
-
                     </Droppable>
+
                     <Grid item container>
                         <AddTaskDialog
                             dialogStatus={dialogStatus}

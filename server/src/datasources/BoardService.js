@@ -243,14 +243,14 @@ class BoardService {
                 where: { columnId, deletedAt: null },
                 order: this.sequelize.literal('columnOrderNumber ASC'),
             })
-            const arrayOfSubtaskObjects = subtasks.map((subtask) => ({ id: subtask.dataValues.id, type: 'subtask', columnOrderNumber: subtask.dataValues.columnOrderNumber }))
+            const arrayOfSubtaskObjects = subtasks.map((subtask) => ({ ticketId: subtask.dataValues.id, type: 'subtask', columnOrderNumber: subtask.dataValues.columnOrderNumber }))
 
             const tasks = await this.store.Task.findAll({
                 attributes: ['id', 'columnOrderNumber'],
                 where: { columnId, deletedAt: null },
                 order: this.sequelize.literal('columnOrderNumber ASC'),
             })
-            const arrayOfTaskObjects = tasks.map((task) => ({ id: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
+            const arrayOfTaskObjects = tasks.map((task) => ({ ticketId: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
 
             arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
                 .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)

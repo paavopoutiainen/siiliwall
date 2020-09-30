@@ -1,10 +1,10 @@
+/* eslint-disable react/jsx-props-no-spreading */
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 
 const Subtask = ({ index, subtask, columnId }) => {
-    console.log(subtask)
     const classes = boardPageStyles()
     const { name } = subtask
     const titleLimit = 27
