@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react'
-import { Grid, Snackbar, Button } from '@material-ui/core'
+import React from 'react'
+import { Grid, Button, Dialog } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
@@ -9,7 +9,7 @@ import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 
 const AlertBox = ({
-    open, setOpen, action, columnId, boardId, taskId,
+    dialogStatus, toggleDialog, action, columnId, boardId, taskId,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
     const classes = boardPageStyles()
@@ -107,7 +107,7 @@ const AlertBox = ({
             deleteColumnById()
             deleteColumnFromCache()
         } else {
-            setOpen(false)
+            toggleDialog()
         }
     }
 
@@ -115,29 +115,16 @@ const AlertBox = ({
         if (action === 'ARCHIVE_TASK' && option === 'ARCHIVE') {
             archiveTaskById()
         } else {
-            setOpen(false)
+            toggleDialog()
         }
     }
 
-
-    useEffect(() => {
-        const boardEl = document.getElementById('boardElement')
-        if (open === true) {
-            boardEl.style.pointerEvents = 'none'
-            boardEl.style.backgroundColor = 'rgba(200, 200, 200, .8)'
-        } else {
-            boardEl.style.pointerEvents = 'auto'
-            boardEl.style.backgroundColor = 'rgba(255, 255, 255, 1)'
-        }
-    }, [open])
-
     return (
         <Grid item>
-            <Snackbar
-                classes={open ? { root: classes.snackbarFocus } : { root: classes.snackbarUnfocus }}
-                open={open}
-                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}
-                id="snackbarElement"
+            <Dialog
+                classes={dialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
+                open={dialogStatus}
+                onClose={toggleDialog}
             >
                 <Alert variant="filled" severity="error">
                     <Grid item container direction="column" spacing={2}>
@@ -147,7 +134,7 @@ const AlertBox = ({
                         <Grid item container direction="row" justify="flex-end">
                             <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
-                            </Button>
+                                    </Button>
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
                                 ? (
                                     <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.deleteAlertButton }}>
@@ -165,7 +152,7 @@ const AlertBox = ({
                         </Grid>
                     </Grid>
                 </Alert>
-            </Snackbar>
+            </Dialog>
         </Grid>
     )
 }
