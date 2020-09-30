@@ -7,6 +7,7 @@ import { boardPageStyles } from '../../styles/styles'
 import TaskList from '../task/TaskList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
+import Subtask from '../subtask/Subtask'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -53,19 +54,25 @@ const Column = ({ column, index }) => {
                         )}
 
                     </Droppable>
-                    <Grid item container>
-                        <AddTaskDialog
-                            dialogStatus={dialogStatus}
-                            toggleDialog={toggleDialog}
-                            column={column}
-                        />
-                        <Button
-                            onClick={toggleDialog}
-                            color="primary"
-                        >
-                            Add task
+                    <Grid item container direction="column">
+                        <Grid item>
+                            <AddTaskDialog
+                                dialogStatus={dialogStatus}
+                                toggleDialog={toggleDialog}
+                                column={column}
+                            />
+                            <Button
+                                onClick={toggleDialog}
+                                color="primary"
+                            >
+                                Add task
                         </Button>
+                        </Grid>
+                        <Grid item>
+                            <Subtask />
+                        </Grid>
                     </Grid>
+
                 </Grid>
             )}
         </Draggable>

@@ -71,6 +71,36 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
+    subtaskComponent: {
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 150
+    },
+
+    subtaskHeader: {
+        backgroundColor: 'rgba(255, 140, 85, .8)',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: '20%'
+    },
+
+    subtaskHeaderText: {
+        paddingLeft: 10,
+    },
+
+    subtaskDropdownComponent: {
+        height: 30
+    },
+
+    subtaskDropdownButton: {
+        height: '100%',
+    },
+
+    subtaskContent: {
+        padding: 10,
+        height: '80%'
+    },
+
     dialogFocus: {
         minWidth: '100vw',
         maxWidth: '100vw',
