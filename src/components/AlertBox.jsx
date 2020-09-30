@@ -35,7 +35,6 @@ const AlertBox = ({
             break
     }
 
-
     const archiveTaskById = () => {
         archiveTask({
             variables: {
