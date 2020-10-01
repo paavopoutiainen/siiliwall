@@ -171,7 +171,7 @@ const subtasks = [
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
         columnOrderNumber: 1,
         id: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
-        columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
+        columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
 
