@@ -14,7 +14,6 @@ const Column = ({ column, index }) => {
         tasks, ticketOrder, subtasks,
     } = column
     const [dialogStatus, setDialogStatus] = useState(false)
-
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     return (
         <Draggable draggableId={column.id} index={index}>

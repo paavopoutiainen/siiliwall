@@ -8,13 +8,13 @@ const TicketList = ({
     const ticketsInOrder = ticketOrder.map((obj) => {
         if (obj.type === 'task') {
             const foundTask = tasks.find((task) => task.id === obj.ticketId)
+
             return { ...foundTask, type: 'task' }
         } else if (obj.type === 'subtask') {
             const foundSubtask = subtasks.find((subtask) => subtask.id === obj.ticketId)
             return { ...foundSubtask, type: 'subtask' }
         }
     })
-    console.log(subtasks)
     return (
         <>
             {ticketsInOrder.map((ticket, index) => {
