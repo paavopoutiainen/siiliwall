@@ -6,12 +6,11 @@ import { Draggable } from 'react-beautiful-dnd'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
-
     return (
         <Grid item container direction="column" classes={{ root: classes.subtaskComponent }}>
             <Grid item container direction="row" justify="space-between" alignItems="center" classes={{ root: classes.subtaskHeader }}>
                 <Grid item classes={{ root: classes.subtaskHeaderText }}>
-                    <p>Taskin nimi</p>
+                    <p>{subtask.task.title}</p>
                 </Grid>
                 <Grid item classes={{ root: classes.subtaskdropDown }}>
                     <DropDownSubtask />

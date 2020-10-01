@@ -7,7 +7,7 @@ import { Delete, Edit, Archive, Add } from '@material-ui/icons'
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 
-const DropdownTask = ({ columnId, taskId, handleEdit }) => {
+const DropdownTask = ({ columnId, taskId, handleEdit, taskTitle }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
@@ -88,6 +88,7 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 toggleAddDialog={toggleAddDialog}
                 columnId={columnId}
                 taskId={taskId}
+                taskTitle={taskTitle}
             />
         </Grid>
     )

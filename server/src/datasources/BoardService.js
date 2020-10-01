@@ -402,7 +402,6 @@ class BoardService {
     async addSubtaskForTask(taskId, columnId, content) {
         let addedSubtask
         try {
-            console.log('content-BS', content, taskId, columnId)
             let largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),

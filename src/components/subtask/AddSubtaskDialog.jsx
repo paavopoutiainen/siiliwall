@@ -7,7 +7,7 @@ import '../../styles.css'
 import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, taskTitle }) => {
     const { loading, data } = useAllUsers()
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask(columnId)
@@ -31,7 +31,6 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
 
     const handleSave = (event) => {
         event.preventDefault()
-        console.log(content)
         addSubtask({
             variables: {
                 columnId: columnId,

@@ -43,6 +43,10 @@ export const BOARD_BY_ID = gql`
                 subtasks {
                     id
                     content
+                    task {
+                        id
+                        title
+                    }
                 }
             }
         }

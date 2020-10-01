@@ -66,6 +66,7 @@ const Task = ({ task, index, columnId }) => {
                         <Grid item>
                             <DropdownTask
                                 taskId={task.id}
+                                taskTitle={title}
                                 columnId={columnId}
                                 handleEdit={toggleDialog}
                             />

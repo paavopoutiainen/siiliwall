@@ -5,6 +5,10 @@ export const ADD_SUBTASK = gql`
         addSubtaskForTask(taskId: $taskId, columnId: $columnId, content: $content) {
             id
             content
+            task {
+                id
+                title
+            }
         }
     }
 `
