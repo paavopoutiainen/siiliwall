@@ -12,6 +12,11 @@ const schema = {
         addColumnForBoard(root, { boardId, columnName }) {
             return dataSources.boardService.addColumnForBoard(boardId, columnName)
         },
+        editColumnById(root, {
+            id, name,
+        }) {
+            return dataSources.boardService.editColumnById(id, name)
+        },
         deleteColumnById(root, { id }) {
             return dataSources.boardService.deleteColumnById(id)
         },
