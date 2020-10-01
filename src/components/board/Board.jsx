@@ -7,8 +7,8 @@ import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import ColumnList from '../column/ColumnList'
 import useBoardById from '../../graphql/board/hooks/useBoardById'
-import useMoveTicketInColumn from '../../graphql/task/hooks/useMoveTaskInColumn'
-import useMoveTaskFromColumn from '../../graphql/task/hooks/useMoveTaskFromColumn'
+import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
+import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import useAddColumn from '../../graphql/column/hooks/useAddColumn'
 import { onDragEnd } from '../../utils/onDragEnd'
@@ -17,7 +17,7 @@ import '../../styles.css'
 const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
     const [moveTicketInColumn] = useMoveTicketInColumn()
-    const [moveTaskFromColumn] = useMoveTaskFromColumn()
+    const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
     const classes = boardPageStyles()
@@ -54,7 +54,7 @@ const Board = ({ id }) => {
                 <Grid container item direction="row">
                     <h1>{board.name}</h1>
                 </Grid>
-                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board)}>
                     <Grid item container direction="row">
                         <Droppable droppableId={id} direction="horizontal" type="column">
                             {(provided) => (
