@@ -400,9 +400,31 @@ class BoardService {
     }
 
     async changeTasksColumnId(taskId, columnId) {
-        const task = await this.store.Task.findByPk(taskId)
-        task.columnId = columnId
-        await task.save()
+        try {
+            const task = await this.store.Task.findByPk(taskId)
+            task.columnId = columnId
+            await task.save()
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    async changeSubtasksColumnId(subtaskId, columnId) {
+        try {
+            const subtask = await this.store.Subtask.findByPk(subtaskId)
+            subtask.columnId = columnId
+            await subtask.save()
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    async changeTicketsColumnId(type, ticketId, columnId) {
+        if (type === 'task') {
+            await this.changeTasksColumnId(ticketId, columnId)
+        } else if (type === 'subtask') {
+            await this.changeSubtasksColumnId(ticketId, columnId)
+        }
     }
 
     async reOrderColumns(columnOrder) {
