@@ -59,6 +59,7 @@ class BoardService {
         } catch (e) {
             console.error(e)
         }
+        console.log(columnFromDb)
         return columnFromDb
     }
 
@@ -378,6 +379,7 @@ class BoardService {
     }
 
     async addSubtaskForTask(taskId, columnId, ownerId, memberIds, content) {
+        console.log('boardSevice gets data')
         const largestColumnOrderNumberForTask = await this.store.Task.max({
             attributes: ['columnOrderNumber'],
             where: {

@@ -4,11 +4,13 @@ import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTi
 import Select from 'react-select'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
+import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const AddSubtaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }) => {
     const { loading, data } = useAllUsers()
     const classes = boardPageStyles()
+    const [addSubtask] = useAddSubtask(columnId)
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
@@ -29,7 +31,17 @@ const AddSubtaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleSave = (event) => {
         event.preventDefault()
-        toggleDialog()
+        addSubtask({
+            variables: {
+                columnId: columnId,
+                taskId: taskId,
+                ownerId: owner,
+                memberIds: members,
+                content
+            }
+        })
+        toggleAddDialog()
+        setContent('')
         setOwner(null)
         setMembers([])
     }
@@ -44,8 +56,8 @@ const AddSubtaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleDialog}
-                open={dialogStatus}
+                onClose={toggleAddDialog}
+                open={addDialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
             >
@@ -78,7 +90,7 @@ const AddSubtaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={toggleAddDialog}
                         color="secondary"
                     >
                         Cancel
@@ -88,7 +100,7 @@ const AddSubtaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         onClick={handleSave}
                         color="primary"
                     >
-                        Create task
+                        Create subtask
                     </Button>
                 </DialogActions>
             </Dialog>

@@ -14,6 +14,7 @@ const TicketList = ({
             return { ...foundSubtask, type: 'subtask' }
         }
     })
+    console.log(subtasks)
     return (
         <>
             {ticketsInOrder.map((ticket, index) => {

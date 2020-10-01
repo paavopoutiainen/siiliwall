@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
+import { Draggable } from 'react-beautiful-dnd'
 
-const Subtask = () => {
+const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
 
     return (
@@ -17,7 +18,7 @@ const Subtask = () => {
                 </Grid>
             </Grid>
             <Grid item classes={{ root: classes.subtaskContent }}>
-                <p>content</p>
+                <p>{subtask.content}</p>
             </Grid>
         </Grid>
     )

@@ -9,7 +9,7 @@ import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 
 const AlertBox = ({
-    dialogStatus, toggleDialog, action, columnId, boardId, taskId,
+    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
     const classes = boardPageStyles()
@@ -106,7 +106,7 @@ const AlertBox = ({
             deleteColumnById()
             deleteColumnFromCache()
         } else {
-            toggleDialog()
+            toggleAlertDialog()
         }
     }
 
@@ -114,16 +114,16 @@ const AlertBox = ({
         if (action === 'ARCHIVE_TASK' && option === 'ARCHIVE') {
             archiveTaskById()
         } else {
-            toggleDialog()
+            toggleAlertDialog()
         }
     }
 
     return (
         <Grid item>
             <Dialog
-                classes={dialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
-                open={dialogStatus}
-                onClose={toggleDialog}
+                classes={alertDialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
+                open={alertDialogStatus}
+                onClose={toggleAlertDialog}
             >
                 <Alert variant="filled" severity="error">
                     <Grid item container direction="column" spacing={2}>

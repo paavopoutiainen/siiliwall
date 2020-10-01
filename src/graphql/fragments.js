@@ -1,6 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client'
 
+export const TICKETORDER_AND_TASKS = gql`
+    fragment taskOrderAndTasks on Column {
+        ticketOrder
+        tasks {
+            id
+        }
+    }
+`
 export const TASKORDER_AND_TASKS = gql`
     fragment taskOrderAndTasks on Column {
         taskOrder
@@ -9,7 +17,14 @@ export const TASKORDER_AND_TASKS = gql`
         }
     }
 `
-
+export const SUBTASKORDER_AND_SUBTASKS = gql`
+    fragment subtaskOrderAndSubtasks on Column {
+        subtaskOrder
+        subtasks {
+            id
+        }
+    }
+`
 export const TASKORDER = gql`
     fragment taskOrder on Column {
         taskOrder

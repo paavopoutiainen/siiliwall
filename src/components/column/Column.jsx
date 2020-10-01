@@ -4,12 +4,9 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
-import TaskList from '../task/TaskList'
-import SubtaskList from '../subtask/SubtaskList'
 import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
-import Subtask from '../subtask/Subtask'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -19,7 +16,7 @@ const Column = ({ column, index }) => {
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-
+    console.log('ticketOrder in Column:', ticketOrder)
     return (
         <Draggable draggableId={column.id} index={index}>
             {(provided) => (
@@ -73,11 +70,7 @@ const Column = ({ column, index }) => {
                                 Add task
                         </Button>
                         </Grid>
-                        <Grid item>
-                            <Subtask />
-                        </Grid>
                     </Grid>
-
                 </Grid>
             )}
         </Draggable>
