@@ -9,6 +9,15 @@ export const TICKETORDER_AND_TASKS = gql`
         }
     }
 `
+export const TICKETORDER_AND_SUBTASKS = gql`
+    fragment ticketOrderAndSubtasks on Column {
+        ticketOrder
+        subtasks {
+            id
+        }
+    }
+`
+
 export const TASKORDER_AND_TASKS = gql`
     fragment taskOrderAndTasks on Column {
         taskOrder

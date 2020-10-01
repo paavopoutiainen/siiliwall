@@ -4,8 +4,8 @@ const schema = {
 
     Mutation: {
         addSubtaskForTask(root, { taskId, columnId, content }) {
-            console.log('resolver gets data')
-            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content,)
+            console.log('content-resolver', content)
+            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content)
         },
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)

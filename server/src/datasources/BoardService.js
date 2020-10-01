@@ -399,30 +399,18 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, ownerId, memberIds, content) {
-        const largestColumnOrderNumberForTask = await this.store.Task.max({
-            attributes: ['columnOrderNumber'],
-            where: {
-                columnId: columnId
-            }
-        })
-        const largestColumnOrderNumberForSubask = await this.store.Subtask.max({
-            attributes: ['columnOrderNumber'],
-            where: {
-                columnId: columnId
-            }
-        })
-        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubask)
-
+    async addSubtaskForTask(taskId, columnId, content) {
         let addedSubtask
         try {
-            addedSubtask = await this.store.Task.create({
+            console.log('content-BS', content, taskId, columnId)
+            let largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
+            addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
                 content,
                 taskId,
                 columnId,
                 //ownerId,
-                columnOrderNumber: largestColumnOrderNumber + 1
+                columnOrderNumber: largestOrderNumber + 1
             })
             /*await Promise.all(
                 memberIds.map(async (memberId) => {

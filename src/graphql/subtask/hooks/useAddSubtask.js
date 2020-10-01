@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { ADD_SUBTASK } from '../subtaskQueries'
-import { TICKETORDER_AND_TASKS } from '../../fragments'
+import { TICKETORDER_AND_SUBTASKS } from '../../fragments'
 
 const useAddSubtask = (columnId) => {
     const retVal = useMutation(ADD_SUBTASK, {
@@ -8,7 +8,7 @@ const useAddSubtask = (columnId) => {
             const columnIdForCache = `Column:${columnId}`
             const cached = cache.readFragment({
                 id: columnIdForCache,
-                fragment: TICKETORDER_AND_TASKS
+                fragment: TICKETORDER_AND_SUBTASKS
             })
             const { subtasks, ticketOrder } = cached
             const newSubtasks = subtasks.concat(response.data.addSubtaskForTask)
@@ -20,7 +20,7 @@ const useAddSubtask = (columnId) => {
 
             cache.writeFragment({
                 id: columnIdForCache,
-                fragment: TICKETORDER_AND_TASKS,
+                fragment: TICKETORDER_AND_SUBTASKS,
                 data: {
                     ticketOrder: newTicketOrder,
                     subtasks: newSubtasks

@@ -31,6 +31,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
 
     const handleSave = (event) => {
         event.preventDefault()
+        console.log(content)
         addSubtask({
             variables: {
                 columnId: columnId,
