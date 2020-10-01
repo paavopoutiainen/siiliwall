@@ -1,36 +1,28 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import Delete from '@material-ui/icons/Delete'
-import AlertBox from '../AlertBox'
+import { Delete, Edit, Archive } from '@material-ui/icons'
+import { boardPageStyles } from '../../styles/styles'
 
-const DropdownColumn = ({ columnId, boardId }) => {
+const DropdownSubtask = () => {
     const [anchorEl, setAnchorEl] = useState(null)
-    const [action, setAction] = useState(null)
-    const [alertDialogStatus, setAlertDialogStatus] = useState(false)
-
-    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
+    const classes = boardPageStyles()
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openAlertDialog = (order) => {
-        setAction(order)
-        toggleAlertDialog()
-        setAnchorEl(null)
-    }
-
     return (
-        <Grid item>
+        <Grid item classes={{ root: classes.subtaskDropdownComponent }}>
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                classes={{ root: classes.subtaskDropdownButton }}
             >
-                <MoreHorizIcon fontSize="large" />
+                <MoreHorizIcon />
             </Button>
             <Menu
                 id="simple-menu"
@@ -41,23 +33,27 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 transformOrigin={{ vertical: 'top', horizontal: 'center' }}
                 getContentAnchorEl={null}
                 elevation={0}
-                selected
             >
-                <MenuItem onClick={() => openAlertDialog('DELETE_COLUMN')}>
+                <MenuItem>
                     <ListItemIcon>
-                        <Delete fontSize="default" />
+                        <Edit />
+                    </ListItemIcon>
+                    <ListItemText primary="Edit" />
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Archive />
+                    </ListItemIcon>
+                    <ListItemText primary="Archive" />
+                </MenuItem>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Delete />
                     </ListItemIcon>
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
-            <AlertBox
-                alertDialogStatus={alertDialogStatus}
-                toggleAlertDialog={toggleAlertDialog}
-                columnId={columnId}
-                boardId={boardId}
-                action={action}
-            />
         </Grid>
     )
 }
-export default DropdownColumn
+export default DropdownSubtask

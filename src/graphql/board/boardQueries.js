@@ -18,7 +18,6 @@ export const BOARD_BY_ID = gql`
             columns {
                 id
                 name
-                taskOrder
                 ticketOrder {
                     ticketId 
                     type
@@ -42,7 +41,7 @@ export const BOARD_BY_ID = gql`
                 }
                 subtasks {
                     id
-                    name
+                    content
                     task {
                         id
                         title

@@ -33,7 +33,7 @@ const schema = {
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
-        },
+        }
     },
 
     Task: {

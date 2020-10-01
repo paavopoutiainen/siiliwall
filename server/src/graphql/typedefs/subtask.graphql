@@ -1,7 +1,16 @@
 type Subtask {
   id: ID!
   name: String!
+  content: String!
+  owner: User
+  members: [User!]!
   done: Boolean!
   task: Task!
   orderNumber: Int!
+  deletedAt: String
+}
+
+type Mutation {
+  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!): Subtask
+  addMemberForSubtask(id: ID!, userId: ID!): Task
 }

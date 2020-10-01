@@ -60,7 +60,7 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         })
     }
 
-    // When task is moved into another column
+    // When ticket is moved into another column
     if (destination.droppableId !== source.droppableId) {
         const sourceColumn = columns.find((col) => col.id === source.droppableId)
         const destinationColumn = columns.find((col) => col.id === destination.droppableId)

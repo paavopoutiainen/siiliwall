@@ -3,23 +3,31 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit, Archive } from '@material-ui/icons'
+import {
+    Delete, Edit, Archive, Add,
+} from '@material-ui/icons'
 import AlertBox from '../AlertBox'
+import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
-    const [dialogStatus, setDialogStatus] = useState(false)
+    const [alertDialogStatus, setAlertDialogStatus] = useState(false)
+    const [addDialogStatus, setAddDialogStatus] = useState(false)
 
-    const toggleDialog = () => setDialogStatus(!dialogStatus)
+    const toggleAddDialog = () => {
+        setAnchorEl(null)
+        setAddDialogStatus(!addDialogStatus)
+    }
+    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openDialog = (order) => {
+    const openAlertDialog = (order) => {
         setAction(order)
-        toggleDialog()
+        toggleAlertDialog()
         setAnchorEl(null)
     }
 
@@ -48,19 +56,25 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
+                <MenuItem onClick={toggleAddDialog}>
+                    <ListItemIcon>
+                        <Add />
+                    </ListItemIcon>
+                    <ListItemText primary="Create subtask" />
+                </MenuItem>
                 <MenuItem onClick={handleEdit}>
                     <ListItemIcon>
                         <Edit />
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem onClick={() => openDialog('ARCHIVE_TASK')}>
+                <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
                     <ListItemIcon>
                         <Archive />
                     </ListItemIcon>
                     <ListItemText primary="Archive" />
                 </MenuItem>
-                <MenuItem onClick={() => openDialog('DELETE_TASK')}>
+                <MenuItem onClick={() => openAlertDialog('DELETE_TASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>
@@ -68,11 +82,17 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 </MenuItem>
             </Menu>
             <AlertBox
-                dialogStatus={dialogStatus}
-                toggleDialog={toggleDialog}
+                alertDialogStatus={alertDialogStatus}
+                toggleAlertDialog={toggleAlertDialog}
                 taskId={taskId}
                 columnId={columnId}
                 action={action}
+            />
+            <AddSubtaskDialog
+                addDialogStatus={addDialogStatus}
+                toggleAddDialog={toggleAddDialog}
+                columnId={columnId}
+                taskId={taskId}
             />
         </Grid>
     )

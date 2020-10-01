@@ -62,14 +62,8 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        margin: 3,
-        borderRadius: 4,
-        padding: 5,
-    },
-
-    subtask: {
-        background: 'linear-gradient(45deg, #5bc489 30%, #009c8f 90%)',
-        margin: 3,
+        marginTop: 2,
+        marginBottom: 2,
         borderRadius: 4,
         padding: 5,
     },
@@ -77,6 +71,38 @@ export const boardPageStyles = makeStyles({
     taskInner: {
         flexWrap: 'nowrap',
     },
+
+    subtaskComponent: {
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 150,
+        marginTop: 2,
+        marginBottom: 2,
+    },
+
+    subtaskHeader: {
+        backgroundColor: 'rgba(255, 140, 85, .8)',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: '20%',
+    },
+
+    subtaskHeaderText: {
+        paddingLeft: 10,
+    },
+
+    subtaskDropdownComponent: {
+        height: 30,
+    },
+
+    subtaskDropdownButton: {
+        height: '100%',
+    },
+
+    subtaskContent: {
+        padding: 10,
+    },
+
     dialogFocus: {
         minWidth: '100vw',
         maxWidth: '100vw',

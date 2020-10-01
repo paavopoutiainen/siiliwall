@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
-import TaskList from '../task/TaskList'
-import SubtaskList from '../subtask/SubtaskList'
 import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
@@ -16,7 +14,6 @@ const Column = ({ column, index }) => {
         tasks, ticketOrder, subtasks,
     } = column
     const [dialogStatus, setDialogStatus] = useState(false)
-
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     return (
         <Draggable draggableId={column.id} index={index}>
@@ -57,19 +54,20 @@ const Column = ({ column, index }) => {
                             </Grid>
                         )}
                     </Droppable>
-
-                    <Grid item container>
-                        <AddTaskDialog
-                            dialogStatus={dialogStatus}
-                            toggleDialog={toggleDialog}
-                            column={column}
-                        />
-                        <Button
-                            onClick={toggleDialog}
-                            color="primary"
-                        >
-                            Add task
-                        </Button>
+                    <Grid item container direction="column">
+                        <Grid item>
+                            <AddTaskDialog
+                                dialogStatus={dialogStatus}
+                                toggleDialog={toggleDialog}
+                                column={column}
+                            />
+                            <Button
+                                onClick={toggleDialog}
+                                color="primary"
+                            >
+                                Add task
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             )}

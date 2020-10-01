@@ -12,6 +12,7 @@ const Task = ({ task, index, columnId }) => {
     const titleLimit = 27
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
+
     const add3Dots = (titleParam, titleLimitParam) => {
         let checkedTitle = titleParam
         const dots = '...'
@@ -20,7 +21,6 @@ const Task = ({ task, index, columnId }) => {
         }
         return checkedTitle
     }
-
     const chosenMembersData = task.members.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject

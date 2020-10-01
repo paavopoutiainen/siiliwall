@@ -4,12 +4,12 @@ import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER, TASKORDER } from '../graphql/fragments'
+import { COLUMNORDER, TICKETORDER } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 
 const AlertBox = ({
-    dialogStatus, toggleDialog, action, columnId, boardId, taskId,
+    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
     const classes = boardPageStyles()
@@ -83,15 +83,14 @@ const AlertBox = ({
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TASKORDER,
+            fragment: TICKETORDER,
         })
-        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
-
+        const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== taskId)
         client.writeFragment({
             id: columnIdForCache,
-            fragment: TASKORDER,
+            fragment: TICKETORDER,
             data: {
-                taskOrder: newTaskOrder,
+                ticketOrder: newTicketOrder,
             },
         })
         client.cache.evict({ id: idToBeDeleted })
@@ -106,7 +105,7 @@ const AlertBox = ({
             deleteColumnById()
             deleteColumnFromCache()
         } else {
-            toggleDialog()
+            toggleAlertDialog()
         }
     }
 
@@ -114,16 +113,16 @@ const AlertBox = ({
         if (action === 'ARCHIVE_TASK' && option === 'ARCHIVE') {
             archiveTaskById()
         } else {
-            toggleDialog()
+            toggleAlertDialog()
         }
     }
 
     return (
         <Grid item>
             <Dialog
-                classes={dialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
-                open={dialogStatus}
-                onClose={toggleDialog}
+                classes={alertDialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
+                open={alertDialogStatus}
+                onClose={toggleAlertDialog}
             >
                 <Alert variant="filled" severity="error">
                     <Grid item container direction="column" spacing={2}>
