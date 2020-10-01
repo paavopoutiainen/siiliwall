@@ -59,7 +59,6 @@ class BoardService {
         } catch (e) {
             console.error(e)
         }
-        console.log(columnFromDb)
         return columnFromDb
     }
 
@@ -319,6 +318,30 @@ class BoardService {
         return addedColumn
     }
 
+    async findTheLargestOrderNumberOfColumn(columnId) {
+        let largestColumnOrderNumberForTask
+        let largestColumnOrderNumberForSubtask
+        try {
+            largestColumnOrderNumberForTask = await this.store.Task.max({
+                attributes: ['columnOrderNumber'],
+                where: {
+                    columnId: columnId
+                }
+            })
+            largestColumnOrderNumberForSubtask = await this.store.Subtask.max({
+                attributes: ['columnOrderNumber'],
+                where: {
+                    columnId: columnId
+                }
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubtask)
+
+        return largestColumnOrderNumber
+    }
+
     async addTaskForColumn(columnId, title, size, ownerId, content, memberIds) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
@@ -326,9 +349,7 @@ class BoardService {
         */
         let addedTask
         try {
-            const largestOrderNumber = await this.store.Task.max('columnOrderNumber', {
-                where: { columnId },
-            })
+            let largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 columnId,
@@ -379,7 +400,6 @@ class BoardService {
     }
 
     async addSubtaskForTask(taskId, columnId, ownerId, memberIds, content) {
-        console.log('boardSevice gets data')
         const largestColumnOrderNumberForTask = await this.store.Task.max({
             attributes: ['columnOrderNumber'],
             where: {
@@ -401,15 +421,15 @@ class BoardService {
                 content,
                 taskId,
                 columnId,
-                ownerId,
+                //ownerId,
                 columnOrderNumber: largestColumnOrderNumber + 1
             })
-            await Promise.all(
+            /*await Promise.all(
                 memberIds.map(async (memberId) => {
                     const members = await this.addMemberForSubtask(addedSubtask.id, memberId)
                     return members
                 })
-            )
+            )*/
         } catch (e) {
             console.error(e)
         }

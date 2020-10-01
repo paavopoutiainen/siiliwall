@@ -3,9 +3,9 @@ const dataSources = require('../../datasources')
 const schema = {
 
     Mutation: {
-        addSubtaskForTask(root, { taskId, columnId, ownerId, memberIds, content }) {
+        addSubtaskForTask(root, { taskId, columnId, content }) {
             console.log('resolver gets data')
-            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content, ownerId, memberIds)
+            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content,)
         },
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)

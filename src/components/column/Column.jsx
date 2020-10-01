@@ -16,7 +16,6 @@ const Column = ({ column, index }) => {
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-    console.log('ticketOrder in Column:', ticketOrder)
     return (
         <Draggable draggableId={column.id} index={index}>
             {(provided) => (

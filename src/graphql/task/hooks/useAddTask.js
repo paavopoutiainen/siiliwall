@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client'
+import { useMutation } from '@apollo/client'
 import { ADD_TASK } from '../taskQueries'
 import { TICKETORDER_AND_TASKS } from '../../fragments'
 
@@ -10,7 +10,6 @@ const useAddTask = (columnId) => {
                 id: columnIdForCache,
                 fragment: TICKETORDER_AND_TASKS,
             })
-            console.log('cached', cached)
             const { tasks, ticketOrder } = cached
             const newTasks = tasks.concat(response.data.addTaskForColumn)
             const newTicketObject = {
@@ -18,7 +17,6 @@ const useAddTask = (columnId) => {
                 type: "task"
             }
             const newTicketOrder = ticketOrder.concat(newTicketObject)
-            console.log('newTicketOrder', newTicketOrder)
             cache.writeFragment({
                 id: columnIdForCache,
                 fragment: TICKETORDER_AND_TASKS,
@@ -27,8 +25,6 @@ const useAddTask = (columnId) => {
                     tasks: newTasks
                 },
             })
-            console.log(cache)
-
         },
     })
     return retVal
