@@ -77,23 +77,34 @@ export const boardPageStyles = makeStyles({
     taskInner: {
         flexWrap: 'nowrap',
     },
-
-    snackbar: {
-        maxWidth: 350,
+    dialogFocus: {
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        borderRadius: 10,
+        boxShadow: '0  9px 46px  8px rgba(0, 0, 0, 0.14),0 11px 15px -7px rgba(0, 0, 0, 0.12),0 24px 38px  3px rgba(0, 0, 0, 0.20)',
+        minHeight: '100vh',
+        maxHeight: '100vh',
     },
 
-    alertBox: {
-        zIndex: 1,
+    dialogUnfocus: {
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        minHeight: '100vh',
+        maxHeight: '100vh',
     },
 
-    invisible: {
-        height: '100vh',
-        left: 0,
-        position: 'fixed',
-        top: 0,
-        width: '100vw',
-        zIndex: 0,
+    undoAlertButton: {
+        margin: 5,
     },
+
+    deleteAlertButton: {
+        margin: 5,
+    },
+
+    archiveAlertButton: {
+        margin: 5,
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
