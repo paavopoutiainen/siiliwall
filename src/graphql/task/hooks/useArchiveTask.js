@@ -1,6 +1,6 @@
 import { useMutation } from '@apollo/client'
 import { ARCHIVE_TASK } from '../taskQueries'
-import { TASKORDER_AND_TASKS } from '../../fragments'
+import { TICKETORDER_AND_TASKS } from '../../fragments'
 
 const useArchiveTask = (columnId) => {
     const retVal = useMutation(ARCHIVE_TASK, {
@@ -8,19 +8,20 @@ const useArchiveTask = (columnId) => {
             const columnIdForCache = `Column:${columnId}`
             const cached = cache.readFragment({
                 id: columnIdForCache,
-                fragment: TASKORDER_AND_TASKS,
+                fragment: TICKETORDER_AND_TASKS,
             })
-            const { tasks, taskOrder } = cached
+            const { tasks, ticketOrder } = cached
             const taskIdToBeRemoved = response.data.archiveTaskById
             const taskIdForCache = `Task:${taskIdToBeRemoved}`
             const newTasks = tasks.filter((task) => task.id !== taskIdToBeRemoved)
-            const newTaskOrder = taskOrder.filter((id) => id !== taskIdToBeRemoved)
+
+            const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== taskIdToBeRemoved)
 
             cache.writeFragment({
                 id: columnIdForCache,
-                fragment: TASKORDER_AND_TASKS,
+                fragment: TICKETORDER_AND_TASKS,
                 data: {
-                    taskOrder: newTaskOrder,
+                    ticketOrder: newTicketOrder,
                     tasks: newTasks,
                 },
             })
