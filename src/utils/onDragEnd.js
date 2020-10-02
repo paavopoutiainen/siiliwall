@@ -32,7 +32,7 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
             },
         })
 
-        toggleSnackbar('COLUMN_MOVED')
+        toggleSnackbar('MOVED_COLUMN')
         return
     }
 
@@ -59,6 +59,8 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
                 columnId: column.id,
             },
         })
+
+        toggleSnackbar('MOVED_TASK_IN_COLUMN')
     }
 
     // When task is moved into another column
@@ -116,5 +118,7 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
                 destTaskOrder: newTaskOrderOfDestinationColumn,
             },
         })
+
+        toggleSnackbar('MOVED_TASK_FROM_COLUMN')
     }
 }

@@ -13,8 +13,8 @@ import useMoveTaskInColumn from '../../graphql/task/hooks/useMoveTaskInColumn'
 import useMoveTaskFromColumn from '../../graphql/task/hooks/useMoveTaskFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import useAddColumn from '../../graphql/column/hooks/useAddColumn'
-import Snackbar from '../Snackbar'
 import { onDragEnd } from '../../utils/onDragEnd'
+import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
 const Board = ({ id }) => {
@@ -106,7 +106,9 @@ const Board = ({ id }) => {
                         </Droppable>
                     </Grid>
                 </DragDropContext>
-                <Snackbar snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} snackbarAction={snackbarAction} />
+                <Grid container item>
+                    <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} snackbarAction={snackbarAction} />
+                </Grid>
             </Grid>
         </div>
     )

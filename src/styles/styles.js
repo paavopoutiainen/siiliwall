@@ -88,19 +88,22 @@ export const boardPageStyles = makeStyles({
     },
 
     undoAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     deleteAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     archiveAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
-    }
+    },
+    textColor: {
+        color: '#3F51C0',
+    },
 })
