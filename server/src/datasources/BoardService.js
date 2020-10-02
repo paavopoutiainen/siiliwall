@@ -238,20 +238,19 @@ class BoardService {
 
     async getTicketOrderOfColumn(columnId) {
         let arrayOfObjectsInOrder
+        // TODO: Figure out if this could be done better
         try {
             const subtasks = await this.store.Subtask.findAll({
                 attributes: ['id', 'columnOrderNumber'],
                 where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
             })
             const arrayOfSubtaskObjects = subtasks.map((subtask) => ({ ticketId: subtask.dataValues.id, type: 'subtask', columnOrderNumber: subtask.dataValues.columnOrderNumber }))
 
-            const tasks = await this.store.Task.findAll({
+            const tasksFromDb = await this.store.Task.findAll({
                 attributes: ['id', 'columnOrderNumber'],
                 where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
             })
-            const arrayOfTaskObjects = tasks.map((task) => ({ ticketId: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
+            const arrayOfTaskObjects = tasksFromDb.map((task) => ({ ticketId: task.dataValues.id, type: 'task', columnOrderNumber: task.dataValues.columnOrderNumber }))
 
             arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
                 .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
@@ -325,14 +324,14 @@ class BoardService {
             largestColumnOrderNumberForTask = await this.store.Task.max({
                 attributes: ['columnOrderNumber'],
                 where: {
-                    columnId: columnId
-                }
+                    columnId,
+                },
             })
             largestColumnOrderNumberForSubtask = await this.store.Subtask.max({
                 attributes: ['columnOrderNumber'],
                 where: {
-                    columnId: columnId
-                }
+                    columnId,
+                },
             })
         } catch (e) {
             console.error(e)
@@ -349,7 +348,7 @@ class BoardService {
         */
         let addedTask
         try {
-            let largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
+            const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 columnId,
@@ -390,7 +389,7 @@ class BoardService {
         try {
             await this.store.UserSubtask.create({
                 userId,
-                subtaskId
+                subtaskId,
             })
             subtask = await this.store.Subtask.findByPk(subtaskId)
         } catch (e) {
@@ -402,25 +401,47 @@ class BoardService {
     async addSubtaskForTask(taskId, columnId, content) {
         let addedSubtask
         try {
-            let largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
+            const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
                 content,
                 taskId,
                 columnId,
-                //ownerId,
-                columnOrderNumber: largestOrderNumber + 1
+                // ownerId,
+                columnOrderNumber: largestOrderNumber + 1,
             })
-            /*await Promise.all(
+            /* await Promise.all(
                 memberIds.map(async (memberId) => {
                     const members = await this.addMemberForSubtask(addedSubtask.id, memberId)
                     return members
                 })
-            )*/
+            ) */
         } catch (e) {
             console.error(e)
         }
         return addedSubtask
+    }
+
+    async deleteSubtaskById(subtaskId) {
+        try {
+            await this.store.Subtask.destroy({
+                where: { id: subtaskId },
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return subtaskId
+    }
+
+    async archiveSubtaskById(subtaskId) {
+        try {
+            const subtask = await this.store.Subtask.findByPk(subtaskId)
+            subtask.deletedAt = new Date()
+            await subtask.save()
+        } catch (e) {
+            console.error(e)
+        }
+        return subtaskId
     }
 
     // Loop through tasks and set the new columnOrderNumber for each using the index of the array
