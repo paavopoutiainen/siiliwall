@@ -117,11 +117,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         closeMenuOnSelect={false}
                     />
                     <TextField
+                        id="standard-multiline-static"
                         autoComplete="off"
                         margin="dense"
                         name="description"
                         label="Description"
                         type="text"
+                        multiline
+                        rows={3}
                         value={description || ''}
                         fullWidth
                         onChange={handleDescriptionChange}
