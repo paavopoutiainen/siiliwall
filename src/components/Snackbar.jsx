@@ -1,15 +1,24 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-const Snackbar = ({ snackbarStatus, toggleSnacbar }) => {
+const Snackbar = ({ snackbarStatus, toggleSnacbar, snackbarAction }) => {
+    let message
+
+    switch (snackbarAction) {
+    case 'COLUMN_MOVED':
+        message = 'Column moved'
+        break
+    default:
+        message = 'jee'
+        break
+    }
 
     return (
         <Snackbar
-            open={open}
-            onClose={handleClose}
-            TransitionComponent={Transition}
-            message="I love snacks"
-            key={Transition.name}
+            open={snackbarStatus}
+            onClose={toggleSnacbar}
+            message={message}
         />
     )
 }
+
 export default Snackbar

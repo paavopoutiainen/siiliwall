@@ -3,7 +3,7 @@
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { TASKORDER_AND_TASKS, TASKORDER, COLUMNORDER } from '../graphql/fragments'
 
-export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board) => {
+export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board, toggleSnackbar) => {
     const { destination, source, draggableId } = result
 
     if (!destination) return
@@ -31,6 +31,8 @@ export const onDragEnd = async (result, moveTaskInColumn, moveTaskFromColumn, mo
                 boardId: board.id,
             },
         })
+
+        toggleSnackbar('COLUMN_MOVED')
         return
     }
 
