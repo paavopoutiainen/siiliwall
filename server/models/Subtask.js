@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         done: DataTypes.BOOLEAN,
         name: DataTypes.STRING,
         content: DataTypes.STRING,
-        deletedAt: DataTypes.DATE
+        deletedAt: DataTypes.DATE,
     })
     Subtask.associate = (models) => {
         Subtask.belongsTo(models.Task, {

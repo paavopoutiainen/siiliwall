@@ -4,9 +4,9 @@ const schema = {
 
     Mutation: {
         addSubtaskForTask(root, {
-            taskId, columnId, content, ownerId,
+            taskId, columnId, content, ownerId, memberIds,
         }) {
-            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content, ownerId)
+            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content, ownerId, memberIds)
         },
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)
@@ -28,6 +28,9 @@ const schema = {
                 return null
             }
             return dataSources.boardService.getOwnerById(root.ownerId)
+        },
+        members(root) {
+            return dataSources.boardService.getMembersBySubtaskId(root.id)
         },
     },
 }

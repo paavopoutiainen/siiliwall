@@ -13,7 +13,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
     const [addSubtask] = useAddSubtask(columnId)
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
-    // const [members, setMembers] = useState([])
+    const [members, setMembers] = useState([])
 
     if (loading) return null
 
@@ -24,10 +24,10 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
     const handleOwnerChange = (action) => {
         setOwner(action.value)
     }
-    /*
+
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
-    } */
+    }
 
     const handleSave = (event) => {
         event.preventDefault()
@@ -36,14 +36,14 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
                 columnId,
                 taskId,
                 ownerId: owner,
-                /* memberIds: members, */
+                memberIds: members,
                 content,
             },
         })
         toggleAddDialog()
         setContent('')
         setOwner(null)
-        // setMembers([])
+        setMembers([])
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -78,6 +78,14 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                    />
+                    <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select members"
+                        options={modifiedData}
+                        onChange={handleMembersChange}
+                        closeMenuOnSelect={false}
                     />
                 </DialogContent>
                 <DialogActions>

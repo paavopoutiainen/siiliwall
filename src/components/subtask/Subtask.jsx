@@ -31,10 +31,17 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item classes={{ root: classes.subtaskContent }}>
-                        <p>{subtask.content}</p>
+                        <p>
+                            {`Content: ${subtask.content}`}
+                        </p>
                         {subtask.owner ? (
                             <p>
-                                {`owner: ${subtask.owner.userName}`}
+                                {`Owner: ${subtask.owner.userName}`}
+                            </p>
+                        ) : null}
+                        {subtask.members.length !== 0 ? (
+                            <p>
+                                {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
                             </p>
                         ) : null}
                     </Grid>

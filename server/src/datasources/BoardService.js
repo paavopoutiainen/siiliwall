@@ -141,6 +141,24 @@ class BoardService {
         return members
     }
 
+    async getMembersBySubtaskId(subtaskId) {
+        let rowsFromDb
+        let members
+        try {
+            rowsFromDb = await this.store.UserSubtask.findAll({ where: { subtaskId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return members
+    }
+
     async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
@@ -398,7 +416,7 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, content, ownerId) {
+    async addSubtaskForTask(taskId, columnId, content, ownerId, memberIds) {
         let addedSubtask
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
@@ -410,12 +428,12 @@ class BoardService {
                 ownerId,
                 columnOrderNumber: largestOrderNumber + 1,
             })
-            /* await Promise.all(
+            await Promise.all(
                 memberIds.map(async (memberId) => {
                     const members = await this.addMemberForSubtask(addedSubtask.id, memberId)
                     return members
-                })
-            ) */
+                }),
+            )
         } catch (e) {
             console.error(e)
         }

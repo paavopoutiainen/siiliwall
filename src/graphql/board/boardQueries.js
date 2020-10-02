@@ -50,6 +50,10 @@ export const BOARD_BY_ID = gql`
                         id
                         title
                     }
+                    members {
+                        id
+                        userName
+                    }
                 }
             }
         }
