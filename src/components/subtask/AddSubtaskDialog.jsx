@@ -12,7 +12,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask(columnId)
     const [content, setContent] = useState('')
-    // const [owner, setOwner] = useState(null)
+    const [owner, setOwner] = useState(null)
     // const [members, setMembers] = useState([])
 
     if (loading) return null
@@ -21,10 +21,10 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
         setContent(event.target.value)
     }
 
-    /* const handleOwnerChange = (action) => {
+    const handleOwnerChange = (action) => {
         setOwner(action.value)
     }
-
+    /*
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     } */
@@ -35,21 +35,21 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
             variables: {
                 columnId,
                 taskId,
-                /* ownerId: owner,
-                memberIds: members, */
+                ownerId: owner,
+                /* memberIds: members, */
                 content,
             },
         })
         toggleAddDialog()
         setContent('')
-        // setOwner(null)
+        setOwner(null)
         // setMembers([])
     }
 
-    /* const modifiedData = data.allUsers.map((user) => {
+    const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
-    }) */
+    })
 
     return (
         <Grid>
@@ -72,6 +72,12 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
                         value={content}
                         fullWidth
                         onChange={handleContentChange}
+                    />
+                    <Select
+                        className="selectField"
+                        placeholder="Select owner"
+                        options={modifiedData}
+                        onChange={handleOwnerChange}
                     />
                 </DialogContent>
                 <DialogActions>

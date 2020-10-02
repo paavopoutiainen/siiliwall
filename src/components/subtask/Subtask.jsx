@@ -32,6 +32,11 @@ const Subtask = ({ subtask, index, columnId }) => {
                     </Grid>
                     <Grid item classes={{ root: classes.subtaskContent }}>
                         <p>{subtask.content}</p>
+                        {subtask.owner ? (
+                            <p>
+                                {`owner: ${subtask.owner.userName}`}
+                            </p>
+                        ) : null}
                     </Grid>
                 </Grid>
             )}

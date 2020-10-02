@@ -398,7 +398,7 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, content) {
+    async addSubtaskForTask(taskId, columnId, content, ownerId) {
         let addedSubtask
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
@@ -407,7 +407,7 @@ class BoardService {
                 content,
                 taskId,
                 columnId,
-                // ownerId,
+                ownerId,
                 columnOrderNumber: largestOrderNumber + 1,
             })
             /* await Promise.all(
@@ -531,7 +531,7 @@ class BoardService {
         return usersFromDb
     }
 
-    async getOwnerOfTask(ownerId) {
+    async getOwnerById(ownerId) {
         let owner
         try {
             owner = await this.store.User.findByPk(ownerId)

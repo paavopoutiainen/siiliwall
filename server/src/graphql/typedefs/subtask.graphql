@@ -11,7 +11,7 @@ type Subtask {
 }
 
 type Mutation {
-  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!): Subtask
+  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!, ownerId: ID,): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
   deleteSubtaskById(id: ID!): ID
   archiveSubtaskById(id: ID!): ID
