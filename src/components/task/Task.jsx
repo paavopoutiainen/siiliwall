@@ -62,6 +62,11 @@ const Task = ({ task, index, columnId }) => {
                                     {`members:  ${chosenMembersData.map((user) => ` ${user.label}`)}`}
                                 </p>
                             ) : null}
+                            {task.description ? (
+                                <p>
+                                    {`description: ${task.description}`}
+                                </p>
+                            ) : null}
                         </Grid>
                         <Grid item>
                             <DropdownTask

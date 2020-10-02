@@ -24,17 +24,17 @@ export const TASK_BY_ID = gql`
             owner{
                 id
             }
-            content
             members{
                 id
             }
+            description
         }
     }
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $content: String, $memberIds: [ID!]) {
-        addTaskForColumn(columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, content: $content, memberIds: $memberIds) {
+    mutation createTask($columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $description: String, $memberIds: [ID!]) {
+        addTaskForColumn(columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, description: $description, memberIds: $memberIds) {
             id
             title
             size
@@ -42,11 +42,11 @@ export const ADD_TASK = gql`
                 id 
                 userName
             }
-            content
             members {
                 id
                 userName
             }
+            description
         }
     }
 `
@@ -58,8 +58,8 @@ export const DELETE_TASK = gql`
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Float, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!]) {
-        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Float, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String) {
+        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, description: $description) {
             id
             title
             size
@@ -71,6 +71,7 @@ export const EDIT_TASK = gql`
                 id
                 userName
             }
+            description
         }
     }
 `

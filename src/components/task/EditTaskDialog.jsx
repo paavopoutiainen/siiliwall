@@ -17,6 +17,7 @@ const EditTaskDialog = ({
     const { loading, data } = useAllUsers()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
+    const [description, setDescription] = useState(task?.description)
     const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
     const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
@@ -24,7 +25,7 @@ const EditTaskDialog = ({
     const classes = boardPageStyles()
     if (loading) return null
 
-    const handleChange = (event) => {
+    const handleTitleChange = (event) => {
         setTitle(event.target.value)
     }
 
@@ -38,6 +39,14 @@ const EditTaskDialog = ({
             return
         }
         setSize(parseFloat(event.target.value))
+    }
+
+    const handleDescriptionChange = (event) => {
+        if (event.target.value === '') {
+            setDescription(null)
+            return
+        }
+        setDescription(event.target.value)
     }
 
     const handleMembersChange = (event) => {
@@ -54,6 +63,7 @@ const EditTaskDialog = ({
                 ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
+                description,
             },
         })
         toggleDialog()
@@ -92,7 +102,7 @@ const EditTaskDialog = ({
                         type="text"
                         value={title}
                         fullWidth
-                        onChange={handleChange}
+                        onChange={handleTitleChange}
                     />
                     <TextField
                         autoComplete="off"
@@ -119,6 +129,16 @@ const EditTaskDialog = ({
                         components={animatedComponents}
                         isMulti
                         onChange={handleMembersChange}
+                    />
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
+                        name="description"
+                        label="Description"
+                        type="text"
+                        value={description || ''}
+                        fullWidth
+                        onChange={handleDescriptionChange}
                     />
                 </DialogContent>
                 <DialogActions>
