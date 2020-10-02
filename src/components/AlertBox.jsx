@@ -22,17 +22,17 @@ const AlertBox = ({
     let alertMsg
 
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    default:
+        break
     }
 
     const archiveTaskById = () => {
@@ -96,24 +96,24 @@ const AlertBox = ({
         client.cache.evict({ id: idToBeDeleted })
     }
 
-    const handleDelete = (option) => {
-        if (action === 'DELETE_TASK' && option === 'DELETE') {
+    const handleDelete = () => {
+        if (action === 'DELETE_TASK') {
             deleteTaskById()
             deleteTaskFromCache()
         }
-        if (action === 'DELETE_COLUMN' && option === 'DELETE') {
+        if (action === 'DELETE_COLUMN') {
             deleteColumnById()
             deleteColumnFromCache()
-        } else {
-            toggleAlertDialog()
         }
     }
 
-    const handleArchive = (option) => {
-        if (action === 'ARCHIVE_TASK' && option === 'ARCHIVE') {
+    const handleUndo = () => {
+        toggleAlertDialog()
+    }
+
+    const handleArchive = () => {
+        if (action === 'ARCHIVE_TASK') {
             archiveTaskById()
-        } else {
-            toggleAlertDialog()
         }
     }
 
@@ -130,19 +130,19 @@ const AlertBox = ({
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
                         <Grid item container direction="row" justify="flex-end">
-                            <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')} classes={{ root: classes.undoAlertButton }}>
+                            <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
-                                    </Button>
+                            </Button>
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
                                 ? (
-                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.deleteAlertButton }}>
+                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete()} classes={{ root: classes.deleteAlertButton }}>
                                         DELETE
                                     </Button>
                                 )
                                 : null}
                             {action === 'ARCHIVE_TASK'
                                 ? (
-                                    <Button size="small" variant="contained" onClick={() => handleArchive('ARCHIVE')} classes={{ root: classes.archiveAlertButton }}>
+                                    <Button size="small" variant="contained" onClick={() => handleArchive()} classes={{ root: classes.archiveAlertButton }}>
                                         ARCHIVE
                                     </Button>
                                 )
