@@ -11,7 +11,6 @@ const RenameColumn = ({ editId, column, toggleEdit }) => {
     }
 
     const handleSave = (event) => {
-        console.log(name)
         event.preventDefault()
         editColumn({
             variables: {
@@ -25,9 +24,11 @@ const RenameColumn = ({ editId, column, toggleEdit }) => {
     return (
         <Grid item>
             <TextField
-                label={column.name}
-                autoFocus
+                defaultValue={column.name}
+                label="Name"
                 onChange={handleChange}
+                autoFocus
+                auto
             />
             <Button onClick={handleSave}>Save</Button>
         </Grid>
