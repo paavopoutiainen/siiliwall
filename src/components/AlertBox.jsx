@@ -7,11 +7,13 @@ import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import { COLUMNORDER, TICKETORDER } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
+import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 
 const AlertBox = ({
-    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId,
+    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
+    const [archiveSubtask] = useArchiveSubtask(columnId)
     const classes = boardPageStyles()
     const client = useApolloClient()
     const [deleteColumn] = useMutation(DELETE_COLUMN)
@@ -19,6 +21,7 @@ const AlertBox = ({
     const alertMsgDeleteColumn = 'This action will permanently remove the selected column and the tasks inside the column from your board and they can\'t be later examined! Are you sure you want to delete it?'
     const alertMsgDeleteTask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?'
     const alertMsgArchiveTask = 'The task is removed from the board, but can be examined through the archive setting.'
+    const alertMsgArchiveSubtask = 'The subtask is removed from the board, but can be examined through the archive setting.'
     let alertMsg
 
     switch (action) {
@@ -31,6 +34,9 @@ const AlertBox = ({
     case 'ARCHIVE_TASK':
         alertMsg = alertMsgArchiveTask
         break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
     default:
         break
     }
@@ -39,6 +45,14 @@ const AlertBox = ({
         archiveTask({
             variables: {
                 taskId,
+            },
+        })
+    }
+
+    const archiveSubtaskById = () => {
+        archiveSubtask({
+            variables: {
+                subtaskId,
             },
         })
     }
@@ -115,6 +129,9 @@ const AlertBox = ({
         if (action === 'ARCHIVE_TASK') {
             archiveTaskById()
         }
+        if (action === 'ARCHIVE_SUBTASK') {
+            archiveSubtaskById()
+        }
     }
 
     return (
@@ -140,7 +157,7 @@ const AlertBox = ({
                                     </Button>
                                 )
                                 : null}
-                            {action === 'ARCHIVE_TASK'
+                            {action === 'ARCHIVE_TASK' || action === 'ARCHIVE_SUBTASK'
                                 ? (
                                     <Button size="small" variant="contained" onClick={() => handleArchive()} classes={{ root: classes.archiveAlertButton }}>
                                         ARCHIVE

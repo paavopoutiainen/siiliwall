@@ -13,7 +13,7 @@ const schema = {
             return dataSources.boardService.deleteTaskById(id)
         },
         archiveSubtaskById(root, { id }) {
-            return dataSources.boardService.archiveTaskById(id)
+            return dataSources.boardService.archiveSubtaskById(id)
         },
     },
 

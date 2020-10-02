@@ -8,13 +8,13 @@ const useAddSubtask = (columnId) => {
             const columnIdForCache = `Column:${columnId}`
             const cached = cache.readFragment({
                 id: columnIdForCache,
-                fragment: TICKETORDER_AND_SUBTASKS
+                fragment: TICKETORDER_AND_SUBTASKS,
             })
             const { subtasks, ticketOrder } = cached
             const newSubtasks = subtasks.concat(response.data.addSubtaskForTask)
             const newTicketObject = {
                 ticketId: response.data.addSubtaskForTask.id,
-                type: "subtask"
+                type: 'subtask',
             }
             const newTicketOrder = ticketOrder.concat(newTicketObject)
 
@@ -23,10 +23,10 @@ const useAddSubtask = (columnId) => {
                 fragment: TICKETORDER_AND_SUBTASKS,
                 data: {
                     ticketOrder: newTicketOrder,
-                    subtasks: newSubtasks
-                }
+                    subtasks: newSubtasks,
+                },
             })
-        }
+        },
     })
     return retVal
 }

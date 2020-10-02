@@ -12,3 +12,9 @@ export const ADD_SUBTASK = gql`
         }
     }
 `
+
+export const ARCHIVE_SUBTASK = gql`
+    mutation archiveSubtask($subtaskId: ID!) {
+        archiveSubtaskById(id: $subtaskId)
+    }
+`

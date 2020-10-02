@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TASKORDER_AND_TASKS, TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
+     TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
 } from '../graphql/fragments'
 
 export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board) => {

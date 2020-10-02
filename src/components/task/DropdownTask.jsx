@@ -27,7 +27,7 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
 
     const openAlertDialog = (order) => {
         setAction(order)
-        toggleAlertDialog()
+        setAlertDialogStatus(true)
         setAnchorEl(null)
     }
 

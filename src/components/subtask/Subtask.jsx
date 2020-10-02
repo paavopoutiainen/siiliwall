@@ -6,6 +6,7 @@ import { boardPageStyles } from '../../styles/styles'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
+
     return (
         <Draggable draggableId={subtask.id} index={index}>
             {(provided) => (
@@ -23,7 +24,10 @@ const Subtask = ({ subtask, index, columnId }) => {
                             <p>{subtask.task.title}</p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
-                            <DropDownSubtask />
+                            <DropDownSubtask
+                                subtaskId={subtask.id}
+                                columnId={columnId}
+                            />
                         </Grid>
                     </Grid>
                     <Grid item classes={{ root: classes.subtaskContent }}>

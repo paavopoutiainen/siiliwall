@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Delete, Edit, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
+import AlertBox from '../AlertBox'
 
-const DropdownSubtask = () => {
+const DropdownSubtask = ({ columnId, subtaskId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
+    const [alertDialogStatus, setAlertDialogStatus] = useState(false)
+    const [action, setAction] = useState(null)
+
+    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
+    }
+
+    const openAlertDialog = (order) => {
+        setAction(order)
+        setAlertDialogStatus(true)
+        setAnchorEl(null)
     }
 
     return (
@@ -40,7 +51,7 @@ const DropdownSubtask = () => {
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => openAlertDialog('ARCHIVE_SUBTASK')}>
                     <ListItemIcon>
                         <Archive />
                     </ListItemIcon>
@@ -53,6 +64,13 @@ const DropdownSubtask = () => {
                     <ListItemText primary="Remove" />
                 </MenuItem>
             </Menu>
+            <AlertBox
+                alertDialogStatus={alertDialogStatus}
+                toggleAlertDialog={toggleAlertDialog}
+                action={action}
+                subtaskId={subtaskId}
+                columnId={columnId}
+            />
         </Grid>
     )
 }

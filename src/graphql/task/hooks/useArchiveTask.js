@@ -14,7 +14,6 @@ const useArchiveTask = (columnId) => {
             const taskIdToBeRemoved = response.data.archiveTaskById
             const taskIdForCache = `Task:${taskIdToBeRemoved}`
             const newTasks = tasks.filter((task) => task.id !== taskIdToBeRemoved)
-
             const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== taskIdToBeRemoved)
 
             cache.writeFragment({
