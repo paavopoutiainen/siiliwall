@@ -35,6 +35,7 @@ export const BOARD_BY_ID = gql`
                         id
                         userName
                     }
+                    description
                 }
             }
         }
