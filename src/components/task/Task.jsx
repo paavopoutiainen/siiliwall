@@ -10,15 +10,24 @@ const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
     const { title } = task
     const titleLimit = 27
+    const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-    const add3Dots = (titleParam, titleLimitParam) => {
+    const dots = '...'
+    const add3Dots = (titleParam) => {
         let checkedTitle = titleParam
-        const dots = '...'
         if (titleParam.length > titleLimit) {
-            checkedTitle = title.substring(0, titleLimitParam) + dots
+            checkedTitle = title.substring(0, titleLimit) + dots
         }
         return checkedTitle
+    }
+
+    const descrDots = (description) => {
+        let retVal = description
+        if (description.length > descrLimit) {
+            retVal = description.substring(0, descrLimit) + dots
+        }
+        return retVal
     }
 
     const chosenMembersData = task.members.map((user) => {
@@ -46,7 +55,7 @@ const Task = ({ task, index, columnId }) => {
                         classes={{ root: classes.taskInner }}
                     >
                         <Grid item>
-                            <h3>{add3Dots(title, titleLimit)}</h3>
+                            <h3>{add3Dots(title)}</h3>
                             {task.owner ? (
                                 <p>
                                     {`owner: ${task.owner.userName}`}
@@ -60,6 +69,11 @@ const Task = ({ task, index, columnId }) => {
                             {task.members.length !== 0 ? (
                                 <p>
                                     {`members:  ${chosenMembersData.map((user) => ` ${user.label}`)}`}
+                                </p>
+                            ) : null}
+                            {task.description ? (
+                                <p>
+                                    {`description: ${descrDots(task.description)}`}
                                 </p>
                             ) : null}
                         </Grid>

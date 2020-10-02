@@ -7,17 +7,19 @@ import { Delete, Edit, Archive } from '@material-ui/icons'
 import AlertBox from '../AlertBox'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
-    const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
+    const [dialogStatus, setDialogStatus] = useState(false)
+
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openSnackbar = (order) => {
+    const openDialog = (order) => {
         setAction(order)
-        setOpen(true)
+        toggleDialog()
         setAnchorEl(null)
     }
 
@@ -52,13 +54,13 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                     </ListItemIcon>
                     <ListItemText primary="Edit" />
                 </MenuItem>
-                <MenuItem onClick={() => openSnackbar('ARCHIVE_TASK')}>
+                <MenuItem onClick={() => openDialog('ARCHIVE_TASK')}>
                     <ListItemIcon>
                         <Archive />
                     </ListItemIcon>
                     <ListItemText primary="Archive" />
                 </MenuItem>
-                <MenuItem onClick={() => openSnackbar('DELETE_TASK')}>
+                <MenuItem onClick={() => openDialog('DELETE_TASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>
@@ -66,8 +68,8 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
                 </MenuItem>
             </Menu>
             <AlertBox
-                open={open}
-                setOpen={setOpen}
+                dialogStatus={dialogStatus}
+                toggleDialog={toggleDialog}
                 taskId={taskId}
                 columnId={columnId}
                 action={action}
