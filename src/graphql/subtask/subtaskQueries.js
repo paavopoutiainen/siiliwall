@@ -18,3 +18,9 @@ export const ARCHIVE_SUBTASK = gql`
         archiveSubtaskById(id: $subtaskId)
     }
 `
+
+export const DELETE_SUBTASK = gql`
+    mutation deleteSubtask($subtaskId: ID!) {
+        deleteSubtaskById(id: $subtaskId)
+    }
+`

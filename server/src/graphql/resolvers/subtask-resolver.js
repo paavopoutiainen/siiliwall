@@ -10,7 +10,7 @@ const schema = {
             return dataSources.boardService.addMemberForSubtask(id, userId)
         },
         deleteSubtaskById(root, { id }) {
-            return dataSources.boardService.deleteTaskById(id)
+            return dataSources.boardService.deleteSubtaskById(id)
         },
         archiveSubtaskById(root, { id }) {
             return dataSources.boardService.archiveSubtaskById(id)

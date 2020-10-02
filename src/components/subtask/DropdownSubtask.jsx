@@ -57,7 +57,7 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                     </ListItemIcon>
                     <ListItemText primary="Archive" />
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={() => openAlertDialog('DELETE_SUBTASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>
