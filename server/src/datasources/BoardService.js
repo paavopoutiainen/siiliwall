@@ -130,7 +130,7 @@ class BoardService {
         return members
     }
 
-    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds) {
+    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
@@ -140,6 +140,7 @@ class BoardService {
             task.title = title
             task.size = size
             task.ownerId = ownerId
+            task.description = description
             await task.save()
             // Updating usertasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
@@ -263,7 +264,7 @@ class BoardService {
         return addedColumn
     }
 
-    async addTaskForColumn(columnId, title, size, ownerId, content, memberIds) {
+    async addTaskForColumn(columnId, title, size, ownerId, memberIds, description) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
@@ -279,7 +280,7 @@ class BoardService {
                 title,
                 size,
                 ownerId,
-                content,
+                description,
                 columnOrderNumber: smallestOrderNumber + 1,
             })
             await Promise.all(
