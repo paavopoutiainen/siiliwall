@@ -53,7 +53,7 @@ export const boardPageStyles = makeStyles({
 
     column: {
         backgroundColor: '#EBECF0',
-        height: 600,
+        minHeight: 600,
         width: 350,
         margin: 5,
         borderRadius: 6,
