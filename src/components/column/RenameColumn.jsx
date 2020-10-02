@@ -32,7 +32,6 @@ const RenameColumn = ({ editId, column, toggleEdit }) => {
                     label="Name"
                     onChange={handleChange}
                     autoFocus
-                    auto
                 />
                 <Button onClick={handleSave}>Save</Button>
             </Grid>
