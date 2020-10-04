@@ -2,15 +2,18 @@
 import React, { useState } from 'react'
 import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
 import Select from 'react-select'
+import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import { TICKETORDER } from '../../graphql/fragments'
 
 const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }) => {
     const { loading, data } = useAllUsers()
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask(columnId)
+    const client = useApolloClient()
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
@@ -31,6 +34,11 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
 
     const handleSave = (event) => {
         event.preventDefault()
+        const { ticketOrder } = client.cache.readFragment({
+            id: `Column:${columnId}`,
+            fragment: TICKETORDER,
+        })
+        const ticketOrderWithoutTypename = ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
         addSubtask({
             variables: {
                 columnId,
@@ -38,6 +46,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
                 ownerId: owner,
                 memberIds: members,
                 content,
+                ticketOrder: ticketOrderWithoutTypename,
             },
         })
         toggleAddDialog()

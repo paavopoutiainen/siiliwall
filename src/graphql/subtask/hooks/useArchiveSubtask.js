@@ -18,7 +18,6 @@ const useArchiveSubtask = (columnId) => {
             const newSubtasks = subtasks.filter((subtask) => subtask.id !== subtaskIdToBeRemoved)
             const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== subtaskIdToBeRemoved)
 
-            // finally remove the normalized subtask entity
             cache.writeFragment({
                 id: columnIdForCache,
                 fragment: TICKETORDER_AND_SUBTASKS,
@@ -27,6 +26,7 @@ const useArchiveSubtask = (columnId) => {
                     subtasks: newSubtasks,
                 },
             })
+            // finally remove the normalized subtask entity
             const subtaskIdForCache = `Subtask:${subtaskIdToBeRemoved}`
             cache.evict({
                 id: subtaskIdForCache,

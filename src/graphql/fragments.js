@@ -2,7 +2,7 @@
 import { gql } from '@apollo/client'
 
 export const TICKETORDER_AND_TASKS = gql`
-    fragment taskOrderAndTasks on Column {
+    fragment ticketOrderAndTasks on Column {
         ticketOrder
         tasks {
             id
@@ -48,6 +48,14 @@ export const TICKETORDER = gql`
         ticketOrder
     }
 `
+export const SUBTASKS = gql`
+    fragment subtasks on Column {
+        subtasks {
+            id
+        }
+    }
+`
+
 export const COLUMNORDER = gql`
     fragment columnOrder on Board {
         columnOrder

@@ -64,11 +64,6 @@ const AlertBox = ({
     }
 
     const deleteColumn = () => {
-        callDeleteColumn({
-            variables: {
-                columnId,
-            },
-        })
         const idToBeDeleted = `Column:${columnId}`
         const boardIdForCache = `Board:${boardId}`
         const data = client.readFragment({
@@ -85,14 +80,14 @@ const AlertBox = ({
             },
         })
         client.cache.evict({ id: idToBeDeleted })
+        callDeleteColumn({
+            variables: {
+                columnId,
+            },
+        })
     }
 
     const deleteTask = () => {
-        callDeleteTask({
-            variables: {
-                taskId,
-            },
-        })
         const idToBeDeleted = `Task:${taskId}`
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
@@ -108,15 +103,15 @@ const AlertBox = ({
             },
         })
         client.cache.evict({ id: idToBeDeleted })
+        callDeleteTask({
+            variables: {
+                taskId,
+            },
+        })
     }
 
     const deleteSubtask = () => {
-        callDeleteSubtask({
-            variables: {
-                subtaskId,
-            },
-        })
-        const subtaskIdForCache = `Task:${subtaskId}`
+        const subtaskIdForCache = `Subtask:${subtaskId}`
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
@@ -131,6 +126,11 @@ const AlertBox = ({
             },
         })
         client.cache.evict({ id: subtaskIdForCache })
+        callDeleteSubtask({
+            variables: {
+                subtaskId,
+            },
+        })
     }
 
     const handleDelete = () => {

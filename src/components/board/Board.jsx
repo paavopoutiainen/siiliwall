@@ -5,7 +5,9 @@ import {
     Grid, TextField, Button, FormControlLabel, Switch,
 } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { useApolloClient } from '@apollo/client'
+import {
+    useApolloClient,
+} from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import ColumnList from '../column/ColumnList'
 import useBoardById from '../../graphql/board/hooks/useBoardById'

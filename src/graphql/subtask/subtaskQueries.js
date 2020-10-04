@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client'
 
 export const ADD_SUBTASK = gql`
-    mutation createSubtask($taskId: ID!, $columnId: ID!, $content: String!, $ownerId: ID, $memberIds: [ID!]) {
-        addSubtaskForTask(taskId: $taskId, columnId: $columnId, content: $content, ownerId: $ownerId, memberIds: $memberIds) {
+    mutation createSubtask($taskId: ID!, $columnId: ID!, $content: String!, $ownerId: ID, $memberIds: [ID!], $ticketOrder: [TicketOrderInput!]) {
+        addSubtaskForTask(taskId: $taskId, columnId: $columnId, content: $content, ownerId: $ownerId, memberIds: $memberIds, ticketOrder: $ticketOrder) {
             id
             content
             owner {
@@ -16,6 +16,13 @@ export const ADD_SUBTASK = gql`
             members {
                 id
                 userName
+            }
+            column {
+                id
+                ticketOrder {
+                    ticketId
+                    type
+                }
             }
         }
     }

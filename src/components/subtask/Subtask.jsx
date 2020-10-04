@@ -21,7 +21,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                 >
                     <Grid item container direction="row" justify="space-between" alignItems="center" classes={{ root: classes.subtaskHeader }}>
                         <Grid item classes={{ root: classes.subtaskHeaderText }}>
-                            <p>{subtask.task.title}</p>
+                            <p>{subtask.task?.title}</p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
                             <DropDownSubtask
