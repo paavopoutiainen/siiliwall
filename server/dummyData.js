@@ -161,7 +161,7 @@ const subtasks = [
         name: 'subtask2',
         done: false,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
-        columnOrderNumber: 1,
+        columnOrderNumber: 2,
         id: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',

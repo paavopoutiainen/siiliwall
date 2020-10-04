@@ -1,3 +1,8 @@
+input TicketOrderInput {
+  ticketId: ID!
+  type: String
+}
+
 type Subtask {
   id: ID!
   name: String!
@@ -5,13 +10,14 @@ type Subtask {
   owner: User
   members: [User!]
   done: Boolean!
-  task: Task!
+  task: Task
   orderNumber: Int!
   deletedAt: String
+  column: Column
 }
 
 type Mutation {
-  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!, ownerId: ID, memberIds: [ID!]): Subtask
+  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
   deleteSubtaskById(id: ID!): ID
   archiveSubtaskById(id: ID!): ID

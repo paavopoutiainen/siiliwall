@@ -5,7 +5,7 @@ const schema = {
     Query: {
         columnById(root, args) {
             return dataSources.boardService.getColumnById(args.id)
-        }
+        },
     },
 
     Mutation: {

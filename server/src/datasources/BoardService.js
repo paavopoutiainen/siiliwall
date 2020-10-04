@@ -172,17 +172,15 @@ class BoardService {
             await task.save()
             // Updating usertasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
-                const resp = await this.addMemberForTask(task.id, userId)
-                return resp
+                await this.addMemberForTask(task.id, userId)
             }))
             await Promise.all(removedMemberIds.map(async (userId) => {
-                const resp = await this.store.UserTask.destroy({
+                await this.store.UserTask.destroy({
                     where: {
                         userId,
                         taskId: task.id,
                     },
                 })
-                return resp
             }))
         } catch (e) {
             console.error(e)
@@ -339,24 +337,22 @@ class BoardService {
         let largestColumnOrderNumberForTask
         let largestColumnOrderNumberForSubtask
         try {
-            largestColumnOrderNumberForTask = await this.store.Task.max({
-                attributes: ['columnOrderNumber'],
+            largestColumnOrderNumberForTask = await this.store.Task.max('columnOrderNumber', {
                 where: {
                     columnId,
                 },
-            })
-            largestColumnOrderNumberForSubtask = await this.store.Subtask.max({
-                attributes: ['columnOrderNumber'],
+            }) || 0
+            largestColumnOrderNumberForSubtask = await this.store.Subtask.max('columnOrderNumber', {
                 where: {
                     columnId,
                 },
-            })
+            }) || 0
         } catch (e) {
             console.error(e)
         }
-        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubtask)
 
-        return largestColumnOrderNumber
+        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubtask)
+        return largestColumnOrderNumber || 0
     }
 
     async addTaskForColumn(columnId, title, size, ownerId, content, memberIds) {
@@ -378,8 +374,7 @@ class BoardService {
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {
-                    const members = await this.addMemberForTask(addedTask.id, memberId)
-                    return members
+                    await this.addMemberForTask(addedTask.id, memberId)
                 }),
             )
         } catch (e) {
@@ -416,22 +411,27 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, content, ownerId, memberIds) {
+    async addSubtaskForTask(taskId, columnId, content, ownerId, memberIds, ticketOrder) {
+        /*
+          At the time of new subtask's creation we want to display it under its parent task
+          hence we give it the columnOrderNumber one greater than the task's
+        */
         let addedSubtask
         try {
-            const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
                 content,
                 taskId,
                 columnId,
                 ownerId,
-                columnOrderNumber: largestOrderNumber + 1,
             })
+            const newTicketOrder = Array.from(ticketOrder)
+            const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
+            newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
+            await this.reOrderTicketsOfColumn(newTicketOrder, columnId)
             await Promise.all(
                 memberIds.map(async (memberId) => {
-                    const members = await this.addMemberForSubtask(addedSubtask.id, memberId)
-                    return members
+                    await this.addMemberForSubtask(addedSubtask.id, memberId)
                 }),
             )
         } catch (e) {
