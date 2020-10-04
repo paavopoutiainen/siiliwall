@@ -16,6 +16,7 @@ import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFro
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import useAddColumn from '../../graphql/column/hooks/useAddColumn'
 import { onDragEnd } from '../../utils/onDragEnd'
+import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
 const Board = ({ id }) => {
@@ -27,6 +28,13 @@ const Board = ({ id }) => {
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
     const [addColumn] = useAddColumn(id)
+    const [snackbarStatus, setSnackbarStatus] = useState(false)
+    const [snackbarAction, setSnackbarAction] = useState(null)
+
+    const toggleSnackbar = (action) => {
+        setSnackbarAction(action)
+        setSnackbarStatus(!snackbarStatus)
+    }
 
     const handleChange = (event) => {
         setColumnName(event.target.value)
@@ -68,7 +76,7 @@ const Board = ({ id }) => {
                     </Grid>
 
                 </Grid>
-                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board)}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar)}>
                     <Grid item container direction="row">
                         <Droppable droppableId={id} direction="horizontal" type="column">
                             {(provided) => (
@@ -100,6 +108,9 @@ const Board = ({ id }) => {
                         </Droppable>
                     </Grid>
                 </DragDropContext>
+                <Grid container item>
+                    <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} snackbarAction={snackbarAction} />
+                </Grid>
             </Grid>
         </div>
     )

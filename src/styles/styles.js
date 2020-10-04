@@ -135,4 +135,7 @@ export const boardPageStyles = makeStyles({
         minHeight: '80vh',
         maxHeight: '80vh',
     },
+    textColor: {
+        color: '#3F51C0',
+    },
 })

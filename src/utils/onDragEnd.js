@@ -5,7 +5,7 @@ import {
      TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
 } from '../graphql/fragments'
 
-export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board) => {
+export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar) => {
     const { destination, source, draggableId } = result
     if (!destination) return
 
@@ -32,6 +32,8 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 boardId: board.id,
             },
         })
+
+        toggleSnackbar('MOVED_COLUMN')
         return
     }
 
@@ -58,6 +60,8 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 columnId: column.id,
             },
         })
+
+        toggleSnackbar('MOVED_TASK_IN_COLUMN')
     }
 
     // When ticket is moved into another column
@@ -142,5 +146,7 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 destTicketOrder: newTicketOrderOfDestinationColumn,
             },
         })
+
+        toggleSnackbar('MOVED_TASK_FROM_COLUMN')
     }
 }
