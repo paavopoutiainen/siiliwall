@@ -7,18 +7,18 @@ const SnackbarAlert = ({ snackbarStatus, toggleSnackbar, snackbarAction }) => {
     let message = null
 
     switch (snackbarAction) {
-    case 'MOVED_COLUMN':
-        message = 'Moved column'
-        break
-    case 'MOVED_TASK_IN_COLUMN':
-        message = 'Moved task'
-        break
-    case 'MOVED_TASK_FROM_COLUMN':
-        message = 'Moved task'
-        break
-    default:
-        message = null
-        break
+        case 'MOVED_COLUMN':
+            message = 'Moved column'
+            break
+        case 'MOVED_TASK_IN_COLUMN':
+            message = 'Moved task'
+            break
+        case 'MOVED_TASK_FROM_COLUMN':
+            message = 'Moved task'
+            break
+        default:
+            message = null
+            break
     }
 
     return (
@@ -31,7 +31,6 @@ const SnackbarAlert = ({ snackbarStatus, toggleSnackbar, snackbarAction }) => {
             action={(
                 <Button
                     onClick={toggleSnackbar}
-                    textPrimary
                     classes={{ root: classes.textColor }}
                 >
                     Close
