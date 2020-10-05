@@ -4,35 +4,47 @@ import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER, TASKORDER } from '../graphql/fragments'
+import { COLUMNORDER, TICKETORDER } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
+import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
+import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
 
 const AlertBox = ({
-    dialogStatus, toggleDialog, action, columnId, boardId, taskId,
+    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
+    const [archiveSubtask] = useArchiveSubtask(columnId)
+    const [callDeleteSubtask] = useDeleteSubtask(columnId)
     const classes = boardPageStyles()
     const client = useApolloClient()
-    const [deleteColumn] = useMutation(DELETE_COLUMN)
-    const [deleteTask] = useMutation(DELETE_TASK)
+    const [callDeleteColumn] = useMutation(DELETE_COLUMN)
+    const [callDeleteTask] = useMutation(DELETE_TASK)
     const alertMsgDeleteColumn = 'This action will permanently remove the selected column and the tasks inside the column from your board and they can\'t be later examined! Are you sure you want to delete it?'
     const alertMsgDeleteTask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?'
     const alertMsgArchiveTask = 'The task is removed from the board, but can be examined through the archive setting.'
+    const alertMsgArchiveSubtask = 'The subtask is removed from the board, but can be examined through the archive setting.'
+    const alertMsgDeleteSubtask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?.'
     let alertMsg
 
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
+    case 'DELETE_SUBTASK':
+        alertMsg = alertMsgDeleteSubtask
+        break
+    default:
+        break
     }
 
     const archiveTaskById = () => {
@@ -43,15 +55,15 @@ const AlertBox = ({
         })
     }
 
-    const deleteColumnById = () => {
-        deleteColumn({
+    const archiveSubtaskById = () => {
+        archiveSubtask({
             variables: {
-                columnId,
+                subtaskId,
             },
         })
     }
 
-    const deleteColumnFromCache = () => {
+    const deleteColumn = () => {
         const idToBeDeleted = `Column:${columnId}`
         const boardIdForCache = `Board:${boardId}`
         const data = client.readFragment({
@@ -68,62 +80,90 @@ const AlertBox = ({
             },
         })
         client.cache.evict({ id: idToBeDeleted })
+        callDeleteColumn({
+            variables: {
+                columnId,
+            },
+        })
     }
 
-    const deleteTaskById = () => {
-        deleteTask({
+    const deleteTask = () => {
+        const idToBeDeleted = `Task:${taskId}`
+        const columnIdForCache = `Column:${columnId}`
+        const data = client.readFragment({
+            id: columnIdForCache,
+            fragment: TICKETORDER,
+        })
+        const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== taskId)
+        client.writeFragment({
+            id: columnIdForCache,
+            fragment: TICKETORDER,
+            data: {
+                ticketOrder: newTicketOrder,
+            },
+        })
+        client.cache.evict({ id: idToBeDeleted })
+        callDeleteTask({
             variables: {
                 taskId,
             },
         })
     }
 
-    const deleteTaskFromCache = () => {
-        const idToBeDeleted = `Task:${taskId}`
+    const deleteSubtask = () => {
+        const subtaskIdForCache = `Subtask:${subtaskId}`
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TASKORDER,
+            fragment: TICKETORDER,
         })
-        const newTaskOrder = data.taskOrder.filter((id) => id !== taskId)
-
+        const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
         client.writeFragment({
             id: columnIdForCache,
-            fragment: TASKORDER,
+            fragment: TICKETORDER,
             data: {
-                taskOrder: newTaskOrder,
+                ticketOrder: newTicketOrder,
             },
         })
-        client.cache.evict({ id: idToBeDeleted })
+        client.cache.evict({ id: subtaskIdForCache })
+        callDeleteSubtask({
+            variables: {
+                subtaskId,
+            },
+        })
     }
 
-    const handleDelete = (option) => {
-        if (action === 'DELETE_TASK' && option === 'DELETE') {
-            deleteTaskById()
-            deleteTaskFromCache()
+    const handleDelete = () => {
+        if (action === 'DELETE_TASK') {
+            deleteTask()
         }
-        if (action === 'DELETE_COLUMN' && option === 'DELETE') {
-            deleteColumnById()
-            deleteColumnFromCache()
-        } else {
-            toggleDialog()
+        if (action === 'DELETE_COLUMN') {
+            deleteColumn()
+        }
+        if (action === 'DELETE_SUBTASK') {
+            deleteSubtask()
         }
     }
 
-    const handleArchive = (option) => {
-        if (action === 'ARCHIVE_TASK' && option === 'ARCHIVE') {
+    const handleUndo = () => {
+        toggleAlertDialog()
+    }
+
+    const handleArchive = () => {
+        if (action === 'ARCHIVE_TASK') {
             archiveTaskById()
-        } else {
-            toggleDialog()
+        }
+        if (action === 'ARCHIVE_SUBTASK') {
+            archiveSubtaskById()
         }
     }
 
     return (
         <Grid item>
             <Dialog
-                classes={dialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
-                open={dialogStatus}
-                onClose={toggleDialog}
+                classes={alertDialogStatus ? { root: classes.dialogFocus } : { root: classes.dialogUnfocus }}
+                open={alertDialogStatus}
+                onClose={toggleAlertDialog}
             >
                 <Alert variant="filled" severity="error">
                     <Grid item container direction="column" spacing={2}>
@@ -131,19 +171,19 @@ const AlertBox = ({
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
                         <Grid item container direction="row" justify="flex-end">
-                            <Button size="small" variant="contained" onClick={() => handleDelete('UNDO')} classes={{ root: classes.undoAlertButton }}>
+                            <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
-                                    </Button>
-                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN'
+                            </Button>
+                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK'
                                 ? (
-                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete('DELETE')} classes={{ root: classes.deleteAlertButton }}>
+                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete()} classes={{ root: classes.deleteAlertButton }}>
                                         DELETE
                                     </Button>
                                 )
                                 : null}
-                            {action === 'ARCHIVE_TASK'
+                            {action === 'ARCHIVE_TASK' || action === 'ARCHIVE_SUBTASK'
                                 ? (
-                                    <Button size="small" variant="contained" onClick={() => handleArchive('ARCHIVE')} classes={{ root: classes.archiveAlertButton }}>
+                                    <Button size="small" variant="contained" onClick={() => handleArchive()} classes={{ root: classes.archiveAlertButton }}>
                                         ARCHIVE
                                     </Button>
                                 )

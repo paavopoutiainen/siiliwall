@@ -26,6 +26,11 @@ module.exports = (sequelize, DataTypes) => {
             through: models.UserTask,
             foreignKey: 'userId',
         })
+        // user may be working on multiple subtasks
+        User.belongsToMany(models.Subtask, {
+            through: models.UserSubtask,
+            foreignKey: 'userId',
+        })
     }
 
     return User
