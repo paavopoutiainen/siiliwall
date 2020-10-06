@@ -44,7 +44,9 @@ export const landingPageStyles = makeStyles({
 
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100%',
+        minWidth: '100%',
+        padding: 30,
     },
 
     columnRow: {
@@ -138,4 +140,14 @@ export const boardPageStyles = makeStyles({
     textColor: {
         color: '#3F51C0',
     },
+})
+export const swimlaneStyles = makeStyles({
+    root: {
+        minHeight: '100%',
+        minWidth: '100%',
+        padding: 30,
+    },
+    swimlaneTitle: {
+
+    }
 })
