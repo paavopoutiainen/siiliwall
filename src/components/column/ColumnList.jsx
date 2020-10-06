@@ -3,7 +3,6 @@ import Column from './Column'
 
 const ColumnList = ({ columns, columnOrder }) => {
     const newColumnOrder = columnOrder.map((id) => columns.find((column) => column.id === id))
-
     return (
         <>
             {newColumnOrder.map((column, index) => (
