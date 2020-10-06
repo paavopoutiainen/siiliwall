@@ -28,6 +28,16 @@ const client = new ApolloClient({
                             return [...incoming]
                         },
                     },
+                    subtasks: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        },
+                    },
+                    ticketOrder: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        },
+                    },
                     taskOrder: {
                         merge(existing, incoming) {
                             return [...incoming]

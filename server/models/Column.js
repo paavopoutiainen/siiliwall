@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         Column.hasMany(models.Task, {
             foreignKey: 'columnId',
         })
+        Column.hasMany(models.Subtask, {
+            foreignKey: 'columnId',
+        })
     }
     return Column
 }

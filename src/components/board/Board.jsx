@@ -5,26 +5,36 @@ import {
     Grid, TextField, Button, FormControlLabel, Switch,
 } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { useApolloClient } from '@apollo/client'
+import {
+    useApolloClient,
+} from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import ColumnList from '../column/ColumnList'
 import useBoardById from '../../graphql/board/hooks/useBoardById'
-import useMoveTaskInColumn from '../../graphql/task/hooks/useMoveTaskInColumn'
-import useMoveTaskFromColumn from '../../graphql/task/hooks/useMoveTaskFromColumn'
+import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
+import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import useAddColumn from '../../graphql/column/hooks/useAddColumn'
 import { onDragEnd } from '../../utils/onDragEnd'
+import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
 const Board = ({ id }) => {
     const { data, loading } = useBoardById(id)
-    const [moveTaskInColumn] = useMoveTaskInColumn()
-    const [moveTaskFromColumn] = useMoveTaskFromColumn()
+    const [moveTicketInColumn] = useMoveTicketInColumn()
+    const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
     const [addColumn] = useAddColumn(id)
+    const [snackbarStatus, setSnackbarStatus] = useState(false)
+    const [snackbarAction, setSnackbarAction] = useState(null)
+
+    const toggleSnackbar = (action) => {
+        setSnackbarAction(action)
+        setSnackbarStatus(!snackbarStatus)
+    }
 
     const handleChange = (event) => {
         setColumnName(event.target.value)
@@ -66,7 +76,7 @@ const Board = ({ id }) => {
                     </Grid>
 
                 </Grid>
-                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTaskInColumn, moveTaskFromColumn, moveColumn, client, columns, board)}>
+                <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar)}>
                     <Grid item container direction="row">
                         <Droppable droppableId={id} direction="horizontal" type="column">
                             {(provided) => (
@@ -98,6 +108,9 @@ const Board = ({ id }) => {
                         </Droppable>
                     </Grid>
                 </DragDropContext>
+                <Grid container item>
+                    <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} snackbarAction={snackbarAction} />
+                </Grid>
             </Grid>
         </div>
     )

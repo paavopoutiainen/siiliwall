@@ -8,7 +8,7 @@ import TaskEditDialog from './EditTaskDialog'
 
 const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
-    const { title } = task
+    const { title, members } = task
     const titleLimit = 27
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
@@ -29,11 +29,6 @@ const Task = ({ task, index, columnId }) => {
         }
         return retVal
     }
-
-    const chosenMembersData = task.members.map((user) => {
-        const newObject = { value: user.id, label: user.userName }
-        return newObject
-    })
 
     return (
         <Draggable draggableId={task.id} index={index}>
@@ -68,7 +63,7 @@ const Task = ({ task, index, columnId }) => {
                             ) : null}
                             {task.members.length !== 0 ? (
                                 <p>
-                                    {`members:  ${chosenMembersData.map((user) => ` ${user.label}`)}`}
+                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
                                 </p>
                             ) : null}
                             {task.description ? (

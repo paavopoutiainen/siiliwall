@@ -9,17 +9,17 @@ import AlertBox from '../AlertBox'
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
-    const [dialogStatus, setDialogStatus] = useState(false)
+    const [alertDialogStatus, setAlertDialogStatus] = useState(false)
 
-    const toggleDialog = () => setDialogStatus(!dialogStatus)
+    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget)
     }
 
-    const openDialog = (order) => {
+    const openAlertDialog = (order) => {
         setAction(order)
-        toggleDialog()
+        toggleAlertDialog()
         setAnchorEl(null)
     }
 
@@ -43,7 +43,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 elevation={0}
                 selected
             >
-                <MenuItem onClick={() => openDialog('DELETE_COLUMN')}>
+                <MenuItem onClick={() => openAlertDialog('DELETE_COLUMN')}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
@@ -51,8 +51,8 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 </MenuItem>
             </Menu>
             <AlertBox
-                dialogStatus={dialogStatus}
-                toggleDialog={toggleDialog}
+                alertDialogStatus={alertDialogStatus}
+                toggleAlertDialog={toggleAlertDialog}
                 columnId={columnId}
                 boardId={boardId}
                 action={action}

@@ -53,7 +53,7 @@ export const boardPageStyles = makeStyles({
 
     column: {
         backgroundColor: '#EBECF0',
-        height: 600,
+        minHeight: 600,
         width: 350,
         margin: 5,
         borderRadius: 6,
@@ -62,13 +62,45 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        margin: 3,
+        marginTop: 2,
+        marginBottom: 2,
         borderRadius: 4,
         padding: 5,
     },
 
     taskInner: {
         flexWrap: 'nowrap',
+    },
+
+    subtaskComponent: {
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 150,
+        marginTop: 2,
+        marginBottom: 2,
+    },
+
+    subtaskHeader: {
+        backgroundColor: 'rgba(255, 140, 85, .8)',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: '20%',
+    },
+
+    subtaskHeaderText: {
+        paddingLeft: 10,
+    },
+
+    subtaskDropdownComponent: {
+        height: 30,
+    },
+
+    subtaskDropdownButton: {
+        height: '100%',
+    },
+
+    subtaskContent: {
+        padding: 10,
     },
 
     dialogFocus: {
@@ -88,19 +120,22 @@ export const boardPageStyles = makeStyles({
     },
 
     undoAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     deleteAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     archiveAlertButton: {
-        margin: 5
+        margin: 5,
     },
 
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
-    }
+    },
+    textColor: {
+        color: '#3F51C0',
+    },
 })
