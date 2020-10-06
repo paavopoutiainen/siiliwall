@@ -1,41 +1,34 @@
 import React, { useState } from 'react'
-import { Grid, TextField, Button, ClickAwayListener } from '@material-ui/core'
+import EditText from 'react-editext'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
+import styles from '../../styles.css'
 
-const RenameColumn = ({ editId, column, toggleEdit }) => {
+const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
-    const [name, setName] = useState(column?.name)
+    const [name] = useState(column?.name)
 
-    const handleChange = (event) => {
-        setName(event.target.value)
-    }
-
-    const handleSave = (event) => {
-        event.preventDefault()
+    const handleSave = () => {
         editColumn({
             variables: {
                 columnId: editId,
                 columnName: name,
             },
         })
-        toggleEdit()
     }
 
     return (
-        <ClickAwayListener
-            onClickAway={toggleEdit}
-            mouseEvent="onMouseDown"
-        >
-            <Grid item>
-                <TextField
-                    defaultValue={column.name}
-                    label="Name"
-                    onChange={handleChange}
-                    autoFocus
-                />
-                <Button onClick={handleSave}>Save</Button>
-            </Grid>
-        </ClickAwayListener>
+        <EditText
+            className={styles.editButton}
+            submitOnEnter
+            cancelOnEscape
+            editOnViewClick
+            cancelOnUnfocus
+            type="text"
+            value={name}
+            onSave={handleSave}
+            validationMessage="Name has to have 1 or more characters"
+            validation={(val) => val.length > 0}
+        />
     )
 }
 
