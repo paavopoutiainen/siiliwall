@@ -138,6 +138,7 @@ const tasks = [
         columnOrderNumber: 0,
         id: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
         ownerId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
         title: 'Cypress test',
@@ -147,6 +148,7 @@ const tasks = [
         columnOrderNumber: 2,
         id: 'd29fc7da-93a1-40ec-8c56-7b619445465b',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
         title: 'Modify column styles',
@@ -156,6 +158,7 @@ const tasks = [
         columnOrderNumber: 1,
         id: 'f6209adb-91ca-476b-8269-328a82d05555',
         creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
         title: 'Modify task styles',
@@ -165,6 +168,7 @@ const tasks = [
         columnOrderNumber: 1,
         id: 'd39fc7da-93a1-40ec-8c56-7b619445465b',
         creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
         title: 'Test for columns',
@@ -173,6 +177,7 @@ const tasks = [
         columnOrderNumber: 1,
         id: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
         title: 'Create user model',
@@ -181,6 +186,7 @@ const tasks = [
         columnOrderNumber: 2,
         id: '6e766c63-0684-4cf2-8a46-868cfaf84033',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e',
     },
     {
         title: 'Add subtasks',
@@ -189,6 +195,7 @@ const tasks = [
         columnOrderNumber: 1,
         id: 'e12d6ed1-c275-4047-8f3c-b50050bada6d',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        boardId: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e',
     },
     {
         title: 'Update user stories',
@@ -197,6 +204,7 @@ const tasks = [
         columnOrderNumber: 0,
         id: '7b29f130-fc89-4f16-b0ef-71a06e09110c',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        boardId: '83fa4f89-8ea1-4d1c-9fee-321daa941485',
     },
 ]
 

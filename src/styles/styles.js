@@ -154,5 +154,5 @@ export const swimlaneStyles = makeStyles({
     columnList: {
         border: '2px solid black',
 
-    }
+    },
 })

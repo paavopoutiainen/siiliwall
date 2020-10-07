@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Grid, FormControlLabel, Switch } from '@material-ui/core'
 import Board from '../components/board/Board'
 import Swimlane from '../components/swimlane/Swimlane'
-import SwimlaneViewHeader from '../components/swimlane/SwimlaneViewHeader'
+import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 
@@ -16,7 +16,7 @@ const BoardPage = ({ id }) => {
     const board = data.boardById
 
     const switchView = () => {
-        view === 'kanban' ? toggleView('swimlane') : toggleView('kanban')
+        toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }
 
     return (
@@ -27,7 +27,7 @@ const BoardPage = ({ id }) => {
             id="boardElement"
             spacing={3}
         >
-            <Grid container item direction="column" justify="space-between" classes={{ root: classes.boardHeader }} id='boardHeader'>
+            <Grid container item direction="column" justify="space-between" classes={{ root: classes.boardHeader }} id="boardHeader">
                 <Grid item>
                     <h1>{board.name}</h1>
                 </Grid>
@@ -39,8 +39,8 @@ const BoardPage = ({ id }) => {
                     />
                 </Grid>
             </Grid>
-            <Grid item>
-                {view === 'kanban' ? <Board board={board} /> : <SwimlaneViewHeader />}
+            <Grid item classes={{ root: classes.boardView }}>
+                {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>
         </Grid>
     )
