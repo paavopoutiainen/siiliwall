@@ -149,5 +149,5 @@ export const swimlaneStyles = makeStyles({
     },
     swimlaneTitle: {
 
-    }
+    },
 })

@@ -1,6 +1,6 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { swimlaneStyles } from '../styles/styles'
+import { swimlaneStyles } from '../../styles/styles'
 
 const Swimlane = () => {
     const classes = swimlaneStyles()

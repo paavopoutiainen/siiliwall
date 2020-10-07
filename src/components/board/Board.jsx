@@ -78,7 +78,7 @@ const Board = ({ board }) => {
                                         id="addColumnButton"
                                     >
                                         Add
-                                        </Button>
+                                    </Button>
                                 </Grid>
                             </Grid>
                         )}
