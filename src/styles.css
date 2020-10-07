@@ -35,13 +35,14 @@ html, body {
 }
 
 button[editext="edit-button"] {
-    visibility: hidden;
+    visibility: hidden; 
+    
 } 
 button[editext="cancel-button"] {
     visibility: hidden;
 } 
 button[editext="save-button"] {
-    visibility: hidden;
+    border-radius: 25%;
 } 
 
 div[editext="view-container"] {
