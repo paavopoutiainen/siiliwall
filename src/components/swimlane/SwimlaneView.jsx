@@ -2,6 +2,8 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import SwimlaneViewHeader from './SwimlaneViewHeader'
 import SwimlaneList from './SwimlaneList'
+import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -40,11 +42,20 @@ const SwimlaneView = ({ board }) => {
         return { ...task, swimlaneColumns }
     })
     console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
+
     return (
-        <Grid container direction="column" spacing={1}>
-            <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} columnOrder={board.columnOrder} /></Grid>
-            <Grid item><SwimlaneList tasks={tasksForSwimlaneList} /></Grid>
-        </Grid>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane}>
+            <Grid container direction="column" spacing={1}>
+                <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} columnOrder={board.columnOrder} /></Grid>
+                <Droppable droppableId={} direction="vertical" type="swimlane">
+                    {(provided) => (
+                        <Grid item {...provided.droppableProps} ref={provided.innerRef}>
+                            <SwimlaneList tasks={tasksForSwimlaneList} />
+                        </Grid>
+                    )}
+                </Droppable>
+            </Grid>
+        </DragDropContext>
     )
 }
 export default SwimlaneView
