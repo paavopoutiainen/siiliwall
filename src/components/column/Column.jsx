@@ -28,7 +28,7 @@ const Column = ({ column, index }) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
