@@ -145,9 +145,14 @@ export const swimlaneStyles = makeStyles({
     root: {
         minHeight: '100%',
         minWidth: '100%',
-        padding: 30,
+        border: '2px solid lightgrey'
     },
     swimlaneTitle: {
+        backgroundColor: '#4589e5',
+        color: '#fff'
+    },
+    columnList: {
+        border: '2px solid black',
 
     }
 })

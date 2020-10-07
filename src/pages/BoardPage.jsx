@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Grid, FormControlLabel, Switch } from '@material-ui/core'
 import Board from '../components/board/Board'
 import Swimlane from '../components/swimlane/Swimlane'
+import SwimlaneViewHeader from '../components/swimlane/SwimlaneViewHeader'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 
@@ -12,11 +13,12 @@ const BoardPage = ({ id }) => {
 
     if (loading) return null
 
+    const board = data.boardById
+
     const switchView = () => {
         view === 'kanban' ? toggleView('swimlane') : toggleView('kanban')
     }
 
-    const board = data.boardById
     return (
         <Grid
             container
@@ -37,8 +39,8 @@ const BoardPage = ({ id }) => {
                     />
                 </Grid>
             </Grid>
-            <Grid item classes={{ root: classes.boardView }} >
-                {view === 'kanban' ? <Board board={board} /> : <Swimlane />}
+            <Grid item>
+                {view === 'kanban' ? <Board board={board} /> : <SwimlaneViewHeader />}
             </Grid>
         </Grid>
     )
