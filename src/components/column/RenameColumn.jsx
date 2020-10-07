@@ -7,11 +7,11 @@ const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
     const [name] = useState(column?.name)
 
-    const handleSave = () => {
+    const handleSave = (newName) => {
         editColumn({
             variables: {
                 columnId: editId,
-                columnName: name,
+                columnName: newName,
             },
         })
     }
