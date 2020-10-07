@@ -27,7 +27,15 @@ const SwimlaneView = ({ board }) => {
             const subtasksOfTask = subtasks.filter((subtask) => subtask.task.id === task.id)
             const subtasksInColumn = subtasksOfTask.filter((subtask) => subtask.column.id === column.id)
 
-            return { name: column.name, id: column.id, subtasks: subtasksInColumn, subtaskOrder: subtasksTicketOrder }
+            // lisää subtaskiin sen oikea indeksiticketlistalla
+            subtasksInColumn.forEach((subtask) => {
+                const index = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
+                return { ...subtask, index }
+            })
+
+            return {
+                name: column.name, id: column.id, subtasks: subtasksInColumn, subtaskOrder: subtasksTicketOrder,
+            }
         })
         return { ...task, swimlaneColumns }
     })
