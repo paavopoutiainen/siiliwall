@@ -2,12 +2,12 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 
-const SwimlaneHeader = () => {
+const SwimlaneHeader = ({ taskName }) => {
     const classes = swimlaneStyles()
 
     return (
         <Grid container direction="row">
-            <Grid item classes={{ root: classes.swimlaneTitle }}><h3>Swimlane title</h3></Grid>
+            <Grid item classes={{ root: classes.swimlaneTitle }}><h3>{taskName}</h3></Grid>
         </Grid>
     )
 }

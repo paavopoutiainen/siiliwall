@@ -4,12 +4,12 @@ import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
 
-const Swimlane = () => {
+const Swimlane = ({ task }) => {
     const classes = swimlaneStyles()
 
     return (
         <Grid container direction="column">
-            <Grid item><SwimlaneHeader /></Grid>
+            <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
             <Grid item><SwimlaneColumnList /></Grid>
         </Grid>
     )

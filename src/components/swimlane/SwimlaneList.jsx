@@ -3,20 +3,11 @@ import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 import Swimlane from './Swimlane'
 
-const SwimlaneList = ({ }) => {
+const SwimlaneList = ({ tasks }) => {
     const classes = swimlaneStyles()
-
-    /*Tähän komponenttiin tarvitaan siis boardin:
-        - kolumnit
-        - taskit + subtaskit tietoineen
-        - swimlaneColumn listat
-    */
-    /* Passataan Swimlane komponentille*/
     return (
         <Grid container direction="column" spacing={2}>
-            <Swimlane
-
-            />
+            {tasks.map((task, index) => <Grid item key={index}><Swimlane task={task} /></Grid>)}
         </Grid>
     )
 }

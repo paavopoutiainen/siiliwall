@@ -1,11 +1,13 @@
 import React from 'react'
+import { Grid } from '@material-ui/core'
+import SwimlaneViewHeader from './SwimlaneViewHeader'
+import SwimlaneList from './SwimlaneList'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
     // Basically we want to each task to contain its subtasks
     // and have them divided by columns they exist at
     // These units are called swimlaneColumns
-    console.log('board', board)
     const { columns } = board
     let tasks = []
     let subtasks = []
@@ -28,8 +30,11 @@ const SwimlaneView = ({ board }) => {
         return { ...task, swimlaneColumns }
     })
     console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
-
-    return <div />
+    return (
+        <Grid container direction="column" spacing={1}>
+            <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} columnOrder={board.columnOrder} /></Grid>
+            <Grid item><SwimlaneList tasks={tasksForSwimlaneList} /></Grid>
+        </Grid>
+    )
 }
-
 export default SwimlaneView

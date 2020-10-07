@@ -149,10 +149,7 @@ export const swimlaneStyles = makeStyles({
     },
     swimlaneTitle: {
         backgroundColor: '#4589e5',
-        color: '#fff'
-    },
-    columnList: {
-        border: '2px solid black',
-
-    },
+        color: '#fff',
+        width: '100%'
+    }
 })
