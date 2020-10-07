@@ -33,3 +33,25 @@ html, body {
 .selectField {
     margin-top: 12px;
 }
+
+button[editext="edit-button"] {
+    visibility: hidden; 
+    
+} 
+button[editext="cancel-button"] {
+    visibility: hidden;
+} 
+button[editext="save-button"] {
+    border-radius: 25%;
+} 
+
+div[editext="view-container"] {
+    font-size: 1.27rem;
+    font-weight: bolder;
+}
+
+input[editext="input"] {
+    border: none;
+    background-color: mintcream;
+    border-radius: 0.3rem;
+}

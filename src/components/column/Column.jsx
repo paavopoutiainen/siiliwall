@@ -4,19 +4,18 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
-import TaskList from '../task/TaskList'
+import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 import RenameColumn from './RenameColumn'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
-    const { tasks, taskOrder } = column
+    const {
+        tasks, ticketOrder, subtasks,
+    } = column
     const [dialogStatus, setDialogStatus] = useState(false)
-    const [editName, setEditName] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-    const toggleEdit = () => setEditName(!editName)
-
     return (
         <Draggable draggableId={column.id} index={index}>
             {(provided) => (
@@ -29,20 +28,15 @@ const Column = ({ column, index }) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
-                        <Grid item onClick={toggleEdit}>
-                            {editName ? (
-                                <RenameColumn
-                                    column={column}
-                                    editId={column.id}
-                                    toggleEdit={toggleEdit}
-                                />
-                            ) : <h2>{column.name}</h2>}
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                        <Grid item>
+                            <RenameColumn editId={column.id} column={column} />
                         </Grid>
                         <Grid item>
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />
                         </Grid>
                     </Grid>
+
                     <Droppable droppableId={column.id} type="task">
                         {(provided) => (
                             <Grid
@@ -51,28 +45,30 @@ const Column = ({ column, index }) => {
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >
-                                <TaskList
+                                <TicketList
                                     tasks={tasks}
-                                    taskOrder={taskOrder}
+                                    subtasks={subtasks}
+                                    ticketOrder={ticketOrder}
                                     columnId={column.id}
                                 />
                                 {provided.placeholder}
                             </Grid>
                         )}
-
                     </Droppable>
-                    <Grid item container>
-                        <AddTaskDialog
-                            dialogStatus={dialogStatus}
-                            toggleDialog={toggleDialog}
-                            column={column}
-                        />
-                        <Button
-                            onClick={toggleDialog}
-                            color="primary"
-                        >
-                            Add task
-                        </Button>
+                    <Grid item container direction="column">
+                        <Grid item>
+                            <AddTaskDialog
+                                dialogStatus={dialogStatus}
+                                toggleDialog={toggleDialog}
+                                column={column}
+                            />
+                            <Button
+                                onClick={toggleDialog}
+                                color="primary"
+                            >
+                                Add task
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             )}

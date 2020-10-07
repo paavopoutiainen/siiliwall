@@ -1,10 +1,28 @@
+enum AllowedTicketType {
+  task
+  subtask
+}
+
+input TicketOrderInput {
+  ticketId: ID!
+  type: String
+}
+
+type TicketOrderObject {
+  ticketId: ID!
+  type: AllowedTicketType
+}
+
 type Column {
   id: ID!
   name: String!
   board: Board!
   orderNumber: Int!
   tasks: [Task!]!
+  subtasks: [Subtask!]!
   taskOrder: [ID!]!
+  subtaskOrder: [ID!]!
+  ticketOrder: [TicketOrderObject!]!
 }
 
 type Query {
@@ -15,8 +33,9 @@ type Mutation {
   addColumnForBoard(boardId: ID!, columnName: String!): Column
   editColumnById(id: ID!, name: String!): Column
   deleteColumnById(id: ID!): ID
-  moveTaskInColumn(newOrder: [ID!], columnId: ID!): Column
+  moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!): Column
   moveTaskFromColumn(taskId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTaskOrder: [ID!], destTaskOrder: [ID!]): [Column!]!
+  moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!): [Column!]
   moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
 }
 

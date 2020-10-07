@@ -50,7 +50,7 @@ const schema = {
             if (!root.ownerId) {
                 return null
             }
-            return dataSources.boardService.getOwnerOfTask(root.ownerId)
+            return dataSources.boardService.getOwnerById(root.ownerId)
         },
         members(root) {
             return dataSources.boardService.getMembersByTaskId(root.id)
