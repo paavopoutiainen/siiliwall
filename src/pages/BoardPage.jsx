@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { Grid, FormControlLabel, Switch } from '@material-ui/core'
 import Board from '../components/board/Board'
-import Swimlane from '../components/swimlane/Swimlane'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
