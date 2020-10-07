@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 
-const SwimlaneColumn = () => {
+const SwimlaneColumn = ({ swimlaneColumn }) => {
     const classes = swimlaneStyles()
 
     return (

@@ -23,9 +23,11 @@ const SwimlaneView = ({ board }) => {
     // This object is passed to swimlaneList
     const tasksForSwimlaneList = tasks.map((task) => {
         const swimlaneColumns = columns.map((column) => {
+            const subtasksTicketOrder = column.ticketOrder.filter((ticketOrderObj) => ticketOrderObj.type === 'subtask')
             const subtasksOfTask = subtasks.filter((subtask) => subtask.task.id === task.id)
             const subtasksInColumn = subtasksOfTask.filter((subtask) => subtask.column.id === column.id)
-            return { name: column.name, id: column.id, subtasks: subtasksInColumn }
+
+            return { name: column.name, id: column.id, subtasks: subtasksInColumn, subtaskOrder: subtasksTicketOrder }
         })
         return { ...task, swimlaneColumns }
     })
