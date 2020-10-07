@@ -218,6 +218,20 @@ class BoardService {
         return arrayOfIds
     }
 
+    async getSwimlaneOrderOfBoard(boardId) {
+        let arrayOfIds
+        try {
+            const swimlanes = await this.store.Task.findAll({
+                attributes: ['id'],
+                where: { boardId },
+                order: this.sequelize.literal('swimlaneOrderNumber ASC')
+            })
+            arrayOfIds = swimlanes.map((swimlane) => swimlane.dataValues.id)
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfIds
+    }
     /*
     Gets the order of tasks in certain column, returns an array of taskIds in the correct order.
     This field is for keeping track of the order in which the tasks are displayed in the column
@@ -536,6 +550,18 @@ class BoardService {
             }))
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    async reOrderSwimlanes(swimlaneOrder) {
+        try {
+            await Promise.all(swimlaneOrder.map(async (id, index) => {
+                const task = await this.store.Task.findByPk(id)
+                task.swimlaneOrderNumber = index
+                await task.save()
+            }))
+        } catch (e) {
+            console.error(e)
         }
     }
 

@@ -4,19 +4,21 @@ import SwimlaneViewHeader from './SwimlaneViewHeader'
 import SwimlaneList from './SwimlaneList'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
+import useMoveSwimlane from '../../graphql/swimlane/hooks/useMoveSwimlane'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
     // Basically we want to each task to contain its subtasks
     // and have them divided by columns they exist at
     // These units are called swimlaneColumns
+    const [moveSwimlane] = useMoveSwimlane()
     const { columns } = board
     let tasks = []
     let subtasks = []
-
     columns.forEach((column) => {
         tasks = tasks.concat(column.tasks)
     })
+    console.log(tasks)
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
@@ -33,16 +35,17 @@ const SwimlaneView = ({ board }) => {
         })
         return { ...task, swimlaneColumns }
     })
-    console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
+    //console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveSwimlane)}>
             <Grid container direction="column" spacing={1}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} columnOrder={board.columnOrder} /></Grid>
-                <Droppable droppableId={} direction="vertical" type="swimlane">
+                <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
                             <SwimlaneList tasks={tasksForSwimlaneList} />
+                            {provided.placeholder}
                         </Grid>
                     )}
                 </Droppable>
