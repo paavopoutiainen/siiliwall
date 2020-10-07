@@ -6,9 +6,7 @@ const SwimlaneColumnList = () => {
     const classes = swimlaneStyles()
 
     return (
-        <Grid container direction="row" spacing={2} classes={{ root: classes.columnList }}>
-
-        </Grid>
+        <Grid container direction="row" spacing={2} />
     )
 }
 export default SwimlaneColumnList

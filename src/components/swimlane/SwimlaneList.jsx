@@ -7,7 +7,7 @@ const SwimlaneList = ({ tasks }) => {
     const classes = swimlaneStyles()
     return (
         <Grid container direction="column" spacing={2}>
-            {tasks.map((task, index) => <Grid item key={index}><Swimlane task={task} /></Grid>)}
+            {tasks.map((task, index) => <Grid item key={task.id}><Swimlane task={task} /></Grid>)}
         </Grid>
     )
 }
