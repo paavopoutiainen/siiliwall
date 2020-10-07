@@ -10,7 +10,7 @@ const Swimlane = ({ task }) => {
     return (
         <Grid container direction="column">
             <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-            <Grid item><SwimlaneColumnList /></Grid>
+            <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} /></Grid>
         </Grid>
     )
 }
