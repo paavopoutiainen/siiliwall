@@ -9,12 +9,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
-        content: {
-            type: DataTypes.STRING,
-        },
         columnOrderNumber: {
             type: DataTypes.INTEGER,
         },
+        description: DataTypes.STRING,
         swimlaneOrderNumber: DataTypes.INTEGER,
         color: DataTypes.STRING,
         size: DataTypes.INTEGER,

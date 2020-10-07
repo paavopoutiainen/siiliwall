@@ -53,7 +53,7 @@ export const boardPageStyles = makeStyles({
 
     column: {
         backgroundColor: '#EBECF0',
-        height: 600,
+        minHeight: 600,
         width: 350,
         margin: 5,
         borderRadius: 6,
@@ -62,7 +62,8 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        margin: 3,
+        marginTop: 2,
+        marginBottom: 2,
         borderRadius: 4,
         padding: 5,
     },
@@ -71,28 +72,70 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
-    dropDownMenu: {
-        backgroundColor: '!important lightgrey',
+    subtaskComponent: {
+        borderRadius: 5,
+        backgroundColor: '#fff',
+        height: 150,
+        marginTop: 2,
+        marginBottom: 2,
     },
 
-    snackbar: {
-        maxWidth: 350,
+    subtaskHeader: {
+        backgroundColor: 'rgba(255, 140, 85, .8)',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        height: '20%',
     },
 
-    alertBox: {
-        zIndex: 1,
+    subtaskHeaderText: {
+        paddingLeft: 10,
     },
 
-    invisible: {
-        height: '100vh',
-        left: 0,
-        position: 'fixed',
-        top: 0,
-        width: '100vw',
-        zIndex: 0,
+    subtaskDropdownComponent: {
+        height: 30,
     },
+
+    subtaskDropdownButton: {
+        height: '100%',
+    },
+
+    subtaskContent: {
+        padding: 10,
+    },
+
+    dialogFocus: {
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        borderRadius: 10,
+        boxShadow: '0  9px 46px  8px rgba(0, 0, 0, 0.14),0 11px 15px -7px rgba(0, 0, 0, 0.12),0 24px 38px  3px rgba(0, 0, 0, 0.20)',
+        minHeight: '100vh',
+        maxHeight: '100vh',
+    },
+
+    dialogUnfocus: {
+        minWidth: '100vw',
+        maxWidth: '100vw',
+        minHeight: '100vh',
+        maxHeight: '100vh',
+    },
+
+    undoAlertButton: {
+        margin: 5,
+    },
+
+    deleteAlertButton: {
+        margin: 5,
+    },
+
+    archiveAlertButton: {
+        margin: 5,
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
+    },
+    textColor: {
+        color: '#3F51C0',
     },
 })

@@ -13,6 +13,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
+    const [description, setDescription] = useState(null)
     const [size, setSize] = useState(null)
     const [owner, setOwner] = useState(null)
     const classes = boardPageStyles()
@@ -29,6 +30,13 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         })
         setTitle(input)
         setTitleError('')
+    }
+    const handleDescriptionChange = (event) => {
+        if (event.target.value === '') {
+            setDescription(null)
+            return
+        }
+        setDescription(event.target.value)
     }
 
     const handleOwnerChange = (action) => {
@@ -53,6 +61,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleSave = async (event) => {
         event.preventDefault()
+<<<<<<< HEAD
         const isValid = await taskSchema.isValid({ title, size })
         if (isValid) {
             addTask({
@@ -71,6 +80,24 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             setOwner(null)
             setMembers([])
         }
+=======
+        addTask({
+            variables: {
+                columnId: column.id,
+                title,
+                size,
+                ownerId: owner,
+                memberIds: members,
+                description,
+            },
+        })
+        toggleDialog()
+        setTitle('')
+        setSize(null)
+        setOwner(null)
+        setMembers([])
+        setDescription(null)
+>>>>>>> dev
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -131,6 +158,19 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         options={modifiedData}
                         onChange={handleMembersChange}
                         closeMenuOnSelect={false}
+                    />
+                    <TextField
+                        id="standard-multiline-static"
+                        autoComplete="off"
+                        margin="dense"
+                        name="description"
+                        label="Description"
+                        type="text"
+                        multiline
+                        rows={3}
+                        value={description || ''}
+                        fullWidth
+                        onChange={handleDescriptionChange}
                     />
                 </DialogContent>
                 <DialogActions>

@@ -4,17 +4,17 @@ import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
 import { boardPageStyles } from '../../styles/styles'
-import TaskList from '../task/TaskList'
+import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
-    const { tasks, taskOrder } = column
+    const {
+        tasks, ticketOrder, subtasks,
+    } = column
     const [dialogStatus, setDialogStatus] = useState(false)
-
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-
     return (
         <Draggable draggableId={column.id} index={index}>
             {(provided) => (
@@ -35,6 +35,7 @@ const Column = ({ column, index }) => {
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />
                         </Grid>
                     </Grid>
+
                     <Droppable droppableId={column.id} type="task">
                         {(provided) => (
                             <Grid
@@ -43,28 +44,30 @@ const Column = ({ column, index }) => {
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >
-                                <TaskList
+                                <TicketList
                                     tasks={tasks}
-                                    taskOrder={taskOrder}
+                                    subtasks={subtasks}
+                                    ticketOrder={ticketOrder}
                                     columnId={column.id}
                                 />
                                 {provided.placeholder}
                             </Grid>
                         )}
-
                     </Droppable>
-                    <Grid item container>
-                        <AddTaskDialog
-                            dialogStatus={dialogStatus}
-                            toggleDialog={toggleDialog}
-                            column={column}
-                        />
-                        <Button
-                            onClick={toggleDialog}
-                            color="primary"
-                        >
-                            Add task
-                        </Button>
+                    <Grid item container direction="column">
+                        <Grid item>
+                            <AddTaskDialog
+                                dialogStatus={dialogStatus}
+                                toggleDialog={toggleDialog}
+                                column={column}
+                            />
+                            <Button
+                                onClick={toggleDialog}
+                                color="primary"
+                            >
+                                Add task
+                            </Button>
+                        </Grid>
                     </Grid>
                 </Grid>
             )}
