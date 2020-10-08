@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
-import { Grid, FormControlLabel, Switch } from '@material-ui/core'
+import {
+    Grid, FormControlLabel, Switch,
+} from '@material-ui/core'
 import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
@@ -21,7 +23,7 @@ const BoardPage = ({ id }) => {
     return (
         <Grid
             container
-            direction="column"
+            direction="row"
             classes={{ root: classes.root }}
             id="boardElement"
             spacing={3}
@@ -38,6 +40,7 @@ const BoardPage = ({ id }) => {
                     />
                 </Grid>
             </Grid>
+
             <Grid item classes={{ root: classes.boardView }}>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>

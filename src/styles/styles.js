@@ -49,6 +49,14 @@ export const boardPageStyles = makeStyles({
         padding: 30,
     },
 
+    boardHeader: {
+        width: '20%',
+    },
+
+    addColumn: {
+        minWidth: 250,
+    },
+
     columnRow: {
         flexWrap: 'nowrap',
     },
@@ -57,17 +65,13 @@ export const boardPageStyles = makeStyles({
         backgroundColor: '#EBECF0',
         minHeight: 600,
         width: 350,
-        margin: 5,
         borderRadius: 6,
-        padding: 5,
     },
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        marginTop: 2,
-        marginBottom: 2,
+        minHeight: 100,
         borderRadius: 4,
-        padding: 5,
     },
 
     taskInner: {
@@ -78,19 +82,12 @@ export const boardPageStyles = makeStyles({
         borderRadius: 5,
         backgroundColor: '#fff',
         height: 150,
-        marginTop: 2,
-        marginBottom: 2,
     },
 
     subtaskHeader: {
         backgroundColor: 'rgba(255, 140, 85, .8)',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        height: '20%',
-    },
-
-    subtaskHeaderText: {
-        paddingLeft: 10,
     },
 
     subtaskDropdownComponent: {
@@ -100,9 +97,11 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownButton: {
         height: '100%',
     },
-
-    subtaskContent: {
-        padding: 10,
+    taskDropdownComponent: {
+        height: 25,
+    },
+    taskDropdownButton: {
+        height: '100%',
     },
 
     dialogFocus: {
@@ -145,11 +144,31 @@ export const swimlaneStyles = makeStyles({
     root: {
         minHeight: '100%',
         minWidth: '100%',
-        border: '2px solid lightgrey'
     },
+
+    swimlaneColumnNames: {
+        width: '100%',
+    },
+
+    swimlaneColumnName: {
+        textAlign: 'center',
+        width: 300,
+    },
+
     swimlaneTitle: {
         backgroundColor: '#4589e5',
         color: '#fff',
-        width: '100%'
-    }
+        width: '100%',
+    },
+
+    swimlaneColumnList: {
+        width: '100%',
+    },
+
+    swimlaneColumn: {
+        border: '2px solid lightgrey',
+        width: 300,
+        height: '100%',
+        backgroundColor: '#EBECF0',
+    },
 })

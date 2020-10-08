@@ -7,7 +7,12 @@ const SwimlaneColumnList = ({ swimlaneColumns }) => {
     const classes = swimlaneStyles()
 
     return (
-        <Grid container direction="row" spacing={2}>
+        <Grid
+            container
+            direction="row"
+            justify="space-evenly"
+            classes={{ root: classes.swimlaneColumnList }}
+        >
             {swimlaneColumns.map((swimlaneColumn, index) => <Grid item key={swimlaneColumn.id}><SwimlaneColumn swimlaneColumn={swimlaneColumn} /></Grid>)}
         </Grid>
     )

@@ -26,8 +26,9 @@ const Column = ({ column, index }) => {
                     alignItems="center"
                     {...provided.draggableProps}
                     ref={provided.innerRef}
+                    spacing={2}
                 >
-                    <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid item container direction="row" justify="space-between" alignItems="center" {...provided.dragHandleProps}>
                         <Grid item>
                             <h2>{column.name}</h2>
                         </Grid>

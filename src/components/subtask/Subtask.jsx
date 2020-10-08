@@ -6,6 +6,16 @@ import { boardPageStyles } from '../../styles/styles'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
+    const titleLimit = 22
+    const title = subtask.task?.title
+    const dots = '...'
+    const add3Dots = (titleParam) => {
+        let checkedTitle = titleParam
+        if (titleParam.length > titleLimit) {
+            checkedTitle = title.substring(0, titleLimit) + dots
+        }
+        return checkedTitle
+    }
 
     return (
         <Draggable draggableId={subtask.id} index={index}>
@@ -18,10 +28,11 @@ const Subtask = ({ subtask, index, columnId }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
+                    spacing={1}
                 >
                     <Grid item container direction="row" justify="space-between" alignItems="center" classes={{ root: classes.subtaskHeader }}>
-                        <Grid item classes={{ root: classes.subtaskHeaderText }}>
-                            <h4>{subtask.task?.title}</h4>
+                        <Grid item>
+                            <h4>{add3Dots(title)}</h4>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
                             <DropDownSubtask
@@ -30,20 +41,26 @@ const Subtask = ({ subtask, index, columnId }) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid item classes={{ root: classes.subtaskContent }}>
-                        <p>
-                            {`Content: ${subtask.content}`}
-                        </p>
-                        {subtask.owner ? (
+                    <Grid item container direction="column">
+                        <Grid item>
                             <p>
-                                {`Owner: ${subtask.owner.userName}`}
+                                {`Content: ${subtask.content}`}
                             </p>
-                        ) : null}
-                        {subtask.members.length !== 0 ? (
-                            <p>
-                                {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
-                            </p>
-                        ) : null}
+                        </Grid>
+                        <Grid item>
+                            {subtask.owner ? (
+                                <p>
+                                    {`Owner: ${subtask.owner.userName}`}
+                                </p>
+                            ) : null}
+                        </Grid>
+                        <Grid item>
+                            {subtask.members.length !== 0 ? (
+                                <p>
+                                    {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
+                                </p>
+                            ) : null}
+                        </Grid>
                     </Grid>
                 </Grid>
             )}

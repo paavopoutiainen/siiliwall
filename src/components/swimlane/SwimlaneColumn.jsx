@@ -17,6 +17,9 @@ const SwimlaneColumn = ({ swimlaneColumn }) => {
                     container
                     {...provided.droppableProps}
                     ref={provided.innerRef}
+                    classes={{ root: classes.swimlaneColumn }}
+                    direction="column"
+                    spacing={2}
                 >
                     {subtasksInOrder.map((subtask) => (
                         <Grid item key={subtask.id}>

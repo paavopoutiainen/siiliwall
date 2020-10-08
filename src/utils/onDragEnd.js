@@ -54,6 +54,9 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
             },
         })
 
+        const test = client.readQuery({ query: BOARD_BY_ID, variables: { boardId: "83fa4f89-8ea1-4d1c-9fee-321daa941485"} })
+        console.log("klerwrlwrjee",test)
+
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
@@ -90,6 +93,9 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         // From the source column filter out the moved ticket using draggableId
         const updatedTicketsOfSourceColumn = ticketsOfSourceColumn.filter((ticket) => ticket.id !== draggableId)
         // To the destination column add the moved task
+        //tällä ticketillä ei ole tässä kohtaa uutta columnId:tä ja se pitäii sille saada
+        // uutta columnId:tä ei tarvitse renderöitiin siihen käytetään columnin subtask saraketta
+        // sen vois päivittää vaikka mutaation update callbackissa vähän alempana
         const updatedTicketsOfDestinationColumn = ticketsOfDestinationColumn.concat(ticketBeingMoved)
 
         const updatedTasksOfSourceColumn = []
@@ -135,6 +141,8 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 subtasks: updatedsubtasksOfDestinationColumn,
             },
         })
+
+        const test = client.readQuery({ query: BOARD_BY_ID, variables: { boardId: "83fa4f89-8ea1-4d1c-9fee-321daa941485"} })
 
         await moveTicketFromColumn({
             variables: {

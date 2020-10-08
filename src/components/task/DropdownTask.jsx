@@ -8,12 +8,14 @@ import {
 } from '@material-ui/icons'
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
+import { boardPageStyles } from '../../styles/styles'
 
 const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
+    const classes = boardPageStyles()
 
     const toggleAddDialog = () => {
         setAnchorEl(null)
@@ -38,11 +40,12 @@ const DropdownTask = ({ columnId, taskId, handleEdit }) => {
     }, [handleEdit])
 
     return (
-        <Grid item>
+        <Grid item classes={{ root: classes.taskDropdownComponent }}>
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                classes={{ root: classes.taskDropdownButton }}
             >
                 <MoreHorizIcon fontSize="large" />
             </Button>
