@@ -22,20 +22,20 @@ const SwimlaneView = ({ board }) => {
         subtasks = subtasks.concat(column.subtasks)
     })
     const columnsForSwimlaneViewHeader = columns.map((column) => ({ id: column.id, name: column.name }))
+
     // This object is passed to swimlaneList
     const tasksForSwimlaneList = tasks.map((task) => {
         const swimlaneColumns = columns.map((column) => {
-            const subtasksOfTask = subtasks.filter((subtask) => subtask.task.id === task.id)
-
-            const subtasksInColumn = subtasksOfTask.filter((subtask) => subtask.column.id === column.id)
-            const subtaskOrder = subtasksInColumn.map((subtask) => {
-                const found = column.ticketOrder.find((obj) => obj.ticketId === subtask.id)
-                if (found) {
-                    return found
+            // figure out task's subtasks in certain column
+            const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
+                if (subtask.task.id === task.id && subtask.column.id === column.id) {
+                    return subtask
                 }
             })
+            // Figure out the subtask order of task's subtasks in certain column
+            const subtaskOrder = column.ticketOrder.filter((obj) => subtasksOfTaskInColumn.map((subtask) => subtask.id).includes(obj.ticketId))
             // Add the real order index for subtask
-            const subtasksInColumnFinal = subtasksInColumn.map((subtask) => {
+            const subtasksInColumnFinal = subtasksOfTaskInColumn.map((subtask) => {
                 const index = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
                 return { ...subtask, index }
             })

@@ -374,6 +374,7 @@ class BoardService {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
+          By default new task will be displyed at the bottom of the swimlane view
         */
         let addedTask
         try {
