@@ -7,7 +7,7 @@ import { boardPageStyles } from '../../styles/styles'
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
     const titleLimit = 22
-    const title = subtask.task?.title
+    const title = subtask.task ? subtask.task.title : ''
     const dots = '...'
     const add3Dots = (titleParam) => {
         let checkedTitle = titleParam

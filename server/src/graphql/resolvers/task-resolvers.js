@@ -15,10 +15,10 @@ const schema = {
             return dataSources.boardService.addMemberForTask(id, userId)
         },
         addTaskForColumn(root, {
-            columnId, title, size, ownerId, memberIds, description,
+            boardId, columnId, title, size, ownerId, memberIds, description,
         }) {
             return dataSources.boardService
-                .addTaskForColumn(columnId, title, size, ownerId, memberIds, description)
+                .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
         },
         editTaskById(root, {
             id, title, size, ownerId, oldMemberIds, newMemberIds, description,
@@ -37,7 +37,7 @@ const schema = {
         async moveSwimlane(root, { boardId, newSwimlaneOrder }) {
             await dataSources.boardService.reOrderSwimlanes(newSwimlaneOrder)
             return boardId
-        }
+        },
     },
 
     Task: {
