@@ -18,7 +18,6 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         tasks = tasks.concat(column.tasks)
     })
-    console.log(tasks)
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
@@ -56,7 +55,7 @@ const SwimlaneView = ({ board }) => {
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasks={tasksForSwimlaneList} />
+                            <SwimlaneList tasks={tasksForSwimlaneList} columnOrder={board.columnOrder} />
                             {provided.placeholder}
                         </Grid>
                     )}

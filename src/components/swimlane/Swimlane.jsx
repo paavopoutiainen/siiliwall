@@ -4,13 +4,14 @@ import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
 
-const Swimlane = ({ task }) => {
+const Swimlane = ({ task, columnOrder }) => {
     const classes = swimlaneStyles()
+    console.log(task)
 
     return (
         <Grid container direction="column" spacing={3}>
             <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-            <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} /></Grid>
+            <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} columnOrder={columnOrder} /></Grid>
         </Grid>
     )
 }

@@ -23,13 +23,13 @@ const TicketList = ({
                 let component
                 if (ticket.type === 'task') {
                     component = (
-                        <Grid item>
-                            <Task key={ticket.id} index={index} task={ticket} columnId={columnId} />
+                        <Grid item key={ticket.id}>
+                            <Task index={index} task={ticket} columnId={columnId} />
                         </Grid>
                     )
                 } else if (ticket.type === 'subtask') {
                     component = (
-                        <Grid item>
+                        <Grid item key={ticket.id}>
                             <Subtask key={ticket.id} index={index} subtask={ticket} columnId={columnId} />
                         </Grid>
                     )

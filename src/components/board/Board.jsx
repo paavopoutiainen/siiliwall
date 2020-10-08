@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable max-len */
 import React, { useState } from 'react'
-import { Grid, TextField, Button } from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
