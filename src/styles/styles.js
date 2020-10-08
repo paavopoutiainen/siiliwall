@@ -148,6 +148,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnNames: {
         width: '100%',
+        flexWrap: 'nowrap',
     },
 
     swimlaneColumnName: {
@@ -163,6 +164,8 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         width: '100%',
+        minHeight: 160,
+        backgroundColor: 'lightblue',
     },
 
     swimlaneColumn: {
@@ -170,5 +173,6 @@ export const swimlaneStyles = makeStyles({
         width: 300,
         height: '100%',
         backgroundColor: '#EBECF0',
+        flexWrap: 'nowrap',
     },
 })
