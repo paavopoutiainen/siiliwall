@@ -45,6 +45,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const emptyState = () => {
+        setTitle('')
+        setSize(null)
+        setOwner(null)
+        setMembers([])
+        setDescription(null)
+    }
+
     const handleSave = (event) => {
         event.preventDefault()
         addTask({
@@ -57,12 +65,13 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 description,
             },
         })
+        emptyState()
         toggleDialog()
-        setTitle('')
-        setSize(null)
-        setOwner(null)
-        setMembers([])
-        setDescription(null)
+    }
+
+    const handleCancel = () => {
+        emptyState()
+        toggleDialog()
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -132,7 +141,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel

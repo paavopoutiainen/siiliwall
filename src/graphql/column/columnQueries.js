@@ -21,3 +21,11 @@ export const DELETE_COLUMN = gql`
         deleteColumnById(id: $columnId)
     }
 `
+export const EDIT_COLUMN = gql`
+    mutation editColumn($columnId: ID!, $columnName: String!) {
+        editColumnById(id: $columnId, name: $columnName ) {
+            id
+            name
+        }
+    }
+`
