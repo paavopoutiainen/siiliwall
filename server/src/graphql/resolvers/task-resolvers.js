@@ -34,6 +34,10 @@ const schema = {
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
         },
+        async moveSwimlane(root, { boardId, newSwimlaneOrder }) {
+            await dataSources.boardService.reOrderSwimlanes(newSwimlaneOrder)
+            return boardId
+        }
     },
 
     Task: {

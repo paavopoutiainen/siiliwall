@@ -39,7 +39,7 @@ export const BOARD_BY_ID = gql`
                         userName
                     }
                     description
-
+                    swimlaneOrderNumber
                 }
                 subtasks {
                     id
