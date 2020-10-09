@@ -28,11 +28,13 @@ const SwimlaneView = ({ board }) => {
         const swimlaneColumns = columns.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
-                if (subtask.task.id === task.id && subtask.column.id === column.id) {
+                if (subtask.task?.id === task.id && subtask.column.id === column.id) {
                     return subtask
                 }
             })
             // Figure out the subtask order of task's subtasks in certain column
+            // Loop through the ticketOrder of the column and pick up the ticketOrder objects
+            // belonging to the subtasks of the task
             const subtaskOrder = column.ticketOrder.filter((obj) => subtasksOfTaskInColumn.map((subtask) => subtask.id).includes(obj.ticketId))
             // Add the real order index for subtask
             const subtasksInColumnFinal = subtasksOfTaskInColumn.map((subtask) => {
@@ -44,8 +46,10 @@ const SwimlaneView = ({ board }) => {
                 name: column.name, id: column.id, subtasks: subtasksInColumnFinal, subtaskOrder,
             }
         })
-        return { ...task, swimlaneColumns }
+        const swimlaneColumnsInOrder = board.columnOrder.map((id) => swimlaneColumns.find((swimlaneColumn) => swimlaneColumn.id === id))
+        return { ...task, swimlaneColumns: swimlaneColumnsInOrder }
     })
+
     // console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
 
     return (

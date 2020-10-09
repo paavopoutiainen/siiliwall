@@ -15,6 +15,7 @@ export const BOARD_BY_ID = gql`
             id
             name
             columnOrder
+            swimlaneOrder
             columns {
                 id
                 name

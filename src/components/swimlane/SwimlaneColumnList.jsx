@@ -3,11 +3,8 @@ import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneColumn from './SwimlaneColumn'
 
-const SwimlaneColumnList = ({ swimlaneColumns, columnOrder }) => {
+const SwimlaneColumnList = ({ swimlaneColumns }) => {
     const classes = swimlaneStyles()
-
-    const swimlaneColumnsInOrder = columnOrder.map((id) => swimlaneColumns.find((swimlaneColumn) => swimlaneColumn.id === id))
-
     return (
         <Grid
             container
@@ -15,7 +12,7 @@ const SwimlaneColumnList = ({ swimlaneColumns, columnOrder }) => {
             justify="space-evenly"
             classes={{ root: classes.swimlaneColumnList }}
         >
-            {swimlaneColumnsInOrder.map((swimlaneColumn, index) => (
+            {swimlaneColumns.map((swimlaneColumn, index) => (
                 <Grid item key={swimlaneColumn.id}>
                     <SwimlaneColumn swimlaneColumn={swimlaneColumn} />
                 </Grid>
