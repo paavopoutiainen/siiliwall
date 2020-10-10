@@ -21,11 +21,12 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
-    const columnsForSwimlaneViewHeader = columns.map((column) => ({ id: column.id, name: column.name }))
+    const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
+    const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
 
     // This object is passed to swimlaneList
     const tasksForSwimlaneList = tasks.map((task) => {
-        const swimlaneColumns = columns.map((column) => {
+        const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
                 if (subtask.task?.id === task.id && subtask.column.id === column.id) {
@@ -46,8 +47,7 @@ const SwimlaneView = ({ board }) => {
                 name: column.name, id: column.id, subtasks: subtasksInColumnFinal, subtaskOrder,
             }
         })
-        const swimlaneColumnsInOrder = board.columnOrder.map((id) => swimlaneColumns.find((swimlaneColumn) => swimlaneColumn.id === id))
-        return { ...task, swimlaneColumns: swimlaneColumnsInOrder }
+        return { ...task, swimlaneColumns }
     })
 
     // console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
@@ -55,11 +55,11 @@ const SwimlaneView = ({ board }) => {
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveSwimlane)}>
             <Grid container direction="column" spacing={3}>
-                <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} columnOrder={board.columnOrder} /></Grid>
+                <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasks={tasksForSwimlaneList} columnOrder={board.columnOrder} />
+                            <SwimlaneList tasks={tasksForSwimlaneList} />
                             {provided.placeholder}
                         </Grid>
                     )}
