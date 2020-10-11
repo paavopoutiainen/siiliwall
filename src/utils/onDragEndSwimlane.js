@@ -18,10 +18,12 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     // and taskId in order to avoid duplicates, here we take the columnId part
     const sourceColumnId = source.droppableId.substring(0, 36)
     const destinationColumnId = destination.droppableId.substring(0, 36)
+    // Task parts of droppable ids are needed for checking if subtask is tried to be moved to another swimlane
     const sourceTaskId = source.droppableId.substring(36, 72)
     const destinationTaskId = destination.droppableId.substring(36, 72)
 
-    console.log('result', result)
+    if (sourceTaskId !== destinationTaskId) return
+
     // When ticket is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === sourceColumnId)
@@ -49,14 +51,12 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     }
 
     // When ticket is moved into another swimlaneColumn
-    if (destination.droppableId !== source.droppableId && sourceTaskId === destinationTaskId) {
+    if (destination.droppableId !== source.droppableId) {
         const sourceColumn = columns.find((col) => col.id === sourceColumnId)
         const destinationColumn = columns.find((col) => col.id === destinationColumnId)
         const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
         const newTicketOrderOfDestinationColumn = Array.from(destinationColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
-
-        const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
-        newTicketOrderOfDestinationColumn.splice(destination.index, 0, movedTicketOrderObject)
+        let destinationIndex = destination.index
 
         // Find from the cache the board
         const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { boardId } })
@@ -64,10 +64,6 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         // Find from the cache the columns being manipulated
         const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
         const destinationColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === destinationColumn.id)
-
-        // Column attribute of the moved subtask has to be updated to the
-        // cache in order to avoid lagging when subtask is moved
-        const newColumnForMovedSubtask = { id: destinationColumnFromCache.id, __typename: 'Column' }
 
         // Find the subtasks of source and destination columns and update them
         const updatedSubtasksOfSourceColumn = Array.from(sourceColumnFromCache.subtasks)
@@ -78,8 +74,21 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedSubtask] = updatedSubtasksOfSourceColumn.splice(indexOfMovedSubtask, 1)
         updatedSubtasksOfDestinationColumn.splice(destination.index, 0, movedSubtask)
 
+        // Check if destination column contains the parent task of the moved subtask and is empty of sibling subtasks
+        // If so, change the destination index, so that the subtask will be situated under its parent task
+        if (destinationColumn.tasks.map((task) => task.id).includes(movedSubtask.task.id) && !destinationColumn.subtasks.some((subtask) => subtask.task.id === movedSubtask.task.id)) {
+            destinationIndex = destinationColumnFromCache.ticketOrder.findIndex((obj) => obj.ticketId === movedSubtask.task.id) + 1
+        }
+
+        const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
+        newTicketOrderOfDestinationColumn.splice(destinationIndex, 0, movedTicketOrderObject)
+
         const sourceColumnIdForCache = `Column:${sourceColumnId}`
         const destinationColumnIdForCache = `Column:${destinationColumnId}`
+
+        // Column attribute of the moved subtask has to be updated to the
+        // cache in order to avoid lagging when subtask is moved
+        const newColumnForMovedSubtask = { id: destinationColumnFromCache.id, __typename: 'Column' }
 
         client.writeFragment({
             id: `Subtask:${draggableId}`,
