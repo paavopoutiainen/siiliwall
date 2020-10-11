@@ -70,7 +70,7 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        minHeight: 100,
+        minHeight: 70,
         borderRadius: 4,
     },
 
@@ -81,7 +81,7 @@ export const boardPageStyles = makeStyles({
     subtaskComponent: {
         borderRadius: 5,
         backgroundColor: '#fff',
-        height: 150,
+        minHeight: 115,
     },
 
     subtaskHeader: {
@@ -164,14 +164,13 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         width: '100%',
-        minHeight: 300,
-        backgroundColor: 'lightblue',
+        minHeight: 128,
     },
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
         width: 300,
-        minHeight: 300,
+        minHeight: 128,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
     },
