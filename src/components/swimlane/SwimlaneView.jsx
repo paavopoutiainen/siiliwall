@@ -1,10 +1,13 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
+import { useApolloClient } from '@apollo/client'
 import SwimlaneViewHeader from './SwimlaneViewHeader'
 import SwimlaneList from './SwimlaneList'
 import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 import useMoveSwimlane from '../../graphql/swimlane/hooks/useMoveSwimlane'
+import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
+import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -12,6 +15,9 @@ const SwimlaneView = ({ board }) => {
     // and have them divided by columns they exist at
     // These units are called swimlaneColumns
     const [moveSwimlane] = useMoveSwimlane()
+    const [moveTicketInColumn] = useMoveTicketInColumn()
+    const [moveTicketFromColumn] = useMoveTicketFromColumn()
+    const client = useApolloClient()
     const { columns } = board
     let tasks = []
     let subtasks = []
@@ -53,7 +59,7 @@ const SwimlaneView = ({ board }) => {
     // console.log(tasksForSwimlaneList, columnsForSwimlaneViewHeader)
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveSwimlane)}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, board.id)}>
             <Grid container direction="column" spacing={3}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">

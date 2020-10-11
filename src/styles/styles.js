@@ -164,14 +164,14 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         width: '100%',
-        minHeight: 160,
+        minHeight: 300,
         backgroundColor: 'lightblue',
     },
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
         width: 300,
-        height: '100%',
+        minHeight: 300,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
     },

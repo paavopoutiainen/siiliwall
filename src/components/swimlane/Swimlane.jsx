@@ -6,12 +6,11 @@ import SwimlaneColumnList from './SwimlaneColumnList'
 
 const Swimlane = ({ task }) => {
     const classes = swimlaneStyles()
-    console.log(task)
 
     return (
         <Grid container direction="column" spacing={3}>
             <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-            <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} /></Grid>
+            <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} /></Grid>
         </Grid>
     )
 }

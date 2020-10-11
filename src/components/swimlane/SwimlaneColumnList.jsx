@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneColumn from './SwimlaneColumn'
 
-const SwimlaneColumnList = ({ swimlaneColumns }) => {
+const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
     const classes = swimlaneStyles()
     return (
         <Grid
@@ -14,7 +14,7 @@ const SwimlaneColumnList = ({ swimlaneColumns }) => {
         >
             {swimlaneColumns.map((swimlaneColumn, index) => (
                 <Grid item key={swimlaneColumn.id}>
-                    <SwimlaneColumn swimlaneColumn={swimlaneColumn} />
+                    <SwimlaneColumn swimlaneColumn={swimlaneColumn} taskId={taskId} />
                 </Grid>
             ))}
         </Grid>

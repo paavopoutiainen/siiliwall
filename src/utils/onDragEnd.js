@@ -54,9 +54,6 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
             },
         })
 
-        const test = client.readQuery({ query: BOARD_BY_ID, variables: { boardId: "83fa4f89-8ea1-4d1c-9fee-321daa941485"} })
-        console.log("klerwrlwrjee",test)
-
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
