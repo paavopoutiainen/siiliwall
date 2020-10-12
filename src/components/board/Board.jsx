@@ -30,10 +30,7 @@ const Board = ({ board }) => {
     const { columnOrder, columns } = board
 
     return (
-        <Grid
-            container
-
-        >
+        <Grid container >
             <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar)}>
 
                 <Droppable droppableId={board.id} direction="horizontal" type="column">

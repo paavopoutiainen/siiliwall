@@ -53,12 +53,6 @@ export const boardPageStyles = makeStyles({
         width: '100%',
     },
 
-    boardViewSwimlane: {
-        left: 'auto',
-        right: 'auto',
-        margin: 'auto'
-    },
-
     addColumn: {
         minWidth: 250,
     },
@@ -147,10 +141,10 @@ export const boardPageStyles = makeStyles({
     },
 })
 export const swimlaneStyles = makeStyles({
-    root: {
+    /*root: {
         minHeight: '100%',
         minWidth: '100%',
-    },
+    },*/
 
     swimlaneColumnNames: {
         width: '100%',
