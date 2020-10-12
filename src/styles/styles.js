@@ -50,7 +50,13 @@ export const boardPageStyles = makeStyles({
     },
 
     boardHeader: {
-        width: '20%',
+        width: '100%',
+    },
+
+    boardViewSwimlane: {
+        left: 'auto',
+        right: 'auto',
+        margin: 'auto'
     },
 
     addColumn: {
@@ -156,14 +162,17 @@ export const swimlaneStyles = makeStyles({
         width: 300,
     },
 
+    swimlane: {
+        border: '2px solid rgba(0, 0, 0, .3)',
+        width: '100%'
+    },
+
     swimlaneTitle: {
-        backgroundColor: '#4589e5',
-        color: '#fff',
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         width: '100%',
     },
 
     swimlaneColumnList: {
-        width: '100%',
         minHeight: 133,
     },
 

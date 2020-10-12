@@ -8,7 +8,7 @@ const Swimlane = ({ task }) => {
     const classes = swimlaneStyles()
 
     return (
-        <Grid container direction="column" spacing={3}>
+        <Grid container direction="column" spacing={3} classes={{ root: classes.swimlane }}>
             <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
             <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} /></Grid>
         </Grid>
