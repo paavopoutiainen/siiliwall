@@ -61,6 +61,18 @@ class BoardService {
         return columnFromDb
     }
 
+    async editColumnById(columnId, name) {
+        let column
+        try {
+            column = await this.store.Column.findByPk(columnId)
+            column.name = name
+            await column.save()
+        } catch (e) {
+            console.error(e)
+        }
+        return column
+    }
+
     async deleteColumnById(columnId) {
         try {
             await this.store.Column.destroy({

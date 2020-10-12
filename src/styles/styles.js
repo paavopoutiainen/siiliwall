@@ -68,6 +68,10 @@ export const boardPageStyles = makeStyles({
         borderRadius: 6,
     },
 
+    columnHeader: {
+        flexWrap: 'nowrap',
+    },
+
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         minHeight: 100,
@@ -141,11 +145,6 @@ export const boardPageStyles = makeStyles({
     },
 })
 export const swimlaneStyles = makeStyles({
-    /*root: {
-        minHeight: '100%',
-        minWidth: '100%',
-    },*/
-
     swimlaneColumnNames: {
         width: '100%',
         flexWrap: 'nowrap',
@@ -167,7 +166,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         minHeight: 133,
-        width: '100%'
+        width: '100%',
     },
 
     swimlaneColumn: {
