@@ -29,7 +29,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     // because nobody wants to read regex
     const checkedString = (val) => {
         // eslint-disable-next-line quotes
-        if (val.includes('<') || val.includes("'") || val.includes('*') || val.includes('`') || val.includes('´')) {
+        if (val.includes('<') || val.includes('`') || val.includes('´')) {
             return true
         }
         return false
@@ -87,6 +87,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         setDescription(input)
     }
 
+    const emptyState = () => {
+        setTitle('')
+        setSize(null)
+        setOwner(null)
+        setMembers([])
+        setDescription(null)
+    }
+
     const handleSave = async (event) => {
         event.preventDefault()
         const isValid = await taskSchema.isValid({ title, size, description })
@@ -101,14 +109,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                     description,
                 },
             })
-
-            toggleDialog()
-            setTitle('')
-            setSize(null)
-            setOwner(null)
-            setMembers([])
-            setDescription(null)
         }
+        emptyState()
+        toggleDialog()
+    }
+
+    const handleCancel = () => {
+        emptyState()
+        toggleDialog()
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -198,7 +206,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel

@@ -7,6 +7,7 @@ import { boardPageStyles } from '../../styles/styles'
 import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
 import AddTaskDialog from '../task/AddTaskDialog'
+import RenameColumn from './RenameColumn'
 
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
@@ -27,9 +28,9 @@ const Column = ({ column, index }) => {
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
                         <Grid item>
-                            <h2>{column.name}</h2>
+                            <RenameColumn editId={column.id} column={column} />
                         </Grid>
                         <Grid item>
                             <DropdownColumn columnId={column.id} boardId={column.board.id} />
