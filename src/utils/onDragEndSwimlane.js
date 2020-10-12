@@ -2,18 +2,41 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN,
+    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN, SWIMLANEORDER
 } from '../graphql/fragments'
 
-export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, boardId) => {
+export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, board, boardSwimlaneOrder) => {
+
     const { destination, source, draggableId } = result
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+    if (result.type === 'swimlane') {
+        const newSwimlaneOrder = Array.from(boardSwimlaneOrder)
+        newSwimlaneOrder.splice(source.index, 1)
 
-    /* if (result.type === 'swimlane') {
-        const newSwimlaneOrder =
-    } */
+        newSwimlaneOrder.splice(destination.index, 0, draggableId)
+
+        const boardId = `Board:${board.id}`
+        client.writeFragment({
+            id: boardId,
+            fragment: SWIMLANEORDER,
+            data: {
+                swimlaneOrder: newSwimlaneOrder
+            }
+        })
+
+        await moveSwimlane({
+            variables: {
+                swimlaneOrderArray: newSwimlaneOrder,
+                boardId: board.id
+            }
+        })
+        return
+    }
+
+
+
     // For swimlaneColumn droppables the id is constructed of both columnId
     // and taskId in order to avoid duplicates, here we take the columnId part
     const sourceColumnId = source.droppableId.substring(0, 36)
@@ -59,7 +82,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         let destinationIndex = destination.index
 
         // Find from the cache the board
-        const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { boardId } })
+        const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { board: { id: board.id } } })
 
         // Find from the cache the columns being manipulated
         const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)

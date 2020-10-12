@@ -24,6 +24,7 @@ const SwimlaneView = ({ board }) => {
     const { columns } = board
     let tasks = []
     let subtasks = []
+    let boardSwimlaneOrder = board.swimlaneOrder
     columns.forEach((column) => {
         tasks = tasks.concat(column.tasks)
     })
@@ -34,6 +35,7 @@ const SwimlaneView = ({ board }) => {
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
 
     // This object is passed to swimlaneList
+
     const tasksForSwimlaneList = tasks.map((task) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
@@ -60,13 +62,13 @@ const SwimlaneView = ({ board }) => {
     })
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, board.id)}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, board, boardSwimlaneOrder)}>
             <Grid container direction="column" spacing={5}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasks={tasksForSwimlaneList} />
+                            <SwimlaneList tasks={tasksForSwimlaneList} swimlaneOrder={boardSwimlaneOrder} />
                             {provided.placeholder}
                         </Grid>
                     )}
