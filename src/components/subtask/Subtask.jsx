@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-props-no-spreading */
+// eslint-disable-next-line no-unused-vars
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
@@ -6,13 +8,12 @@ import { boardPageStyles } from '../../styles/styles'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
-    const titleLimit = 22
     const title = subtask.task ? subtask.task.title : ''
     const dots = '...'
-    const add3Dots = (titleParam) => {
+    const add3Dots = (titleParam, limit) => {
         let checkedTitle = titleParam
-        if (titleParam.length > titleLimit) {
-            checkedTitle = title.substring(0, titleLimit) + dots
+        if (titleParam.length > limit) {
+            checkedTitle = title.substring(0, limit) + dots
         }
         return checkedTitle
     }
@@ -32,7 +33,10 @@ const Subtask = ({ subtask, index, columnId }) => {
                 >
                     <Grid item container direction="row" justify="space-between" alignItems="center" classes={{ root: classes.subtaskHeader }}>
                         <Grid item>
-                            <h4>{add3Dots(title)}</h4>
+                            <p>
+                                {' '}
+                                {add3Dots(subtask.task?.title, 25)}
+                            </p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
                             <DropDownSubtask
@@ -42,9 +46,10 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction="column">
-                        <Grid item>
-                            <p>
-                                {`Content: ${subtask.content}`}
+
+                        <Grid item classes={{ root: classes.subtaskContent }}>
+                            <p classes={{ root: classes.subtaskContentText }}>
+                                {`Content: ${add3Dots(subtask.content, 30)}`}
                             </p>
                         </Grid>
                         <Grid item>

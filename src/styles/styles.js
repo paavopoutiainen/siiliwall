@@ -56,7 +56,7 @@ export const boardPageStyles = makeStyles({
     boardViewSwimlane: {
         left: 'auto',
         right: 'auto',
-        margin: 'auto'
+        margin: 'auto',
     },
 
     addColumn: {
@@ -72,6 +72,10 @@ export const boardPageStyles = makeStyles({
         minHeight: 600,
         width: 330,
         borderRadius: 6,
+    },
+
+    columnHeader: {
+        flexWrap: 'nowrap',
     },
 
     task: {
@@ -173,7 +177,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         minHeight: 133,
-        width: '100%'
+        width: '100%',
     },
 
     swimlaneColumn: {

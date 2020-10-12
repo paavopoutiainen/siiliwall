@@ -9,7 +9,7 @@ import TaskEditDialog from './EditTaskDialog'
 const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
     const { title, members } = task
-    const titleLimit = 22
+    const titleLimit = 25
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
