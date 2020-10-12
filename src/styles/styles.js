@@ -164,7 +164,6 @@ export const swimlaneStyles = makeStyles({
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
-        width: '100%'
     },
 
     swimlaneTitle: {
@@ -174,6 +173,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnList: {
         minHeight: 133,
+        width: '100%'
     },
 
     swimlaneColumn: {
