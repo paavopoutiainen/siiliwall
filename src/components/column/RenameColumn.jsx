@@ -18,7 +18,6 @@ const RenameColumn = ({ editId, column }) => {
 
     return (
         <EditText
-            className={styles.editButton}
             submitOnEnter
             cancelOnEscape
             editOnViewClick
