@@ -88,11 +88,14 @@ export const boardPageStyles = makeStyles({
         backgroundColor: 'rgba(255, 140, 85, .8)',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        height: '20%',
+        flexWrap: 'nowrap',
     },
 
     subtaskHeaderText: {
         paddingLeft: 10,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
 
     subtaskDropdownComponent: {
@@ -105,6 +108,13 @@ export const boardPageStyles = makeStyles({
 
     subtaskContent: {
         padding: 10,
+        maxWidth: '310px',
+    },
+
+    subtaskContentText: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
 
     dialogFocus: {
