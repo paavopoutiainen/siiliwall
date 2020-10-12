@@ -57,6 +57,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         event.preventDefault()
         addTask({
             variables: {
+                boardId: column.board.id,
                 columnId: column.id,
                 title,
                 size,

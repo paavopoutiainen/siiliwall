@@ -9,7 +9,7 @@ import TaskEditDialog from './EditTaskDialog'
 const Task = ({ task, index, columnId }) => {
     const classes = boardPageStyles()
     const { title, members } = task
-    const titleLimit = 27
+    const titleLimit = 25
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -41,36 +41,18 @@ const Task = ({ task, index, columnId }) => {
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
+                    spacing={1}
                 >
                     <Grid
                         item
                         container
                         direction="row"
                         justify="space-between"
+                        alignItems="flex-start"
                         classes={{ root: classes.taskInner }}
                     >
                         <Grid item>
                             <h3>{add3Dots(title)}</h3>
-                            {task.owner ? (
-                                <p>
-                                    {`owner: ${task.owner.userName}`}
-                                </p>
-                            ) : null}
-                            {task.size ? (
-                                <p>
-                                    {`size: ${task.size}`}
-                                </p>
-                            ) : null}
-                            {task.members.length !== 0 ? (
-                                <p>
-                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
-                                </p>
-                            ) : null}
-                            {task.description ? (
-                                <p>
-                                    {`description: ${descrDots(task.description)}`}
-                                </p>
-                            ) : null}
                         </Grid>
                         <Grid item>
                             <DropdownTask
@@ -78,15 +60,47 @@ const Task = ({ task, index, columnId }) => {
                                 columnId={columnId}
                                 handleEdit={toggleDialog}
                             />
-                            <TaskEditDialog
-                                dialogStatus={dialogStatus}
-                                toggleDialog={toggleDialog}
-                                editId={task.id}
-                                task={task}
-                            />
                         </Grid>
                     </Grid>
+                    <Grid item direction="column" container>
+                        <Grid item>
+                            {task.owner ? (
+                                <p>
+                                    {`owner: ${task.owner.userName}`}
+                                </p>
+                            ) : null}
+                        </Grid>
+                        <Grid item>
+                            {task.size ? (
+                                <p>
+                                    {`size: ${task.size}`}
+                                </p>
+                            ) : null}
+                        </Grid>
+                        <Grid item>
+                            {task.members.length !== 0 ? (
+                                <p>
+                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
+                                </p>
+                            ) : null}
+                        </Grid>
+                        <Grid item>
+                            {task.description ? (
+                                <p>
+                                    {`description: ${descrDots(task.description)}`}
+                                </p>
+                            ) : null}
+                        </Grid>
+                    </Grid>
+
+                    <TaskEditDialog
+                        dialogStatus={dialogStatus}
+                        toggleDialog={toggleDialog}
+                        editId={task.id}
+                        task={task}
+                    />
                 </Grid>
+
             )}
         </Draggable>
     )

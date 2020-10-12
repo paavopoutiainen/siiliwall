@@ -44,7 +44,17 @@ export const landingPageStyles = makeStyles({
 
 export const boardPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100%',
+        minWidth: '100%',
+        padding: 30,
+    },
+
+    boardHeader: {
+        width: '100%',
+    },
+
+    addColumn: {
+        minWidth: 250,
     },
 
     columnRow: {
@@ -54,10 +64,8 @@ export const boardPageStyles = makeStyles({
     column: {
         backgroundColor: '#EBECF0',
         minHeight: 600,
-        width: 350,
-        margin: 5,
+        width: 330,
         borderRadius: 6,
-        padding: 5,
     },
 
     columnHeader: {
@@ -66,10 +74,8 @@ export const boardPageStyles = makeStyles({
 
     task: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        marginTop: 2,
-        marginBottom: 2,
+        minHeight: 100,
         borderRadius: 4,
-        padding: 5,
     },
 
     taskInner: {
@@ -79,23 +85,13 @@ export const boardPageStyles = makeStyles({
     subtaskComponent: {
         borderRadius: 5,
         backgroundColor: '#fff',
-        height: 150,
-        marginTop: 2,
-        marginBottom: 2,
+        minHeight: 115,
     },
 
     subtaskHeader: {
         backgroundColor: 'rgba(255, 140, 85, .8)',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
-        flexWrap: 'nowrap',
-    },
-
-    subtaskHeaderText: {
-        paddingLeft: 10,
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
     },
 
     subtaskDropdownComponent: {
@@ -105,16 +101,11 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownButton: {
         height: '100%',
     },
-
-    subtaskContent: {
-        padding: 10,
-        maxWidth: '310px',
+    taskDropdownComponent: {
+        height: 25,
     },
-
-    subtaskContentText: {
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
+    taskDropdownButton: {
+        height: '100%',
     },
 
     dialogFocus: {
@@ -151,5 +142,38 @@ export const boardPageStyles = makeStyles({
     },
     textColor: {
         color: '#3F51C0',
+    },
+})
+export const swimlaneStyles = makeStyles({
+    swimlaneColumnNames: {
+        width: '100%',
+        flexWrap: 'nowrap',
+    },
+
+    swimlaneColumnName: {
+        textAlign: 'center',
+        width: 300,
+    },
+
+    swimlane: {
+        border: '2px solid rgba(0, 0, 0, .3)',
+    },
+
+    swimlaneTitle: {
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        width: '100%',
+    },
+
+    swimlaneColumnList: {
+        minHeight: 133,
+        width: '100%',
+    },
+
+    swimlaneColumn: {
+        border: '2px solid lightgrey',
+        width: 300,
+        minHeight: 133,
+        backgroundColor: '#EBECF0',
+        flexWrap: 'nowrap',
     },
 })
