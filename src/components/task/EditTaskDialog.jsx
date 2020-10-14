@@ -6,6 +6,10 @@ import {
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import useEditTask from '../../graphql/task/hooks/useEditTask'
+import {
+    sizeSchema, titleSchema, descriptionSchema, taskSchema,
+} from './validationSchema'
+import checkedString from './checkedString'
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
@@ -19,6 +23,9 @@ const EditTaskDialog = ({
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [description, setDescription] = useState(task?.description)
     const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
+    const [sizeError, setSizeError] = useState('')
+    const [titleError, setTitleError] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
     const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
     const animatedComponents = makeAnimated()
@@ -26,7 +33,17 @@ const EditTaskDialog = ({
     if (loading) return null
 
     const handleTitleChange = (event) => {
-        setTitle(event.target.value)
+        const input = event.target.value
+        // eslint-disable-next-line quotes
+        if (checkedString(input)) {
+            setTitleError('Contains illegal character(s)')
+        } else {
+            titleSchema.validate(input).catch((err) => {
+                setTitleError(err.message)
+            })
+            setTitleError('')
+        }
+        setTitle(input)
     }
 
     const handleOwnerChange = (action) => {
@@ -34,39 +51,56 @@ const EditTaskDialog = ({
     }
 
     const handleSizeChange = (event) => {
-        if (event.target.value === '') {
+        const input = parseInt(event.target.value, 10)
+        if (input === '') {
             setSize(null)
             return
         }
-        setSize(parseFloat(event.target.value))
+        sizeSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setSize(input)
+        setSizeError('')
     }
 
     const handleDescriptionChange = (event) => {
-        if (event.target.value === '') {
+        const input = event.target.value
+        if (input === '') {
             setDescription(null)
             return
         }
-        setDescription(event.target.value)
+        if (checkedString(input)) {
+            setDescriptionError('Contains illegal character(s)')
+        } else {
+            descriptionSchema.validate(input).catch((err) => {
+                setSizeError(err.message)
+            })
+            setDescriptionError('')
+        }
+        setDescription(input)
     }
 
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault()
-        editTask({
-            variables: {
-                taskId: editId,
-                title,
-                size,
-                ownerId: owner,
-                oldMemberIds: arrayOfOldMemberIds,
-                newMemberIds: members,
-                description,
-            },
-        })
-        toggleDialog()
+        const isValid = await taskSchema.isValid({ title, size, description })
+        if (isValid) {
+            editTask({
+                variables: {
+                    taskId: editId,
+                    title,
+                    size,
+                    ownerId: owner,
+                    oldMemberIds: arrayOfOldMemberIds,
+                    newMemberIds: members,
+                    description,
+                },
+            })
+            toggleDialog()
+        }
     }
 
     // Modifiying userData to be of form expected by the react select component
@@ -95,6 +129,8 @@ const EditTaskDialog = ({
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>
                     <TextField
+                        error={titleError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         autoFocus={true}
                         required={true}
@@ -104,9 +140,12 @@ const EditTaskDialog = ({
                         type="text"
                         value={title}
                         fullWidth
+                        helperText={titleError}
                         onChange={handleTitleChange}
                     />
                     <TextField
+                        error={sizeError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="size"
@@ -114,6 +153,7 @@ const EditTaskDialog = ({
                         type="number"
                         value={size || ''}
                         fullWidth
+                        helperText={sizeError}
                         onChange={handleSizeChange}
                     />
                     <Select
@@ -133,13 +173,15 @@ const EditTaskDialog = ({
                         onChange={handleMembersChange}
                     />
                     <TextField
-                        id="standard-multiline-static"
+                        error={descriptionError.length > 0}
+                        id="standard-multiline-static, filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="description"
                         label="Description"
                         type="text"
                         multiline
+                        helperText={descriptionError}
                         rows={3}
                         value={description || ''}
                         fullWidth

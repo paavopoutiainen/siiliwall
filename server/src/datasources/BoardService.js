@@ -1,5 +1,4 @@
 /* eslint-disable class-methods-use-this */
-/* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
 
 class BoardService {
@@ -63,9 +62,10 @@ class BoardService {
 
     async editColumnById(columnId, name) {
         let column
+        const escName = this.sequelize.escape(`%${name}%`)
         try {
             column = await this.store.Column.findByPk(columnId)
-            column.name = name
+            column.name = escName
             await column.save()
         } catch (e) {
             console.error(e)
@@ -97,7 +97,9 @@ class BoardService {
     async getSubtasksByColumnId(columnId) {
         let subtasksFromDb
         try {
-            subtasksFromDb = await this.store.Subtask.findAll({ where: { columnId, deletedAt: null } })
+            subtasksFromDb = await this.store.Subtask.findAll(
+                { where: { columnId, deletedAt: null } },
+            )
         } catch (e) {
             console.error(e)
         }
@@ -175,12 +177,14 @@ class BoardService {
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let task
+        const escTitle = this.sequelize.escape(`%${title}%`)
+        const escDescr = this.sequelize.escape(`%${description}%`)
         try {
             task = await this.store.Task.findByPk(taskId)
-            task.title = title
+            task.title = escTitle
             task.size = size
             task.ownerId = ownerId
-            task.description = description
+            task.description = escDescr
             await task.save()
             // Updating usertasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
@@ -283,6 +287,7 @@ class BoardService {
             arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
                 .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
                 .map((obj) => {
+                    // eslint-disable-next-line no-param-reassign
                     delete obj.columnOrderNumber
                     return { ...obj }
                 })
@@ -309,11 +314,12 @@ class BoardService {
 
     async addBoard(boardName) {
         let addedBoard
+        const escName = this.sequelize.escape(`%${boardName}%`)
         try {
             const largestOrderNumber = await this.store.Board.max('orderNumber')
             addedBoard = await this.store.Board.create({
                 id: uuid(),
-                name: boardName,
+                name: escName,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -329,6 +335,7 @@ class BoardService {
           hence it is given the biggest orderNumber of the board
         */
         let addedColumn
+        const escName = this.sequelize.escape(`%${columnName}%`)
         try {
             const largestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
@@ -336,7 +343,7 @@ class BoardService {
             addedColumn = await this.store.Column.create({
                 id: uuid(),
                 boardId,
-                name: columnName,
+                name: escName,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -363,25 +370,30 @@ class BoardService {
             console.error(e)
         }
 
-        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubtask)
+        const largestColumnOrderNumber = Math.max(
+            largestColumnOrderNumberForTask,
+            largestColumnOrderNumberForSubtask,
+        )
         return largestColumnOrderNumber || 0
     }
 
     async addTaskForColumn(columnId, title, size, ownerId, memberIds, description) {
         /*
-          At the time of new tasks' creation we want to display it as the lower most task in its column,
+          At a new tasks' creation we want to display it as the lowermost task in its column,
           hence it is given the biggest columnOrderNumber of the column
         */
         let addedTask
+        const escTitle = this.sequelize.escape(`%${title}%`)
+        const escDescr = this.sequelize.escape(`%${description}%`)
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 columnId,
-                title,
+                escTitle,
                 size,
                 ownerId,
-                description,
+                escDescr,
                 columnOrderNumber: largestOrderNumber + 1,
             })
             await Promise.all(
@@ -429,10 +441,11 @@ class BoardService {
           hence we give it the columnOrderNumber one greater than the task's
         */
         let addedSubtask
+        const escContent = this.sequelize.escape(`%${content}%`)
         try {
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                content,
+                escContent,
                 taskId,
                 columnId,
                 ownerId,

@@ -6,6 +6,7 @@ import Select from 'react-select'
 import {
     sizeSchema, titleSchema, descriptionSchema, taskSchema,
 } from './validationSchema'
+import checkedString from './checkedString'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
@@ -25,15 +26,6 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
     const [descriptionError, setDescriptionError] = useState('')
 
     if (loading) return null
-
-    // because nobody wants to read regex
-    const checkedString = (val) => {
-        // eslint-disable-next-line quotes
-        if (val.includes('<') || val.includes('`') || val.includes('´')) {
-            return true
-        }
-        return false
-    }
 
     const handleTitleChange = (event) => {
         const input = event.target.value
@@ -109,9 +101,9 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                     description,
                 },
             })
+            emptyState()
+            toggleDialog()
         }
-        emptyState()
-        toggleDialog()
     }
 
     const handleCancel = () => {
