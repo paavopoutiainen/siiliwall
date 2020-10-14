@@ -69,7 +69,6 @@ const Task = ({
                             <DropdownTask
                                 taskId={task.id}
                                 columnId={columnId}
-                                handleEdit={toggleDialog}
                                 boardId={boardId}
                             />
                         </Grid>
