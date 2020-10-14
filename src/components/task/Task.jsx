@@ -6,7 +6,9 @@ import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
 
-const Task = ({ task, index, columnId }) => {
+const Task = ({
+    task, index, columnId, boardId,
+}) => {
     const classes = boardPageStyles()
     const { title, members } = task
     const titleLimit = 25
@@ -59,6 +61,7 @@ const Task = ({ task, index, columnId }) => {
                                 taskId={task.id}
                                 columnId={columnId}
                                 handleEdit={toggleDialog}
+                                boardId={boardId}
                             />
                         </Grid>
                     </Grid>
