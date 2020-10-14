@@ -25,7 +25,7 @@ const schema = {
         },
         swimlaneOrder(root) {
             return dataSources.boardService.getSwimlaneOrderOfBoard(root.id)
-        }
+        },
     },
 }
 

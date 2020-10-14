@@ -4,7 +4,6 @@ import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
-import { boardPageStyles } from '../../styles/styles'
 import ColumnList from '../column/ColumnList'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
@@ -18,7 +17,6 @@ const Board = ({ board }) => {
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
-    const classes = boardPageStyles()
     const [snackbarStatus, setSnackbarStatus] = useState(false)
     const [snackbarAction, setSnackbarAction] = useState(null)
 
@@ -30,7 +28,7 @@ const Board = ({ board }) => {
     const { columnOrder, columns } = board
 
     return (
-        <Grid container >
+        <Grid container>
             <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar)}>
 
                 <Droppable droppableId={board.id} direction="horizontal" type="column">

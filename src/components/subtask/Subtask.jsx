@@ -51,7 +51,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                             ) : null}
                         </Grid>
                         <Grid item>
-                            {subtask.members.length !== 0 ? (
+                            {subtask.members?.length !== 0 ? (
                                 <p>
                                     {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
                                 </p>

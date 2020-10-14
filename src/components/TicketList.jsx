@@ -4,7 +4,7 @@ import Task from './task/Task'
 import Subtask from './subtask/Subtask'
 
 const TicketList = ({
-    tasks, subtasks, ticketOrder, columnId,
+    tasks, subtasks, ticketOrder, columnId, boardId,
 }) => {
     const ticketsInOrder = ticketOrder.map((obj) => {
         let foundTicket
@@ -24,7 +24,7 @@ const TicketList = ({
                 if (ticket.type === 'task') {
                     component = (
                         <Grid item key={ticket.id}>
-                            <Task index={index} task={ticket} columnId={columnId} />
+                            <Task index={index} task={ticket} columnId={columnId} boardId={boardId} />
                         </Grid>
                     )
                 } else if (ticket.type === 'subtask') {
