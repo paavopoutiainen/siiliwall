@@ -5,7 +5,7 @@ input TicketOrderInput {
 
 type Subtask {
   id: ID!
-  name: String!
+  name: String
   content: String!
   owner: User
   members: [User!]
