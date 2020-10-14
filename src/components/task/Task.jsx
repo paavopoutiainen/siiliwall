@@ -32,6 +32,14 @@ const Task = ({
         return retVal
     }
 
+    const handleClick = () => {
+        toggleDialog()
+        console.log('taskia klikattu')
+    }
+
+    // Prevents closing dialog when clicking on it to edit task's fields
+    const handleDialogClick = (e) => e.stopPropagation()
+
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -44,6 +52,7 @@ const Task = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     spacing={1}
+                    onClick={handleClick}
                 >
                     <Grid
                         item
@@ -56,7 +65,7 @@ const Task = ({
                         <Grid item>
                             <h3>{add3Dots(title)}</h3>
                         </Grid>
-                        <Grid item>
+                        <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 taskId={task.id}
                                 columnId={columnId}

@@ -69,6 +69,9 @@ const EditTaskDialog = ({
         toggleDialog()
     }
 
+    // Prevents closing dialog when clicking on it to edit task's fields
+    const handleDialogClick = (e) => e.stopPropagation()
+
     // Modifiying userData to be of form expected by the react select component
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
@@ -91,6 +94,7 @@ const EditTaskDialog = ({
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
+                onClick={handleDialogClick}
             >
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>
