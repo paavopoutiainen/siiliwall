@@ -1,9 +1,10 @@
 import React from 'react'
+import { Grid } from '@material-ui/core'
 import Task from './task/Task'
 import Subtask from './subtask/Subtask'
 
 const TicketList = ({
-    tasks, subtasks, ticketOrder, columnId,
+    tasks, subtasks, ticketOrder, columnId, boardId,
 }) => {
     const ticketsInOrder = ticketOrder.map((obj) => {
         let foundTicket
@@ -17,17 +18,25 @@ const TicketList = ({
         return foundTicket
     })
     return (
-        <>
+        <Grid container direction="column" spacing={2}>
             {ticketsInOrder.map((ticket, index) => {
                 let component
                 if (ticket.type === 'task') {
-                    component = <Task key={ticket.id} index={index} task={ticket} columnId={columnId} />
+                    component = (
+                        <Grid item key={ticket.id}>
+                            <Task index={index} task={ticket} columnId={columnId} boardId={boardId} />
+                        </Grid>
+                    )
                 } else if (ticket.type === 'subtask') {
-                    component = <Subtask key={ticket.id} index={index} subtask={ticket} columnId={columnId} />
+                    component = (
+                        <Grid item key={ticket.id}>
+                            <Subtask key={ticket.id} index={index} subtask={ticket} columnId={columnId} />
+                        </Grid>
+                    )
                 }
                 return component
             })}
-        </>
+        </Grid>
     )
 }
 

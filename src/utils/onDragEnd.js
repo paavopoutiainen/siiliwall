@@ -90,6 +90,9 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         // From the source column filter out the moved ticket using draggableId
         const updatedTicketsOfSourceColumn = ticketsOfSourceColumn.filter((ticket) => ticket.id !== draggableId)
         // To the destination column add the moved task
+        //tällä ticketillä ei ole tässä kohtaa uutta columnId:tä ja se pitäii sille saada
+        // uutta columnId:tä ei tarvitse renderöitiin siihen käytetään columnin subtask saraketta
+        // sen vois päivittää vaikka mutaation update callbackissa vähän alempana
         const updatedTicketsOfDestinationColumn = ticketsOfDestinationColumn.concat(ticketBeingMoved)
 
         const updatedTasksOfSourceColumn = []

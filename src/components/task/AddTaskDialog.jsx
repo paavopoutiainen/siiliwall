@@ -93,6 +93,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
         if (isValid) {
             addTask({
                 variables: {
+                    boardId: column.board.id,
                     columnId: column.id,
                     title,
                     size,

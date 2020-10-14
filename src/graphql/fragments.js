@@ -63,8 +63,26 @@ export const COLUMNORDER = gql`
 `
 
 export const COLUMNORDER_AND_COLUMNS = gql`
-fragment columnOrderAndColumns on Board {
-    columnOrder
-    columns
+    fragment columnOrderAndColumns on Board {
+        columnOrder
+        columns
 }
+`
+
+export const SUBTASKS_COLUMN = gql`
+    fragment column on Subtask {
+        column {
+            id
+        }
+    }
+`
+
+export const BOARDS_COLUMNS_AND_COLUMNORDER = gql`
+    fragment columns on Board {
+        columnOrder
+        columns {
+            id
+            name
+        }
+    }
 `

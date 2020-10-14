@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         orderNumber: {
             type: DataTypes.INTEGER,
             allowNull: false,
-        }
+        },
     })
     Board.associate = (models) => {
         Board.hasMany(models.Column, {
@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
         // Board has one creator user
         Board.belongsTo(models.User, {
             foreignKey: 'creatorId',
+        })
+        Board.hasMany(models.Task, {
+            foreignKey: 'boardId',
         })
     }
     return Board

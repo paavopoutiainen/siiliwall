@@ -13,6 +13,12 @@ export const MOVE_TICKET_FROM_COLUMN = gql`
     mutation moveTicketFromColumn($type: String!, $ticketId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTicketOrder: [TicketOrderInput!]!, $destTicketOrder:  [TicketOrderInput!]!) {
         moveTicketFromColumn(type: $type, ticketId: $ticketId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTicketOrder: $sourceTicketOrder, destTicketOrder: $destTicketOrder) {
             id
+            subtasks {
+                id
+                column {
+                    id
+                }
+            }
         }
     }    
 `

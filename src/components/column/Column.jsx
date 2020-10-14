@@ -12,7 +12,7 @@ import RenameColumn from './RenameColumn'
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
     const {
-        tasks, ticketOrder, subtasks,
+        tasks, ticketOrder, subtasks, board,
     } = column
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -27,8 +27,9 @@ const Column = ({ column, index }) => {
                     alignItems="center"
                     {...provided.draggableProps}
                     ref={provided.innerRef}
+                    spacing={2}
                 >
-                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" alignItems="center" justify="space-between" {...provided.dragHandleProps}>
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
@@ -50,6 +51,7 @@ const Column = ({ column, index }) => {
                                     subtasks={subtasks}
                                     ticketOrder={ticketOrder}
                                     columnId={column.id}
+                                    boardId={board.id}
                                 />
                                 {provided.placeholder}
                             </Grid>

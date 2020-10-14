@@ -234,6 +234,21 @@ class BoardService {
         return arrayOfIds
     }
 
+    async getSwimlaneOrderOfBoard(boardId) {
+        let arrayOfIds
+        try {
+            const swimlanes = await this.store.Task.findAll({
+                attributes: ['id'],
+                where: { boardId },
+                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
+            })
+            arrayOfIds = swimlanes.map((swimlane) => swimlane.dataValues.id)
+        } catch (e) {
+            console.error(e)
+        }
+        return arrayOfIds
+    }
+
     /*
     Gets the order of tasks in certain column, returns an array of taskIds in the correct order.
     This field is for keeping track of the order in which the tasks are displayed in the column
@@ -377,24 +392,32 @@ class BoardService {
         return largestColumnOrderNumber || 0
     }
 
-    async addTaskForColumn(columnId, title, size, ownerId, memberIds, description) {
+    async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At a new tasks' creation we want to display it as the lowermost task in its column,
           hence it is given the biggest columnOrderNumber of the column
+          By default new task will be displyed at the bottom of the swimlane view
         */
         let addedTask
         const escTitle = this.sequelize.escape(`%${title}%`)
         const escDescr = this.sequelize.escape(`%${description}%`)
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
+            const largestSwimlaneOrderNumber = await this.store.Task.max('columnOrderNumber', {
+                where: {
+                    boardId,
+                },
+            }) || 0
             addedTask = await this.store.Task.create({
                 id: uuid(),
+                boardId,
                 columnId,
                 escTitle,
                 size,
                 ownerId,
                 escDescr,
                 columnOrderNumber: largestOrderNumber + 1,
+                swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {
@@ -439,6 +462,8 @@ class BoardService {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
+          If subtask is created into diffenrent column than the current 'home' of parent task
+          the subtask will be placed at the bottom of the column
         */
         let addedSubtask
         const escContent = this.sequelize.escape(`%${content}%`)
@@ -450,9 +475,16 @@ class BoardService {
                 columnId,
                 ownerId,
             })
+
+            const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
-            const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
-            newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
+            // figure out if the created subtask was created into same or different column than its parent task
+            if (columnId === parentTask.dataValues.columnId) {
+                const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
+                newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
+            } else {
+                newTicketOrder.push({ ticketId: addedSubtask.id, type: 'subtask' })
+            }
             await this.reOrderTicketsOfColumn(newTicketOrder, columnId)
             await Promise.all(
                 memberIds.map(async (memberId) => {
@@ -561,6 +593,18 @@ class BoardService {
             }))
         } catch (e) {
             console.log(e)
+        }
+    }
+
+    async reOrderSwimlanes(swimlaneOrder) {
+        try {
+            await Promise.all(swimlaneOrder.map(async (id, index) => {
+                const task = await this.store.Task.findByPk(id)
+                task.swimlaneOrderNumber = index
+                await task.save()
+            }))
+        } catch (e) {
+            console.error(e)
         }
     }
 

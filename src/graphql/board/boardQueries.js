@@ -15,6 +15,7 @@ export const BOARD_BY_ID = gql`
             id
             name
             columnOrder
+            swimlaneOrder
             columns {
                 id
                 name
@@ -39,11 +40,14 @@ export const BOARD_BY_ID = gql`
                         userName
                     }
                     description
-
+                    swimlaneOrderNumber
                 }
                 subtasks {
                     id
                     content
+                    column {
+                        id
+                    }
                     owner {
                         id
                         userName

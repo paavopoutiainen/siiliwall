@@ -35,6 +35,9 @@ module.exports = (sequelize, DataTypes) => {
             through: models.UserTask,
             foreignKey: 'taskId',
         })
+        Task.belongsTo(models.Board, {
+            foreignKey: 'boardId',
+        })
     }
     return Task
 }
