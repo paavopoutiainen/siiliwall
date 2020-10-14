@@ -6,7 +6,6 @@ import Select from 'react-select'
 import {
     sizeSchema, titleSchema, descriptionSchema, taskSchema,
 } from './validationSchema'
-import checkedString from './checkedString'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
@@ -29,15 +28,10 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleTitleChange = (event) => {
         const input = event.target.value
-        // eslint-disable-next-line quotes
-        if (checkedString(input)) {
-            setTitleError('Contains illegal character(s)')
-        } else {
-            titleSchema.validate(input).catch((err) => {
-                setTitleError(err.message)
-            })
-            setTitleError('')
-        }
+        titleSchema.validate(input).catch((err) => {
+            setTitleError(err.message)
+        })
+        setTitleError('')
         setTitle(input)
     }
 
@@ -68,14 +62,11 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
             setDescription(null)
             return
         }
-        if (checkedString(input)) {
-            setDescriptionError('Contains illegal character(s)')
-        } else {
-            descriptionSchema.validate(input).catch((err) => {
-                setSizeError(err.message)
-            })
-            setDescriptionError('')
-        }
+
+        descriptionSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setDescriptionError('')
         setDescription(input)
     }
 

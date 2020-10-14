@@ -1,5 +1,6 @@
 /* eslint-disable class-methods-use-this */
 const { v4: uuid } = require('uuid')
+const sanitize = require('../utils/sanitize')
 
 class BoardService {
     constructor({ db }) {
@@ -62,10 +63,10 @@ class BoardService {
 
     async editColumnById(columnId, name) {
         let column
-        const escName = this.sequelize.escape(`%${name}%`)
         try {
+            const cname = sanitize(name)
             column = await this.store.Column.findByPk(columnId)
-            column.name = escName
+            column.name = cname
             await column.save()
         } catch (e) {
             console.error(e)
@@ -177,14 +178,14 @@ class BoardService {
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let task
-        const escTitle = this.sequelize.escape(`%${title}%`)
-        const escDescr = this.sequelize.escape(`%${description}%`)
         try {
+            const ntitle = sanitize(title)
+            const ndescr = sanitize(description)
             task = await this.store.Task.findByPk(taskId)
-            task.title = escTitle
+            task.title = ntitle
             task.size = size
             task.ownerId = ownerId
-            task.description = escDescr
+            task.description = ndescr
             await task.save()
             // Updating usertasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
@@ -329,12 +330,12 @@ class BoardService {
 
     async addBoard(boardName) {
         let addedBoard
-        const escName = this.sequelize.escape(`%${boardName}%`)
         try {
+            const bname = sanitize(boardName)
             const largestOrderNumber = await this.store.Board.max('orderNumber')
             addedBoard = await this.store.Board.create({
                 id: uuid(),
-                name: escName,
+                name: bname,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -350,15 +351,15 @@ class BoardService {
           hence it is given the biggest orderNumber of the board
         */
         let addedColumn
-        const escName = this.sequelize.escape(`%${columnName}%`)
         try {
+            const cname = sanitize(columnName)
             const largestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
             addedColumn = await this.store.Column.create({
                 id: uuid(),
                 boardId,
-                name: escName,
+                name: cname,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -399,9 +400,9 @@ class BoardService {
           By default new task will be displyed at the bottom of the swimlane view
         */
         let addedTask
-        const escTitle = this.sequelize.escape(`%${title}%`)
-        const escDescr = this.sequelize.escape(`%${description}%`)
         try {
+            const newtitle = sanitize(title)
+            const ndescr = sanitize(description)
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             const largestSwimlaneOrderNumber = await this.store.Task.max('columnOrderNumber', {
                 where: {
@@ -412,10 +413,10 @@ class BoardService {
                 id: uuid(),
                 boardId,
                 columnId,
-                escTitle,
+                title: newtitle,
                 size,
                 ownerId,
-                escDescr,
+                description: ndescr,
                 columnOrderNumber: largestOrderNumber + 1,
                 swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
@@ -466,11 +467,11 @@ class BoardService {
           the subtask will be placed at the bottom of the column
         */
         let addedSubtask
-        const escContent = this.sequelize.escape(`%${content}%`)
         try {
+            const ncont = sanitize(content)
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                escContent,
+                content: ncont,
                 taskId,
                 columnId,
                 ownerId,

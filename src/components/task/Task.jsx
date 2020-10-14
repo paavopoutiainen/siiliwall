@@ -16,14 +16,13 @@ const Task = ({
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     const dots = '...'
-    const add3Dots = (titleParam) => {
-        let checkedTitle = titleParam
-        if (titleParam.length > titleLimit) {
+    const add3Dots = () => {
+        let checkedTitle = title
+        if (title.length > titleLimit) {
             checkedTitle = title.substring(0, titleLimit) + dots
         }
         return checkedTitle
     }
-
     const descrDots = (description) => {
         let retVal = description
         if (description.length > descrLimit) {
@@ -69,28 +68,32 @@ const Task = ({
                         <Grid item>
                             {task.owner ? (
                                 <p>
-                                    {`owner: ${task.owner.userName}`}
+                                    owner:&nbsp;
+                                    {task.owner.userName}
                                 </p>
                             ) : null}
                         </Grid>
                         <Grid item>
                             {task.size ? (
                                 <p>
-                                    {`size: ${task.size}`}
+                                    size:&nbsp;
+                                    {task.size}
                                 </p>
                             ) : null}
                         </Grid>
                         <Grid item>
                             {task.members.length !== 0 ? (
                                 <p>
-                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
+                                    members:&nbsp;
+                                    {members.map((user) => user.userName)}
                                 </p>
                             ) : null}
                         </Grid>
                         <Grid item>
                             {task.description ? (
                                 <p>
-                                    {`description: ${descrDots(task.description)}`}
+                                    description:&nbsp;
+                                    {descrDots(task.description)}
                                 </p>
                             ) : null}
                         </Grid>

@@ -9,7 +9,6 @@ import useEditTask from '../../graphql/task/hooks/useEditTask'
 import {
     sizeSchema, titleSchema, descriptionSchema, taskSchema,
 } from './validationSchema'
-import checkedString from './checkedString'
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
@@ -34,15 +33,10 @@ const EditTaskDialog = ({
 
     const handleTitleChange = (event) => {
         const input = event.target.value
-        // eslint-disable-next-line quotes
-        if (checkedString(input)) {
-            setTitleError('Contains illegal character(s)')
-        } else {
-            titleSchema.validate(input).catch((err) => {
-                setTitleError(err.message)
-            })
-            setTitleError('')
-        }
+        titleSchema.validate(input).catch((err) => {
+            setTitleError(err.message)
+        })
+        setTitleError('')
         setTitle(input)
     }
 
@@ -69,14 +63,10 @@ const EditTaskDialog = ({
             setDescription(null)
             return
         }
-        if (checkedString(input)) {
-            setDescriptionError('Contains illegal character(s)')
-        } else {
-            descriptionSchema.validate(input).catch((err) => {
-                setSizeError(err.message)
-            })
-            setDescriptionError('')
-        }
+        descriptionSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setDescriptionError('')
         setDescription(input)
     }
 
