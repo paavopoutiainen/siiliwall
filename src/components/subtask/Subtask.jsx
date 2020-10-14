@@ -35,7 +35,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                         <Grid item>
                             <p>
                                 {' '}
-                                {add3Dots(subtask.task?.title, 25)}
+                                {add3Dots(subtask.task?.title || 'default', 25)}
                             </p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
@@ -49,7 +49,7 @@ const Subtask = ({ subtask, index, columnId }) => {
 
                         <Grid item classes={{ root: classes.subtaskContent }}>
                             <p classes={{ root: classes.subtaskContentText }}>
-                                {`Content: ${add3Dots(subtask.content, 30)}`}
+                                {`Content: ${add3Dots(subtask.content || 'default', 30)}`}
                             </p>
                         </Grid>
                         <Grid item>
@@ -60,7 +60,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                             ) : null}
                         </Grid>
                         <Grid item>
-                            {subtask.members.length !== 0 ? (
+                            {subtask.members?.length !== 0 ? (
                                 <p>
                                     {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
                                 </p>

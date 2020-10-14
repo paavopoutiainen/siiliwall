@@ -81,3 +81,13 @@ export const SUBTASKS_COLUMN = gql`
         }
     }
 `
+
+export const BOARDS_COLUMNS_AND_COLUMNORDER = gql`
+    fragment columns on Board {
+        columnOrder
+        columns {
+            id
+            name
+        }
+    }
+`

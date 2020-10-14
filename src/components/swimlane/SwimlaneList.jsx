@@ -1,6 +1,5 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import { swimlaneStyles } from '../../styles/styles'
 import Swimlane from './Swimlane'
 
 const SwimlaneList = ({ tasks, swimlaneOrder }) => {

@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import EditText from 'react-editext'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
-import styles from '../../styles.css'
 
 const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
@@ -18,6 +17,7 @@ const RenameColumn = ({ editId, column }) => {
 
     return (
         <EditText
+            showButtonsOnHover
             submitOnEnter
             cancelOnEscape
             editOnViewClick
