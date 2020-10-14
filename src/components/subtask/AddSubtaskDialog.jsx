@@ -68,6 +68,11 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         setMembers([])
     }
 
+    const handleCancel = () => {
+        setContent('')
+        toggleAddDialog()
+    }
+
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
@@ -123,7 +128,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleAddDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel
