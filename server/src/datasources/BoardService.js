@@ -450,6 +450,8 @@ class BoardService {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
+          If subtask is created into diffenrent column than the current 'home' of parent task
+          the subtask will be placed at the bottom of the column
         */
         let addedSubtask
         try {
@@ -460,9 +462,16 @@ class BoardService {
                 columnId,
                 ownerId,
             })
+
+            const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
-            const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
-            newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
+            // figure out if the created subtask was created into same or different column than its parent task
+            if (columnId === parentTask.dataValues.columnId) {
+                const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
+                newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
+            } else {
+                newTicketOrder.push({ ticketId: addedSubtask.id, type: 'subtask' })
+            }
             await this.reOrderTicketsOfColumn(newTicketOrder, columnId)
             await Promise.all(
                 memberIds.map(async (memberId) => {

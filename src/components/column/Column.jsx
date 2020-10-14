@@ -12,7 +12,7 @@ import RenameColumn from './RenameColumn'
 const Column = ({ column, index }) => {
     const classes = boardPageStyles()
     const {
-        tasks, ticketOrder, subtasks,
+        tasks, ticketOrder, subtasks, board,
     } = column
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -51,6 +51,7 @@ const Column = ({ column, index }) => {
                                     subtasks={subtasks}
                                     ticketOrder={ticketOrder}
                                     columnId={column.id}
+                                    boardId={board.id}
                                 />
                                 {provided.placeholder}
                             </Grid>

@@ -7,16 +7,24 @@ import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
-import { TICKETORDER } from '../../graphql/fragments'
+import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragments'
 
-const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, boardId }) => {
     const { loading, data } = useAllUsers()
     const classes = boardPageStyles()
-    const [addSubtask] = useAddSubtask(columnId)
+    const [addSubtask] = useAddSubtask()
     const client = useApolloClient()
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
+    const [inputColumnId, setInputColumnId] = useState(null)
+
+    const { columns, columnOrder } = client.cache.readFragment({
+        id: `Board:${boardId}`,
+        fragment: BOARDS_COLUMNS_AND_COLUMNORDER,
+    })
+
+    const columnOfParentTask = columns.find((col) => col.id === columnId).name
 
     if (loading) return null
 
@@ -32,16 +40,21 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const handleColumnChange = (action) => {
+        setInputColumnId(action.value)
+    }
+
     const handleSave = (event) => {
         event.preventDefault()
+        // Get the ticketOrder of the column to which user is creating the subtask
         const { ticketOrder } = client.cache.readFragment({
-            id: `Column:${columnId}`,
+            id: `Column:${inputColumnId || columnId}`,
             fragment: TICKETORDER,
         })
         const ticketOrderWithoutTypename = ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
         addSubtask({
             variables: {
-                columnId,
+                columnId: inputColumnId || columnId,
                 taskId,
                 ownerId: owner,
                 memberIds: members,
@@ -55,8 +68,18 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
         setMembers([])
     }
 
+    const handleCancel = () => {
+        setContent('')
+        toggleAddDialog()
+    }
+
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
+
+    const columnsData = columnOrder.map((id) => columns.find((col) => col.id === id)).map((col) => {
+        const newObject = { value: col.id, label: col.name }
         return newObject
     })
 
@@ -96,10 +119,16 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId }
                         onChange={handleMembersChange}
                         closeMenuOnSelect={false}
                     />
+                    <Select
+                        className="selectField"
+                        placeholder={`Select column - ${columnOfParentTask}`}
+                        options={columnsData}
+                        onChange={handleColumnChange}
+                    />
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleAddDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel

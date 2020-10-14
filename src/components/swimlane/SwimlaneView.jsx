@@ -8,7 +8,6 @@ import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 import useMoveSwimlane from '../../graphql/swimlane/hooks/useMoveSwimlane'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
-import { swimlaneStyles } from '../../styles/styles'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -19,7 +18,6 @@ const SwimlaneView = ({ board }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const client = useApolloClient()
-    const classes = swimlaneStyles()
 
     const { columns } = board
     let tasks = []
