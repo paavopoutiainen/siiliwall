@@ -247,6 +247,36 @@ const subtasks = [
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
         content: 'subtaskin kontentti 333',
     },
+    {
+        id: '5d689892-f627-4ae3-84ab-766d45532601',
+        columnOrderNumber: 1,
+        done: false,
+        name: '',
+        content: 'Test 1',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
+        taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
+        ownerId: '6285867e-7db8-4769-8730-26d18ef9aba9',
+    },
+    {
+        id: '5d689892-f627-4ae3-84ab-766d45532602',
+        columnOrderNumber: 2,
+        done: false,
+        name: '',
+        content: 'Test 2',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
+        taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
+        ownerId: '6285867e-7db8-4769-8730-26d18ef9aba9',
+    },
+    {
+        id: '5d689892-f627-4ae3-84ab-766d45532603',
+        columnOrderNumber: 2,
+        done: false,
+        name: '',
+        content: 'Update some more',
+        columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0528',
+        taskId: '7b29f130-fc89-4f16-b0ef-71a06e09110c',
+        ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+    },
 
 ]
 
