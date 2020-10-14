@@ -34,7 +34,6 @@ const Task = ({
 
     const handleClick = () => {
         toggleDialog()
-        console.log('taskia klikattu')
     }
 
     // Prevents closing dialog when clicking on it to edit task's fields
