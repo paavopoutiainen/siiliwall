@@ -31,7 +31,7 @@ html, body {
 }
 
 button[editext="edit-button"] {
-    visibility: hidden; 
+    border-radius: 25%;
     
 } 
 button[editext="cancel-button"] {
