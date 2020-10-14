@@ -92,6 +92,21 @@ export const boardPageStyles = makeStyles({
         backgroundColor: 'rgba(255, 140, 85, .8)',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
+        flexWrap: 'nowrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    subtaskHeaderTitleItem: {
+        maxHeight: 25,
+        maxWidth: 250,
+    },
+
+    subtaskHeaderTitleText: {
+        maxHeight: 'inherit',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
 
     subtaskDropdownComponent: {
@@ -101,6 +116,18 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownButton: {
         height: '100%',
     },
+
+    subtaskContent: {
+        maxWidth: 300,
+
+    },
+
+    subtaskContentText: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+    },
+
     taskDropdownComponent: {
         height: 25,
     },
@@ -167,11 +194,12 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumnList: {
         minHeight: 133,
         width: '100%',
+        flexWrap: 'nowrap',
     },
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
-        width: 300,
+        width: 330,
         minHeight: 133,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
