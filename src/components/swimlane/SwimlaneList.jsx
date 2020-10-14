@@ -5,8 +5,7 @@ import Swimlane from './Swimlane'
 
 const SwimlaneList = ({ tasks, swimlaneOrder }) => {
     const classes = swimlaneStyles()
-
-    const newSwimlaneOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id))
+    const newSwimlaneOrder = swimlaneOrder.map((obj) => tasks.find((task) => task.id === obj.ticketId))
     return (
         <Grid
             container

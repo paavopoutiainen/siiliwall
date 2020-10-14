@@ -13,8 +13,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
     if (result.type === 'swimlane') {
         const newSwimlaneOrder = Array.from(boardSwimlaneOrder)
-        newSwimlaneOrder.splice(source.index, 1)
 
+        newSwimlaneOrder.splice(source.index, 1)
         newSwimlaneOrder.splice(destination.index, 0, draggableId)
 
         const boardId = `Board:${board.id}`

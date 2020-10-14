@@ -7,7 +7,6 @@ import { Draggable } from 'react-beautiful-dnd'
 
 const Swimlane = ({ task, index }) => {
     const classes = swimlaneStyles()
-
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (

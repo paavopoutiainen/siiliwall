@@ -24,15 +24,29 @@ const SwimlaneView = ({ board }) => {
     const { columns } = board
     let tasks = []
     let subtasks = []
+    let tasksInSwimlaneOrder = []
     let boardSwimlaneOrder = board.swimlaneOrder
+
     columns.forEach((column) => {
         tasks = tasks.concat(column.tasks)
     })
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
+
+    // Getting the right column order from board
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
+
+    // Getting the data we want to use in SwimlaneViewHeader component from the columnsInOrder array 
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
+
+    // Reversing the original column order so that in the swimlaneView we can render tasks in priority order (Done, Test, In Progress, To Do)
+    let columnsInOrderForSwimlaneView = Array.from(columnsInOrder).reverse()
+
+    // Saving ticketOrderObjects from the reversed column array to the tasksInSwimlaneOrder variable in the right priority order. 
+    columnsInOrderForSwimlaneView.map((column) => {
+        tasksInSwimlaneOrder = tasksInSwimlaneOrder.concat(column.ticketOrder.filter((ticket) => ticket.type === 'task'))
+    })
 
     // This object is passed to swimlaneList
 
@@ -68,7 +82,7 @@ const SwimlaneView = ({ board }) => {
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasks={tasksForSwimlaneList} swimlaneOrder={boardSwimlaneOrder} />
+                            <SwimlaneList tasks={tasksForSwimlaneList} swimlaneOrder={tasksInSwimlaneOrder} />
                             {provided.placeholder}
                         </Grid>
                     )}

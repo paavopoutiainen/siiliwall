@@ -236,7 +236,7 @@ class BoardService {
             const swimlanes = await this.store.Task.findAll({
                 attributes: ['id'],
                 where: { boardId },
-                order: this.sequelize.literal('swimlaneOrderNumber'),
+                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
             })
             arrayOfIds = swimlanes.map((swimlane) => swimlane.dataValues.id)
         } catch (e) {

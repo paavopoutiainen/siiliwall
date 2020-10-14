@@ -195,6 +195,16 @@ const tasks = [
         boardId: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e',
     },
     {
+        title: 'Test for columns',
+        content: 'Add test for columns',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
+        columnOrderNumber: 1,
+        swimlaneOrderNumber: 1,
+        id: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
+    },
+    {
         title: 'Update user stories',
         content: 'Update user stories',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
