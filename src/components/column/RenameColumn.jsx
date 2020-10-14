@@ -17,6 +17,7 @@ const RenameColumn = ({ editId, column }) => {
 
     return (
         <EditText
+            showButtonsOnHover
             submitOnEnter
             cancelOnEscape
             editOnViewClick
