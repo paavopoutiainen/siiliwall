@@ -32,11 +32,12 @@ const Task = ({
         return retVal
     }
 
+    // Opens task editing dialog
     const handleClick = () => {
         toggleDialog()
     }
 
-    // Prevents closing dialog when clicking on it to edit task's fields
+    // Prevents edit task dialog from opening, when user presses the three dots to open dropdown
     const handleDialogClick = (e) => e.stopPropagation()
 
     return (
