@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {
-    Delete, Edit, Archive, Add,
+    Delete, Archive, Add,
 } from '@material-ui/icons'
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
 
 const DropdownTask = ({
-    columnId, taskId, handleEdit, boardId,
+    columnId, taskId, boardId,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
@@ -34,12 +34,6 @@ const DropdownTask = ({
         setAlertDialogStatus(true)
         setAnchorEl(null)
     }
-
-    useEffect(() => {
-        if (handleEdit) {
-            setAnchorEl(null)
-        }
-    }, [handleEdit])
 
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>
@@ -66,12 +60,6 @@ const DropdownTask = ({
                         <Add />
                     </ListItemIcon>
                     <ListItemText primary="Create subtask" />
-                </MenuItem>
-                <MenuItem onClick={handleEdit}>
-                    <ListItemIcon>
-                        <Edit />
-                    </ListItemIcon>
-                    <ListItemText primary="Edit" />
                 </MenuItem>
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
                     <ListItemIcon>

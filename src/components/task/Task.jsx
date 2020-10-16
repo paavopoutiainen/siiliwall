@@ -32,6 +32,14 @@ const Task = ({
         return retVal
     }
 
+    // Opens task editing dialog
+    const handleClick = () => {
+        toggleDialog()
+    }
+
+    // Prevents edit task dialog from opening, when user presses the three dots to open dropdown
+    const handleDialogClick = (e) => e.stopPropagation()
+
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -44,6 +52,7 @@ const Task = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     spacing={1}
+                    onClick={handleClick}
                 >
                     <Grid
                         item
@@ -56,11 +65,10 @@ const Task = ({
                         <Grid item>
                             <h3>{add3Dots(title)}</h3>
                         </Grid>
-                        <Grid item>
+                        <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 taskId={task.id}
                                 columnId={columnId}
-                                handleEdit={toggleDialog}
                                 boardId={boardId}
                             />
                         </Grid>
