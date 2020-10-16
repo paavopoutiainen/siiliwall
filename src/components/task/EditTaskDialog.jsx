@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
@@ -83,7 +82,8 @@ const EditTaskDialog = ({
         return newObject
     })
     // data for showing only the members not yet chosen
-    const modifiedMemberOptions = modifiedData.filter((user) => !arrayOfOldMemberIds.includes(user.id))
+    const modifiedMemberOptions = modifiedData
+        .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
     return (
         <Grid>
