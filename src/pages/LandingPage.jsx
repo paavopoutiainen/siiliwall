@@ -18,7 +18,7 @@ const LandingPage = () => {
         setOpen(true)
     }
 
-    const handleAddUserClickOpen = () => {
+    const handleClickOpenUser = () => {
         setUserFormOpen(true)
     }
 
@@ -41,15 +41,23 @@ const LandingPage = () => {
                 <Grid item classes={{ root: classes.title }}>
                     <h1 id="landingTitle">Welcome!</h1>
                 </Grid>
-                <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }} id="addButton">
-                        Add Board
-                    </Button>
-                </Grid>
-                <Grid item>
-                    <Button onClick={setUserFormOpen} classes={{ root: classes.addUserButton }}>
-                        Add User
-                    </Button>
+                <Grid
+                    item
+                    container
+                    direction="row"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item>
+                        <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                            Add Board
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                            Add User
+                        </Button>
+                    </Grid>
                 </Grid>
                 <Grid
                     item

@@ -19,7 +19,7 @@ const NewUserForm = ({ setOpen, open }) => {
     const handleSave = () => {
         addUser({
             variables: {
-                name,
+                userName: name,
             },
         })
         setName('')
@@ -43,7 +43,6 @@ const NewUserForm = ({ setOpen, open }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChange(event)}
-                        id="inputName"
                     />
                 </DialogContent>
                 <DialogActions>

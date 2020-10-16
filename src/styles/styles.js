@@ -29,24 +29,12 @@ export const landingPageStyles = makeStyles({
         minWidth: '16rem',
     },
 
-    addBoardButton: {
+    addNewButton: {
         height: '6rem',
         width: '6rem',
         fontSize: '0.7rem',
         fontWeight: 'bold',
         borderRadius: '50%',
-        border: '2px solid #ff8d58',
-        color: '#ff8d58',
-        textAlign: 'center',
-        textDecoration: 'none',
-    },
-
-    addUserButton: {
-        height: '3rem',
-        width: '6rem',
-        fontSize: '0.7rem',
-        fontWeight: 'bold',
-        borderRadius: '25%',
         border: '2px solid #ff8d58',
         color: '#ff8d58',
         textAlign: 'center',
