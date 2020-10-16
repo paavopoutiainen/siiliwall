@@ -83,9 +83,9 @@ const Task = ({
                         </Grid>
                         <Grid item>
                             {task.members.length !== 0 ? (
+                                // this part renders commas after name only if formatting is like below
                                 <p>
-                                    members:&nbsp;
-                                    {members.map((user) => user.userName)}
+                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
                                 </p>
                             ) : null}
                         </Grid>
