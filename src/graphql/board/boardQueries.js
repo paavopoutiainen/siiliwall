@@ -41,6 +41,9 @@ export const BOARD_BY_ID = gql`
                     }
                     description
                     swimlaneOrderNumber
+                    column {
+                        id
+                    }
                 }
                 subtasks {
                     id

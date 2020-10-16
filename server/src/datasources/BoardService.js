@@ -523,6 +523,7 @@ class BoardService {
     }
 
     async reOrderTicketsOfColumn(newOrderArray, columnId) {
+        console.log('newOrderArray:', newOrderArray, '\n', 'columnId:', columnId)
         let column
         try {
             await Promise.all(newOrderArray.map(async (obj, index) => {

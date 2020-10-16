@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-     TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
+    TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
 } from '../graphql/fragments'
 
 export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar) => {
@@ -53,7 +53,6 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 ticketOrder: newTicketOrder,
             },
         })
-
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
@@ -103,7 +102,7 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         updatedTicketsOfSourceColumn.forEach((ticket) => {
             if (ticket.["__typename"] === 'Task') {
                 updatedTasksOfSourceColumn.push(ticket)
-            } else if (ticket["__typename"]  === 'Subtask') {
+            } else if (ticket["__typename"] === 'Subtask') {
                 updatedSubtasksOfSourceColumn.push(ticket)
             }
         })

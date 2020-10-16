@@ -2,40 +2,52 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN, SWIMLANEORDER
+    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN
 } from '../graphql/fragments'
 
-export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, board, boardSwimlaneOrder) => {
+export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, columns, client, board, tasksInSwimlaneOrder) => {
 
     const { destination, source, draggableId } = result
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
     if (result.type === 'swimlane') {
-        const newSwimlaneOrder = Array.from(boardSwimlaneOrder)
+        console.log('MENEE')
+        const columnMovedIn = columns.find((column) => column.tasks.map((task) => task.id).includes(draggableId))
+        const columnIdOfTheMovedTask = columnMovedIn.id
+        const columnObjectById = columns.find((column) => column.id === columnIdOfTheMovedTask)
+        const ticketOrderOfColumn = Array.from(columnObjectById.ticketOrder)
+        const newSwimlaneOrder = Array.from(tasksInSwimlaneOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
 
-        newSwimlaneOrder.splice(source.index, 1)
-        newSwimlaneOrder.splice(destination.index, 0, draggableId)
+        // Luodaan uusi lista missä pelkästään taskit mitkä jäävät dragatyn taskin alle
+        const newArr = newSwimlaneOrder.slice(destination.index)
+        // Käydään uusi lista läpi
+        const foundTask = newArr.find((obj) => ticketOrderOfColumn.find((colOrderObj) => obj.ticketId === colOrderObj.ticketId))
+        const highestTaskInColumnIndex = ticketOrderOfColumn.findIndex((obj) => obj.ticketId === foundTask.ticketId)
+        const movedTaskIndex = ticketOrderOfColumn.findIndex((obj) => obj.ticketId === draggableId)
+        console.log(highestTaskInColumnIndex)
+        const [movedTaskOrderObject] = ticketOrderOfColumn.splice(movedTaskIndex, 1)
+        ticketOrderOfColumn.splice(highestTaskInColumnIndex, 0, movedTaskOrderObject)
 
-        const boardId = `Board:${board.id}`
+        const finalTicketOrder = ticketOrderOfColumn.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
+        console.log(finalTicketOrder)
+        const columnId = `Column:${columnIdOfTheMovedTask}`
+
         client.writeFragment({
-            id: boardId,
-            fragment: SWIMLANEORDER,
+            id: columnId,
+            fragment: TICKETORDER,
             data: {
-                swimlaneOrder: newSwimlaneOrder
+                ticketOrder: finalTicketOrder
             }
         })
-
-        await moveSwimlane({
+        await moveTicketInColumn({
             variables: {
-                swimlaneOrderArray: newSwimlaneOrder,
-                boardId: board.id
+                orderArray: finalTicketOrder,
+                columnId: columnIdOfTheMovedTask
             }
         })
         return
     }
-
-
 
     // For swimlaneColumn droppables the id is constructed of both columnId
     // and taskId in order to avoid duplicates, here we take the columnId part
@@ -75,6 +87,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
 
     // When ticket is moved into another swimlaneColumn
     if (destination.droppableId !== source.droppableId) {
+        console.log('BÖÖÖ')
         const sourceColumn = columns.find((col) => col.id === sourceColumnId)
         const destinationColumn = columns.find((col) => col.id === destinationColumnId)
         const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
@@ -83,7 +96,6 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
 
         // Find from the cache the board
         const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { board: { id: board.id } } })
-
         // Find from the cache the columns being manipulated
         const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
         const destinationColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === destinationColumn.id)
