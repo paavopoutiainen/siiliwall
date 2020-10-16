@@ -5,32 +5,48 @@ import {
     TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN
 } from '../graphql/fragments'
 
-export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, columns, client, board, tasksInSwimlaneOrder) => {
+export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, columns, client, tasksInSwimlaneOrder, boardId) => {
 
     const { destination, source, draggableId } = result
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
     if (result.type === 'swimlane') {
-        console.log('MENEE')
         const columnMovedIn = columns.find((column) => column.tasks.map((task) => task.id).includes(draggableId))
         const columnIdOfTheMovedTask = columnMovedIn.id
         const columnObjectById = columns.find((column) => column.id === columnIdOfTheMovedTask)
+        // ticketOrderOfColumn = kopio kolumnin ticketOrder listasta, missä siirrettävä taski sijaitsee
         const ticketOrderOfColumn = Array.from(columnObjectById.ticketOrder)
         const newSwimlaneOrder = Array.from(tasksInSwimlaneOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
 
-        // Luodaan uusi lista missä pelkästään taskit mitkä jäävät dragatyn taskin alle
+        // newArr = uusi lista missä taskit mitkä jäävät siirretyn taskin alle sekä itse siirrettävä taski
         const newArr = newSwimlaneOrder.slice(destination.index)
-        // Käydään uusi lista läpi
-        const foundTask = newArr.find((obj) => ticketOrderOfColumn.find((colOrderObj) => obj.ticketId === colOrderObj.ticketId))
-        const highestTaskInColumnIndex = ticketOrderOfColumn.findIndex((obj) => obj.ticketId === foundTask.ticketId)
+        // foundTask = ylimmän taskin ticketOrderObject newArr listassa mikä sijaitsee samassa kolumnissa kuin siirretty task
+        const foundTask = newArr.find((obj) => {
+            const test = ticketOrderOfColumn.find((colOrderObj) => obj.ticketId === colOrderObj.ticketId)
+            return test
+        })
+        // movedTaskIndex = siirrettävän taskin indexi kolumnin ticketOrder listassa ennen siirtoa
         const movedTaskIndex = ticketOrderOfColumn.findIndex((obj) => obj.ticketId === draggableId)
-        console.log(highestTaskInColumnIndex)
+        let highestTaskInColumnIndex
+
+        if (foundTask) {
+            // highestTaskInColumnIndex = foundTaskin indexi kolumnin ticketOrder listassa ennen taskin siirtoa
+            highestTaskInColumnIndex = ticketOrderOfColumn.findIndex((obj) => obj.ticketId === foundTask.ticketId)
+
+        } else {
+            /* jos siirrettävän taskin alapuolelle ei jää mitään taskeja jotka ovat samassa kolumnissa laitetaan siirrettyä
+            taskia vastaava ticketOrderObject kyseisen kolumnin ticketOrder listan alimmaiseksi */
+            highestTaskInColumnIndex = ticketOrderOfColumn.length - 1
+        }
+
+        // ticketOrderOfColumnista poistetaan siirrettyä taskia vastaava ticketOrderObject ja laitetaan se uuteen indexiin
         const [movedTaskOrderObject] = ticketOrderOfColumn.splice(movedTaskIndex, 1)
         ticketOrderOfColumn.splice(highestTaskInColumnIndex, 0, movedTaskOrderObject)
 
+        /* finalTicketOrder = lopuksi poistetaan ticketOrderOfColumn listasta kaikista olioista __typename attribuutti, jotta se voidaan ylipäätään 
+           lähettää graphql mutaatioon oikeassa muodossa */
         const finalTicketOrder = ticketOrderOfColumn.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
-        console.log(finalTicketOrder)
         const columnId = `Column:${columnIdOfTheMovedTask}`
 
         client.writeFragment({
@@ -87,7 +103,6 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
 
     // When ticket is moved into another swimlaneColumn
     if (destination.droppableId !== source.droppableId) {
-        console.log('BÖÖÖ')
         const sourceColumn = columns.find((col) => col.id === sourceColumnId)
         const destinationColumn = columns.find((col) => col.id === destinationColumnId)
         const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
@@ -95,7 +110,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         let destinationIndex = destination.index
 
         // Find from the cache the board
-        const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { board: { id: board.id } } })
+        const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { boardId } })
+
         // Find from the cache the columns being manipulated
         const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
         const destinationColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === destinationColumn.id)

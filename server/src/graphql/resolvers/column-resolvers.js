@@ -21,7 +21,6 @@ const schema = {
             return dataSources.boardService.deleteColumnById(id)
         },
         moveTicketInColumn(root, args) {
-            console.log('BÖÖ', args)
             return dataSources.boardService.reOrderTicketsOfColumn(args.newOrder, args.columnId)
         },
         async moveTicketFromColumn(root, {

@@ -5,7 +5,6 @@ import { useApolloClient } from '@apollo/client'
 import SwimlaneViewHeader from './SwimlaneViewHeader'
 import SwimlaneList from './SwimlaneList'
 import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
-import useMoveSwimlane from '../../graphql/swimlane/hooks/useMoveSwimlane'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 
@@ -14,7 +13,6 @@ const SwimlaneView = ({ board }) => {
     // Basically we want to each task to contain its subtasks
     // and have them divided by columns they exist at
     // These units are called swimlaneColumns
-    const [moveSwimlane] = useMoveSwimlane()
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const client = useApolloClient()
@@ -23,7 +21,6 @@ const SwimlaneView = ({ board }) => {
     let tasks = []
     let subtasks = []
     let tasksInSwimlaneOrder = []
-    let boardSwimlaneOrder = board.swimlaneOrder
 
     columns.forEach((column) => {
         tasks = tasks.concat(column.tasks)
@@ -74,7 +71,7 @@ const SwimlaneView = ({ board }) => {
     })
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, columns, client, board, tasksInSwimlaneOrder)}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, columns, client, tasksInSwimlaneOrder, board.id)}>
             <Grid container direction="column" spacing={5}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
