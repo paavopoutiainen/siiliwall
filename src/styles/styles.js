@@ -98,12 +98,10 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskHeaderTitleItem: {
-        maxHeight: 25,
         maxWidth: 250,
     },
 
     subtaskHeaderTitleText: {
-        maxHeight: 'inherit',
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
