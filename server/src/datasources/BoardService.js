@@ -637,6 +637,53 @@ class BoardService {
         }
         return updatedTask
     }
+
+    async prioritizeTask(taskId, swimlaneOrderNumber, prioritizedTasksIds, direction) {
+        try {
+            // make task prioritized
+            const task = await this.store.Task.findByPk(taskId)
+            task.swimlaneOrderNumber = swimlaneOrderNumber
+            task.prioritized = true
+            await task.save()
+            // increase the swimlaneOrderNumber of prioritizedTasks beneath the moved task when the swimlane was moved upwards
+            if (direction === 'upwards') {
+                await Promise.all(prioritizedTasksIds.map(async (id) => {
+                    const affectedTask = await this.store.Task.findByPk(id)
+                    affectedTask.swimlaneOrderNumber += 1
+                    await affectedTask.save()
+                }))
+            // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
+            } else if (direction === 'downwards') {
+                await Promise.all(prioritizedTasksIds.map(async (id) => {
+                    const affectedTask = await this.store.Task.findByPk(id)
+                    affectedTask.swimlaneOrderNumber -= 1
+                    await affectedTask.save()
+                }))
+            }
+        } catch (e) {
+            console.error(e)
+        }
+        return taskId
+    }
+
+    async unPrioritizeTask(taskId, taskIds) {
+        try {
+            // unprioritize certain task
+            const task = await this.store.Task.findByPk(taskId)
+            task.swimlaneOrderNumber = null
+            task.prioritized = false
+            await task.save()
+            // change the swimlaneOrderNumbers of the other affected tasks
+            await Promise.all(taskIds.map(async (id) => {
+                const affectedTask = await this.store.Task.findByPk(id)
+                affectedTask.swimlaneOrderNumber -= 1
+                await affectedTask.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
+        return taskId
+    }
 }
 
 module.exports.BoardService = BoardService
