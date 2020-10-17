@@ -645,7 +645,7 @@ class BoardService {
             task.swimlaneOrderNumber = swimlaneOrderNumber
             task.prioritized = true
             await task.save()
-            // increase the swimlaneOrderNumber of prioritizedTasks beneath the moved task when the swimlane was moved upwards
+            // increase the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved upwards
             if (direction === 'upwards') {
                 await Promise.all(prioritizedTasksIds.map(async (id) => {
                     const affectedTask = await this.store.Task.findByPk(id)

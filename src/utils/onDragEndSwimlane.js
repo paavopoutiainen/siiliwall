@@ -11,6 +11,10 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    /*
+    WHEN SWIMLANE WAS MOVED
+    */
     if (result.type === 'swimlane') {
         const columnOfTheMovedTask = columns.find((column) => column.tasks.map((task) => task.id).includes(draggableId))
         const columnIdOfTheMovedTask = columnOfTheMovedTask.id
@@ -18,11 +22,9 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const movedTask = tasksInOrder.find((task) => task.id === draggableId)
         const indexOfTaskBeforeDrag = tasksInOrder.findIndex((task) => task.id === draggableId)
 
-        // Jos swimlanea liikutettu alaspäin ollaan kiinostuneita yläpuolella olevasta asiasta kun yritämme selvittää onko
-        // taski siirretty 'columninsa ulkopuolelle'
-        // If swimlane is moved downwards
+        // IF SWIMLANE IS MOVED DOWNWARDS
         if (indexOfTaskBeforeDrag < destination.index) {
-            // This is used for figuring out if the task was moved 'out of its column'
+            // This is used for figuring out if the swimlane/task was moved 'out of its column'
             const taskAbove = tasksInOrder[destination.index]
             // sitten verrataan taskAboven column id:tä liikutetun taskin column ideeseen
             // jos niin halutaan tehdä niin taskista halutaan tehdä priorisoitu ja sille annetaan myös swimlaneOrderNumber
@@ -66,8 +68,9 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 })
             }
 
-        // if swimlane is moved upwards
+        // IF SWIMLANE IS MOVED UPWARDS
         } else {
+            // This is used for figuring out if the task was moved 'out of its column'
             const taskBeneath = tasksInOrder[destination.index]
             // Situations where swimlaneOrderNumbers has to be updated
             // if swimlane is moved right above the swimlane with different columnId, the dragged task has to get the prioritized attribute
@@ -176,6 +179,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     const sourceTaskId = source.droppableId.substring(36, 72)
     const destinationTaskId = destination.droppableId.substring(36, 72)
 
+    // When subtask is tried to be moved outside its parent swimlane
     if (sourceTaskId !== destinationTaskId) return
 
     // When ticket is moved within one column
