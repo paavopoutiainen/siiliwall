@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
-import React from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, Button } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
 import { swimlaneStyles } from '../../styles/styles'
@@ -13,8 +13,13 @@ import useUnPrioritizeTask from '../../graphql/task/hooks/useUnPrioritizeTask'
 
 const Swimlane = ({ tasksInOrder, task, index }) => {
     const classes = swimlaneStyles()
+    const [show, setShow] = useState(true)
     const client = useApolloClient()
     const [unPrioritizeTask] = useUnPrioritizeTask()
+
+    const handleShowClick = () => {
+        setShow(!show)
+    }
 
     const removePrioritization = () => {
         client.writeFragment({
@@ -43,7 +48,8 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
             })
         })
         // SwimlaneOrderNumbers need to be updatetd to the database aswell
-        const prioritizedTasksBeneathTheSwimlaneIds = prioritizedTasksBeneathTheSwimlane.map((taskObj) => taskObj.id)
+        const prioritizedTasksBeneathTheSwimlaneIds = prioritizedTasksBeneathTheSwimlane
+            .map((taskObj) => taskObj.id)
 
         unPrioritizeTask({
             variables: {
@@ -58,15 +64,24 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                 <Grid
                     container
                     direction="column"
-                    spacing={3}
+                    spacing={2}
                     classes={{ root: classes.swimlane }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
                     <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-                    {task.prioritized ? <Grid item><button onClick={() => removePrioritization()}>remove prio</button></Grid> : null}
-                    <Grid item><SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} /></Grid>
+                    <Grid item container direction="row">
+                        {task.prioritized ? <Grid item><Button variant="outlined" size="small" onClick={() => removePrioritization()}>remove prio</Button></Grid> : null}
+                        <Grid item><Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button></Grid>
+                    </Grid>
+                    {show
+                    && (
+                        <Grid item>
+                            <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
+                        </Grid>
+                    )}
+
                 </Grid>
             )}
         </Draggable>
