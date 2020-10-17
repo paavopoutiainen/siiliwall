@@ -391,11 +391,6 @@ class BoardService {
         let addedTask
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
-            const largestSwimlaneOrderNumber = await this.store.Task.max('columnOrderNumber', {
-                where: {
-                    boardId,
-                },
-            }) || 0
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 boardId,
@@ -405,7 +400,6 @@ class BoardService {
                 ownerId,
                 description,
                 columnOrderNumber: largestOrderNumber + 1,
-                swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {

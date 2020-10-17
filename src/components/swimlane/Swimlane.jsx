@@ -72,8 +72,15 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                 >
                     <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
                     <Grid item container direction="row">
-                        {task.prioritized ? <Grid item><Button variant="outlined" size="small" onClick={() => removePrioritization()}>remove prio</Button></Grid> : null}
-                        <Grid item><Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button></Grid>
+                        <Grid item>
+                            <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button>
+                        </Grid>
+                        {task.prioritized
+                                && (
+                                    <Grid item>
+                                        <Button variant="outlined" size="small" onClick={() => removePrioritization()}>remove prioritization</Button>
+                                    </Grid>
+                                )}
                     </Grid>
                     {show
                     && (
