@@ -61,6 +61,13 @@ export const SUBTASKS = gql`
     }
 `
 
+export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
+    fragment prioritizedAndSwimlaneOrderNumber on Task {
+        prioritized
+        swimlaneOrderNumber
+    }
+`
+
 export const COLUMNORDER = gql`
     fragment columnOrder on Board {
         columnOrder

@@ -40,6 +40,7 @@ export const BOARD_BY_ID = gql`
                         userName
                     }
                     description
+                    prioritized
                     swimlaneOrderNumber
                     column {
                         id
