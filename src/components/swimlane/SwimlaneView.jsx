@@ -44,7 +44,7 @@ const SwimlaneView = ({ board }) => {
     })
     const tasksInReversedOrder = reversedTicketOrder.filter((obj) => obj.type === 'task').map((obj) => tasks.find((task) => task.id === obj.ticketId))
 
-    const tasksInOrder = tasksInReversedOrder.map((task) => {
+    const tasksInOrder = tasksInReversedOrder.map((task, index) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
@@ -58,15 +58,15 @@ const SwimlaneView = ({ board }) => {
             const subtaskOrder = column.ticketOrder.filter((obj) => subtasksOfTaskInColumn.map((subtask) => subtask.id).includes(obj.ticketId))
             // Add the real order index for subtask
             const subtasksInColumnFinal = subtasksOfTaskInColumn.map((subtask) => {
-                const index = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
-                return { ...subtask, index }
+                const realOrderIndex = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
+                return { ...subtask, index: realOrderIndex }
             })
 
             return {
                 name: column.name, id: column.id, subtasks: subtasksInColumnFinal, subtaskOrder,
             }
         })
-        return { ...task, swimlaneColumns }
+        return { ...task, swimlaneColumns, indexInNormalFlow: index }
     })
 
     // new logic for ordering swimlanes, taking into account the prioritized tasks

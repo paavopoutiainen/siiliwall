@@ -13,7 +13,7 @@ import useUnPrioritizeTask from '../../graphql/task/hooks/useUnPrioritizeTask'
 
 const Swimlane = ({ tasksInOrder, task, index }) => {
     const classes = swimlaneStyles()
-    const [show, setShow] = useState(true)
+    const [show, setShow] = useState(false)
     const client = useApolloClient()
     const [unPrioritizeTask] = useUnPrioritizeTask()
 
@@ -30,14 +30,18 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                 swimlaneOrderNumber: null,
             },
         })
-        // When swimlane/task gets unprioritized we have to change the swimlaneOrderNumber of
-        // all the prioritized tasks beneath the swimlane
-        const prioritizedTasksBeneathTheSwimlane = tasksInOrder
+        // When swimlane/task gets unprioritized we have to change the swimlaneOrderNumbers of
+        // all the prioritized tasks the unprioritization affects
+        // These are the indexes between the swimlaneOrderNumber and indexInNormalFlow of the unprioritized task
+        // TODO: THIS LOGIC IS NOT YET PERFECT - there might be cases where swimlaneorderNumbers of the tasks above needs to be changed
+        const affectedPrioritizedTasks = tasksInOrder
             .filter((taskObj) => taskObj.prioritized)
             .filter((taskObj) => taskObj.id !== task.id)
-            .filter((taskObj) => taskObj.swimlaneOrderNumber > task.swimlaneOrderNumber)
+            .filter((taskObj) => taskObj.swimlaneOrderNumber > task.swimlaneOrderNumber
+                                && taskObj.swimlaneOrderNumber < task.indexInNormalFlow)
+
         // Update the cache
-        prioritizedTasksBeneathTheSwimlane.map((taskObj) => {
+        affectedPrioritizedTasks.map((taskObj) => {
             client.writeFragment({
                 id: `Task:${taskObj.id}`,
                 fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
@@ -48,13 +52,13 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
             })
         })
         // SwimlaneOrderNumbers need to be updatetd to the database aswell
-        const prioritizedTasksBeneathTheSwimlaneIds = prioritizedTasksBeneathTheSwimlane
+        const affectedPrioritizedTaskIds = affectedPrioritizedTasks
             .map((taskObj) => taskObj.id)
 
         unPrioritizeTask({
             variables: {
                 id: task.id,
-                prioritizedTaskIds: prioritizedTasksBeneathTheSwimlaneIds,
+                prioritizedTaskIds: affectedPrioritizedTaskIds,
             },
         })
     }

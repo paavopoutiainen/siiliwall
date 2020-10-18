@@ -75,7 +75,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
             // This is used for figuring out if the swimlane/task was moved 'out of its column'/out of the normal flow of constructing the swimlane order.
             const taskAbove = tasksInOrder[destination.index]
             // Check if prioritization needs to happen
-            if (taskAbove.column.id !== movedTask.column.id || movedTask.prioritized) {
+            if (taskAbove.column.id !== movedTask.column.id || movedTask.prioritized || taskAbove.prioritized) {
                 // Figure out the affected prioritized tasks
                 const affectedTasks = tasksInOrder.slice(source.index, source.index + (destination.index - source.index + 1))
                 const affectedTasksWithoutTheMovedTask = affectedTasks.filter((taskObj) => taskObj.id !== draggableId)
