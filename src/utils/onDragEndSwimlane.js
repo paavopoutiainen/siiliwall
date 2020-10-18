@@ -13,23 +13,68 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
 
     /*
-    WHEN SWIMLANE WAS MOVED
+    WHEN SWIMLANE IS MOVED
     */
     if (result.type === 'swimlane') {
-        const columnOfTheMovedTask = columns.find((column) => column.tasks.map((task) => task.id).includes(draggableId))
-        const columnIdOfTheMovedTask = columnOfTheMovedTask.id
-
         const movedTask = tasksInOrder.find((task) => task.id === draggableId)
         const indexOfTaskBeforeDrag = tasksInOrder.findIndex((task) => task.id === draggableId)
 
-        // IF SWIMLANE IS MOVED DOWNWARDS
-        if (indexOfTaskBeforeDrag < destination.index) {
-            // This is used for figuring out if the swimlane/task was moved 'out of its column'
-            const taskAbove = tasksInOrder[destination.index]
-            // sitten verrataan taskAboven column id:tä liikutetun taskin column ideeseen
-            // jos niin halutaan tehdä niin taskista halutaan tehdä priorisoitu ja sille annetaan myös swimlaneOrderNumber
-            // Tämä tehdään myös aina jos iikuteltava taski on jo priorisoitu ennestään
+        // FIRST WE CHECK, IF PRIORITIZATION HAS TO HAPPEN - ACCORDING TO THE DRAGGING DIRECTION DIFFERENT LOGICS ARE APPLIED
+        // IF SWIMLANE IS MOVED UPWARDS
+        if (indexOfTaskBeforeDrag > destination.index) {
+            // This is used for figuring out if the task was moved 'out of its column'/out of the normal flow of constructing the swimlane order.
+            const taskBeneath = tasksInOrder[destination.index]
+            // Situations where swimlaneOrderNumbers has to be updated:
+            // if swimlane is moved right above the swimlane with different columnId, the dragged task has to get the prioritized attribute
+            // and all the other affected prioritized tasks beneath it has to get their swimlaneOrderNumbers incremented by one.
+            // Also if task beneath is prioritized it means we have to prioritize the moved task as well and increment
+            // the swimlaneOrderNumbers of the affected prioritized tasks by one.
+            // And finally if the moved task is already prioritized it has to be able to be moved anywhere and again, all the swimlaneOrderNumbers
+            // of the affected prioritized tasks has to get their swimlaneOrderNumbers incremented by one.
+            if (taskBeneath.column.id !== movedTask.column.id || taskBeneath.prioritized || movedTask.prioritized) {
+                // Figure out the affected prioritized tasks, they are found within the group
+                // that were located between the source index and the destination index of the drag.
+                const affectedTasks = tasksInOrder.slice(destination.index, destination.index + (source.index - destination.index + 1))
+                const affectedTasksWithoutTheMovedTask = affectedTasks.filter((taskObj) => taskObj.id !== draggableId)
+                const affectedPrioritizedTasks = affectedTasksWithoutTheMovedTask.filter((taskObj) => taskObj.prioritized)
+                const affectedPrioritizedTaskIds = affectedPrioritizedTasks.map((taskObj) => taskObj.id)
 
+                // Increase the swimlaneOrderNumbers of the affected prioritized tasks to the cache
+                affectedPrioritizedTasks.map((task) => {
+                    client.writeFragment({
+                        id: `Task:${task.id}`,
+                        fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
+                        data: {
+                            prioritized: true,
+                            swimlaneOrderNumber: task.swimlaneOrderNumber + 1,
+                        },
+                    })
+                })
+                // Give the moved task the new swimlaneOrderNumber
+                client.writeFragment({
+                    id: `Task:${draggableId}`,
+                    fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
+                    data: {
+                        prioritized: true,
+                        swimlaneOrderNumber: destination.index,
+                    },
+                })
+                // Send mutation to the server, server takes care of incrementing swimlaneOrderNumbers
+                // of the affected prioritized tasks into the database
+                prioritizeTask({
+                    variables: {
+                        id: draggableId,
+                        swimlaneOrderNumber: destination.index,
+                        affectedPrioritizedTaskIds,
+                        direction: 'upwards',
+                    },
+                })
+            }
+        // IF SWIMLANE IS MOVED DOWNWARDS
+        } else {
+            // This is used for figuring out if the swimlane/task was moved 'out of its column'/out of the normal flow of constructing the swimlane order.
+            const taskAbove = tasksInOrder[destination.index]
+            // Check if prioritization needs to happen
             if (taskAbove.column.id !== movedTask.column.id || movedTask.prioritized) {
                 // Figure out the affected prioritized tasks
                 const affectedTasks = tasksInOrder.slice(source.index, source.index + (destination.index - source.index + 1))
@@ -57,7 +102,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                         swimlaneOrderNumber: destination.index,
                     },
                 })
-                // Send mutation to the server
+                // Send mutation to the server.
                 prioritizeTask({
                     variables: {
                         id: draggableId,
@@ -67,58 +112,13 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                     },
                 })
             }
-
-        // IF SWIMLANE IS MOVED UPWARDS
-        } else {
-            // This is used for figuring out if the task was moved 'out of its column'
-            const taskBeneath = tasksInOrder[destination.index]
-            // Situations where swimlaneOrderNumbers has to be updated
-            // if swimlane is moved right above the swimlane with different columnId, the dragged task has to get the prioritized attribute
-            // and all the other prioritized tasks beneath it has to get their swimlaneOrderNumbers incremented by one
-            // also if task beneath is prioritized it means we have to prioritize the moved task as well and increment
-            // the swimlaneOrderNumbers of tasks beneath it.
-            // Also if the moved task is already prioritized it has to be able to be moved anywhere and hence all the swimlaneOrderNumbers
-            // of the affected prioritized tasks beneath it has to get incremented swimlaneOrderNumbers
-            if (taskBeneath.column.id !== movedTask.column.id || taskBeneath.prioritized || movedTask.prioritized) {
-                // selvitä millä logiikalla swimlaneOrderNumbereita täytyy muuttaa
-                // niiden priorisoitujen taskien, jotka sijoittuvat välille destination index ja source Index
-                // Figure out the affected prioritized tasks
-                const affectedTasks = tasksInOrder.slice(destination.index, destination.index + (source.index - destination.index + 1))
-                const affectedTasksWithoutTheMovedTask = affectedTasks.filter((taskObj) => taskObj.id !== draggableId)
-                const affectedPrioritizedTasks = affectedTasksWithoutTheMovedTask.filter((taskObj) => taskObj.prioritized)
-                const affectedPrioritizedTaskIds = affectedPrioritizedTasks.map((taskObj) => taskObj.id)
-
-                // Increase the swimlaneOrderNumbers of the affected prioritized tasks
-                affectedPrioritizedTasks.map((task) => {
-                    client.writeFragment({
-                        id: `Task:${task.id}`,
-                        fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
-                        data: {
-                            prioritized: true,
-                            swimlaneOrderNumber: task.swimlaneOrderNumber + 1,
-                        },
-                    })
-                })
-                // Give the moved task the new swimlaneOrderNumber
-                client.writeFragment({
-                    id: `Task:${draggableId}`,
-                    fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
-                    data: {
-                        prioritized: true,
-                        swimlaneOrderNumber: destination.index,
-                    },
-                })
-                // send mutation to the server
-                prioritizeTask({
-                    variables: {
-                        id: draggableId,
-                        swimlaneOrderNumber: destination.index,
-                        affectedPrioritizedTaskIds,
-                        direction: 'upwards',
-                    },
-                })
-            }
         }
+
+        // AFTER HANDLING THE PRIORITIZATION, CHANGES TO THE NORMAL FLOW ARE MADE
+        // The normal constructing of the swimlane order is done by using the board's columns' ticketorders
+        // So we need to change the ticketOrder of the column the movedTask is in.
+        const columnOfTheMovedTask = columns.find((column) => column.tasks.map((task) => task.id).includes(draggableId))
+        const columnIdOfTheMovedTask = columnOfTheMovedTask.id
 
         // ticketOrderOfColumn = kopio kolumnin ticketOrder listasta, missä siirrettävä taski sijaitsee
         const ticketOrderOfColumn = Array.from(columnOfTheMovedTask.ticketOrder)
