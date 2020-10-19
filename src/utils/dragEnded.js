@@ -1,11 +1,20 @@
-/* eslint-disable max-len */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-     TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
+    TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
 } from '../graphql/fragments'
 
-export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar) => {
+export const dragEnded = async (
+    result,
+    moveTicketInColumn,
+    moveTicketFromColumn,
+    moveColumn,
+    client,
+    columns,
+    board,
+    toggleSnackbar,
+) => {
     const { destination, source, draggableId } = result
     if (!destination) return
 
@@ -16,6 +25,7 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         const newColumnOrder = Array.from(board.columnOrder)
         newColumnOrder.splice(source.index, 1)
         newColumnOrder.splice(destination.index, 0, draggableId)
+        const colName = board.columns.filter((b) => b.id === draggableId).map((c) => c.name)
 
         const boardId = `Board:${board.id}`
         client.writeFragment({
@@ -32,18 +42,32 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 boardId: board.id,
             },
         })
-
-        toggleSnackbar('MOVED_COLUMN')
+        let msg = 'Moved Column ' + colName
+        toggleSnackbar(msg)
         return
     }
 
     // When task is moved within one column
     if (destination.droppableId === source.droppableId) {
         const column = columns.find((col) => col.id === source.droppableId)
-        const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+        const newTicketOrder = Array.from(column.ticketOrder.map((obj) => (
+            { ticketId: obj.ticketId, type: obj.type })))
 
         const movedTicket = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicket[0])
+
+        let msg = null
+        let ticketName = null
+        if (movedTicket[0]?.type === 'task') {
+            ticketName = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
+                .map((f) => f.title)
+            msg = 'Moved Task ' + ticketName
+        }
+        if (movedTicket[0]?.type === 'subtask') {
+            let stask = column.subtasks.map((s) => s.task)
+            ticketName = stask[0]?.title
+            msg = 'Moved Subtask of ' + ticketName
+            }
 
         const columnId = `Column:${column.id}`
         client.writeFragment({
@@ -60,40 +84,50 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 columnId: column.id,
             },
         })
-
-        toggleSnackbar('MOVED_TASK_IN_COLUMN')
+        
+        toggleSnackbar(msg)
     }
 
     // When ticket is moved into another column
     if (destination.droppableId !== source.droppableId) {
         const sourceColumn = columns.find((col) => col.id === source.droppableId)
         const destinationColumn = columns.find((col) => col.id === destination.droppableId)
-        const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
-        const newTicketOrderOfDestinationColumn = Array.from(destinationColumn.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+        const newTicketOrderOfSourceColumn = Array.from(sourceColumn.ticketOrder
+            .map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
+        const newTicketOrderOfDestinationColumn = Array.from(destinationColumn.ticketOrder
+            .map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
 
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
         newTicketOrderOfDestinationColumn.splice(destination.index, 0, movedTicketOrderObject)
 
         // Find from the cache the board
-        const dataInCache = client.readQuery({ query: BOARD_BY_ID, variables: { boardId: board.id } })
+        const dataInCache = client.readQuery(
+            { query: BOARD_BY_ID, variables: { boardId: board.id } },
+        )
 
         // Find from the cache the columns being manipulated
-        const sourceColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === sourceColumn.id)
-        const destinationColumnFromCache = dataInCache.boardById.columns.find((column) => column.id === destinationColumn.id)
+        const sourceColumnFromCache = dataInCache.boardById.columns
+            .find((column) => column.id === sourceColumn.id)
+        const destinationColumnFromCache = dataInCache.boardById.columns
+            .find((column) => column.id === destinationColumn.id)
 
         // Combine the tasks and the subtasks into single array
-        const ticketsOfSourceColumn = sourceColumnFromCache.tasks.concat(sourceColumnFromCache.subtasks)
-        const ticketsOfDestinationColumn = destinationColumnFromCache.tasks.concat(destinationColumnFromCache.subtasks)
+        const ticketsOfSourceColumn = sourceColumnFromCache.tasks
+            .concat(sourceColumnFromCache.subtasks)
+        const ticketsOfDestinationColumn = destinationColumnFromCache.tasks
+            .concat(destinationColumnFromCache.subtasks)
         // Find the ticket being moved using draggableId
         const ticketBeingMoved = ticketsOfSourceColumn.find((ticket) => ticket.id === draggableId)
 
         // From the source column filter out the moved ticket using draggableId
-        const updatedTicketsOfSourceColumn = ticketsOfSourceColumn.filter((ticket) => ticket.id !== draggableId)
+        const updatedTicketsOfSourceColumn = ticketsOfSourceColumn
+            .filter((ticket) => ticket.id !== draggableId)
         // To the destination column add the moved task
-        //tällä ticketillä ei ole tässä kohtaa uutta columnId:tä ja se pitäii sille saada
+        // tällä ticketillä ei ole tässä kohtaa uutta columnId:tä ja se pitäii sille saada
         // uutta columnId:tä ei tarvitse renderöitiin siihen käytetään columnin subtask saraketta
         // sen vois päivittää vaikka mutaation update callbackissa vähän alempana
-        const updatedTicketsOfDestinationColumn = ticketsOfDestinationColumn.concat(ticketBeingMoved)
+        const updatedTicketsOfDestinationColumn = ticketsOfDestinationColumn
+            .concat(ticketBeingMoved)
 
         const updatedTasksOfSourceColumn = []
         const updatedTasksOfDestinationColumn = []
@@ -101,17 +135,17 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
         const updatedsubtasksOfDestinationColumn = []
 
         updatedTicketsOfSourceColumn.forEach((ticket) => {
-            if (ticket.["__typename"] === 'Task') {
+            if (ticket.['__typename'] === 'Task') {
                 updatedTasksOfSourceColumn.push(ticket)
-            } else if (ticket["__typename"]  === 'Subtask') {
+            } else if (ticket.['__typename'] === 'Subtask') {
                 updatedSubtasksOfSourceColumn.push(ticket)
             }
         })
 
         updatedTicketsOfDestinationColumn.forEach((ticket) => {
-            if (ticket.["__typename"] === 'Task') {
+            if (ticket.['__typename'] === 'Task') {
                 updatedTasksOfDestinationColumn.push(ticket)
-            } else if (ticket.["__typename"] === 'Subtask') {
+            } else if (ticket.['__typename'] === 'Subtask') {
                 updatedsubtasksOfDestinationColumn.push(ticket)
             }
         })
@@ -149,7 +183,13 @@ export const onDragEnd = async (result, moveTicketInColumn, moveTicketFromColumn
                 destTicketOrder: newTicketOrderOfDestinationColumn,
             },
         })
-
-        toggleSnackbar('MOVED_TASK_FROM_COLUMN')
+        let ticketTitle = null
+        if (ticketBeingMoved.['__typename'] === 'Subtask') {
+            ticketTitle = 'Moved Subtask of ' + ticketBeingMoved.task.title
+        }
+        if (ticketBeingMoved.['__typename'] === 'Task') {
+            ticketTitle = 'Moved Task ' + ticketBeingMoved.title
+        }
+        toggleSnackbar(ticketTitle)
     }
 }

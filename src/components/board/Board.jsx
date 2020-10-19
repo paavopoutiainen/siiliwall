@@ -8,7 +8,7 @@ import ColumnList from '../column/ColumnList'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
-import { onDragEnd } from '../../utils/onDragEnd'
+import { dragEnded } from '../../utils/dragEnded'
 import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
@@ -18,10 +18,10 @@ const Board = ({ board }) => {
     const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
     const [snackbarStatus, setSnackbarStatus] = useState(false)
-    const [snackbarAction, setSnackbarAction] = useState(null)
+    const [snackbarMessage, setSnackbarMessage] = useState(null)
 
-    const toggleSnackbar = (action) => {
-        setSnackbarAction(action)
+    const toggleSnackbar = (message) => {
+        setSnackbarMessage(message)
         setSnackbarStatus(!snackbarStatus)
     }
 
@@ -29,7 +29,10 @@ const Board = ({ board }) => {
 
     return (
         <Grid container>
-            <DragDropContext onDragEnd={(result) => onDragEnd(result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar)}>
+            <DragDropContext onDragEnd={(result) => dragEnded(
+                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar,
+            )}
+            >
 
                 <Droppable droppableId={board.id} direction="horizontal" type="column">
                     {(provided) => (
@@ -50,7 +53,7 @@ const Board = ({ board }) => {
 
             </DragDropContext>
             <Grid container item>
-                <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} snackbarAction={snackbarAction} />
+                <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} message={snackbarMessage} />
             </Grid>
         </Grid>
     )

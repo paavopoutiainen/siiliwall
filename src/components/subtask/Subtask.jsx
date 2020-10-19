@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-// eslint-disable-next-line no-unused-vars
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
