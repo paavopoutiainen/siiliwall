@@ -44,6 +44,13 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         setInputColumnId(action.value)
     }
 
+    const emptyState = () => {
+        setContent('')
+        setOwner(null)
+        setInputColumnId(null)
+        setMembers([])
+    }
+
     const handleSave = (event) => {
         event.preventDefault()
         // Get the ticketOrder of the column to which user is creating the subtask
@@ -62,14 +69,12 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 ticketOrder: ticketOrderWithoutTypename,
             },
         })
+        emptyState()
         toggleAddDialog()
-        setContent('')
-        setOwner(null)
-        setMembers([])
     }
 
     const handleCancel = () => {
-        setContent('')
+        emptyState()
         toggleAddDialog()
     }
 
