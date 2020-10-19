@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 import React, { useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
@@ -69,6 +68,9 @@ const EditTaskDialog = ({
         toggleDialog()
     }
 
+    // Prevents closing dialog when clicking on it to edit task's fields
+    const handleDialogClick = (e) => e.stopPropagation()
+
     // Modifiying userData to be of form expected by the react select component
     const modifiedData = data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
@@ -80,7 +82,8 @@ const EditTaskDialog = ({
         return newObject
     })
     // data for showing only the members not yet chosen
-    const modifiedMemberOptions = modifiedData.filter((user) => !arrayOfOldMemberIds.includes(user.id))
+    const modifiedMemberOptions = modifiedData
+        .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
     return (
         <Grid>
@@ -91,6 +94,7 @@ const EditTaskDialog = ({
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
+                onClick={handleDialogClick}
             >
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>

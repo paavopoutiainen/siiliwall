@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-props-no-spreading */
-// eslint-disable-next-line no-unused-vars
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
@@ -8,15 +7,6 @@ import { boardPageStyles } from '../../styles/styles'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
-    const title = subtask.task ? subtask.task.title : ''
-    const dots = '...'
-    const add3Dots = (titleParam, limit) => {
-        let checkedTitle = titleParam
-        if (titleParam.length > limit) {
-            checkedTitle = title.substring(0, limit) + dots
-        }
-        return checkedTitle
-    }
 
     return (
         <Draggable draggableId={subtask.id} index={index}>
@@ -31,11 +21,11 @@ const Subtask = ({ subtask, index, columnId }) => {
                     ref={provided.innerRef}
                     spacing={1}
                 >
-                    <Grid item container direction="row" justify="space-between" alignItems="center" classes={{ root: classes.subtaskHeader }}>
-                        <Grid item>
-                            <p>
-                                {' '}
-                                {add3Dots(subtask.task?.title || 'default', 25)}
+                    <Grid item container classes={{ root: classes.subtaskHeader }}>
+                        {/* Styles.js ellipsis doesn't work with classes={{ root: classes.x}} */}
+                        <Grid item className={classes.subtaskHeaderTitleItem}>
+                            <p className={classes.subtaskHeaderTitleText}>
+                                {subtask.task?.title}
                             </p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }}>
@@ -46,10 +36,10 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction="column">
-
-                        <Grid item classes={{ root: classes.subtaskContent }}>
-                            <p classes={{ root: classes.subtaskContentText }}>
-                                {`Content: ${add3Dots(subtask.content || 'default', 30)}`}
+                        {/* Styles.js ellipsis doesn't work with classes={{ root: classes.x}} */}
+                        <Grid item className={classes.subtaskContent}>
+                            <p className={classes.subtaskContentText}>
+                                {`Content: ${subtask.content}`}
                             </p>
                         </Grid>
                         <Grid item>

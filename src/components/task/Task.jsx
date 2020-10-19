@@ -17,14 +17,13 @@ const Task = ({
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     const dots = '...'
-    const add3Dots = (titleParam) => {
-        let checkedTitle = titleParam
-        if (titleParam.length > titleLimit) {
+    const add3Dots = () => {
+        let checkedTitle = title
+        if (title.length > titleLimit) {
             checkedTitle = title.substring(0, titleLimit) + dots
         }
         return checkedTitle
     }
-
     const descrDots = (description) => {
         let retVal = description
         if (description.length > descrLimit) {
@@ -32,6 +31,14 @@ const Task = ({
         }
         return retVal
     }
+
+    // Opens task editing dialog
+    const handleClick = () => {
+        toggleDialog()
+    }
+
+    // Prevents edit task dialog from opening, when user presses the three dots to open dropdown
+    const handleDialogClick = (e) => e.stopPropagation()
 
     return (
         <Draggable draggableId={task.id} index={index}>
@@ -45,6 +52,7 @@ const Task = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                     spacing={1}
+                    onClick={handleClick}
                 >
                     <Grid
                         item
@@ -57,11 +65,10 @@ const Task = ({
                         <Grid item>
                             <h3>{add3Dots(title)}</h3>
                         </Grid>
-                        <Grid item>
+                        <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 taskId={task.id}
                                 columnId={columnId}
-                                handleEdit={toggleDialog}
                                 boardId={boardId}
                             />
                         </Grid>
@@ -70,19 +77,22 @@ const Task = ({
                         <Grid item>
                             {task.owner ? (
                                 <p>
-                                    {`owner: ${task.owner.userName}`}
+                                    owner:&nbsp;
+                                    {task.owner.userName}
                                 </p>
                             ) : null}
                         </Grid>
                         <Grid item>
                             {task.size ? (
                                 <p>
-                                    {`size: ${task.size}`}
+                                    size:&nbsp;
+                                    {task.size}
                                 </p>
                             ) : null}
                         </Grid>
                         <Grid item>
                             {task.members.length !== 0 ? (
+                            // this part renders commas after name only if formatting is like below
                                 <p>
                                     {`members:  ${members.map((user) => ` ${user.userName}`)}`}
                                 </p>
@@ -91,7 +101,8 @@ const Task = ({
                         <Grid item>
                             {task.description ? (
                                 <p>
-                                    {`description: ${descrDots(task.description)}`}
+                                    description:&nbsp;
+                                    {descrDots(task.description)}
                                 </p>
                             ) : null}
                         </Grid>
