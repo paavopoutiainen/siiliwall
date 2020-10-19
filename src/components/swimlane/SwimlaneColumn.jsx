@@ -23,7 +23,7 @@ const SwimlaneColumn = ({ swimlaneColumn, taskId }) => {
                     direction="column"
                     spacing={2}
                 >
-                    {subtasksInOrder.map((subtask, index) => (
+                    {subtasksInOrder.map((subtask) => (
                         <Grid item key={subtask.id}>
                             <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
                         </Grid>

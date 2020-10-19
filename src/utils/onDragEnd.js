@@ -5,7 +5,7 @@ import {
     TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
 } from '../graphql/fragments'
 
-export const dragEnded = async (
+export const onDragEnd = async (
     result,
     moveTicketInColumn,
     moveTicketFromColumn,
@@ -77,7 +77,6 @@ export const dragEnded = async (
                 ticketOrder: newTicketOrder,
             },
         })
-
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,

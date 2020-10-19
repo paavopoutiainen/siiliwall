@@ -48,11 +48,23 @@ export const TICKETORDER = gql`
         ticketOrder
     }
 `
+export const SWIMLANEORDER = gql`
+    fragment swimlaneOrder on Board {
+        swimlaneOrder
+    }
+`
 export const SUBTASKS = gql`
     fragment subtasks on Column {
         subtasks {
             id
         }
+    }
+`
+
+export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
+    fragment prioritizedAndSwimlaneOrderNumber on Task {
+        prioritized
+        swimlaneOrderNumber
     }
 `
 

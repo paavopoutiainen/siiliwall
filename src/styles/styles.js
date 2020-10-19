@@ -182,6 +182,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
+        backgroundColor: 'white',
     },
 
     swimlaneTitle: {

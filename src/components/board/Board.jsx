@@ -8,7 +8,7 @@ import ColumnList from '../column/ColumnList'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
-import { dragEnded } from '../../utils/dragEnded'
+import { onDragEnd } from '../../utils/onDragEnd'
 import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
@@ -29,7 +29,7 @@ const Board = ({ board }) => {
 
     return (
         <Grid container>
-            <DragDropContext onDragEnd={(result) => dragEnded(
+            <DragDropContext onDragEnd={(result) => onDragEnd(
                 result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar,
             )}
             >

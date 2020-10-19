@@ -391,11 +391,6 @@ class BoardService {
         let addedTask
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
-            const largestSwimlaneOrderNumber = await this.store.Task.max('columnOrderNumber', {
-                where: {
-                    boardId,
-                },
-            }) || 0
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 boardId,
@@ -405,7 +400,6 @@ class BoardService {
                 ownerId,
                 description,
                 columnOrderNumber: largestOrderNumber + 1,
-                swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {
@@ -636,6 +630,53 @@ class BoardService {
             console.log(e)
         }
         return updatedTask
+    }
+
+    async prioritizeTask(taskId, swimlaneOrderNumber, prioritizedTasksIds, direction) {
+        try {
+            // make task prioritized
+            const task = await this.store.Task.findByPk(taskId)
+            task.swimlaneOrderNumber = swimlaneOrderNumber
+            task.prioritized = true
+            await task.save()
+            // increase the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved upwards
+            if (direction === 'upwards') {
+                await Promise.all(prioritizedTasksIds.map(async (id) => {
+                    const affectedTask = await this.store.Task.findByPk(id)
+                    affectedTask.swimlaneOrderNumber += 1
+                    await affectedTask.save()
+                }))
+            // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
+            } else if (direction === 'downwards') {
+                await Promise.all(prioritizedTasksIds.map(async (id) => {
+                    const affectedTask = await this.store.Task.findByPk(id)
+                    affectedTask.swimlaneOrderNumber -= 1
+                    await affectedTask.save()
+                }))
+            }
+        } catch (e) {
+            console.error(e)
+        }
+        return taskId
+    }
+
+    async unPrioritizeTask(taskId, taskIds) {
+        try {
+            // unprioritize certain task
+            const task = await this.store.Task.findByPk(taskId)
+            task.swimlaneOrderNumber = null
+            task.prioritized = false
+            await task.save()
+            // change the swimlaneOrderNumbers of the other affected tasks
+            await Promise.all(taskIds.map(async (id) => {
+                const affectedTask = await this.store.Task.findByPk(id)
+                affectedTask.swimlaneOrderNumber -= 1
+                await affectedTask.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
+        return taskId
     }
 }
 

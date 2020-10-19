@@ -6,11 +6,12 @@ type Task {
   description: String
   column: Column!
   columnOrderNumber: Int!
-  swimlaneOrderNumber: Int!
+  swimlaneOrderNumber: Int
   subtasks: [Subtask!]!
   subtaskOrder: [ID!]!
   deletedAt: String
   members: [User!]!
+  prioritized: Boolean
 }
 
 type Query {
@@ -24,5 +25,6 @@ type Mutation {
   archiveTaskById(id: ID!): ID
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
-  moveSwimlane(boardId: ID!, newSwimlaneOrder: [ID!]!): ID!
+  prioritizeTask(id: ID!, swimlaneOrderNumber: Int!, affectedPrioritizedTaskIds: [ID!], direction: String!): ID
+  unPrioritizeTask(id: ID!, prioritizedTaskIds: [ID!]): ID
 }

@@ -73,3 +73,14 @@ export const ARCHIVE_TASK = gql`
         archiveTaskById(id: $taskId)
     }
 `
+
+export const PRIORITIZE_TASK = gql`
+    mutation prioritizeTask($id: ID!, $swimlaneOrderNumber: Int!, $affectedPrioritizedTaskIds: [ID!], $direction: String!) {
+        prioritizeTask(id: $id, swimlaneOrderNumber: $swimlaneOrderNumber, affectedPrioritizedTaskIds: $affectedPrioritizedTaskIds, direction: $direction)
+    }
+`
+export const UNPRIORITIZE_TASK = gql`
+    mutation unPrioritizeTask($id: ID!, $prioritizedTaskIds: [ID!]) {
+        unPrioritizeTask(id: $id, prioritizedTaskIds: $prioritizedTaskIds)
+    }
+`
