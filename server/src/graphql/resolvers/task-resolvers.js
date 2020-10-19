@@ -51,9 +51,6 @@ const schema = {
         subtasks(root) {
             return dataSources.boardService.getSubtasksByTaskId(root.id)
         },
-        subtaskOrder(root) {
-            return dataSources.boardService.getSubtaskOrderOfTask(root.id)
-        },
         owner(root) {
             if (!root.ownerId) {
                 return null

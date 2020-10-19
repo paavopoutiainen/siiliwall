@@ -20,8 +20,6 @@ type Column {
   orderNumber: Int!
   tasks: [Task!]!
   subtasks: [Subtask!]!
-  taskOrder: [ID!]!
-  subtaskOrder: [ID!]!
   ticketOrder: [TicketOrderObject!]!
 }
 
@@ -34,10 +32,6 @@ type Mutation {
   editColumnById(id: ID!, name: String!): Column
   deleteColumnById(id: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!): Column
-  moveTaskFromColumn(taskId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTaskOrder: [ID!], destTaskOrder: [ID!]): [Column!]!
   moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!): [Column!]
   moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
 }
-
-
-

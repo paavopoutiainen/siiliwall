@@ -18,15 +18,6 @@ export const TICKETORDER_AND_SUBTASKS = gql`
     }
 `
 
-export const TASKORDER_AND_TASKS = gql`
-    fragment taskOrderAndTasks on Column {
-        taskOrder
-        tasks {
-            id
-        }
-    }
-`
-
 export const TICKETORDER_AND_TICKETS = gql`
     fragment ticketOrderAndTickets on Column {
         ticketOrder
@@ -38,21 +29,13 @@ export const TICKETORDER_AND_TICKETS = gql`
         }
     }
 `
-export const TASKORDER = gql`
-    fragment taskOrder on Column {
-        taskOrder
-    }
-`
+
 export const TICKETORDER = gql`
     fragment ticketOrder on Column {
         ticketOrder
     }
 `
-export const SWIMLANEORDER = gql`
-    fragment swimlaneOrder on Board {
-        swimlaneOrder
-    }
-`
+
 export const SUBTASKS = gql`
     fragment subtasks on Column {
         subtasks {

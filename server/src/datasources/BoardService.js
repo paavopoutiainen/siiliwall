@@ -230,55 +230,6 @@ class BoardService {
         return arrayOfIds
     }
 
-    async getSwimlaneOrderOfBoard(boardId) {
-        let arrayOfIds
-        try {
-            const swimlanes = await this.store.Task.findAll({
-                attributes: ['id'],
-                where: { boardId },
-                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
-            })
-            arrayOfIds = swimlanes.map((swimlane) => swimlane.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    /*
-    Gets the order of tasks in certain column, returns an array of taskIds in the correct order.
-    This field is for keeping track of the order in which the tasks are displayed in the column
-  */
-    async getTaskOrderOfColumn(columnId) {
-        let arrayOfIds
-        try {
-            const tasks = await this.store.Task.findAll({
-                attributes: ['id'],
-                where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
-            })
-            arrayOfIds = tasks.map((task) => task.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    async getSubtaskOrderOfColumn(columnId) {
-        let arrayOfIds
-        try {
-            const subtasks = await this.store.Subtask.findAll({
-                attributes: ['id'],
-                where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
-            })
-            arrayOfIds = subtasks.map((task) => task.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
     async getTicketOrderOfColumn(columnId) {
         let arrayOfObjectsInOrder
         // TODO: Figure out if this could be done better
@@ -298,28 +249,14 @@ class BoardService {
             arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
                 .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
                 .map((obj) => {
-                    delete obj.columnOrderNumber
-                    return { ...obj }
+                    const copy = { ...obj }
+                    delete copy.columnOrderNumber
+                    return { ...copy }
                 })
         } catch (e) {
             console.error(e)
         }
         return arrayOfObjectsInOrder
-    }
-
-    async getSubtaskOrderOfTask(taskId) {
-        let arrayOfIds
-        try {
-            const subtasks = await this.store.Subtask.findAll({
-                attributes: ['id'],
-                where: { taskId },
-                order: this.sequelize.literal('orderNumber ASC'),
-            })
-            arrayOfIds = subtasks.map((subtask) => subtask.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
     }
 
     async addBoard(boardName) {

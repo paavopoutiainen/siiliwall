@@ -1,13 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const MOVE_TASK_FROM_COLUMN = gql`
-    mutation moveTaskFromColumn($taskId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTaskOrder: [ID!], $destTaskOrder: [ID!]) {
-        moveTaskFromColumn(taskId: $taskId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTaskOrder: $sourceTaskOrder, destTaskOrder: $destTaskOrder) {
-            id
-        }
-    }    
-`
-
 export const TASK_BY_ID = gql`
     query taskById($taskId: ID!) {
         taskById(id: $taskId) {
