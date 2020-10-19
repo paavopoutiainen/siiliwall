@@ -34,11 +34,13 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
         // all the prioritized tasks the unprioritization affects
         // These are the indexes between the swimlaneOrderNumber and indexInNormalFlow of the unprioritized task
         // TODO: THIS LOGIC IS NOT YET PERFECT - there might be cases where swimlaneorderNumbers of the tasks above needs to be changed
+        // kolumnin sisällä voi olla asioita ristiriidassa keskenään, Jos esim kolumnissa on kaksi priottua asiaa niin on
+        // mahdollista, että ylemmällä on pienempi oprio arvo kuin alemmalla
         const affectedPrioritizedTasks = tasksInOrder
             .filter((taskObj) => taskObj.prioritized)
             .filter((taskObj) => taskObj.id !== task.id)
             .filter((taskObj) => taskObj.swimlaneOrderNumber > task.swimlaneOrderNumber
-                                && taskObj.swimlaneOrderNumber < task.indexInNormalFlow)
+                                && taskObj.swimlaneOrderNumber <= task.indexInNormalFlow)
 
         // Update the cache
         affectedPrioritizedTasks.map((taskObj) => {
