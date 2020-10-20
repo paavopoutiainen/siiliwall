@@ -45,8 +45,15 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item container direction="column">
-                        <Grid item className={classes.subtaskContent}>
-                            <p className={classes.subtaskContentText}>
+                        {subtask.name && (
+                            <Grid item className={classes.subtaskContentAndName}>
+                                <p className={classes.subtaskContentAndNameText}>
+                                    {`Name: ${subtask.name}`}
+                                </p>
+                            </Grid>
+                        )}
+                        <Grid item className={classes.subtaskContentAndName}>
+                            <p className={classes.subtaskContentAndNameText}>
                                 {`Content: ${subtask.content}`}
                             </p>
                         </Grid>

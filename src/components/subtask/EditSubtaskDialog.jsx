@@ -42,10 +42,6 @@ const EditSubtaskDialog = ({
     }
 
     const handleContentChange = (event) => {
-        if (event.target.value === '') {
-            setContent(null)
-            return
-        }
         setContent(event.target.value)
     }
 
@@ -97,7 +93,7 @@ const EditSubtaskDialog = ({
                 classes={{ paper: classes.dialogPaper }}
                 onClick={handleDialogClick}
             >
-                <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
+                <DialogTitle aria-labelledby="max-width-dialog-title">Edit subtask</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoComplete="off"
@@ -105,7 +101,7 @@ const EditSubtaskDialog = ({
                         name="name"
                         label="Name"
                         type="text"
-                        value={name}
+                        value={name || ''}
                         fullWidth
                         onChange={handleNameChange}
                     />
@@ -117,7 +113,7 @@ const EditSubtaskDialog = ({
                         type="text"
                         multiline
                         rows={3}
-                        value={content || ''}
+                        value={content}
                         fullWidth
                         onChange={handleContentChange}
                     />
@@ -148,6 +144,7 @@ const EditSubtaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
+                        disabled={!content.length}
                     >
                         Submit edit
                     </Button>
