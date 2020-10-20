@@ -17,6 +17,11 @@ const schema = {
         archiveSubtaskById(root, { id }) {
             return dataSources.boardService.archiveSubtaskById(id)
         },
+        editSubtaskById(root, {
+            id, name, content, ownerId, oldMemberIds, newMemberIds
+        }) {
+            return dataSources.boardService.editSubtaskById(id, name, content, ownerId, oldMemberIds, newMemberIds)
+        }
     },
 
     Subtask: {

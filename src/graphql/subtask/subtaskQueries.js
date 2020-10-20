@@ -27,6 +27,22 @@ export const ADD_SUBTASK = gql`
         }
     }
 `
+export const EDIT_SUBTASK = gql`
+    mutation editSubtask($id: ID!, $content: String!, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!]) {
+        editSubtaskById(id: $id, content: $content, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds) {
+            id
+            content
+            owner {
+                id
+                userName
+            }
+            members {
+                id
+                userName
+            }
+        }
+    }
+`
 
 export const ARCHIVE_SUBTASK = gql`
     mutation archiveSubtask($subtaskId: ID!) {
