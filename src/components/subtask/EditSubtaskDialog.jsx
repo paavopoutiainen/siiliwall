@@ -15,7 +15,7 @@ const EditSubtaskDialog = ({
     const [editSubtask] = useEditSubtask()
     const { loading, data } = useAllUsers()
     const [name, setName] = useState(subtask?.name)
-    //const [size, setSize] = useState(task?.size ? task.size : null)
+    const [size, setSize] = useState(subtask?.size)
     const [content, setContent] = useState(subtask?.content)
     const [owner, setOwner] = useState(subtask?.owner ? subtask.owner.id : null)
     const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
@@ -24,18 +24,13 @@ const EditSubtaskDialog = ({
     const classes = boardPageStyles()
 
     if (loading) return null
-
     const handleOwnerChange = (action) => {
         setOwner(action.value)
     }
 
-    /*const handleSizeChange = (event) => {
-        if (event.target.value === '') {
-            setSize(null)
-            return
-        }
+    const handleSizeChange = (event) => {
         setSize(parseFloat(event.target.value))
-    }*/
+    }
 
     const handleNameChange = (event) => {
         setName(event.target.value)
@@ -56,7 +51,7 @@ const EditSubtaskDialog = ({
                 id: editId,
                 name,
                 content,
-                //size,
+                size,
                 ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
@@ -106,6 +101,7 @@ const EditSubtaskDialog = ({
                         onChange={handleNameChange}
                     />
                     <TextField
+                        required={true}
                         autoComplete="off"
                         margin="dense"
                         name="content"
@@ -116,6 +112,16 @@ const EditSubtaskDialog = ({
                         value={content}
                         fullWidth
                         onChange={handleContentChange}
+                    />
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
+                        name="size"
+                        label="Size"
+                        type="text"
+                        value={size || ''}
+                        fullWidth
+                        onChange={handleSizeChange}
                     />
                     <Select
                         className="selectField"

@@ -64,6 +64,13 @@ const Subtask = ({ subtask, index, columnId }) => {
                                 </p>
                             ) : null}
                         </Grid>
+                        {subtask.size && (
+                            <Grid item>
+                                <p>
+                                    {`Size: ${subtask.size}`}
+                                </p>
+                            </Grid>
+                        )}
                         <Grid item>
                             {subtask.members?.length !== 0 ? (
                                 <p>

@@ -49,6 +49,7 @@ export const BOARD_BY_ID = gql`
                     id
                     name
                     content
+                    size
                     column {
                         id
                     }

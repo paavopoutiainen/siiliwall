@@ -7,14 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         },
         columnOrderNumber: DataTypes.INTEGER,
         done: DataTypes.BOOLEAN,
-        name: {
-            type: DataTypes.STRING,
-            allowNull: false
-        },
+        name: DataTypes.STRING,
         content: {
             type: DataTypes.STRING,
             allowNull: false
         },
+        size: DataTypes.FLOAT,
         deletedAt: DataTypes.DATE,
     })
     Subtask.associate = (models) => {
