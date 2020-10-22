@@ -7,6 +7,7 @@ type Subtask {
   id: ID!
   name: String
   content: String!
+  size: Float
   owner: User
   members: [User!]
   done: Boolean!
@@ -17,7 +18,8 @@ type Subtask {
 }
 
 type Mutation {
-  addSubtaskForTask(taskId: ID!, columnId: ID!, content: String!, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
+  addSubtaskForTask(taskId: ID!, columnId: ID!, name: String, content: String!, size: Float, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
+  editSubtaskById(id: ID!, name: String, content: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!]): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
   deleteSubtaskById(id: ID!): ID
   archiveSubtaskById(id: ID!): ID

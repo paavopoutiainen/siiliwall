@@ -200,6 +200,36 @@ class BoardService {
         return task
     }
 
+    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds) {
+        // Logic for figuring out who was deleted and who was added as a new member for the subtask
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        let subtask
+        try {
+            subtask = await this.store.Subtask.findByPk(id)
+            subtask.name = name
+            subtask.content = content
+            subtask.size = size
+            subtask.ownerId = ownerId
+            await subtask.save()
+            // Updating userSubtasks junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                await this.addMemberForSubtask(subtask.id, userId)
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                await this.store.UserSubtask.destroy({
+                    where: {
+                        userId,
+                        subtaskId: subtask.id,
+                    },
+                })
+            }))
+        } catch (e) {
+            console.error(e)
+        }
+        return subtask
+    }
+
     async deleteTaskById(taskId) {
         try {
             await this.store.Task.destroy({
@@ -377,7 +407,7 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, content, ownerId, memberIds, ticketOrder) {
+    async addSubtaskForTask(taskId, columnId, name, content, size, ownerId, memberIds, ticketOrder) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
@@ -388,7 +418,9 @@ class BoardService {
         try {
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
+                name,
                 content,
+                size,
                 taskId,
                 columnId,
                 ownerId,

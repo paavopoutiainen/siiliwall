@@ -115,12 +115,12 @@ export const boardPageStyles = makeStyles({
         height: '100%',
     },
 
-    subtaskContent: {
+    subtaskContentAndName: {
         maxWidth: 300,
 
     },
 
-    subtaskContentText: {
+    subtaskContentAndNameText: {
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
