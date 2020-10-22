@@ -11,10 +11,11 @@ import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
 
 const DropdownTask = ({
-    columnId, taskId, boardId,
+    columnId, task, boardId,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
+    const [count, setCount] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
     const classes = boardPageStyles()
@@ -30,10 +31,18 @@ const DropdownTask = ({
     }
 
     const openAlertDialog = (order) => {
-        setAction(order)
-        setAlertDialogStatus(true)
-        setAnchorEl(null)
+        if (order === 'DELETE_TASK' || task.subtasks) {
+            setCount(task.subtasks.length)
+            setAction('DELETE_TASK_IF_SUBTASKS')
+            setAlertDialogStatus(true)
+            setAnchorEl(null)
+        } else {
+            setAction(order)
+            setAlertDialogStatus(true)
+            setAnchorEl(null)
+        }
     }
+    console.log(action)
 
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>
@@ -77,15 +86,16 @@ const DropdownTask = ({
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                taskId={taskId}
+                taskId={task.id}
                 columnId={columnId}
                 action={action}
+                count={count}
             />
             <AddSubtaskDialog
                 addDialogStatus={addDialogStatus}
                 toggleAddDialog={toggleAddDialog}
                 columnId={columnId}
-                taskId={taskId}
+                taskId={task.id}
                 boardId={boardId}
             />
         </Grid>

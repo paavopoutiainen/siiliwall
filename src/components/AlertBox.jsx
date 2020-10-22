@@ -11,7 +11,7 @@ import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
 
 const AlertBox = ({
-    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId,
+    alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
 }) => {
     const [archiveTask] = useArchiveTask(columnId)
     const [archiveSubtask] = useArchiveSubtask(columnId)
@@ -25,26 +25,33 @@ const AlertBox = ({
     const alertMsgArchiveTask = 'The task is removed from the board, but can be examined through the archive setting.'
     const alertMsgArchiveSubtask = 'The subtask is removed from the board, but can be examined through the archive setting.'
     const alertMsgDeleteSubtask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?.'
+    const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Are you sure you want to delete it?`
     let alertMsg
-
+    let buttonText = 'DELETE'
+    if (action === 'DELETE_TASK_IF_SUBTASKS') {
+        buttonText = 'DELETE ANYWAY'
+    }
     switch (action) {
-    case 'DELETE_COLUMN':
-        alertMsg = alertMsgDeleteColumn
-        break
-    case 'DELETE_TASK':
-        alertMsg = alertMsgDeleteTask
-        break
-    case 'ARCHIVE_TASK':
-        alertMsg = alertMsgArchiveTask
-        break
-    case 'ARCHIVE_SUBTASK':
-        alertMsg = alertMsgArchiveSubtask
-        break
-    case 'DELETE_SUBTASK':
-        alertMsg = alertMsgDeleteSubtask
-        break
-    default:
-        break
+        case 'DELETE_COLUMN':
+            alertMsg = alertMsgDeleteColumn
+            break
+        case 'DELETE_TASK':
+            alertMsg = alertMsgDeleteTask
+            break
+        case 'DELETE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgDeleteTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK':
+            alertMsg = alertMsgArchiveTask
+            break
+        case 'ARCHIVE_SUBTASK':
+            alertMsg = alertMsgArchiveSubtask
+            break
+        case 'DELETE_SUBTASK':
+            alertMsg = alertMsgDeleteSubtask
+            break
+        default:
+            break
     }
 
     const archiveTaskById = () => {
@@ -90,6 +97,7 @@ const AlertBox = ({
     const deleteTask = () => {
         const idToBeDeleted = `Task:${taskId}`
         const columnIdForCache = `Column:${columnId}`
+
         const data = client.readFragment({
             id: columnIdForCache,
             fragment: TICKETORDER,
@@ -174,10 +182,10 @@ const AlertBox = ({
                             <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
                             </Button>
-                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK'
+                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK' || 'DELETE_TASK_IF_SUBTASKS'
                                 ? (
                                     <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete()} classes={{ root: classes.deleteAlertButton }}>
-                                        DELETE
+                                        {buttonText}
                                     </Button>
                                 )
                                 : null}
