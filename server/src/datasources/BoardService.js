@@ -201,7 +201,7 @@ class BoardService {
     }
 
     async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds) {
-        // Logic for figuring out who was deleted and who was added as a new member for the task
+        // Logic for figuring out who was deleted and who was added as a new member for the subtask
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let subtask
@@ -212,7 +212,7 @@ class BoardService {
             subtask.size = size
             subtask.ownerId = ownerId
             await subtask.save()
-            // Updating usertasks junction table
+            // Updating userSubtasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
                 await this.addMemberForSubtask(subtask.id, userId)
             }))
@@ -615,7 +615,7 @@ class BoardService {
                     affectedTask.swimlaneOrderNumber += 1
                     await affectedTask.save()
                 }))
-                // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
+            // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
             } else if (direction === 'downwards') {
                 await Promise.all(prioritizedTasksIds.map(async (id) => {
                     const affectedTask = await this.store.Task.findByPk(id)
