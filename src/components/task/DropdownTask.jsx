@@ -31,7 +31,7 @@ const DropdownTask = ({
     }
 
     const openAlertDialog = (order) => {
-        if (order === 'DELETE_TASK' || task.subtasks) {
+        if (order === 'DELETE_TASK' && task.subtasks.length) {
             setCount(task.subtasks.length)
             setAction('DELETE_TASK_IF_SUBTASKS')
             setAlertDialogStatus(true)
@@ -42,8 +42,6 @@ const DropdownTask = ({
             setAnchorEl(null)
         }
     }
-    console.log(action)
-
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>
             <Button

@@ -1,10 +1,11 @@
-import React from 'react'
-import { Grid, Button, Dialog } from '@material-ui/core'
+import React, { useState } from 'react'
+import { withStyles } from '@material-ui/core/styles'
+import { Grid, Button, Dialog, Checkbox } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER, TICKETORDER } from '../graphql/fragments'
+import { COLUMNORDER, TICKETORDER, TICKETORDER_AND_TASKS_WITH_SUBTASKS } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
@@ -13,6 +14,7 @@ import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
 }) => {
+    const [check, toggleCheck] = useState(false)
     const [archiveTask] = useArchiveTask(columnId)
     const [archiveSubtask] = useArchiveSubtask(columnId)
     const [callDeleteSubtask] = useDeleteSubtask(columnId)
@@ -52,6 +54,20 @@ const AlertBox = ({
             break
         default:
             break
+    }
+
+    const WhiteCheckbox = withStyles({
+        root: {
+            color: 'white',
+            '&$checked': {
+                color: 'white',
+            },
+        },
+        checked: {},
+    })((props) => <Checkbox color="default" {...props} />)
+
+    const handleChecked = () => {
+        toggleCheck(!check)
     }
 
     const archiveTaskById = () => {
@@ -95,25 +111,28 @@ const AlertBox = ({
     }
 
     const deleteTask = () => {
-        const idToBeDeleted = `Task:${taskId}`
+        const taskToBeDeleted = `Task:${taskId}`
         const columnIdForCache = `Column:${columnId}`
 
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER,
+            fragment: TICKETORDER_AND_TASKS_WITH_SUBTASKS,
         })
-        const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== taskId)
+        const newTicketOrder = data.tasks.filter((task) => task.id !== taskId)
+        const deletedTask = data.tasks.find((task) => task.id === taskId)
+        const subtasksToBeDeleted = deletedTask.subtasks.map((subtask) => subtask.id)
         client.writeFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER,
+            fragment: TICKETORDER_AND_TEST,
             data: {
                 ticketOrder: newTicketOrder,
             },
         })
-        client.cache.evict({ id: idToBeDeleted })
+        client.cache.evict({ id: taskToBeDeleted })
         callDeleteTask({
             variables: {
                 taskId,
+                subtaskIds: subtasksToBeDeleted
             },
         })
     }
@@ -142,7 +161,7 @@ const AlertBox = ({
     }
 
     const handleDelete = () => {
-        if (action === 'DELETE_TASK') {
+        if (action === 'DELETE_TASK' || 'DELETE_TASK_IF_SUBTASKS') {
             deleteTask()
         }
         if (action === 'DELETE_COLUMN') {
@@ -178,13 +197,32 @@ const AlertBox = ({
                         <Grid item>
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
+                        {action === 'DELETE_TASK_IF_SUBTASKS'
+                            && (
+                                <Grid item container direction='row' alignItems='center'>
+                                    <p>I understand</p>
+                                    <WhiteCheckbox
+                                        checked={check}
+                                        onChange={handleChecked}
+                                        size='small'
+                                    />
+                                </Grid>
+                            )
+                        }
                         <Grid item container direction="row" justify="flex-end">
                             <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
                             </Button>
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK' || 'DELETE_TASK_IF_SUBTASKS'
                                 ? (
-                                    <Button size="small" color="secondary" variant="contained" onClick={() => handleDelete()} classes={{ root: classes.deleteAlertButton }}>
+                                    <Button
+                                        size="small"
+                                        color="secondary"
+                                        variant="contained"
+                                        onClick={() => handleDelete()}
+                                        classes={{ root: classes.deleteAlertButton }}
+                                        disabled={action === 'DELETE_TASK_IF_SUBTASKS' && !check ? true : false}
+                                    >
                                         {buttonText}
                                     </Button>
                                 )

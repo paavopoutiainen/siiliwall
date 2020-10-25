@@ -37,8 +37,8 @@ export const ADD_TASK = gql`
 `
 
 export const DELETE_TASK = gql`
-    mutation deleteTask($taskId: ID!) {
-        deleteTaskById(id: $taskId)
+    mutation deleteTask($taskId: ID!, $subtaskIds: [ID!]) {
+        deleteTaskById(id: $taskId, subtaskIds: $subtaskIds)
     }
 `
 

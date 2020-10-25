@@ -230,11 +230,18 @@ class BoardService {
         return subtask
     }
 
-    async deleteTaskById(taskId) {
+    async deleteTaskById(taskId, subtaskIds) {
         try {
             await this.store.Task.destroy({
                 where: { id: taskId },
             })
+            if (subtaskIds) {
+                await subtaskIds.map((id) => {
+                    this.store.Subtask.destroy({
+                        where: { id: id }
+                    })
+                })
+            }
         } catch (e) {
             console.error(e)
         }
@@ -244,7 +251,7 @@ class BoardService {
     /*
     Gets the order of columns in certain board, returns an array of columnIds in the correct order.
     This field is for keeping track of the order in which the columns are displayed in the board
-  */
+    */
     async getColumnOrderOfBoard(boardId) {
         let arrayOfIds
         try {
@@ -615,7 +622,7 @@ class BoardService {
                     affectedTask.swimlaneOrderNumber += 1
                     await affectedTask.save()
                 }))
-            // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
+                // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
             } else if (direction === 'downwards') {
                 await Promise.all(prioritizedTasksIds.map(async (id) => {
                     const affectedTask = await this.store.Task.findByPk(id)

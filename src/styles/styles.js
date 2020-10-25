@@ -161,6 +161,13 @@ export const boardPageStyles = makeStyles({
         margin: 5,
     },
 
+    alertCheckbox: {
+        color: 'white',
+        '&$checked': {
+            color: 'white',
+        }
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
