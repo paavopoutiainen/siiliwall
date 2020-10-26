@@ -230,18 +230,11 @@ class BoardService {
         return subtask
     }
 
-    async deleteTaskById(taskId, subtaskIds) {
+    async deleteTaskById(taskId) {
         try {
             await this.store.Task.destroy({
                 where: { id: taskId },
             })
-            if (subtaskIds) {
-                await subtaskIds.map((id) => {
-                    this.store.Subtask.destroy({
-                        where: { id: id }
-                    })
-                })
-            }
         } catch (e) {
             console.error(e)
         }

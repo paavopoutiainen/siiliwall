@@ -9,6 +9,8 @@ import {
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
+import { useApolloClient } from '@apollo/client'
+import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
     columnId, task, boardId,
@@ -19,6 +21,7 @@ const DropdownTask = ({
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
     const classes = boardPageStyles()
+    const client = useApolloClient()
 
     const toggleAddDialog = () => {
         setAnchorEl(null)
@@ -31,8 +34,15 @@ const DropdownTask = ({
     }
 
     const openAlertDialog = (order) => {
-        if (order === 'DELETE_TASK' && task.subtasks.length) {
-            setCount(task.subtasks.length)
+        const boardIdForCache = `Board:${boardId}`
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksOfTask = columnsSubtasks.filter((subtask) => subtask.task.id === task.id)
+        if (order === 'DELETE_TASK' && subtasksOfTask.length) {
+            setCount(subtasksOfTask.length)
             setAction('DELETE_TASK_IF_SUBTASKS')
             setAlertDialogStatus(true)
             setAnchorEl(null)
@@ -86,6 +96,7 @@ const DropdownTask = ({
                 toggleAlertDialog={toggleAlertDialog}
                 taskId={task.id}
                 columnId={columnId}
+                boardId={boardId}
                 action={action}
                 count={count}
             />

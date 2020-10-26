@@ -9,9 +9,16 @@ export const TICKETORDER_AND_TASKS = gql`
         }
     }
 `
-export const TICKETORDER_AND_TASKS_WITH_SUBTASKS = gql`
-    fragment ticketOrderAndSubtasks on Column {
-        ticketOrder
+export const TASK_SUBTASKS = gql`
+    fragment tasksSubtasks on Task {
+        id
+        subtasks {
+            id
+        }
+    }
+`
+export const TASKS_WITH_SUBTASKS = gql`
+    fragment tasksWithSubtasks on Column {
         tasks {
             id
             subtasks {
@@ -71,8 +78,18 @@ export const COLUMNORDER = gql`
 export const COLUMNORDER_AND_COLUMNS = gql`
     fragment columnOrderAndColumns on Board {
         columnOrder
-        columns
-}
+        columns {
+            subtasks {
+                id
+                task {
+                    id
+                }
+                column {
+                    id
+                }
+            }
+        }
+    }
 `
 
 export const SUBTASKS_COLUMN = gql`

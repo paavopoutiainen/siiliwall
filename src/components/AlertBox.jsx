@@ -5,7 +5,7 @@ import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER, TICKETORDER, TICKETORDER_AND_TASKS_WITH_SUBTASKS } from '../graphql/fragments'
+import { COLUMNORDER, TICKETORDER, COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
@@ -27,12 +27,8 @@ const AlertBox = ({
     const alertMsgArchiveTask = 'The task is removed from the board, but can be examined through the archive setting.'
     const alertMsgArchiveSubtask = 'The subtask is removed from the board, but can be examined through the archive setting.'
     const alertMsgDeleteSubtask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?.'
-    const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Are you sure you want to delete it?`
+    const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
     let alertMsg
-    let buttonText = 'DELETE'
-    if (action === 'DELETE_TASK_IF_SUBTASKS') {
-        buttonText = 'DELETE ANYWAY'
-    }
     switch (action) {
         case 'DELETE_COLUMN':
             alertMsg = alertMsgDeleteColumn
@@ -113,31 +109,35 @@ const AlertBox = ({
     const deleteTask = () => {
         const taskToBeDeleted = `Task:${taskId}`
         const columnIdForCache = `Column:${columnId}`
-
+        const boardIdForCache = `Board:${boardId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER_AND_TASKS_WITH_SUBTASKS,
+            fragment: TICKETORDER,
         })
-        const newTicketOrder = data.tasks.filter((task) => task.id !== taskId)
-        const deletedTask = data.tasks.find((task) => task.id === taskId)
-        const subtasksToBeDeleted = deletedTask.subtasks.map((subtask) => subtask.id)
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        const newTicketOrder = data.ticketOrder.filter((task) => task.id !== taskId)
         client.writeFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER_AND_TEST,
+            fragment: TICKETORDER,
             data: {
                 ticketOrder: newTicketOrder,
             },
         })
         client.cache.evict({ id: taskToBeDeleted })
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
+        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
         callDeleteTask({
             variables: {
                 taskId,
-                subtaskIds: subtasksToBeDeleted
             },
         })
     }
 
-    const deleteSubtask = () => {
+    const deleteSubtask = (columnId, subtaskId) => {
         const subtaskIdForCache = `Subtask:${subtaskId}`
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
@@ -161,14 +161,14 @@ const AlertBox = ({
     }
 
     const handleDelete = () => {
-        if (action === 'DELETE_TASK' || 'DELETE_TASK_IF_SUBTASKS') {
+        if (action === 'DELETE_TASK' || action === 'DELETE_TASK_IF_SUBTASKS') {
             deleteTask()
         }
         if (action === 'DELETE_COLUMN') {
             deleteColumn()
         }
         if (action === 'DELETE_SUBTASK') {
-            deleteSubtask()
+            deleteSubtask(columnId, subtaskId)
         }
     }
 
@@ -223,7 +223,7 @@ const AlertBox = ({
                                         classes={{ root: classes.deleteAlertButton }}
                                         disabled={action === 'DELETE_TASK_IF_SUBTASKS' && !check ? true : false}
                                     >
-                                        {buttonText}
+                                        DELETE
                                     </Button>
                                 )
                                 : null}

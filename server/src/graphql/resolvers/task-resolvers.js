@@ -25,8 +25,8 @@ const schema = {
         }) {
             return dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
         },
-        deleteTaskById(root, { id, subtaskIds }) {
-            return dataSources.boardService.deleteTaskById(id, subtaskIds)
+        deleteTaskById(root, { id }) {
+            return dataSources.boardService.deleteTaskById(id)
         },
         archiveTaskById(root, { id }) {
             return dataSources.boardService.archiveTaskById(id)
