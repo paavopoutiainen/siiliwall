@@ -1,14 +1,18 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
 
-const Swimlane = ({ task, index }) => {
+const Swimlane = ({ task, index, showAll }) => {
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
+    useEffect(() => {
+        if (showAll === null) return
+        setShow(showAll)
+    }, [showAll])
 
     const handleShowClick = () => {
         setShow(!show)
