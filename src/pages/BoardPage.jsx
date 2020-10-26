@@ -15,7 +15,6 @@ const BoardPage = ({ id }) => {
     if (loading) return null
 
     const board = data.boardById
-
     const switchView = () => {
         toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }
