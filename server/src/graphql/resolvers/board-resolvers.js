@@ -14,6 +14,9 @@ const schema = {
         addBoard(root, args) {
             return dataSources.boardService.addBoard(args.name)
         },
+        moveSwimlane(root, { boardId, newSwimlaneOrder }) {
+            return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder)
+        },
     },
 
     Board: {

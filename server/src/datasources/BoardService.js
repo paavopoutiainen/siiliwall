@@ -679,6 +679,19 @@ class BoardService {
         }
         return swimlaneOrder
     }
+
+    async updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder) {
+        try {
+            await Promise.all(newSwimlaneOrder.map(async (obj) => {
+                const task = await this.store.Task.findByPk(obj.id)
+                task.swimlaneOrderNumber = obj.swimlaneOrderNumber
+                await task.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
+        return boardId
+    }
 }
 
 module.exports.BoardService = BoardService
