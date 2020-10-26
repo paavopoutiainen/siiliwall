@@ -568,6 +568,19 @@ class BoardService {
         return usersFromDb
     }
 
+    async addUser(userName) {
+        let addedUser
+        try {
+            addedUser = await this.store.User.create({
+                id: uuid(),
+                userName,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedUser
+    }
+
     async getOwnerById(ownerId) {
         let owner
         try {

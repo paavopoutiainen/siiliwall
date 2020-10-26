@@ -29,7 +29,7 @@ export const landingPageStyles = makeStyles({
         minWidth: '16rem',
     },
 
-    addBoardButton: {
+    addNewButton: {
         height: '6rem',
         width: '6rem',
         fontSize: '0.7rem',
@@ -40,6 +40,7 @@ export const landingPageStyles = makeStyles({
         textAlign: 'center',
         textDecoration: 'none',
     },
+
 })
 
 export const boardPageStyles = makeStyles({
