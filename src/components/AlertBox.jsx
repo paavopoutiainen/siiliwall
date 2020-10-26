@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { Grid, Button, Dialog, Checkbox } from '@material-ui/core'
+import {
+    Grid, Button, Dialog, Checkbox,
+} from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
@@ -15,7 +17,7 @@ const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
 }) => {
     const [check, toggleCheck] = useState(false)
-    const [archiveTask] = useArchiveTask(columnId)
+    const [archiveTask] = useArchiveTask(columnId, boardId)
     const [archiveSubtask] = useArchiveSubtask(columnId)
     const [callDeleteSubtask] = useDeleteSubtask(columnId)
     const classes = boardPageStyles()
@@ -30,26 +32,26 @@ const AlertBox = ({
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
     let alertMsg
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'DELETE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgDeleteTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        case 'ARCHIVE_SUBTASK':
-            alertMsg = alertMsgArchiveSubtask
-            break
-        case 'DELETE_SUBTASK':
-            alertMsg = alertMsgDeleteSubtask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'DELETE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgDeleteTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
+    case 'DELETE_SUBTASK':
+        alertMsg = alertMsgDeleteSubtask
+        break
+    default:
+        break
     }
 
     const WhiteCheckbox = withStyles({
@@ -199,16 +201,15 @@ const AlertBox = ({
                         </Grid>
                         {action === 'DELETE_TASK_IF_SUBTASKS'
                             && (
-                                <Grid item container direction='row' alignItems='center'>
+                                <Grid item container direction="row" alignItems="center">
                                     <p>I understand</p>
                                     <WhiteCheckbox
                                         checked={check}
                                         onChange={handleChecked}
-                                        size='small'
+                                        size="small"
                                     />
                                 </Grid>
-                            )
-                        }
+                            )}
                         <Grid item container direction="row" justify="flex-end">
                             <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
@@ -221,7 +222,7 @@ const AlertBox = ({
                                         variant="contained"
                                         onClick={() => handleDelete()}
                                         classes={{ root: classes.deleteAlertButton }}
-                                        disabled={action === 'DELETE_TASK_IF_SUBTASKS' && !check ? true : false}
+                                        disabled={!!(action === 'DELETE_TASK_IF_SUBTASKS' && !check)}
                                     >
                                         DELETE
                                     </Button>
