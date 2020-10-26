@@ -14,6 +14,8 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask()
     const client = useApolloClient()
+    const [name, setName] = useState('')
+    const [size, setSize] = useState(null)
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
@@ -28,8 +30,20 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
 
     if (loading) return null
 
+    const handleNameChange = (event) => {
+        setName(event.target.value)
+    }
+
     const handleContentChange = (event) => {
         setContent(event.target.value)
+    }
+
+    const handleSizeChange = (event) => {
+        if (event.target.value === '') {
+            setSize(null)
+            return
+        }
+        setSize(parseFloat(event.target.value))
     }
 
     const handleOwnerChange = (action) => {
@@ -42,6 +56,15 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
 
     const handleColumnChange = (action) => {
         setInputColumnId(action.value)
+    }
+
+    const emptyState = () => {
+        setName('')
+        setContent('')
+        setSize(null)
+        setOwner(null)
+        setInputColumnId(null)
+        setMembers([])
     }
 
     const handleSave = (event) => {
@@ -58,18 +81,18 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 taskId,
                 ownerId: owner,
                 memberIds: members,
+                name,
                 content,
+                size,
                 ticketOrder: ticketOrderWithoutTypename,
             },
         })
+        emptyState()
         toggleAddDialog()
-        setContent('')
-        setOwner(null)
-        setMembers([])
     }
 
     const handleCancel = () => {
-        setContent('')
+        emptyState()
         toggleAddDialog()
     }
 
@@ -98,12 +121,33 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                     <TextField
                         autoComplete="off"
                         margin="dense"
+                        name="name"
+                        label="Name"
+                        type="text"
+                        value={name}
+                        fullWidth
+                        onChange={handleNameChange}
+                    />
+                    <TextField
+                        required={true}
+                        autoComplete="off"
+                        margin="dense"
                         name="content"
                         label="Content"
                         type="text"
                         value={content}
                         fullWidth
                         onChange={handleContentChange}
+                    />
+                    <TextField
+                        autoComplete="off"
+                        margin="dense"
+                        name="size"
+                        label="Size"
+                        type="text"
+                        value={size || ''}
+                        fullWidth
+                        onChange={handleSizeChange}
                     />
                     <Select
                         className="selectField"

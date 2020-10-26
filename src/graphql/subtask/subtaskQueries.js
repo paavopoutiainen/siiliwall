@@ -1,10 +1,12 @@
 import { gql } from '@apollo/client'
 
 export const ADD_SUBTASK = gql`
-    mutation createSubtask($taskId: ID!, $columnId: ID!, $content: String!, $ownerId: ID, $memberIds: [ID!], $ticketOrder: [TicketOrderInput!]) {
-        addSubtaskForTask(taskId: $taskId, columnId: $columnId, content: $content, ownerId: $ownerId, memberIds: $memberIds, ticketOrder: $ticketOrder) {
+    mutation createSubtask($taskId: ID!, $columnId: ID!, $name: String, $content: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $ticketOrder: [TicketOrderInput!]) {
+        addSubtaskForTask(taskId: $taskId, columnId: $columnId, name: $name, content: $content, size: $size, ownerId: $ownerId, memberIds: $memberIds, ticketOrder: $ticketOrder) {
             id
+            name
             content
+            size
             owner {
                 id
                 userName
@@ -23,6 +25,24 @@ export const ADD_SUBTASK = gql`
                     ticketId
                     type
                 }
+            }
+        }
+    }
+`
+export const EDIT_SUBTASK = gql`
+    mutation editSubtask($id: ID!, $name: String, $content: String!, $size: Float, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!]) {
+        editSubtaskById(id: $id, name: $name, content: $content, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds) {
+            id
+            name
+            content
+            size
+            owner {
+                id
+                userName
+            }
+            members {
+                id
+                userName
             }
         }
     }

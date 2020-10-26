@@ -19,6 +19,12 @@ export const MOVE_TICKET_FROM_COLUMN = gql`
                     id
                 }
             }
+            tasks {
+                id
+                column {
+                    id
+                }
+            }
         }
     }    
 `

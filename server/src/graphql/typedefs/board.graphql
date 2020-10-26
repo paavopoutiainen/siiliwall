@@ -4,7 +4,6 @@ type Board {
   orderNumber: Int!
   columns: [Column!]!
   columnOrder: [ID!]!
-  swimlaneOrder: [ID!]!
 }
 
 type Query {

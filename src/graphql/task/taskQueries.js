@@ -1,13 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const MOVE_TASK_FROM_COLUMN = gql`
-    mutation moveTaskFromColumn($taskId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTaskOrder: [ID!], $destTaskOrder: [ID!]) {
-        moveTaskFromColumn(taskId: $taskId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTaskOrder: $sourceTaskOrder, destTaskOrder: $destTaskOrder) {
-            id
-        }
-    }    
-`
-
 export const TASK_BY_ID = gql`
     query taskById($taskId: ID!) {
         taskById(id: $taskId) {
@@ -71,5 +63,16 @@ export const EDIT_TASK = gql`
 export const ARCHIVE_TASK = gql`
     mutation archiveTask($taskId: ID!) {
         archiveTaskById(id: $taskId)
+    }
+`
+
+export const PRIORITIZE_TASK = gql`
+    mutation prioritizeTask($id: ID!, $swimlaneOrderNumber: Int!, $affectedPrioritizedTaskIds: [ID!], $direction: String!) {
+        prioritizeTask(id: $id, swimlaneOrderNumber: $swimlaneOrderNumber, affectedPrioritizedTaskIds: $affectedPrioritizedTaskIds, direction: $direction)
+    }
+`
+export const UNPRIORITIZE_TASK = gql`
+    mutation unPrioritizeTask($id: ID!, $prioritizedTaskIds: [ID!]) {
+        unPrioritizeTask(id: $id, prioritizedTaskIds: $prioritizedTaskIds)
     }
 `

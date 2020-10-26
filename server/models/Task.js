@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: DataTypes.STRING,
         swimlaneOrderNumber: DataTypes.INTEGER,
+        prioritized: DataTypes.BOOLEAN,
         color: DataTypes.STRING,
         size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,

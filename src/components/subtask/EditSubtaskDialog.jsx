@@ -4,48 +4,40 @@ import {
 } from '@material-ui/core'
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
-import useEditTask from '../../graphql/task/hooks/useEditTask'
+import useEditSubtask from '../../graphql/subtask/hooks/useEditSubtask'
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const EditTaskDialog = ({
-    dialogStatus, editId, toggleDialog, task,
+const EditSubtaskDialog = ({
+    dialogStatus, editId, toggleDialog, subtask,
 }) => {
-    const [editTask] = useEditTask()
+    const [editSubtask] = useEditSubtask()
     const { loading, data } = useAllUsers()
-    const [title, setTitle] = useState(task?.title)
-    const [size, setSize] = useState(task?.size ? task.size : null)
-    const [description, setDescription] = useState(task?.description)
-    const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
-    const arrayOfOldMemberIds = task.members.map((user) => user.id)
-    const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
+    const [name, setName] = useState(subtask?.name)
+    const [size, setSize] = useState(subtask?.size)
+    const [content, setContent] = useState(subtask?.content)
+    const [owner, setOwner] = useState(subtask?.owner ? subtask.owner.id : null)
+    const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
+    const [members, setMembers] = useState(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+
     if (loading) return null
-
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value)
-    }
-
     const handleOwnerChange = (action) => {
         setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
-        if (event.target.value === '') {
-            setSize(null)
-            return
-        }
         setSize(parseFloat(event.target.value))
     }
 
-    const handleDescriptionChange = (event) => {
-        if (event.target.value === '') {
-            setDescription(null)
-            return
-        }
-        setDescription(event.target.value)
+    const handleNameChange = (event) => {
+        setName(event.target.value)
+    }
+
+    const handleContentChange = (event) => {
+        setContent(event.target.value)
     }
 
     const handleMembersChange = (event) => {
@@ -54,21 +46,21 @@ const EditTaskDialog = ({
 
     const handleSave = (event) => {
         event.preventDefault()
-        editTask({
+        editSubtask({
             variables: {
-                taskId: editId,
-                title,
+                id: editId,
+                name,
+                content,
                 size,
                 ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
-                description,
             },
         })
         toggleDialog()
     }
 
-    // Prevents closing dialog when clicking on it to edit task's fields
+    // Prevents closing dialog when clicking on it to edit subtask's fields
     const handleDialogClick = (e) => e.stopPropagation()
 
     // Modifiying userData to be of form expected by the react select component
@@ -77,7 +69,7 @@ const EditTaskDialog = ({
         return newObject
     })
 
-    const chosenMembersData = task.members.map((user) => {
+    const chosenMembersData = subtask.members.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
@@ -96,31 +88,44 @@ const EditTaskDialog = ({
                 classes={{ paper: classes.dialogPaper }}
                 onClick={handleDialogClick}
             >
-                <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
+                <DialogTitle aria-labelledby="max-width-dialog-title">Edit subtask</DialogTitle>
                 <DialogContent>
                     <TextField
                         autoComplete="off"
                         margin="dense"
-                        name="title"
+                        name="name"
                         label="Name"
                         type="text"
-                        value={title}
+                        value={name || ''}
                         fullWidth
-                        onChange={handleTitleChange}
+                        onChange={handleNameChange}
+                    />
+                    <TextField
+                        required={true}
+                        autoComplete="off"
+                        margin="dense"
+                        name="content"
+                        label="Content"
+                        type="text"
+                        multiline
+                        rows={3}
+                        value={content}
+                        fullWidth
+                        onChange={handleContentChange}
                     />
                     <TextField
                         autoComplete="off"
                         margin="dense"
                         name="size"
                         label="Size"
-                        type="number"
+                        type="text"
                         value={size || ''}
                         fullWidth
                         onChange={handleSizeChange}
                     />
                     <Select
                         className="selectField"
-                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
+                        placeholder={subtask?.owner ? subtask.owner.userName : 'Select owner'}
                         options={modifiedData}
                         onChange={handleOwnerChange}
                     />
@@ -134,19 +139,6 @@ const EditTaskDialog = ({
                         isMulti
                         onChange={handleMembersChange}
                     />
-                    <TextField
-                        id="standard-multiline-static"
-                        autoComplete="off"
-                        margin="dense"
-                        name="description"
-                        label="Description"
-                        type="text"
-                        multiline
-                        rows={3}
-                        value={description || ''}
-                        fullWidth
-                        onChange={handleDescriptionChange}
-                    />
                 </DialogContent>
                 <DialogActions>
                     <Button
@@ -158,6 +150,7 @@ const EditTaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
+                        disabled={!content.length}
                     >
                         Submit edit
                     </Button>
@@ -166,4 +159,4 @@ const EditTaskDialog = ({
         </Grid>
     )
 }
-export default EditTaskDialog
+export default EditSubtaskDialog

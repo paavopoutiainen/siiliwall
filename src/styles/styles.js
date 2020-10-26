@@ -116,12 +116,12 @@ export const boardPageStyles = makeStyles({
         height: '100%',
     },
 
-    subtaskContent: {
+    subtaskContentAndName: {
         maxWidth: 300,
 
     },
 
-    subtaskContentText: {
+    subtaskContentAndNameText: {
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -162,6 +162,13 @@ export const boardPageStyles = makeStyles({
         margin: 5,
     },
 
+    alertCheckbox: {
+        color: 'white',
+        '&$checked': {
+            color: 'white',
+        }
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
@@ -183,6 +190,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
+        backgroundColor: 'white',
     },
 
     swimlaneTitle: {

@@ -19,6 +19,11 @@ const client = new ApolloClient({
                             return [...incoming]
                         },
                     },
+                    swimlaneOrder: {
+                        merge(existing, incoming = []) {
+                            return [...incoming]
+                        }
+                    }
                 },
             },
             Column: {

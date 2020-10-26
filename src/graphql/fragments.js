@@ -9,19 +9,28 @@ export const TICKETORDER_AND_TASKS = gql`
         }
     }
 `
-export const TICKETORDER_AND_SUBTASKS = gql`
-    fragment ticketOrderAndSubtasks on Column {
-        ticketOrder
+export const TASK_SUBTASKS = gql`
+    fragment tasksSubtasks on Task {
+        id
         subtasks {
             id
         }
     }
 `
-
-export const TASKORDER_AND_TASKS = gql`
-    fragment taskOrderAndTasks on Column {
-        taskOrder
+export const TASKS_WITH_SUBTASKS = gql`
+    fragment tasksWithSubtasks on Column {
         tasks {
+            id
+            subtasks {
+                id
+            }
+        } 
+    }
+`
+export const TICKETORDER_AND_SUBTASKS = gql`
+    fragment ticketOrderAndSubtasks on Column {
+        ticketOrder
+        subtasks {
             id
         }
     }
@@ -38,21 +47,25 @@ export const TICKETORDER_AND_TICKETS = gql`
         }
     }
 `
-export const TASKORDER = gql`
-    fragment taskOrder on Column {
-        taskOrder
-    }
-`
+
 export const TICKETORDER = gql`
     fragment ticketOrder on Column {
         ticketOrder
     }
 `
+
 export const SUBTASKS = gql`
     fragment subtasks on Column {
         subtasks {
             id
         }
+    }
+`
+
+export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
+    fragment prioritizedAndSwimlaneOrderNumber on Task {
+        prioritized
+        swimlaneOrderNumber
     }
 `
 
@@ -65,8 +78,18 @@ export const COLUMNORDER = gql`
 export const COLUMNORDER_AND_COLUMNS = gql`
     fragment columnOrderAndColumns on Board {
         columnOrder
-        columns
-}
+        columns {
+            subtasks {
+                id
+                task {
+                    id
+                }
+                column {
+                    id
+                }
+            }
+        }
+    }
 `
 
 export const SUBTASKS_COLUMN = gql`
