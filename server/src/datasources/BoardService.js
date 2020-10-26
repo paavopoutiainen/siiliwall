@@ -349,15 +349,31 @@ class BoardService {
         return largestColumnOrderNumber || 0
     }
 
+    async findTheLargestSwimlaneOrderNumberOfBoard(boardId) {
+        let largestSwimlaneOrderNumber
+        try {
+            largestSwimlaneOrderNumber = await this.store.Task.max('swimlaneOrderNumber', {
+                where: {
+                    boardId,
+                },
+            }) || 0
+        } catch (e) {
+            console.log(e)
+        }
+        return largestSwimlaneOrderNumber
+    }
+
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
           hence it is given the biggest columnOrderNumber of the column
-          By default new task will be displyed at the bottom of the swimlane view
+          By default new task will be dirssplyed at the bottom of the swimlane view
         */
         let addedTask
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
+            const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
+
             addedTask = await this.store.Task.create({
                 id: uuid(),
                 boardId,
@@ -367,6 +383,7 @@ class BoardService {
                 ownerId,
                 description,
                 columnOrderNumber: largestOrderNumber + 1,
+                swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
             await Promise.all(
                 memberIds.map(async (memberId) => {
