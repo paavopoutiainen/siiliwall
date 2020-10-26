@@ -670,7 +670,7 @@ class BoardService {
         try {
             swimlaneOrder = await this.store.Task.findAll({
                 attributes: ['id'],
-                where: { boardId },
+                where: { boardId, deletedAt: null },
                 order: this.sequelize.literal('swimlaneOrderNumber ASC'),
             })
             swimlaneOrder = swimlaneOrder.map((item) => item.dataValues.id)
