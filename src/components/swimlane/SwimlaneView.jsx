@@ -9,7 +9,7 @@ import SwimlaneList from './SwimlaneList'
 import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
-import usePrioritizeTask from '../../graphql/task/hooks/usePrioritizeTask'
+import useMoveSwimlane from '../../graphql/task/hooks/useMoveSwimlane'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -18,7 +18,7 @@ const SwimlaneView = ({ board }) => {
     // These units are called swimlaneColumns
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
-    const [prioritizeTask] = usePrioritizeTask()
+    const [moveSwimlane] = useMoveSwimlane()
     const client = useApolloClient()
 
     const { columns, swimlaneOrder } = board
@@ -31,7 +31,6 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
-
     const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id))
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
 
@@ -63,10 +62,8 @@ const SwimlaneView = ({ board }) => {
         return { ...task, swimlaneColumns }
     })
 
-    const finalTasks = Array.from(tasksInOrder)
-
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, prioritizeTask, columns, client, finalTasks, board.id)}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
             <Grid container direction="column" spacing={5}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
