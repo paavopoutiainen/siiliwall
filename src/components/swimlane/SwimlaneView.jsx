@@ -21,7 +21,7 @@ const SwimlaneView = ({ board }) => {
     const [prioritizeTask] = usePrioritizeTask()
     const client = useApolloClient()
 
-    const { columns } = board
+    const { columns, swimlaneOrder } = board
     let tasks = []
     let subtasks = []
 
@@ -31,24 +31,17 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
+
+    const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id))
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
 
-    // This object is passed to swimlaneList
-
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
-
-    const columnsInReversedOrder = Array.from(columnsInOrder).reverse()
-    let reversedTicketOrder = []
-    columnsInReversedOrder.map((column) => {
-        reversedTicketOrder = reversedTicketOrder.concat(column.ticketOrder)
-    })
-    const tasksInReversedOrder = reversedTicketOrder.filter((obj) => obj.type === 'task').map((obj) => tasks.find((task) => task.id === obj.ticketId))
-
-    const tasksInOrder = tasksInReversedOrder.map((task, index) => {
+    // This object is passed to swimlaneList
+    const tasksInOrder = tasksInCorrectOrder.map((task, index) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
-                if (subtask.task?.id === task.id && subtask.column.id === column.id) {
+                if (subtask.task.id === task.id && subtask.column.id === column.id) {
                     return subtask
                 }
             })
@@ -56,29 +49,21 @@ const SwimlaneView = ({ board }) => {
             // Loop through the ticketOrder of the column and pick up the ticketOrder objects
             // belonging to the subtasks of the task
             const subtaskOrder = column.ticketOrder.filter((obj) => subtasksOfTaskInColumn.map((subtask) => subtask.id).includes(obj.ticketId))
+            const subtasksInOrder = subtaskOrder.map((obj) => subtasksOfTaskInColumn.find((subtask) => subtask.id === obj.ticketId))
             // Add the real order index for subtask
-            const subtasksInColumnFinal = subtasksOfTaskInColumn.map((subtask) => {
+            const subtasksInColumnFinal = subtasksInOrder.map((subtask) => {
                 const realOrderIndex = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
                 return { ...subtask, index: realOrderIndex }
             })
 
             return {
-                name: column.name, id: column.id, subtasks: subtasksInColumnFinal, subtaskOrder,
+                name: column.name, id: column.id, subtasks: subtasksInColumnFinal,
             }
         })
-        return { ...task, swimlaneColumns, indexInNormalFlow: index }
+        return { ...task, swimlaneColumns }
     })
 
-    // new logic for ordering swimlanes, taking into account the prioritized tasks
-    const prioritizedTasks = tasksInOrder.filter((task) => task.prioritized)
-    const unPrioritizedTasks = tasksInOrder.filter((task) => !task.prioritized)
-    const finalArray = Array.from(unPrioritizedTasks)
-
-    prioritizedTasks.sort((a, b) => a.swimlaneOrderNumber - b.swimlaneOrderNumber).map((task) => {
-        finalArray.splice(task.swimlaneOrderNumber, 0, task)
-    })
-
-    const finalTasks = Array.from(finalArray)
+    const finalTasks = Array.from(tasksInOrder)
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, prioritizeTask, columns, client, finalTasks, board.id)}>
@@ -87,7 +72,7 @@ const SwimlaneView = ({ board }) => {
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasksInOrder={finalTasks} />
+                            <SwimlaneList tasksInOrder={tasksInOrder} />
                             {provided.placeholder}
                         </Grid>
                     )}

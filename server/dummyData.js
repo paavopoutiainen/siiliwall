@@ -169,7 +169,7 @@ const tasks = [
         size: 2,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05drt',
         columnOrderNumber: 1,
-        swimlaneOrderNumber: 4,
+        swimlaneOrderNumber: 0,
         id: 'd39fc7da-93a1-40ec-8c56-7b619445465b',
         creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
