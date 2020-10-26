@@ -64,6 +64,7 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
             },
         })
     }
+    const numberOfSubtasks = task.swimlaneColumns.reduce((acc, cur) => parseInt(acc + cur.subtasks.length, 10), 0)
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -77,7 +78,7 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                     ref={provided.innerRef}
                 >
                     <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-                    <Grid item container direction="row">
+                    <Grid item container direction="row" alignItems="center" spacing={1}>
                         <Grid item>
                             <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button>
                         </Grid>
@@ -87,6 +88,7 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                                         <Button variant="outlined" size="small" onClick={() => removePrioritization()}>remove prioritization</Button>
                                     </Grid>
                                 )}
+                        <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
                     </Grid>
                     {show
                     && (
