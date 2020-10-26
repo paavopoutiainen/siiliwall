@@ -76,3 +76,9 @@ export const UNPRIORITIZE_TASK = gql`
         unPrioritizeTask(id: $id, prioritizedTaskIds: $prioritizedTaskIds)
     }
 `
+
+export const MOVE_SWIMLANE = gql`
+    mutation moveSwimlane($boardId: ID!, $newSwimlaneOrder: [newSwimlaneOrderInput!]!) {
+        moveSwimlane(boardId: $boardId, newSwimlaneOrder: $newSwimlaneOrder) 
+    }
+`
