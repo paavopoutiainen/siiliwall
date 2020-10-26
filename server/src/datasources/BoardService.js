@@ -647,6 +647,21 @@ class BoardService {
         }
         return taskId
     }
+
+    async getSwimlaneOrderOfBoard(boardId) {
+        let swimlaneOrder
+        try {
+            swimlaneOrder = await this.store.Task.findAll({
+                attributes: ['id'],
+                where: { boardId },
+                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
+            })
+            swimlaneOrder = swimlaneOrder.map((item) => item.dataValues.id)
+        } catch (e) {
+            console.log(e)
+        }
+        return swimlaneOrder
+    }
 }
 
 module.exports.BoardService = BoardService

@@ -23,6 +23,9 @@ const schema = {
         columnOrder(root) {
             return dataSources.boardService.getColumnOrderOfBoard(root.id)
         },
+        swimlaneOrder(root) {
+            return dataSources.boardService.getSwimlaneOrderOfBoard(root.id)
+        },
     },
 }
 
