@@ -4,16 +4,22 @@ import { Link } from 'react-router-dom'
 import useAllBoards from '../graphql/board/hooks/useAllBoards'
 
 import NewBoardForm from '../components/board/NewBoardForm'
+import NewUserForm from '../components/user/NewUserForm'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
 
 const LandingPage = () => {
     const { data, loading } = useAllBoards()
     const [open, setOpen] = useState(false)
+    const [openUserForm, setUserFormOpen] = useState(false)
     const classes = landingPageStyles()
 
-    function handleClickOpen() {
+    const handleClickOpen = () => {
         setOpen(true)
+    }
+
+    const handleClickOpenUser = () => {
+        setUserFormOpen(true)
     }
 
     if (loading) return null
@@ -30,16 +36,28 @@ const LandingPage = () => {
                 classes={{ root: classes.root }}
                 spacing={7}
             >
-                {open
-
-                    && <NewBoardForm setOpen={setOpen} open={open} />}
+                {open && <NewBoardForm setOpen={setOpen} open={open} />}
+                {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
                 <Grid item classes={{ root: classes.title }}>
                     <h1 id="landingTitle">Welcome!</h1>
                 </Grid>
-                <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addBoardButton }} id="addButton">
-                        Add Board
-                    </Button>
+                <Grid
+                    item
+                    container
+                    direction="row"
+                    justify="center"
+                    spacing={3}
+                >
+                    <Grid item>
+                        <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                            Add Board
+                        </Button>
+                    </Grid>
+                    <Grid item>
+                        <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                            Add User
+                        </Button>
+                    </Grid>
                 </Grid>
                 <Grid
                     item
