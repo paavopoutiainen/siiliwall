@@ -10,6 +10,7 @@ import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveSwimlane from '../../graphql/task/hooks/useMoveSwimlane'
+import AddTaskDialog from '../task/AddTaskDialog'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -20,6 +21,8 @@ const SwimlaneView = ({ board }) => {
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveSwimlane] = useMoveSwimlane()
     const [showAll, setShowAll] = useState(null)
+    const [dialogStatus, setDialogStatus] = useState(false)
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
     const client = useApolloClient()
 
     const { columns, swimlaneOrder } = board
@@ -37,7 +40,7 @@ const SwimlaneView = ({ board }) => {
 
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
     // This object is passed to swimlaneList
-    const tasksInOrder = tasksInCorrectOrder.map((task, index) => {
+    const tasksInOrder = tasksInCorrectOrder.map((task) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
@@ -71,7 +74,14 @@ const SwimlaneView = ({ board }) => {
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
             <Grid container direction="column" spacing={5}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
-                <Grid item><Button size="small" variant="outlined" onClick={() => handleShowClick()}>{showAll ? 'Hide all' : 'Show all'}</Button></Grid>
+                <Grid container item spacing={1}>
+                    <Grid item>
+                        <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{showAll ? 'Hide all' : 'Show all'}</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button size="small" variant="outlined" onClick={() => toggleDialog()}>Add task</Button>
+                    </Grid>
+                </Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
@@ -81,6 +91,11 @@ const SwimlaneView = ({ board }) => {
                     )}
                 </Droppable>
             </Grid>
+            <AddTaskDialog
+                dialogStatus={dialogStatus}
+                toggleDialog={toggleDialog}
+                column={columnsInOrder[0]}
+            />
         </DragDropContext>
     )
 }
