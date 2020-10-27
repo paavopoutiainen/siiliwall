@@ -68,6 +68,19 @@ const EditTaskDialog = ({
         toggleDialog()
     }
 
+    const recoverState = () => {
+        setTitle(task?.title)
+        setSize(task?.size ? task.size : null)
+        setOwner(task?.owner ? task.owner.id : null)
+        setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setDescription(task?.description)
+    }
+
+    const handleCancel = () => {
+        recoverState()
+        toggleDialog()
+    }
+
     // Prevents closing dialog when clicking on it to edit task's fields
     const handleDialogClick = (e) => e.stopPropagation()
 
@@ -90,7 +103,7 @@ const EditTaskDialog = ({
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleDialog}
+                onClose={handleCancel}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
@@ -150,7 +163,7 @@ const EditTaskDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel
