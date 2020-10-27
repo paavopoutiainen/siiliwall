@@ -75,7 +75,7 @@ const SwimlaneView = ({ board }) => {
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} />
+                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} boardId={board.id} />
                             {provided.placeholder}
                         </Grid>
                     )}

@@ -5,10 +5,19 @@ import { Draggable } from 'react-beautiful-dnd'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
+import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 
-const Swimlane = ({ task, index, showAll }) => {
+const Swimlane = ({
+    task, index, showAll, boardId,
+}) => {
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
+    const [addDialogStatus, setAddDialogStatus] = useState(false)
+
+    const toggleAddDialog = () => {
+        setAddDialogStatus(!addDialogStatus)
+    }
+
     useEffect(() => {
         if (showAll === null) return
         setShow(showAll)
@@ -37,6 +46,11 @@ const Swimlane = ({ task, index, showAll }) => {
                         <Grid item>
                             <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button>
                         </Grid>
+                        {show && (
+                            <Grid item>
+                                <Button size="small" variant="outlined" onClick={() => toggleAddDialog()}>add subtask</Button>
+                            </Grid>
+                        )}
                         <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
                     </Grid>
                     {show
@@ -45,8 +59,15 @@ const Swimlane = ({ task, index, showAll }) => {
                             <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
                         </Grid>
                     )}
-
+                    <AddSubtaskDialog
+                        addDialogStatus={addDialogStatus}
+                        toggleAddDialog={toggleAddDialog}
+                        columnId={task.column.id}
+                        taskId={task.id}
+                        boardId={boardId}
+                    />
                 </Grid>
+
             )}
         </Draggable>
 
