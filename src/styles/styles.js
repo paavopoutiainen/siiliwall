@@ -29,7 +29,7 @@ export const landingPageStyles = makeStyles({
         minWidth: '16rem',
     },
 
-    addBoardButton: {
+    addNewButton: {
         height: '6rem',
         width: '6rem',
         fontSize: '0.7rem',
@@ -40,6 +40,7 @@ export const landingPageStyles = makeStyles({
         textAlign: 'center',
         textDecoration: 'none',
     },
+
 })
 
 export const boardPageStyles = makeStyles({
@@ -115,12 +116,12 @@ export const boardPageStyles = makeStyles({
         height: '100%',
     },
 
-    subtaskContent: {
+    subtaskContentAndName: {
         maxWidth: 300,
 
     },
 
-    subtaskContentText: {
+    subtaskContentAndNameText: {
         overflow: 'hidden',
         whiteSpace: 'nowrap',
         textOverflow: 'ellipsis',
@@ -161,6 +162,13 @@ export const boardPageStyles = makeStyles({
         margin: 5,
     },
 
+    alertCheckbox: {
+        color: 'white',
+        '&$checked': {
+            color: 'white',
+        },
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
@@ -177,7 +185,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnName: {
         textAlign: 'center',
-        width: 300,
+        width: 335,
     },
 
     swimlane: {
@@ -198,7 +206,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
-        width: 330,
+        width: 327,
         minHeight: 133,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',

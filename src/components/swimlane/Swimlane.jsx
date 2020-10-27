@@ -1,69 +1,41 @@
 /* eslint-disable array-callback-return */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
-import { useApolloClient } from '@apollo/client'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
-import {
-    PRIORITIZED_AND_SWIMLANEORDERNUMBER,
-} from '../../graphql/fragments'
-import useUnPrioritizeTask from '../../graphql/task/hooks/useUnPrioritizeTask'
+import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
+import TaskEditDialog from '../task/EditTaskDialog'
 
-const Swimlane = ({ tasksInOrder, task, index }) => {
+const Swimlane = ({
+    task, index, showAll, boardId,
+}) => {
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
-    const client = useApolloClient()
-    const [unPrioritizeTask] = useUnPrioritizeTask()
+    const [addDialogStatus, setAddDialogStatus] = useState(false)
+    const [editTaskDialogStatus, setEditTaskDialogStatus] = useState(false)
+    const toggleEditTaskDialog = () => {
+        setEditTaskDialogStatus(!editTaskDialogStatus)
+    }
 
-    const handleShowClick = () => {
+    const toggleAddDialog = (e) => {
+        e.stopPropagation()
+        setAddDialogStatus(!addDialogStatus)
+    }
+
+    useEffect(() => {
+        if (showAll === null) return
+        setShow(showAll)
+    }, [showAll])
+
+    const handleShowClick = (e) => {
+        e.stopPropagation()
         setShow(!show)
     }
 
-    const removePrioritization = () => {
-        client.writeFragment({
-            id: `Task:${task.id}`,
-            fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
-            data: {
-                prioritized: false,
-                swimlaneOrderNumber: null,
-            },
-        })
-        // When swimlane/task gets unprioritized we have to change the swimlaneOrderNumbers of
-        // all the prioritized tasks the unprioritization affects
-        // These are the indexes between the swimlaneOrderNumber and indexInNormalFlow of the unprioritized task
-        // TODO: THIS LOGIC IS NOT YET PERFECT - there might be cases where swimlaneorderNumbers of the tasks above needs to be changed
-        // kolumnin sisällä voi olla asioita ristiriidassa keskenään, Jos esim kolumnissa on kaksi priottua asiaa niin on
-        // mahdollista, että ylemmällä on pienempi oprio arvo kuin alemmalla
-        const affectedPrioritizedTasks = tasksInOrder
-            .filter((taskObj) => taskObj.prioritized)
-            .filter((taskObj) => taskObj.id !== task.id)
-            .filter((taskObj) => taskObj.swimlaneOrderNumber > task.swimlaneOrderNumber
-                                && taskObj.swimlaneOrderNumber <= task.indexInNormalFlow)
-
-        // Update the cache
-        affectedPrioritizedTasks.map((taskObj) => {
-            client.writeFragment({
-                id: `Task:${taskObj.id}`,
-                fragment: PRIORITIZED_AND_SWIMLANEORDERNUMBER,
-                data: {
-                    prioritized: true,
-                    swimlaneOrderNumber: taskObj.swimlaneOrderNumber - 1,
-                },
-            })
-        })
-        // SwimlaneOrderNumbers need to be updatetd to the database aswell
-        const affectedPrioritizedTaskIds = affectedPrioritizedTasks
-            .map((taskObj) => taskObj.id)
-
-        unPrioritizeTask({
-            variables: {
-                id: task.id,
-                prioritizedTaskIds: affectedPrioritizedTaskIds,
-            },
-        })
-    }
+    const numberOfSubtasks = task.swimlaneColumns
+        .reduce((acc, cur) => parseInt(acc + cur.subtasks.length, 10), 0)
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -76,17 +48,17 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-                    <Grid item container direction="row">
+                    <Grid item onClick={toggleEditTaskDialog}><SwimlaneHeader taskName={task.title} /></Grid>
+                    <Grid item container direction="row" alignItems="center" spacing={1} onClick={toggleEditTaskDialog}>
                         <Grid item>
-                            <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button>
+                            <Button size="small" variant="outlined" onClick={(e) => handleShowClick(e)}>{show ? 'hide' : 'show'}</Button>
                         </Grid>
-                        {task.prioritized
-                                && (
-                                    <Grid item>
-                                        <Button variant="outlined" size="small" onClick={() => removePrioritization()}>remove prioritization</Button>
-                                    </Grid>
-                                )}
+                        {show && (
+                            <Grid item>
+                                <Button size="small" variant="outlined" onClick={(e) => toggleAddDialog(e)}>add subtask</Button>
+                            </Grid>
+                        )}
+                        <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
                     </Grid>
                     {show
                     && (
@@ -94,8 +66,21 @@ const Swimlane = ({ tasksInOrder, task, index }) => {
                             <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
                         </Grid>
                     )}
-
+                    <AddSubtaskDialog
+                        addDialogStatus={addDialogStatus}
+                        toggleAddDialog={toggleAddDialog}
+                        columnId={task.column.id}
+                        taskId={task.id}
+                        boardId={boardId}
+                    />
+                    <TaskEditDialog
+                        dialogStatus={editTaskDialogStatus}
+                        toggleDialog={toggleEditTaskDialog}
+                        editId={task.id}
+                        task={task}
+                    />
                 </Grid>
+
             )}
         </Draggable>
 

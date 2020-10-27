@@ -1,8 +1,8 @@
 import { useMutation } from '@apollo/client'
 import { ARCHIVE_TASK } from '../taskQueries'
-import { TICKETORDER_AND_TASKS } from '../../fragments'
+import { TICKETORDER_AND_TASKS, SWIMLANE_ORDER } from '../../fragments'
 
-const useArchiveTask = (columnId) => {
+const useArchiveTask = (columnId, boardId) => {
     const retVal = useMutation(ARCHIVE_TASK, {
         update: async (cache, response) => {
             const columnIdForCache = `Column:${columnId}`
@@ -24,8 +24,22 @@ const useArchiveTask = (columnId) => {
                     tasks: newTasks,
                 },
             })
+
             cache.evict({
                 id: taskIdForCache,
+            })
+            // Remove id of the archived task from boards swimlaneOrder list in the cache
+            const { swimlaneOrder } = cache.readFragment({
+                id: `Board:${boardId}`,
+                fragment: SWIMLANE_ORDER,
+            })
+            const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskIdToBeRemoved)
+            cache.writeFragment({
+                id: `Board:${boardId}`,
+                fragment: SWIMLANE_ORDER,
+                data: {
+                    swimlaneOrder: newSwimlaneOrder,
+                },
             })
         },
     })

@@ -3,7 +3,7 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit, Archive } from '@material-ui/icons'
+import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../AlertBox'
 
@@ -45,12 +45,6 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem>
-                    <ListItemIcon>
-                        <Edit />
-                    </ListItemIcon>
-                    <ListItemText primary="Edit" />
-                </MenuItem>
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_SUBTASK')}>
                     <ListItemIcon>
                         <Archive />

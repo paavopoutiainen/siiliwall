@@ -67,7 +67,7 @@ const Task = ({
                         </Grid>
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
-                                taskId={task.id}
+                                task={task}
                                 columnId={columnId}
                                 boardId={boardId}
                             />
@@ -92,7 +92,7 @@ const Task = ({
                         </Grid>
                         <Grid item>
                             {task.members.length !== 0 ? (
-                            // this part renders commas after name only if formatting is like below
+                                // this part renders commas after name only if formatting is like below
                                 <p>
                                     {`members:  ${members.map((user) => ` ${user.userName}`)}`}
                                 </p>

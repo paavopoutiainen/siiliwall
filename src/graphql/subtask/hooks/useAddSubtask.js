@@ -12,7 +12,6 @@ const useAddSubtask = () => {
             })
             const { subtasks } = cached
             const newSubtasks = subtasks.concat(response.data.addSubtaskForTask)
-
             cache.writeFragment({
                 id: columnIdForCache,
                 fragment: SUBTASKS,
