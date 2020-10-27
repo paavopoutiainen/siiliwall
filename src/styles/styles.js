@@ -166,7 +166,7 @@ export const boardPageStyles = makeStyles({
         color: 'white',
         '&$checked': {
             color: 'white',
-        }
+        },
     },
 
     dialogPaper: {
@@ -185,7 +185,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnName: {
         textAlign: 'center',
-        width: 300,
+        width: 335,
     },
 
     swimlane: {
@@ -206,7 +206,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
-        width: 330,
+        width: 327,
         minHeight: 133,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
