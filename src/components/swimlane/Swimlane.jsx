@@ -6,6 +6,7 @@ import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
+import TaskEditDialog from '../task/EditTaskDialog'
 
 const Swimlane = ({
     task, index, showAll, boardId,
@@ -13,8 +14,13 @@ const Swimlane = ({
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
+    const [editTaskDialogStatus, setEditTaskDialogStatus] = useState(false)
+    const toggleEditTaskDialog = () => {
+        setEditTaskDialogStatus(!editTaskDialogStatus)
+    }
 
-    const toggleAddDialog = () => {
+    const toggleAddDialog = (e) => {
+        e.stopPropagation()
         setAddDialogStatus(!addDialogStatus)
     }
 
@@ -23,7 +29,8 @@ const Swimlane = ({
         setShow(showAll)
     }, [showAll])
 
-    const handleShowClick = () => {
+    const handleShowClick = (e) => {
+        e.stopPropagation()
         setShow(!show)
     }
 
@@ -41,14 +48,14 @@ const Swimlane = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item><SwimlaneHeader taskName={task.title} /></Grid>
-                    <Grid item container direction="row" alignItems="center" spacing={1}>
+                    <Grid item onClick={toggleEditTaskDialog}><SwimlaneHeader taskName={task.title} /></Grid>
+                    <Grid item container direction="row" alignItems="center" spacing={1} onClick={toggleEditTaskDialog}>
                         <Grid item>
-                            <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{show ? 'hide' : 'show'}</Button>
+                            <Button size="small" variant="outlined" onClick={(e) => handleShowClick(e)}>{show ? 'hide' : 'show'}</Button>
                         </Grid>
                         {show && (
                             <Grid item>
-                                <Button size="small" variant="outlined" onClick={() => toggleAddDialog()}>add subtask</Button>
+                                <Button size="small" variant="outlined" onClick={(e) => toggleAddDialog(e)}>add subtask</Button>
                             </Grid>
                         )}
                         <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
@@ -65,6 +72,12 @@ const Swimlane = ({
                         columnId={task.column.id}
                         taskId={task.id}
                         boardId={boardId}
+                    />
+                    <TaskEditDialog
+                        dialogStatus={editTaskDialogStatus}
+                        toggleDialog={toggleEditTaskDialog}
+                        editId={task.id}
+                        task={task}
                     />
                 </Grid>
 
