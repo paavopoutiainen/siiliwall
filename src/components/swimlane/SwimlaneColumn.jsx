@@ -6,10 +6,8 @@ import { swimlaneStyles } from '../../styles/styles'
 import Subtask from '../subtask/Subtask'
 
 const SwimlaneColumn = ({ swimlaneColumn, taskId }) => {
-    const { subtaskOrder, subtasks } = swimlaneColumn
+    const { subtasks } = swimlaneColumn
     const classes = swimlaneStyles()
-
-    const subtasksInOrder = subtaskOrder.map((obj) => subtasks.find((subtask) => subtask.id === obj.ticketId))
 
     const idForDroppable = `${swimlaneColumn.id}${taskId}`
     return (
@@ -23,7 +21,7 @@ const SwimlaneColumn = ({ swimlaneColumn, taskId }) => {
                     direction="column"
                     spacing={2}
                 >
-                    {subtasksInOrder.map((subtask) => (
+                    {subtasks.map((subtask) => (
                         <Grid item key={subtask.id}>
                             <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
                         </Grid>

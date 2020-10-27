@@ -4,6 +4,7 @@ type Board {
   orderNumber: Int!
   columns: [Column!]!
   columnOrder: [ID!]!
+  swimlaneOrder: [ID!]!
 }
 
 type Query {
@@ -11,7 +12,13 @@ type Query {
   boardById(id: ID!): Board!
 }
 
+input newSwimlaneOrderInput {
+  id: ID!
+  swimlaneOrderNumber: Int!
+}
+
 type Mutation {
   addBoard(name: String!): Board
+  moveSwimlane(boardId: ID!, newSwimlaneOrder: [newSwimlaneOrderInput]!): ID
 }
 

@@ -88,7 +88,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
             },
         })
         emptyState()
-        toggleAddDialog()
+        toggleAddDialog(event)
     }
 
     const handleCancel = () => {
@@ -129,7 +129,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                         onChange={handleNameChange}
                     />
                     <TextField
-                        required={true}
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="content"

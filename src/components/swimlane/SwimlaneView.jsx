@@ -1,7 +1,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable max-len */
-import React from 'react'
-import { Grid } from '@material-ui/core'
+import React, { useState } from 'react'
+import { Grid, Button } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
 import SwimlaneViewHeader from './SwimlaneViewHeader'
@@ -9,7 +9,8 @@ import SwimlaneList from './SwimlaneList'
 import { onDragEndSwimlane } from '../../utils/onDragEndSwimlane'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
-import usePrioritizeTask from '../../graphql/task/hooks/usePrioritizeTask'
+import useMoveSwimlane from '../../graphql/task/hooks/useMoveSwimlane'
+import AddTaskDialog from '../task/AddTaskDialog'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -18,10 +19,13 @@ const SwimlaneView = ({ board }) => {
     // These units are called swimlaneColumns
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
-    const [prioritizeTask] = usePrioritizeTask()
+    const [moveSwimlane] = useMoveSwimlane()
+    const [showAll, setShowAll] = useState(null)
+    const [dialogStatus, setDialogStatus] = useState(false)
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
     const client = useApolloClient()
 
-    const { columns } = board
+    const { columns, swimlaneOrder } = board
     let tasks = []
     let subtasks = []
 
@@ -31,24 +35,16 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
+    const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id))
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
 
-    // This object is passed to swimlaneList
-
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
-
-    const columnsInReversedOrder = Array.from(columnsInOrder).reverse()
-    let reversedTicketOrder = []
-    columnsInReversedOrder.map((column) => {
-        reversedTicketOrder = reversedTicketOrder.concat(column.ticketOrder)
-    })
-    const tasksInReversedOrder = reversedTicketOrder.filter((obj) => obj.type === 'task').map((obj) => tasks.find((task) => task.id === obj.ticketId))
-
-    const tasksInOrder = tasksInReversedOrder.map((task, index) => {
+    // This object is passed to swimlaneList
+    const tasksInOrder = tasksInCorrectOrder.map((task) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
             // figure out task's subtasks in certain column
             const subtasksOfTaskInColumn = subtasks.filter((subtask) => {
-                if (subtask.task?.id === task.id && subtask.column.id === column.id) {
+                if (subtask.task.id === task.id && subtask.column.id === column.id) {
                     return subtask
                 }
             })
@@ -56,43 +52,50 @@ const SwimlaneView = ({ board }) => {
             // Loop through the ticketOrder of the column and pick up the ticketOrder objects
             // belonging to the subtasks of the task
             const subtaskOrder = column.ticketOrder.filter((obj) => subtasksOfTaskInColumn.map((subtask) => subtask.id).includes(obj.ticketId))
+            const subtasksInOrder = subtaskOrder.map((obj) => subtasksOfTaskInColumn.find((subtask) => subtask.id === obj.ticketId))
             // Add the real order index for subtask
-            const subtasksInColumnFinal = subtasksOfTaskInColumn.map((subtask) => {
+            const subtasksInColumnFinal = subtasksInOrder.map((subtask) => {
                 const realOrderIndex = column.ticketOrder.findIndex((obj) => obj.ticketId === subtask.id)
                 return { ...subtask, index: realOrderIndex }
             })
 
             return {
-                name: column.name, id: column.id, subtasks: subtasksInColumnFinal, subtaskOrder,
+                name: column.name, id: column.id, subtasks: subtasksInColumnFinal,
             }
         })
-        return { ...task, swimlaneColumns, indexInNormalFlow: index }
+        return { ...task, swimlaneColumns }
     })
 
-    // new logic for ordering swimlanes, taking into account the prioritized tasks
-    const prioritizedTasks = tasksInOrder.filter((task) => task.prioritized)
-    const unPrioritizedTasks = tasksInOrder.filter((task) => !task.prioritized)
-    const finalArray = Array.from(unPrioritizedTasks)
-
-    prioritizedTasks.sort((a, b) => a.swimlaneOrderNumber - b.swimlaneOrderNumber).map((task) => {
-        finalArray.splice(task.swimlaneOrderNumber, 0, task)
-    })
-
-    const finalTasks = Array.from(finalArray)
+    const handleShowClick = () => {
+        setShowAll(!showAll)
+    }
 
     return (
-        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, prioritizeTask, columns, client, finalTasks, board.id)}>
-            <Grid container direction="column" spacing={5}>
+        <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
+            <Grid container direction="column" spacing={3}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
+                <Grid container item spacing={1}>
+                    <Grid item>
+                        <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{showAll ? 'Hide all' : 'Show all'}</Button>
+                    </Grid>
+                    <Grid item>
+                        <Button size="small" variant="outlined" onClick={() => toggleDialog()}>Add task</Button>
+                    </Grid>
+                </Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
                         <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasksInOrder={finalTasks} />
+                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} boardId={board.id} />
                             {provided.placeholder}
                         </Grid>
                     )}
                 </Droppable>
             </Grid>
+            <AddTaskDialog
+                dialogStatus={dialogStatus}
+                toggleDialog={toggleDialog}
+                column={columnsInOrder[0]}
+            />
         </DragDropContext>
     )
 }

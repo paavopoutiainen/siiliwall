@@ -109,3 +109,15 @@ export const BOARDS_COLUMNS_AND_COLUMNORDER = gql`
         }
     }
 `
+
+export const SWIMLANE_ORDER = gql`
+    fragment swimlaneOrder on Board {
+        swimlaneOrder
+    }
+`
+
+export const SWIMLANE_ORDER_NUMBER = gql`
+    fragment swimlaneOrderNumber on Task {
+        swimlaneOrderNumber
+    }
+`

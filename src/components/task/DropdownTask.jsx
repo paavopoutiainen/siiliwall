@@ -6,10 +6,10 @@ import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {
     Delete, Archive, Add,
 } from '@material-ui/icons'
+import { useApolloClient } from '@apollo/client'
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
-import { useApolloClient } from '@apollo/client'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({

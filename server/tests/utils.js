@@ -1,7 +1,11 @@
 /* eslint-disable consistent-return */
+const supertest = require('supertest')
 const db = require('../models/index.js')
 const dummyData = require('../dummyData')
 const { closeHttpServer } = require('../src/index.js')
+const { app } = require('../src/index.js')
+
+const request = supertest(app)
 
 /*
   Drop all the tables, sync the models with the database,
@@ -10,6 +14,12 @@ const { closeHttpServer } = require('../src/index.js')
 const initializeDb = async () => {
     try {
         await db.sequelize.sync({ force: true })
+        await Promise.all(
+            dummyData.users.map(async (user) => {
+                const resolved = await db.User.create(user)
+                return resolved
+            }),
+        )
         await Promise.all(
             dummyData.boards.map(async (board) => {
                 const resolved = await db.Board.create(board)
@@ -88,7 +98,69 @@ const tasksOfColumnInTheDb = async (id) => {
     }
 }
 
+const tasksInTheDb = async () => {
+    try {
+        const tasks = await db.Task.findAll()
+        return tasks
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const taskById = async (id) => {
+    let task
+    try {
+        task = await db.Task.findByPk(id)
+    } catch (e) {
+        console.log(e)
+    }
+    return task
+}
+
+const getTaskOrderOfColumn = async (columnId) => {
+    let arrayOfIds
+    try {
+        const tasks = await db.Task.findAll({
+            attributes: ['id'],
+            where: { columnId },
+            order: db.sequelize.literal('columnOrderNumber ASC'),
+        })
+        arrayOfIds = tasks.map((task) => task.dataValues.id)
+    } catch (e) {
+        console.log(e)
+    }
+    return arrayOfIds
+}
+
 const initialBoards = dummyData.boards
+
+const testCall = (query) => request
+    .post('/graphql')
+    .send({ query })
+
+/* const taskOrderAtStart = await getTaskOrderOfColumn('7bce34e5-385b-41e6-acd3-ceb4bd57b4f6')
+        const newTaskOrderArray = [
+            '6e766c63-0684-4cf2-8a46-868cfaf84033',
+            'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
+            'e12d6ed1-c275-4047-8f3c-b50050bada6d',
+        ]
+        expect(newTaskOrderArray).not.toStrictEqual(taskOrderAtStart)
+        const response = await testCall(`mutation {
+                moveTaskInColumn(newOrder: [
+                    "6e766c63-0684-4cf2-8a46-868cfaf84033",
+                    "b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3",
+                    "e12d6ed1-c275-4047-8f3c-b50050bada6d",
+                ], columnId: "7bce34e5-385b-41e6-acd3-ceb4bd57b4f6") {id taskOrder}
+        }`)
+        // expect taskOrder in mutation's response to be the same we asked for
+        expect(response.body.data.moveTaskInColumn.taskOrder).toStrictEqual(newTaskOrderArray)
+
+        const taskOrderAtEnd = await getTaskOrderOfColumn('7bce34e5-385b-41e6-acd3-ceb4bd57b4f6')
+        // expect taskOrder to have changed
+        expect(taskOrderAtEnd).not.toStrictEqual(taskOrderAtStart)
+        // expect the tasks of certain column to have the same
+        // taskOrder the mutation was set to change it into
+        expect(taskOrderAtEnd).toStrictEqual(newTaskOrderArray) */
 
 module.exports = {
     initializeDb,
@@ -98,4 +170,8 @@ module.exports = {
     columnsOfBoardInTheDb,
     columnsInTheDb,
     tasksOfColumnInTheDb,
+    testCall,
+    tasksInTheDb,
+    taskById,
+    getTaskOrderOfColumn,
 }
