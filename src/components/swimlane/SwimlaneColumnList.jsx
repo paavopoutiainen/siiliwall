@@ -10,6 +10,7 @@ const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
             container
             direction="row"
             justify="space-evenly"
+            spacing={1}
             classes={{ root: classes.swimlaneColumnList }}
         >
             {swimlaneColumns.map((swimlaneColumn, index) => (

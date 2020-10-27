@@ -72,7 +72,7 @@ const SwimlaneView = ({ board }) => {
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
-            <Grid container direction="column" spacing={5}>
+            <Grid container direction="column" spacing={3}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Grid container item spacing={1}>
                     <Grid item>
