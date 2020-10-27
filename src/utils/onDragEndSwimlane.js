@@ -154,10 +154,18 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedSubtask] = updatedSubtasksOfSourceColumn.splice(indexOfMovedSubtask, 1)
         updatedSubtasksOfDestinationColumn.splice(destination.index, 0, movedSubtask)
 
+        const containsParentTask = destinationColumn.tasks.map((task) => task.id).includes(movedSubtask.task.id)
+        const hasSubtasks = destinationColumn.subtasks.some((subtask) => subtask.task.id === movedSubtask.task.id)
         // Check if destination column contains the parent task of the moved subtask and is empty of sibling subtasks
         // If so, change the destination index, so that the subtask will be situated under its parent task
-        if (destinationColumn.tasks.map((task) => task.id).includes(movedSubtask.task.id) && !destinationColumn.subtasks.some((subtask) => subtask.task.id === movedSubtask.task.id)) {
+        if (containsParentTask && !hasSubtasks) {
             destinationIndex = destinationColumnFromCache.ticketOrder.findIndex((obj) => obj.ticketId === movedSubtask.task.id) + 1
+        }
+
+        // Check if destination column doesn't contain sibling subtasks or parent task
+        // If so, change the destination index to be the biggest in the column so that the subtask will be situated at the bottom
+        if (!containsParentTask && !hasSubtasks) {
+            destinationIndex = destinationColumnFromCache.ticketOrder.length
         }
 
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
