@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
         },
+        prettyId: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
         columnOrderNumber: DataTypes.INTEGER,
         done: DataTypes.BOOLEAN,
         name: DataTypes.STRING,

@@ -1,5 +1,6 @@
 type Board {
   id: ID!
+  prettyId: String!
   name: String!
   orderNumber: Int!
   columns: [Column!]!

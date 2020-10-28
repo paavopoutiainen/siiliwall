@@ -1,5 +1,6 @@
 type Task {
   id: ID!
+  prettyId: String!
   title: String!
   owner: User
   size: Float
