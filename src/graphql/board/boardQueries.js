@@ -63,6 +63,7 @@ export const BOARD_BY_ID = gql`
                     }
                     task {
                         id
+                        prettyId
                         title
                     }
                     members {
