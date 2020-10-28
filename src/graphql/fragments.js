@@ -61,7 +61,13 @@ export const SUBTASKS = gql`
         }
     }
 `
-
+export const SUBTASKS_OF_BOARD = gql`
+    fragment subtasks on Board {
+        subtasks {
+            id
+        }
+    }
+`
 export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
     fragment prioritizedAndSwimlaneOrderNumber on Task {
         prioritized

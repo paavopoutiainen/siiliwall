@@ -79,6 +79,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
             variables: {
                 columnId: inputColumnId || columnId,
                 taskId,
+                boardId,
                 ownerId: owner,
                 memberIds: members,
                 name,

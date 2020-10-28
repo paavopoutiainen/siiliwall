@@ -16,10 +16,11 @@ type Subtask {
   orderNumber: Int!
   deletedAt: String
   column: Column
+  board: Board
 }
 
 type Mutation {
-  addSubtaskForTask(taskId: ID!, columnId: ID!, name: String, content: String!, size: Float, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
+  addSubtaskForTask(taskId: ID!, columnId: ID!, boardId: ID!, name: String, content: String!, size: Float, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
   editSubtaskById(id: ID!, name: String, content: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!]): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
   deleteSubtaskById(id: ID!): ID

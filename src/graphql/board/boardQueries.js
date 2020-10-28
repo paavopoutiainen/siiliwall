@@ -13,6 +13,7 @@ export const BOARD_BY_ID = gql`
     query boardById($boardId: ID!) {
         boardById(id: $boardId) {
             id
+            prettyId
             name
             columnOrder
             swimlaneOrder
@@ -29,6 +30,7 @@ export const BOARD_BY_ID = gql`
                 }
                 tasks {
                     id
+                    prettyId
                     title
                     size
                     owner {
@@ -48,6 +50,7 @@ export const BOARD_BY_ID = gql`
                 }
                 subtasks {
                     id
+                    prettyId
                     name
                     content
                     size

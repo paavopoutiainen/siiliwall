@@ -374,9 +374,19 @@ class BoardService {
         try {
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
+            const tasksBoard = await this.store.Board.findByPk(boardId)
+            const prettyIdOfBoard = tasksBoard.prettyId
+            const numberOfTasksInBoard = await this.store.Task.count({
+                where: { boardId }
+            })
+            const numberOfSubtasksInBoard = await this.store.Subtask.count({
+                where: { boardId }
+            })
+            const ticketCountOfBoard = numberOfSubtasksInBoard + numberOfTasksInBoard
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
+                prettyId: `${prettyIdOfBoard}-${ticketCountOfBoard + 1}`,
                 boardId,
                 columnId,
                 title,
@@ -386,6 +396,7 @@ class BoardService {
                 columnOrderNumber: largestOrderNumber + 1,
                 swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
+            console.log('BÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ', addedTask.prettyId)
             await Promise.all(
                 memberIds.map(async (memberId) => {
                     await this.addMemberForTask(addedTask.id, memberId)
@@ -425,7 +436,7 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, name, content, size, ownerId, memberIds, ticketOrder) {
+    async addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
@@ -434,16 +445,27 @@ class BoardService {
         */
         let addedSubtask
         try {
+            const subtasksBoard = await this.store.Board.findByPk(boardId)
+            const prettyIdOfBoard = subtasksBoard.prettyId
+            const numberOfTasksInBoard = await this.store.Task.count({
+                where: { boardId }
+            })
+            const numberOfSubtasksInBoard = await this.store.Subtask.count({
+                where: { boardId }
+            })
+            const ticketCountOfBoard = numberOfSubtasksInBoard + numberOfTasksInBoard
+
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
+                prettyId: `${prettyIdOfBoard}-${ticketCountOfBoard + 1}`,
                 name,
                 content,
                 size,
                 taskId,
                 columnId,
+                boardId,
                 ownerId,
             })
-
             const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
             // figure out if the created subtask was created into same or different column than its parent task

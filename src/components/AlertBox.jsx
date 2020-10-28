@@ -186,7 +186,7 @@ const AlertBox = ({
             archiveSubtaskById()
         }
     }
-    console.log(action)
+
     return (
         <Grid item>
             <Dialog

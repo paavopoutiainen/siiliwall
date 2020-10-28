@@ -20,6 +20,9 @@ module.exports = (sequelize, DataTypes) => {
         deletedAt: DataTypes.DATE,
     })
     Subtask.associate = (models) => {
+        Subtask.belongsTo(models.Board, {
+            foreignKey: 'boardId'
+        })
         Subtask.belongsTo(models.Task, {
             foreignKey: 'taskId',
         })

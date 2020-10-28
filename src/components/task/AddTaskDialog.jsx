@@ -7,7 +7,7 @@ import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column.id)
     const [title, setTitle] = useState('')
@@ -55,6 +55,8 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleSave = (event) => {
         event.preventDefault()
+
+
         addTask({
             variables: {
                 boardId: column.board.id,
@@ -93,6 +95,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
                     <TextField
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="title"
