@@ -72,10 +72,11 @@ export const BOARD_BY_ID = gql`
     }
 `
 export const ADD_BOARD = gql`
-    mutation addBoard($name: String!) {
-        addBoard(name: $name) {
+    mutation addBoard($name: String!, $prettyId: String!) {
+        addBoard(name: $name, prettyId: $prettyId) {
             id
             name
+            prettyId
         }
     }
 `

@@ -63,6 +63,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                         Please enter the credentials for the board.
                     </DialogContentText>
                     <TextField
+                        required
                         autoFocus
                         margin="dense"
                         name="name"
@@ -74,6 +75,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                     />
                     {valid ?
                         <TextField
+                            required
                             margin="dense"
                             name="shortForm"
                             label="Short Form"
@@ -92,7 +94,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                             fullWidth
                             onChange={(event) => handleChangePrettyId(event)}
                             id="inputShortFormError"
-                            helperText="Incorrect entry (Has to be 2-5 characters long and letters must be capitalized!)"
+                            helperText="Has to be 2-5 characters long and letters must be capitalized"
                         />
                     }
                 </DialogContent>
@@ -100,7 +102,7 @@ const NewBoardForm = ({ setOpen, open }) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length} onClick={handleSave} color="primary" id="addBoard">
+                    <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" id="addBoard">
                         Add
                     </Button>
                 </DialogActions>

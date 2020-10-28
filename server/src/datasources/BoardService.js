@@ -289,13 +289,14 @@ class BoardService {
         return arrayOfObjectsInOrder
     }
 
-    async addBoard(boardName) {
+    async addBoard(boardName, prettyId) {
         let addedBoard
         try {
             const largestOrderNumber = await this.store.Board.max('orderNumber')
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
+                prettyId: prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
