@@ -8,22 +8,50 @@ import useAddBoard from '../../graphql/board/hooks/useAddBoard'
 const NewBoardForm = ({ setOpen, open }) => {
     const [addBoard] = useAddBoard()
     const [name, setName] = useState('')
-    const handleChange = (event) => {
+    const [prettyId, setPrettyId] = useState('')
+    const [valid, setValid] = useState(true)
+
+    const handleChangeName = (event) => {
         setName(event.target.value)
+    }
+
+    const handleChangePrettyId = (event) => {
+        setPrettyId(event.target.value)
     }
 
     const handleClose = () => {
         setOpen(false)
     }
 
-    const handleSave = () => {
-        addBoard({
-            variables: {
-                name,
-            },
-        })
+    const closeDialog = () => {
         setName('')
+        setPrettyId('')
         setOpen(false)
+    }
+
+    const hasLowerCase = (prettyId) => {
+        return (/[a-z]/.test(prettyId))
+    }
+
+    const validationOfPrettyId = () => {
+        if (prettyId.length < 2 || prettyId.length > 5 || hasLowerCase(prettyId)) return false
+        return true
+    }
+
+    const handleSave = () => {
+        if (!validationOfPrettyId()) {
+            setValid(false)
+            return
+        }
+        else {
+            addBoard({
+                variables: {
+                    name,
+                    prettyId
+                },
+            })
+            closeDialog()
+        }
     }
 
     return (
@@ -35,16 +63,38 @@ const NewBoardForm = ({ setOpen, open }) => {
                         Please enter the credentials for the board.
                     </DialogContentText>
                     <TextField
-                        autoComplete="off"
                         autoFocus
                         margin="dense"
                         name="name"
                         label="Name"
                         type="text"
                         fullWidth
-                        onChange={(event) => handleChange(event)}
+                        onChange={(event) => handleChangeName(event)}
                         id="inputName"
                     />
+                    {valid ?
+                        <TextField
+                            margin="dense"
+                            name="shortForm"
+                            label="Short Form"
+                            type="text"
+                            fullWidth
+                            onChange={(event) => handleChangePrettyId(event)}
+                            id="inputShortForm"
+                            helperText="Has to be 2-5 characters long and letters must be capitalized"
+                        />
+                        : <TextField
+                            error
+                            margin="dense"
+                            name="shortFormError"
+                            defaultValue={prettyId}
+                            type="text"
+                            fullWidth
+                            onChange={(event) => handleChangePrettyId(event)}
+                            id="inputShortFormError"
+                            helperText="Incorrect entry (Has to be 2-5 characters long and letters must be capitalized!)"
+                        />
+                    }
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">
