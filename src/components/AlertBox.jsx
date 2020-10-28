@@ -32,26 +32,26 @@ const AlertBox = ({
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
     let alertMsg
     switch (action) {
-    case 'DELETE_COLUMN':
-        alertMsg = alertMsgDeleteColumn
-        break
-    case 'DELETE_TASK':
-        alertMsg = alertMsgDeleteTask
-        break
-    case 'DELETE_TASK_IF_SUBTASKS':
-        alertMsg = alertMsgDeleteTaskIfSubtasks
-        break
-    case 'ARCHIVE_TASK':
-        alertMsg = alertMsgArchiveTask
-        break
-    case 'ARCHIVE_SUBTASK':
-        alertMsg = alertMsgArchiveSubtask
-        break
-    case 'DELETE_SUBTASK':
-        alertMsg = alertMsgDeleteSubtask
-        break
-    default:
-        break
+        case 'DELETE_COLUMN':
+            alertMsg = alertMsgDeleteColumn
+            break
+        case 'DELETE_TASK':
+            alertMsg = alertMsgDeleteTask
+            break
+        case 'DELETE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgDeleteTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK':
+            alertMsg = alertMsgArchiveTask
+            break
+        case 'ARCHIVE_SUBTASK':
+            alertMsg = alertMsgArchiveSubtask
+            break
+        case 'DELETE_SUBTASK':
+            alertMsg = alertMsgDeleteSubtask
+            break
+        default:
+            break
     }
 
     const WhiteCheckbox = withStyles({
@@ -120,7 +120,7 @@ const AlertBox = ({
             id: boardIdForCache,
             fragment: COLUMNORDER_AND_COLUMNS,
         })
-        const newTicketOrder = data.ticketOrder.filter((task) => task.id !== taskId)
+        const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
         client.writeFragment({
             id: columnIdForCache,
             fragment: TICKETORDER,
@@ -186,7 +186,7 @@ const AlertBox = ({
             archiveSubtaskById()
         }
     }
-
+    console.log(action)
     return (
         <Grid item>
             <Dialog
@@ -214,7 +214,7 @@ const AlertBox = ({
                             <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
                             </Button>
-                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK' || 'DELETE_TASK_IF_SUBTASKS'
+                            {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK' || action === 'DELETE_TASK_IF_SUBTASKS'
                                 ? (
                                     <Button
                                         size="small"
@@ -222,7 +222,7 @@ const AlertBox = ({
                                         variant="contained"
                                         onClick={() => handleDelete()}
                                         classes={{ root: classes.deleteAlertButton }}
-                                        disabled={!!(action === 'DELETE_TASK_IF_SUBTASKS' && !check)}
+                                        disabled={action === 'DELETE_TASK_IF_SUBTASKS' && !check}
                                     >
                                         DELETE
                                     </Button>
