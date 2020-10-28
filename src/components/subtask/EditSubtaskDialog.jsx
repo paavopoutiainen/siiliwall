@@ -60,6 +60,19 @@ const EditSubtaskDialog = ({
         toggleDialog()
     }
 
+    const recoverState = () => {
+        setName(subtask?.name)
+        setSize(subtask?.size)
+        setOwner(subtask?.owner ? subtask.owner.id : null)
+        setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+        setContent(subtask?.content)
+    }
+
+    const handleCancel = () => {
+        recoverState()
+        toggleDialog()
+    }
+
     // Prevents closing dialog when clicking on it to edit subtask's fields
     const handleDialogClick = (e) => e.stopPropagation()
 
@@ -82,7 +95,7 @@ const EditSubtaskDialog = ({
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleDialog}
+                onClose={handleCancel}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
@@ -101,7 +114,7 @@ const EditSubtaskDialog = ({
                         onChange={handleNameChange}
                     />
                     <TextField
-                        required={true}
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="content"
@@ -142,7 +155,7 @@ const EditSubtaskDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel
