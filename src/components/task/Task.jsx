@@ -11,7 +11,6 @@ const Task = ({
 }) => {
     const classes = boardPageStyles()
     let { title, members } = task
-    title = task.prioritized ? `${title} prio` : title
     const titleLimit = 25
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
