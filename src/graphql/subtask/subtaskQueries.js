@@ -52,8 +52,8 @@ export const EDIT_SUBTASK = gql`
 `
 
 export const ARCHIVE_SUBTASK = gql`
-    mutation archiveSubtask($subtaskId: ID!) {
-        archiveSubtaskById(id: $subtaskId)
+    mutation archiveSubtask($subtaskId: ID!, $boardId: ID!) {
+        archiveSubtaskById(id: $subtaskId, boardId: $boardId)
     }
 `
 

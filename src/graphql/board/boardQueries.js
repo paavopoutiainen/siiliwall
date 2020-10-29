@@ -17,6 +17,7 @@ export const BOARD_BY_ID = gql`
             name
             columnOrder
             swimlaneOrder
+            archivedTickets
             columns {
                 id
                 name
@@ -42,7 +43,6 @@ export const BOARD_BY_ID = gql`
                         userName
                     }
                     description
-                    prioritized
                     swimlaneOrderNumber
                     column {
                         id
@@ -69,6 +69,9 @@ export const BOARD_BY_ID = gql`
                     members {
                         id
                         userName
+                    }
+                    board {
+                        id
                     }
                 }
             }

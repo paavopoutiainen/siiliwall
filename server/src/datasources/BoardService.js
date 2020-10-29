@@ -376,17 +376,29 @@ class BoardService {
             const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
-            const numberOfTasksInBoard = await this.store.Task.count({
+
+            //If the board has no archived tickets the value of archivedTickets is null which cant be incremented unless changed to 0
+            !tasksBoard.archivedTickets ? tasksBoard.archivedTickets = 0 : tasksBoard.archivedTickets
+
+            //Return the array of all the task and subtask objects with prettyIds in the board
+            const tasksOfTheBoard = await this.store.Task.findAll({
+                attributes: ['prettyId'],
                 where: { boardId }
             })
-            const numberOfSubtasksInBoard = await this.store.Subtask.count({
+            const subtasksOfTheBoard = await this.store.Subtask.findAll({
+                attributes: ['prettyId'],
                 where: { boardId }
             })
-            const ticketCountOfBoard = numberOfSubtasksInBoard + numberOfTasksInBoard
+            //Return an array with contains the unique end integers of the task's and subtask's prettyIds
+            const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+            const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+            const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
+            //Finding the largest integer on the list so we can increment it by one to the added task
+            const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${ticketCountOfBoard + 1}`,
+                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
                 boardId,
                 columnId,
                 title,
@@ -396,7 +408,6 @@ class BoardService {
                 columnOrderNumber: largestOrderNumber + 1,
                 swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
-            console.log('BÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖÖ', addedTask.prettyId)
             await Promise.all(
                 memberIds.map(async (memberId) => {
                     await this.addMemberForTask(addedTask.id, memberId)
@@ -455,9 +466,27 @@ class BoardService {
             })
             const ticketCountOfBoard = numberOfSubtasksInBoard + numberOfTasksInBoard
 
+            !subtasksBoard.archivedTickets ? subtasksBoard.archivedTickets = 0 : subtasksBoard.archivedTickets
+
+            //Return the array of all the task and subtask objects with prettyIds in the board
+            const tasksOfTheBoard = await this.store.Task.findAll({
+                attributes: ['prettyId'],
+                where: { boardId }
+            })
+            const subtasksOfTheBoard = await this.store.Subtask.findAll({
+                attributes: ['prettyId'],
+                where: { boardId }
+            })
+            //Return an array with contains the unique end integers of the task's and subtask's prettyIds
+            const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+            const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+            const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
+            //Finding the largest integer on the list so we can increment it by one to the added task
+            const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
+
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${ticketCountOfBoard + 1}`,
+                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
                 name,
                 content,
                 size,
@@ -498,11 +527,14 @@ class BoardService {
         return subtaskId
     }
 
-    async archiveSubtaskById(subtaskId) {
+    async archiveSubtaskById(subtaskId, boardId) {
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
             await subtask.save()
+            const subtasksBoard = await this.store.Board.findByPk(boardId)
+            subtasksBoard.archivedTickets++
+            await subtasksBoard.save()
         } catch (e) {
             console.error(e)
         }
@@ -631,11 +663,14 @@ class BoardService {
         return owner
     }
 
-    async archiveTaskById(taskId) {
+    async archiveTaskById(taskId, boardId) {
         try {
             const task = await this.store.Task.findByPk(taskId)
             task.deletedAt = new Date()
             await task.save()
+            const tasksBoard = await this.store.Board.findByPk(boardId)
+            tasksBoard.archivedTickets++
+            await tasksBoard.save()
         } catch (e) {
             console.log(e)
         }
@@ -652,53 +687,6 @@ class BoardService {
             console.log(e)
         }
         return updatedTask
-    }
-
-    async prioritizeTask(taskId, swimlaneOrderNumber, prioritizedTasksIds, direction) {
-        try {
-            // make task prioritized
-            const task = await this.store.Task.findByPk(taskId)
-            task.swimlaneOrderNumber = swimlaneOrderNumber
-            task.prioritized = true
-            await task.save()
-            // increase the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved upwards
-            if (direction === 'upwards') {
-                await Promise.all(prioritizedTasksIds.map(async (id) => {
-                    const affectedTask = await this.store.Task.findByPk(id)
-                    affectedTask.swimlaneOrderNumber += 1
-                    await affectedTask.save()
-                }))
-                // decrease the swimlaneOrderNumber of the affected prioritizedTasks when the swimlane was moved downwards
-            } else if (direction === 'downwards') {
-                await Promise.all(prioritizedTasksIds.map(async (id) => {
-                    const affectedTask = await this.store.Task.findByPk(id)
-                    affectedTask.swimlaneOrderNumber -= 1
-                    await affectedTask.save()
-                }))
-            }
-        } catch (e) {
-            console.error(e)
-        }
-        return taskId
-    }
-
-    async unPrioritizeTask(taskId, taskIds) {
-        try {
-            // unprioritize certain task
-            const task = await this.store.Task.findByPk(taskId)
-            task.swimlaneOrderNumber = null
-            task.prioritized = false
-            await task.save()
-            // change the swimlaneOrderNumbers of the other affected tasks
-            await Promise.all(taskIds.map(async (id) => {
-                const affectedTask = await this.store.Task.findByPk(id)
-                affectedTask.swimlaneOrderNumber -= 1
-                await affectedTask.save()
-            }))
-        } catch (e) {
-            console.log(e)
-        }
-        return taskId
     }
 
     async getSwimlaneOrderOfBoard(boardId) {

@@ -28,19 +28,11 @@ const schema = {
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
         },
-        archiveTaskById(root, { id }) {
-            return dataSources.boardService.archiveTaskById(id)
+        archiveTaskById(root, { id, boardId }) {
+            return dataSources.boardService.archiveTaskById(id, boardId)
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
-        },
-        prioritizeTask(root, {
-            id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction,
-        }) {
-            return dataSources.boardService.prioritizeTask(id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction)
-        },
-        unPrioritizeTask(root, { id, prioritizedTaskIds }) {
-            return dataSources.boardService.unPrioritizeTask(id, prioritizedTaskIds)
         },
     },
 

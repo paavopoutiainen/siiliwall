@@ -46,7 +46,14 @@ const DropdownTask = ({
             setAction('DELETE_TASK_IF_SUBTASKS')
             setAlertDialogStatus(true)
             setAnchorEl(null)
-        } else {
+        }
+        if (order === 'ARCHIVE_TASK' && subtasksOfTask.length) {
+            setCount(subtasksOfTask.length)
+            setAction('ARCHIVE_TASK_IF_SUBTASKS')
+            setAlertDialogStatus(true)
+            setAnchorEl(null)
+        }
+        else {
             setAction(order)
             setAlertDialogStatus(true)
             setAnchorEl(null)
