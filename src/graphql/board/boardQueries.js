@@ -17,7 +17,6 @@ export const BOARD_BY_ID = gql`
             name
             columnOrder
             swimlaneOrder
-            archivedTickets
             columns {
                 id
                 name

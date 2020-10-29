@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
-        archivedTickets: DataTypes.INTEGER
     })
     Board.associate = (models) => {
         Board.hasMany(models.Column, {

@@ -6,7 +6,6 @@ type Board {
   columns: [Column!]!
   columnOrder: [ID!]!
   swimlaneOrder: [ID!]!
-  archivedTickets: Int
 }
 
 type Query {

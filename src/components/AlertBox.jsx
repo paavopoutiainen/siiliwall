@@ -81,21 +81,18 @@ const AlertBox = ({
         })
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id, boardId))
+        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
         archiveTask({
             variables: {
                 taskId,
-                boardId
             },
         })
     }
 
-    const archiveSubtaskById = (subtaskId, boardId) => {
-        console.log('böö', boardId)
+    const archiveSubtaskById = (subtaskId) => {
         archiveSubtask({
             variables: {
                 subtaskId,
-                boardId
             },
         })
     }
@@ -199,7 +196,7 @@ const AlertBox = ({
             archiveTaskById()
         }
         if (action === 'ARCHIVE_SUBTASK') {
-            archiveSubtaskById(subtaskId, boardId)
+            archiveSubtaskById(subtaskId)
         }
     }
 

@@ -377,9 +377,6 @@ class BoardService {
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
 
-            //If the board has no archived tickets the value of archivedTickets is null which cant be incremented unless changed to 0
-            !tasksBoard.archivedTickets ? tasksBoard.archivedTickets = 0 : tasksBoard.archivedTickets
-
             //Return the array of all the task and subtask objects with prettyIds in the board
             const tasksOfTheBoard = await this.store.Task.findAll({
                 attributes: ['prettyId'],
@@ -459,9 +456,6 @@ class BoardService {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
 
-            //If the board has no archived tickets the value of archivedTickets is null which cant be incremented unless changed to 0
-            !subtasksBoard.archivedTickets ? subtasksBoard.archivedTickets = 0 : subtasksBoard.archivedTickets
-
             //Return the array of all the task and subtask objects with prettyIds in the board
             const tasksOfTheBoard = await this.store.Task.findAll({
                 attributes: ['prettyId'],
@@ -521,14 +515,11 @@ class BoardService {
         return subtaskId
     }
 
-    async archiveSubtaskById(subtaskId, boardId) {
+    async archiveSubtaskById(subtaskId) {
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
             await subtask.save()
-            const subtasksBoard = await this.store.Board.findByPk(boardId)
-            subtasksBoard.archivedTickets++
-            await subtasksBoard.save()
         } catch (e) {
             console.error(e)
         }
@@ -657,14 +648,11 @@ class BoardService {
         return owner
     }
 
-    async archiveTaskById(taskId, boardId) {
+    async archiveTaskById(taskId) {
         try {
             const task = await this.store.Task.findByPk(taskId)
             task.deletedAt = new Date()
             await task.save()
-            const tasksBoard = await this.store.Board.findByPk(boardId)
-            tasksBoard.archivedTickets++
-            await tasksBoard.save()
         } catch (e) {
             console.log(e)
         }

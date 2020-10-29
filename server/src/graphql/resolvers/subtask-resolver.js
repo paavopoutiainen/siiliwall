@@ -14,9 +14,8 @@ const schema = {
         deleteSubtaskById(root, { id }) {
             return dataSources.boardService.deleteSubtaskById(id)
         },
-        archiveSubtaskById(root, { id, boardId }) {
-            console.log('böö', boardId)
-            return dataSources.boardService.archiveSubtaskById(id, boardId)
+        archiveSubtaskById(root, { id }) {
+            return dataSources.boardService.archiveSubtaskById(id)
         },
         editSubtaskById(root, {
             id, name, content, size, ownerId, oldMemberIds, newMemberIds
