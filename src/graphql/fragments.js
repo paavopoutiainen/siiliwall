@@ -127,3 +127,10 @@ export const SWIMLANE_ORDER_NUMBER = gql`
         swimlaneOrderNumber
     }
 `
+export const BOARD_ID_BY_COLUMN_ID = gql`
+    fragment boarfIdByColumnId on Column {
+        board {
+            id
+        }
+    }
+`

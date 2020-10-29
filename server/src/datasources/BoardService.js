@@ -458,14 +458,8 @@ class BoardService {
         try {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
-            const numberOfTasksInBoard = await this.store.Task.count({
-                where: { boardId }
-            })
-            const numberOfSubtasksInBoard = await this.store.Subtask.count({
-                where: { boardId }
-            })
-            const ticketCountOfBoard = numberOfSubtasksInBoard + numberOfTasksInBoard
 
+            //If the board has no archived tickets the value of archivedTickets is null which cant be incremented unless changed to 0
             !subtasksBoard.archivedTickets ? subtasksBoard.archivedTickets = 0 : subtasksBoard.archivedTickets
 
             //Return the array of all the task and subtask objects with prettyIds in the board

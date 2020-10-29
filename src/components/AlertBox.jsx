@@ -91,6 +91,7 @@ const AlertBox = ({
     }
 
     const archiveSubtaskById = (subtaskId, boardId) => {
+        console.log('böö', boardId)
         archiveSubtask({
             variables: {
                 subtaskId,
