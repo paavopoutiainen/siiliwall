@@ -34,12 +34,12 @@ const Subtask = ({ subtask, index, columnId }) => {
                 >
                     <Grid item container classes={{ root: classes.subtaskHeader }} direction='row' alignItems='center'>
                         <Grid item container className={classes.subtaskHeaderTitleItem} direction='row' alignItems='center' justify='space-between'>
-                            <Grid item container spacing={1}>
+                            <Grid item container spacing={1} direction='row' alignItems='center' >
                                 <Grid item><VpnKeyIcon classes={{ root: classes.foreingKeyIcon }} /></Grid>
-                                <Grid item><b>{subtask.task.prettyId}</b></Grid>
+                                <Grid item classes={{ root: classes.taskPrettyIdInSubtask }}><b>{subtask.task.prettyId}</b></Grid>
                             </Grid>
                             <Grid item>
-                                <p>{subtask.prettyId}</p>
+                                <b>{subtask.prettyId}</b>
                             </Grid>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }} onClick={handleDialogClick}>

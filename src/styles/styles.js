@@ -103,7 +103,11 @@ export const boardPageStyles = makeStyles({
     },
 
     foreingKeyIcon: {
-        fontSize: 15
+        fontSize: 12
+    },
+
+    taskPrettyIdInSubtask: {
+        fontSize: 12,
     },
 
     subtaskHeaderTitleText: {

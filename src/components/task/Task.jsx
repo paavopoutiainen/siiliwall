@@ -74,7 +74,7 @@ const Task = ({
                     </Grid>
                     <Grid item direction="column" container>
                         <Grid item>
-                            <p>{task.title}</p>
+                            <p>{add3Dots(task.title)}</p>
                         </Grid>
                         <Grid item>
                             {task.owner ? (
