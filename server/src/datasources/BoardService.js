@@ -366,6 +366,7 @@ class BoardService {
 
     async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
         //Return the array of all the task and subtask objects with prettyIds in the board
+        let largestInteger
         const tasksOfTheBoard = await this.store.Task.findAll({
             attributes: ['prettyId'],
             where: { boardId }
@@ -374,12 +375,16 @@ class BoardService {
             attributes: ['prettyId'],
             where: { boardId }
         })
+        if (!tasksOfTheBoard.length && !subtasksOfTheBoard.length) {
+            largestInteger = 0
+            return largestInteger
+        }
         //Return an array with contains the unique end integers of the task's and subtask's prettyIds
         const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
         //Finding the largest integer on the list so we can increment it by one to the added task
-        const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
+        largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
 
         return largestInteger
     }
