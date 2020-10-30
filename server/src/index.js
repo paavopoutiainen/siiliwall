@@ -6,7 +6,6 @@ const { ApolloServer } = require('apollo-server-express')
 const http = require('http')
 const { makeExecutableSchema } = require('graphql-tools')
 const { execute, subscribe } = require('graphql')
-const { PubSub } = require('graphql-subscriptions')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const config = require('./utils/config')
 const typeDefs = require('./graphql/typedefs')
@@ -19,6 +18,7 @@ const apollo = new ApolloServer({ schema })
 apollo.applyMiddleware({ app, path: '/graphql' })
 
 const server = http.createServer(app)
+apollo.installSubscriptionHandlers(app)
 
 server.listen({ port: config.PORT }, () => {
     console.log(`Server running on port ${config.PORT}`)
@@ -29,7 +29,7 @@ server.listen({ port: config.PORT }, () => {
         schema,
     }, {
         server,
-        path: '/subscriptions',
+        path: '/graphql',
     })
 })
 

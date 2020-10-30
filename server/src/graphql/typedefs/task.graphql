@@ -28,3 +28,20 @@ type Mutation {
   prioritizeTask(id: ID!, swimlaneOrderNumber: Int!, affectedPrioritizedTaskIds: [ID!], direction: String!): ID
   unPrioritizeTask(id: ID!, prioritizedTaskIds: [ID!]): ID
 }
+
+type Subscription {
+  taskMutated(boardId: ID!): TaskMutationPayload!
+}
+
+type TaskMutationPayload {
+  mutationType: MutationType!
+  node: Task!
+}
+
+enum MutationType{
+  CREATED
+  UPDATED
+  DELETED
+}
+
+

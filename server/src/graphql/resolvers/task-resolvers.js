@@ -1,10 +1,23 @@
 /* eslint-disable max-len */
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const TASK_MUTATED = 'TASK_MUTATED'
 
 const schema = {
     Query: {
         taskById(root, args) {
             return dataSources.boardService.getTaskById(args.id)
+        },
+    },
+
+    Subscription: {
+        taskMutated: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TASK_MUTATED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
         },
     },
 
@@ -14,11 +27,19 @@ const schema = {
         }) {
             return dataSources.boardService.addMemberForTask(id, userId)
         },
-        addTaskForColumn(root, {
+        async addTaskForColumn(root, {
             boardId, columnId, title, size, ownerId, memberIds, description,
         }) {
-            return dataSources.boardService
+            const addedTask = await dataSources.boardService
                 .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
+            pubsub.publish(TASK_MUTATED, {
+                boardId,
+                taskMutated: {
+                    mutationType: 'CREATED',
+                    node: addedTask.dataValues,
+                },
+            })
+            return addedTask
         },
         editTaskById(root, {
             id, title, size, ownerId, oldMemberIds, newMemberIds, description,
