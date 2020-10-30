@@ -364,6 +364,27 @@ class BoardService {
         return largestSwimlaneOrderNumber
     }
 
+    async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
+        //Return the array of all the task and subtask objects with prettyIds in the board
+        const tasksOfTheBoard = await this.store.Task.findAll({
+            attributes: ['prettyId'],
+            where: { boardId }
+        })
+        const subtasksOfTheBoard = await this.store.Subtask.findAll({
+            attributes: ['prettyId'],
+            where: { boardId }
+        })
+        //Return an array with contains the unique end integers of the task's and subtask's prettyIds
+        const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+        const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
+        const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
+        //Finding the largest integer on the list so we can increment it by one to the added task
+        const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
+
+        return largestInteger
+    }
+
+
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
@@ -377,21 +398,7 @@ class BoardService {
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
 
-            //Return the array of all the task and subtask objects with prettyIds in the board
-            const tasksOfTheBoard = await this.store.Task.findAll({
-                attributes: ['prettyId'],
-                where: { boardId }
-            })
-            const subtasksOfTheBoard = await this.store.Subtask.findAll({
-                attributes: ['prettyId'],
-                where: { boardId }
-            })
-            //Return an array with contains the unique end integers of the task's and subtask's prettyIds
-            const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-            const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-            const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-            //Finding the largest integer on the list so we can increment it by one to the added task
-            const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
+            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
@@ -456,21 +463,7 @@ class BoardService {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
 
-            //Return the array of all the task and subtask objects with prettyIds in the board
-            const tasksOfTheBoard = await this.store.Task.findAll({
-                attributes: ['prettyId'],
-                where: { boardId }
-            })
-            const subtasksOfTheBoard = await this.store.Subtask.findAll({
-                attributes: ['prettyId'],
-                where: { boardId }
-            })
-            //Return an array with contains the unique end integers of the task's and subtask's prettyIds
-            const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-            const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-            const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-            //Finding the largest integer on the list so we can increment it by one to the added task
-            const largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
+            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
