@@ -1,12 +1,12 @@
 // dummy data
 const boards = [{
-    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2,
+    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2,
 },
 {
-    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3,
+    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', prettyId: 'DEV', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3,
 },
 {
-    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1,
+    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1,
 }]
 
 const users = [
@@ -131,6 +131,7 @@ const columns = [
 
 const tasks = [
     {
+        prettyId: 'KNBN-2',
         title: 'Add drag and drop function to cards',
         content: 'Add drag and drop function to cards',
         size: 1.1,
@@ -142,6 +143,7 @@ const tasks = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
+        prettyId: 'KNBN-3',
         title: 'Cypress test',
         content: 'add Cypress tests',
         size: 2,
@@ -153,6 +155,7 @@ const tasks = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
+        prettyId: 'KNBN-5',
         title: 'Modify column styles',
         content: 'Make everything pretty',
         size: 9,
@@ -164,6 +167,7 @@ const tasks = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
+        prettyId: 'KNBN-1',
         title: 'Modify task styles',
         content: 'Add some pink',
         size: 2,
@@ -175,6 +179,7 @@ const tasks = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
+        prettyId: 'DEV-2',
         title: 'Create user model',
         content: 'Create user model',
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
@@ -185,6 +190,7 @@ const tasks = [
         boardId: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e',
     },
     {
+        prettyId: 'DEV-1',
         title: 'Add subtasks',
         content: 'Add subtasks to tasks',
         columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
@@ -195,6 +201,7 @@ const tasks = [
         boardId: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e',
     },
     {
+        prettyId: 'KNBN-4',
         title: 'Test for columns',
         content: 'Add test for columns',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
@@ -205,6 +212,7 @@ const tasks = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
     },
     {
+        prettyId: 'PO-1',
         title: 'Update user stories',
         content: 'Update user stories',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0527',
@@ -218,36 +226,43 @@ const tasks = [
 
 const subtasks = [
     {
+        prettyId: 'KNBN-8',
         name: 'subtask1',
         done: true,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         columnOrderNumber: 2,
         id: '7ccd9f9b-a706-4fa7-a99c-d07136606840',
-        columnId: '7bce34e5-385b-41e6-acd3-ceb4bd57b4f6',
+        columnId: 'f6209adb-91ca-476b-8269-328a82d05d41',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
         content: 'subtaskin kontentti 11',
     },
     {
+        prettyId: 'KNBN-9',
         name: 'subtask2',
         done: false,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         columnOrderNumber: 2,
         id: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
-        columnId: 'b23f9b7f-ab9f-4219-9604-2178751ce948',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
         content: 'subtaskin kontentti 222',
     },
     {
+        prettyId: 'KNBN-10',
         name: 'subtask3',
         done: true,
         taskId: 'b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         columnOrderNumber: 1,
         id: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
-        columnId: 'b23f9b7f-ab9f-4219-9604-2178751ce948',
+        columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
         content: 'subtaskin kontentti 333',
     },
     {
+        prettyId: 'KNBN-6',
         id: '5d689892-f627-4ae3-84ab-766d45532601',
         columnOrderNumber: 1,
         done: false,
@@ -255,9 +270,11 @@ const subtasks = [
         content: 'Test 1',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         ownerId: '6285867e-7db8-4769-8730-26d18ef9aba9',
     },
     {
+        prettyId: 'KNBN-7',
         id: '5d689892-f627-4ae3-84ab-766d45532602',
         columnOrderNumber: 2,
         done: false,
@@ -265,9 +282,11 @@ const subtasks = [
         content: 'Test 2',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         ownerId: '6285867e-7db8-4769-8730-26d18ef9aba9',
     },
     {
+        prettyId: 'PO-2',
         id: '5d689892-f627-4ae3-84ab-766d45532603',
         columnOrderNumber: 2,
         done: false,
@@ -275,6 +294,7 @@ const subtasks = [
         content: 'Update some more',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0528',
         taskId: '7b29f130-fc89-4f16-b0ef-71a06e09110c',
+        boardId: '83fa4f89-8ea1-4d1c-9fee-321daa941485',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
 

@@ -99,7 +99,15 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskHeaderTitleItem: {
-        maxWidth: 250,
+        width: 200,
+    },
+
+    foreingKeyIcon: {
+        fontSize: 12
+    },
+
+    taskPrettyIdInSubtask: {
+        fontSize: 12,
     },
 
     subtaskHeaderTitleText: {
