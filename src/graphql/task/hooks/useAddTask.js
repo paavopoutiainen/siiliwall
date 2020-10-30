@@ -14,7 +14,7 @@ const useAddTask = (columnId) => {
             const newTasks = tasks.concat(response.data.addTaskForColumn)
             const newTicketObject = {
                 ticketId: response.data.addTaskForColumn.id,
-                type: "task"
+                type: 'task',
             }
             const newTicketOrder = ticketOrder.concat(newTicketObject)
             cache.writeFragment({
@@ -22,7 +22,7 @@ const useAddTask = (columnId) => {
                 fragment: TICKETORDER_AND_TASKS,
                 data: {
                     ticketOrder: newTicketOrder,
-                    tasks: newTasks
+                    tasks: newTasks,
                 },
             })
         },

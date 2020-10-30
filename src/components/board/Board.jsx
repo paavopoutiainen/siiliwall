@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import { useApolloClient } from '@apollo/client'
+import { useApolloClient, useSubscription, gql } from '@apollo/client'
 import ColumnList from '../column/ColumnList'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
@@ -12,6 +12,33 @@ import { onDragEnd } from '../../utils/onDragEnd'
 import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
+const TASK_SUBSCRIPTION = gql`
+  subscription taskMutated($boardId: ID!) {
+    taskMutated(boardId: $boardId) {
+      mutationType
+      node {
+        id
+        title
+        size
+        owner {
+          id
+          userName
+        }
+        members {
+            id
+            userName
+        }
+        description
+        prioritized
+        swimlaneOrderNumber
+        column {
+            id
+        }
+      }
+    }
+  }
+`
+
 const Board = ({ board }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
@@ -19,6 +46,12 @@ const Board = ({ board }) => {
     const client = useApolloClient()
     const [snackbarStatus, setSnackbarStatus] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState(null)
+    const { data, loading } = useSubscription(
+        TASK_SUBSCRIPTION,
+        { variables: { boardId: board.id } },
+
+    )
+    console.log(data)
 
     const toggleSnackbar = (message) => {
         setSnackbarMessage(message)
