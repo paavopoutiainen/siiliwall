@@ -55,14 +55,6 @@ const schema = {
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
         },
-        prioritizeTask(root, {
-            id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction,
-        }) {
-            return dataSources.boardService.prioritizeTask(id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction)
-        },
-        unPrioritizeTask(root, { id, prioritizedTaskIds }) {
-            return dataSources.boardService.unPrioritizeTask(id, prioritizedTaskIds)
-        },
     },
 
     Task: {
@@ -80,6 +72,9 @@ const schema = {
         },
         members(root) {
             return dataSources.boardService.getMembersByTaskId(root.id)
+        },
+        board(root) {
+            return dataSources.boardService.getBoardById(root.boardId)
         },
     },
 }

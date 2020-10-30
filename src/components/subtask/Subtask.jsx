@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
 import { Grid } from '@material-ui/core'
+import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import { Draggable } from 'react-beautiful-dnd'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
@@ -31,11 +32,15 @@ const Subtask = ({ subtask, index, columnId }) => {
                     spacing={1}
                     onClick={handleClick}
                 >
-                    <Grid item container classes={{ root: classes.subtaskHeader }}>
-                        <Grid item className={classes.subtaskHeaderTitleItem}>
-                            <p className={classes.subtaskHeaderTitleText}>
-                                {subtask.task?.title}
-                            </p>
+                    <Grid item container classes={{ root: classes.subtaskHeader }} direction='row' alignItems='center'>
+                        <Grid item container className={classes.subtaskHeaderTitleItem} direction='row' alignItems='center' justify='space-between'>
+                            <Grid item container spacing={1} direction='row' alignItems='center' >
+                                <Grid item><VpnKeyIcon classes={{ root: classes.foreingKeyIcon }} /></Grid>
+                                <Grid item classes={{ root: classes.taskPrettyIdInSubtask }}><b>{subtask.task.prettyId}</b></Grid>
+                            </Grid>
+                            <Grid item>
+                                <b>{subtask.prettyId}</b>
+                            </Grid>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskdropDown }} onClick={handleDialogClick}>
                             <DropDownSubtask

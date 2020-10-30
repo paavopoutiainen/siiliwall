@@ -61,7 +61,13 @@ export const SUBTASKS = gql`
         }
     }
 `
-
+export const SUBTASKS_OF_BOARD = gql`
+    fragment subtasksOfBoard on Board {
+        subtasks {
+            id
+        }
+    }
+`
 export const PRIORITIZED_AND_SWIMLANEORDERNUMBER = gql`
     fragment prioritizedAndSwimlaneOrderNumber on Task {
         prioritized
@@ -119,5 +125,12 @@ export const SWIMLANE_ORDER = gql`
 export const SWIMLANE_ORDER_NUMBER = gql`
     fragment swimlaneOrderNumber on Task {
         swimlaneOrderNumber
+    }
+`
+export const BOARD_ID_BY_COLUMN_ID = gql`
+    fragment boarfIdByColumnId on Column {
+        board {
+            id
+        }
     }
 `

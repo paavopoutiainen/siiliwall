@@ -7,7 +7,9 @@ import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER, TICKETORDER, COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
+import {
+    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER_AND_TASKS, TICKETORDER_AND_SUBTASKS, SWIMLANE_ORDER,
+} from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
@@ -30,6 +32,8 @@ const AlertBox = ({
     const alertMsgArchiveSubtask = 'The subtask is removed from the board, but can be examined through the archive setting.'
     const alertMsgDeleteSubtask = 'This action will permanently delete this task from the board and it can\'t be later examined! Are you sure you want to delete it?.'
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
+    const alertMsgArchiveTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Archiving of the task will also archive it's subtasks, but can be examined through the archive setting.`
+
     let alertMsg
     switch (action) {
     case 'DELETE_COLUMN':
@@ -40,6 +44,9 @@ const AlertBox = ({
         break
     case 'DELETE_TASK_IF_SUBTASKS':
         alertMsg = alertMsgDeleteTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgArchiveTaskIfSubtasks
         break
     case 'ARCHIVE_TASK':
         alertMsg = alertMsgArchiveTask
@@ -68,18 +75,26 @@ const AlertBox = ({
         toggleCheck(!check)
     }
 
-    const archiveTaskById = () => {
-        archiveTask({
+    const archiveSubtaskById = (subtaskId) => {
+        archiveSubtask({
             variables: {
-                taskId,
+                subtaskId,
             },
         })
     }
 
-    const archiveSubtaskById = () => {
-        archiveSubtask({
+    const archiveTaskById = () => {
+        const boardIdForCache = `Board:${boardId}`
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
+        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
+        archiveTask({
             variables: {
-                subtaskId,
+                taskId,
             },
         })
     }
@@ -108,56 +123,77 @@ const AlertBox = ({
         })
     }
 
-    const deleteTask = () => {
-        const taskToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
-        const boardIdForCache = `Board:${boardId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-        })
-        const columnData = client.readFragment({
-            id: boardIdForCache,
-            fragment: COLUMNORDER_AND_COLUMNS,
-        })
-        const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-            data: {
-                ticketOrder: newTicketOrder,
-            },
-        })
-        client.cache.evict({ id: taskToBeDeleted })
-        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
-        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
-        callDeleteTask({
-            variables: {
-                taskId,
-            },
-        })
-    }
-
     const deleteSubtask = (columnId, subtaskId) => {
         const subtaskIdForCache = `Subtask:${subtaskId}`
         const columnIdForCache = `Column:${columnId}`
         const data = client.readFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER,
+            fragment: TICKETORDER_AND_SUBTASKS,
         })
         const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+        const newSubtasks = data.subtasks.filter((subtask) => subtask.id !== subtaskId)
         client.writeFragment({
             id: columnIdForCache,
-            fragment: TICKETORDER,
+            fragment: TICKETORDER_AND_SUBTASKS,
             data: {
                 ticketOrder: newTicketOrder,
+                subtasks: newSubtasks,
             },
         })
         client.cache.evict({ id: subtaskIdForCache })
         callDeleteSubtask({
             variables: {
                 subtaskId,
+            },
+        })
+    }
+
+    const deleteTask = () => {
+        // Deleting task affects column's tasks list, column's ticketOrder list and board's swimlaneOrder list
+        // In addition the normalized cache object is deleted itself
+        const taskToBeDeleted = `Task:${taskId}`
+        const columnIdForCache = `Column:${columnId}`
+        const boardIdForCache = `Board:${boardId}`
+        const data = client.readFragment({
+            id: columnIdForCache,
+            fragment: TICKETORDER_AND_TASKS,
+        })
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
+        const newTasks = data.tasks.filter((task) => task.id !== taskId)
+        client.writeFragment({
+            id: columnIdForCache,
+            fragment: TICKETORDER_AND_TASKS,
+            data: {
+                ticketOrder: newTicketOrder,
+                tasks: newTasks,
+            },
+        })
+        // Delete related taskId from the board's swimlaneOrder list
+        const { swimlaneOrder } = client.readFragment({
+            id: `Board:${boardId}`,
+            fragment: SWIMLANE_ORDER,
+        })
+        const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
+        client.writeFragment({
+            id: `Board:${boardId}`,
+            fragment: SWIMLANE_ORDER,
+            data: {
+                swimlaneOrder: newSwimlaneOrder,
+            },
+        })
+        // Delete normalized object itself
+        client.cache.evict({ id: taskToBeDeleted })
+        // Handle deletion of task's subtasks
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
+        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
+        callDeleteTask({
+            variables: {
+                taskId,
             },
         })
     }
@@ -179,13 +215,14 @@ const AlertBox = ({
     }
 
     const handleArchive = () => {
-        if (action === 'ARCHIVE_TASK') {
+        if (action === 'ARCHIVE_TASK' || action === 'ARCHIVE_TASK_IF_SUBTASKS') {
             archiveTaskById()
         }
         if (action === 'ARCHIVE_SUBTASK') {
-            archiveSubtaskById()
+            archiveSubtaskById(subtaskId)
         }
     }
+
     return (
         <Grid item>
             <Dialog
@@ -198,8 +235,8 @@ const AlertBox = ({
                         <Grid item>
                             <span id="alertMessage">{alertMsg}</span>
                         </Grid>
-                        {action === 'DELETE_TASK_IF_SUBTASKS'
-                            && (
+                        {action === 'DELETE_TASK_IF_SUBTASKS' || action === 'ARCHIVE_TASK_IF_SUBTASKS'
+                            ? (
                                 <Grid item container direction="row" alignItems="center">
                                     <p>I understand</p>
                                     <WhiteCheckbox
@@ -208,7 +245,8 @@ const AlertBox = ({
                                         size="small"
                                     />
                                 </Grid>
-                            )}
+                            )
+                            : null}
                         <Grid item container direction="row" justify="flex-end">
                             <Button size="small" variant="contained" onClick={() => handleUndo()} classes={{ root: classes.undoAlertButton }}>
                                 UNDO
@@ -227,9 +265,15 @@ const AlertBox = ({
                                     </Button>
                                 )
                                 : null}
-                            {action === 'ARCHIVE_TASK' || action === 'ARCHIVE_SUBTASK'
+                            {action === 'ARCHIVE_TASK' || action === 'ARCHIVE_SUBTASK' || action === 'ARCHIVE_TASK_IF_SUBTASKS'
                                 ? (
-                                    <Button size="small" variant="contained" onClick={() => handleArchive()} classes={{ root: classes.archiveAlertButton }}>
+                                    <Button
+                                        size="small"
+                                        variant="contained"
+                                        onClick={() => handleArchive()}
+                                        classes={{ root: classes.archiveAlertButton }}
+                                        disabled={action === 'ARCHIVE_TASK_IF_SUBTASKS' && !check}
+                                    >
                                         ARCHIVE
                                     </Button>
                                 )
