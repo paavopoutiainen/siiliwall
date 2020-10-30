@@ -12,6 +12,7 @@ type Task {
   deletedAt: String
   members: [User!]!
   prioritized: Boolean
+  board: Board
 }
 
 type Query {

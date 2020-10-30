@@ -32,6 +32,9 @@ export const ADD_TASK = gql`
                 userName
             }
             description
+            board {
+                id
+            }
         }
     }
 `
