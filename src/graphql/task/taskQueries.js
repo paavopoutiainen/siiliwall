@@ -74,3 +74,31 @@ export const MOVE_SWIMLANE = gql`
         moveSwimlane(boardId: $boardId, newSwimlaneOrder: $newSwimlaneOrder) 
     }
 `
+export const TASK_MUTATED = gql`
+  subscription taskMutated($boardId: ID!) {
+    taskMutated(boardId: $boardId) {
+      mutationType
+      node {
+        id
+        title
+        size
+        owner {
+          id
+          userName
+        }
+        members {
+            id
+            userName
+        }
+        description
+        swimlaneOrderNumber
+        column {
+            id
+        }
+        board {
+            id
+        }
+      }
+    }
+  }
+`

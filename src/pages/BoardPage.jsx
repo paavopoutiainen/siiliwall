@@ -2,51 +2,20 @@ import React, { useState, useEffect } from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
-import { useApolloClient, useSubscription, gql } from '@apollo/client'
+import { useApolloClient, gql } from '@apollo/client'
 import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
+import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
 import { TICKETORDER_AND_TASKS, SWIMLANE_ORDER } from '../graphql/fragments'
-
-const TASK_SUBSCRIPTION = gql`
-  subscription taskMutated($boardId: ID!) {
-    taskMutated(boardId: $boardId) {
-      mutationType
-      node {
-        id
-        title
-        size
-        owner {
-          id
-          userName
-        }
-        members {
-            id
-            userName
-        }
-        description
-        swimlaneOrderNumber
-        column {
-            id
-        }
-        board {
-            id
-        }
-      }
-    }
-  }
-`
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
     const client = useApolloClient()
-    const { data, loading } = useSubscription(
-        TASK_SUBSCRIPTION,
-        { variables: { boardId: id } },
-    )
+    const { data, loading } = useTaskMutated(id)
 
     useEffect(() => {
         if (!data) return
