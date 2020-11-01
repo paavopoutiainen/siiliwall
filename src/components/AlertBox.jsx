@@ -14,6 +14,7 @@ import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
+import { removeTaskFromCache } from '../cacheService/cacheUpdates'
 
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
@@ -149,43 +150,13 @@ const AlertBox = ({
     }
 
     const deleteTask = () => {
-        // Deleting task affects column's tasks list, column's ticketOrder list and board's swimlaneOrder list
-        // In addition the normalized cache object is deleted itself
-        const taskToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
+        removeTaskFromCache(taskId, columnId, boardId)
+        // Handle deletion of task's subtasks
         const boardIdForCache = `Board:${boardId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-        })
         const columnData = client.readFragment({
             id: boardIdForCache,
             fragment: COLUMNORDER_AND_COLUMNS,
         })
-        const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-            data: {
-                ticketOrder: newTicketOrder,
-            },
-        })
-        // Delete related taskId from the board's swimlaneOrder list
-        const { swimlaneOrder } = client.readFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-        })
-        const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
-        client.writeFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-            data: {
-                swimlaneOrder: newSwimlaneOrder,
-            },
-        })
-        // Delete normalized object itself
-        client.cache.evict({ id: taskToBeDeleted })
-        // Handle deletion of task's subtasks
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
         subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
