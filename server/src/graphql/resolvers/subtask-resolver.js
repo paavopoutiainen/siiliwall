@@ -22,11 +22,13 @@ const schema = {
         }) {
             const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
             pubsub.publish(SUBTASK_MUTATED, {
+                boardId,
                 subtaskMutated: {
-                    boardId,
+                    mutationType: 'CREATED',
                     subtask: addedSubtask.dataValues,
                 },
             })
+            console.log('tääällä', addedSubtask)
             return addedSubtask
         },
         addMemberForSubtask(root, { id, userId }) {
