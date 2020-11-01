@@ -68,7 +68,12 @@ export const EDIT_TASK = gql`
 `
 export const ARCHIVE_TASK = gql`
     mutation archiveTask($taskId: ID!, $columnId: ID!, $boardId: ID!) {
-        archiveTaskById(id: $taskId, columnId: $columnId, boardId: $boardId)
+        archiveTaskById(id: $taskId, columnId: $columnId, boardId: $boardId){
+            taskId
+            columnId
+            boardId
+            
+        }
     }
 `
 

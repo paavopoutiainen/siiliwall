@@ -89,9 +89,8 @@ const schema = {
             return deletedTaskId
         },
         async archiveTaskById(root, { id, columnId, boardId }) {
-            let archivedTaskId
             try {
-                archivedTaskId = await dataSources.boardService.archiveTaskById(id)
+                await dataSources.boardService.archiveTaskById(id)
                 pubsub.publish(TASK_REMOVED, {
                     boardId,
                     taskRemoved: {
@@ -103,7 +102,7 @@ const schema = {
                 console.log(e)
             }
 
-            return archivedTaskId
+            return { taskId: id, columnId, boardId }
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)

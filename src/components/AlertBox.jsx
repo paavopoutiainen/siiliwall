@@ -19,7 +19,7 @@ const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
 }) => {
     const [check, toggleCheck] = useState(false)
-    const [archiveTask] = useArchiveTask(columnId, boardId)
+    const [archiveTask] = useArchiveTask()
     const [archiveSubtask] = useArchiveSubtask(columnId)
     const [callDeleteSubtask] = useDeleteSubtask(columnId)
     const classes = boardPageStyles()

@@ -23,7 +23,7 @@ type Mutation {
   addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Float, ownerId: ID, memberIds: [ID!], description: String): Task
   editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String): Task
   deleteTaskById(id: ID!, columnId: ID!, boardId:ID!): ID
-  archiveTaskById(id: ID!, columnId: ID!, boardId:ID!): ID
+  archiveTaskById(id: ID!, columnId: ID!, boardId:ID!): RemoveInfo!
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
 }
@@ -40,10 +40,10 @@ type TaskMutationPayload {
 
 type TaskRemovedPayload {
   removeType: RemoveType!
-  removeInfo: DeleteInfo!
+  removeInfo: RemoveInfo!
 }
 
-type DeleteInfo {
+type RemoveInfo {
   taskId: ID!
   columnId: ID!
   boardId: ID!
