@@ -1,12 +1,33 @@
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const SUBTASK_MUTATED = 'SUBTASK_MUTATED'
+const SUBTASK_REMOVED = 'SUBTASK_REMOVED'
 
 const schema = {
 
+    Subscription: {
+        subtaskMutated: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(SUBTASK_MUTATED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
+        },
+    },
+
     Mutation: {
-        addSubtaskForTask(root, {
+        async addSubtaskForTask(root, {
             taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder,
         }) {
-            return dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
+            const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
+            pubsub.publish(SUBTASK_MUTATED, {
+                subtaskMutated: {
+                    boardId,
+                    subtask: addedSubtask.dataValues,
+                },
+            })
+            return addedSubtask
         },
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)
@@ -18,10 +39,10 @@ const schema = {
             return dataSources.boardService.archiveSubtaskById(id)
         },
         editSubtaskById(root, {
-            id, name, content, size, ownerId, oldMemberIds, newMemberIds
+            id, name, content, size, ownerId, oldMemberIds, newMemberIds,
         }) {
             return dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds)
-        }
+        },
     },
 
     Subtask: {

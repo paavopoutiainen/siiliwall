@@ -26,3 +26,19 @@ type Mutation {
   deleteSubtaskById(id: ID!): ID
   archiveSubtaskById(id: ID!): ID
 }
+
+type Subscription {
+  subtaskMutated(boardId: ID!): SubtaskMutationPayload!
+}
+
+type SubtaskMutationPayload {
+  mutationType: MutationType!
+  subtask: Subtask!
+}
+
+enum MutationType{
+  CREATED
+  UPDATED
+}
+
+
