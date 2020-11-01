@@ -7,13 +7,15 @@ import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
-import { addNewTask } from '../cacheService/cacheUpdates'
+import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
+import { addNewTask, removeTaskFromCache } from '../cacheService/cacheUpdates'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
     const { data, loading } = useTaskMutated(id)
+    const taskRemoved = useTaskRemoved(id)
 
     useEffect(() => {
         if (!data) return
@@ -21,6 +23,12 @@ const BoardPage = ({ id }) => {
             addNewTask(data.taskMutated.node)
         }
     }, [data])
+
+    useEffect(() => {
+        if (!taskRemoved.data) return
+        const { taskId, columnId, boardId } = taskRemoved.data.taskRemoved.removeInfo
+        removeTaskFromCache(taskId, columnId, boardId)
+    }, [taskRemoved.data])
 
     if (queryResult.loading) return null
 

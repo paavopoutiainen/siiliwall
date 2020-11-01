@@ -4,6 +4,7 @@ const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
 
 const TASK_MUTATED = 'TASK_MUTATED'
+const TASK_REMOVED = 'TASK_REMOVED'
 
 const schema = {
     Query: {
@@ -16,6 +17,12 @@ const schema = {
         taskMutated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TASK_MUTATED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
+        },
+        taskRemoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TASK_REMOVED),
                 (payload, args) => args.boardId === payload.boardId,
             ),
         },
@@ -54,8 +61,16 @@ const schema = {
             })
             return editedTask
         },
-        deleteTaskById(root, { id }) {
-            return dataSources.boardService.deleteTaskById(id)
+        async deleteTaskById(root, { id, columnId, boardId }) {
+            const deletedTaskId = await dataSources.boardService.deleteTaskById(id)
+            pubsub.publish(TASK_REMOVED, {
+                boardId,
+                taskRemoved: {
+                    mutationType: 'DELETED',
+                    removeInfo: { taskId: id, columnId, boardId },
+                },
+            })
+            return deletedTaskId
         },
         archiveTaskById(root, { id }) {
             return dataSources.boardService.archiveTaskById(id)

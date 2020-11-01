@@ -43,8 +43,8 @@ export const ADD_TASK = gql`
 `
 
 export const DELETE_TASK = gql`
-    mutation deleteTask($taskId: ID!) {
-        deleteTaskById(id: $taskId)
+    mutation deleteTask($taskId: ID!, $columnId: ID!, $boardId: ID!) {
+        deleteTaskById(id: $taskId, columnId: $columnId, boardId: $boardId)
     }
 `
 
@@ -101,6 +101,19 @@ export const TASK_MUTATED = gql`
         board {
             id
         }
+      }
+    }
+  }
+`
+
+export const TASK_REMOVED = gql`
+  subscription taskRemoved($boardId: ID!) {
+    taskRemoved(boardId: $boardId) {
+      mutationType
+      removeInfo {
+          taskId
+          columnId
+          boardId
       }
     }
   }

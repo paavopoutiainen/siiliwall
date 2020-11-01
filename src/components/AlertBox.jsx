@@ -190,6 +190,8 @@ const AlertBox = ({
         callDeleteTask({
             variables: {
                 taskId,
+                columnId,
+                boardId,
             },
         })
     }

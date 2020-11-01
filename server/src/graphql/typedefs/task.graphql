@@ -22,7 +22,7 @@ type Query {
 type Mutation {
   addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Float, ownerId: ID, memberIds: [ID!], description: String): Task
   editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String): Task
-  deleteTaskById(id: ID!): ID
+  deleteTaskById(id: ID!, columnId: ID!, boardId:ID!): ID
   archiveTaskById(id: ID!): ID
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
@@ -30,6 +30,7 @@ type Mutation {
 
 type Subscription {
   taskMutated(boardId: ID!): TaskMutationPayload!
+  taskRemoved(boardId: ID!): TaskRemovedPayload!
 }
 
 type TaskMutationPayload {
@@ -37,10 +38,22 @@ type TaskMutationPayload {
   node: Task!
 }
 
+type TaskRemovedPayload {
+  mutationType: MutationType!
+  removeInfo: DeleteInfo!
+}
+
+type DeleteInfo {
+  taskId: ID!
+  columnId: ID!
+  boardId: ID!
+}
+
 enum MutationType{
   CREATED
   UPDATED
   DELETED
+  ARCHIVED
 }
 
 
