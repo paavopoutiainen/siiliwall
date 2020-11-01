@@ -2,55 +2,25 @@ import React, { useState, useEffect } from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
-import { useApolloClient, gql } from '@apollo/client'
 import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
-import { TICKETORDER_AND_TASKS, SWIMLANE_ORDER } from '../graphql/fragments'
+import { addNewTask } from '../cacheService/cacheUpdates'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    const client = useApolloClient()
     const { data, loading } = useTaskMutated(id)
 
     useEffect(() => {
         if (!data) return
-        console.log('herre', data.taskMutated.node)
-        // Update the column's tasks and ticketOrder lists
-        const addedTask = data.taskMutated.node
-        const columnIdForCache = `Column:${addedTask.column.id}`
-        const { ticketOrder, tasks } = client.readFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER_AND_TASKS,
-        })
-        const newTasks = tasks.concat(addedTask)
-        const newTicketOrder = ticketOrder.concat({ ticketId: addedTask.id, type: 'task' })
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER_AND_TASKS,
-            data: {
-                ticketOrder: newTicketOrder,
-                tasks: newTasks,
-            },
-        })
-        // Update the board's swimlaneOrder
-        const boardIdForCache = `Board:${addedTask.board.id}`
-        const { swimlaneOrder } = client.readFragment({
-            id: boardIdForCache,
-            fragment: SWIMLANE_ORDER,
-        })
-        client.writeFragment({
-            id: boardIdForCache,
-            fragment: SWIMLANE_ORDER,
-            data: {
-                swimlaneOrder: swimlaneOrder.filter((id) => id !== addedTask.id),
-            },
-        })
-    }, [data, client])
+        if (data.taskMutated.mutationType === 'CREATED') {
+            addNewTask(data.taskMutated.node)
+        }
+    }, [data])
 
     if (queryResult.loading) return null
 

@@ -35,6 +35,9 @@ export const ADD_TASK = gql`
             board {
                 id
             }
+            column {
+                id
+            }
         }
     }
 `
