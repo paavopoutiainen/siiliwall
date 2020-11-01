@@ -37,43 +37,73 @@ const schema = {
         async addTaskForColumn(root, {
             boardId, columnId, title, size, ownerId, memberIds, description,
         }) {
-            const addedTask = await dataSources.boardService
-                .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
-            pubsub.publish(TASK_MUTATED, {
-                boardId,
-                taskMutated: {
-                    mutationType: 'CREATED',
-                    node: addedTask.dataValues,
-                },
-            })
+            let addedTask
+            try {
+                addedTask = await dataSources.boardService
+                    .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
+                pubsub.publish(TASK_MUTATED, {
+                    boardId,
+                    taskMutated: {
+                        mutationType: 'CREATED',
+                        node: addedTask.dataValues,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
             return addedTask
         },
         async editTaskById(root, {
             id, title, size, ownerId, oldMemberIds, newMemberIds, description,
         }) {
-            const editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
-            pubsub.publish(TASK_MUTATED, {
-                boardId: editedTask.boardId,
-                taskMutated: {
-                    mutationType: 'UPDATED',
-                    node: editedTask,
-                },
-            })
+            let editedTask
+            try {
+                editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+                pubsub.publish(TASK_MUTATED, {
+                    boardId: editedTask.boardId,
+                    taskMutated: {
+                        mutationType: 'UPDATED',
+                        node: editedTask,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
             return editedTask
         },
         async deleteTaskById(root, { id, columnId, boardId }) {
-            const deletedTaskId = await dataSources.boardService.deleteTaskById(id)
-            pubsub.publish(TASK_REMOVED, {
-                boardId,
-                taskRemoved: {
-                    removeType: 'DELETED',
-                    removeInfo: { taskId: id, columnId, boardId },
-                },
-            })
+            let deletedTaskId
+            try {
+                deletedTaskId = await dataSources.boardService.deleteTaskById(id)
+                pubsub.publish(TASK_REMOVED, {
+                    boardId,
+                    taskRemoved: {
+                        removeType: 'DELETED',
+                        removeInfo: { taskId: id, columnId, boardId },
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
             return deletedTaskId
         },
-        archiveTaskById(root, { id }) {
-            return dataSources.boardService.archiveTaskById(id)
+        async archiveTaskById(root, { id, columnId, boardId }) {
+            let archivedTaskId
+            try {
+                archivedTaskId = await dataSources.boardService.archiveTaskById(id)
+                pubsub.publish(TASK_REMOVED, {
+                    boardId,
+                    taskRemoved: {
+                        removeType: 'ARCHIVED',
+                        removeInfo: { taskId: id, columnId, boardId },
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
+            return archivedTaskId
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)

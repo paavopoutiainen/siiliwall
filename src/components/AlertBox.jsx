@@ -95,6 +95,8 @@ const AlertBox = ({
         archiveTask({
             variables: {
                 taskId,
+                columnId,
+                boardId,
             },
         })
     }
