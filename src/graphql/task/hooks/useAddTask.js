@@ -1,6 +1,5 @@
 import { useMutation } from '@apollo/client'
 import { ADD_TASK } from '../taskQueries'
-import { TICKETORDER_AND_TASKS, SWIMLANE_ORDER } from '../../fragments'
 import { addNewTask } from '../../../cacheService/cacheUpdates'
 
 const useAddTask = () => {

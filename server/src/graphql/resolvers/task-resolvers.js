@@ -41,10 +41,18 @@ const schema = {
             })
             return addedTask
         },
-        editTaskById(root, {
+        async editTaskById(root, {
             id, title, size, ownerId, oldMemberIds, newMemberIds, description,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+            const editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+            pubsub.publish(TASK_MUTATED, {
+                boardId: editedTask.boardId,
+                taskMutated: {
+                    mutationType: 'UPDATED',
+                    node: editedTask,
+                },
+            })
+            return editedTask
         },
         deleteTaskById(root, { id }) {
             return dataSources.boardService.deleteTaskById(id)
