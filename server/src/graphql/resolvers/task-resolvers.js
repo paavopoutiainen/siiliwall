@@ -66,7 +66,7 @@ const schema = {
             pubsub.publish(TASK_REMOVED, {
                 boardId,
                 taskRemoved: {
-                    mutationType: 'DELETED',
+                    removeType: 'DELETED',
                     removeInfo: { taskId: id, columnId, boardId },
                 },
             })

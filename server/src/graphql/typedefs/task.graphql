@@ -39,7 +39,7 @@ type TaskMutationPayload {
 }
 
 type TaskRemovedPayload {
-  mutationType: MutationType!
+  removeType: RemoveType!
   removeInfo: DeleteInfo!
 }
 
@@ -52,6 +52,9 @@ type DeleteInfo {
 enum MutationType{
   CREATED
   UPDATED
+}
+
+enum RemoveType {
   DELETED
   ARCHIVED
 }

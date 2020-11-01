@@ -109,7 +109,7 @@ export const TASK_MUTATED = gql`
 export const TASK_REMOVED = gql`
   subscription taskRemoved($boardId: ID!) {
     taskRemoved(boardId: $boardId) {
-      mutationType
+      removeType
       removeInfo {
           taskId
           columnId
