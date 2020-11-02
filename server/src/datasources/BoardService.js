@@ -296,7 +296,7 @@ class BoardService {
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
-                prettyId: prettyId,
+                prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -365,30 +365,29 @@ class BoardService {
     }
 
     async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
-        //Return the array of all the task and subtask objects with prettyIds in the board
+        // Return the array of all the task and subtask objects with prettyIds in the board
         let largestInteger
         const tasksOfTheBoard = await this.store.Task.findAll({
             attributes: ['prettyId'],
-            where: { boardId }
+            where: { boardId },
         })
         const subtasksOfTheBoard = await this.store.Subtask.findAll({
             attributes: ['prettyId'],
-            where: { boardId }
+            where: { boardId },
         })
         if (!tasksOfTheBoard.length && !subtasksOfTheBoard.length) {
             largestInteger = 0
             return largestInteger
         }
-        //Return an array with contains the unique end integers of the task's and subtask's prettyIds
+        // Return an array with contains the unique end integers of the task's and subtask's prettyIds
         const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-        //Finding the largest integer on the list so we can increment it by one to the added task
+        // Finding the largest integer on the list so we can increment it by one to the added task
         largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
 
         return largestInteger
     }
-
 
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
@@ -523,22 +522,6 @@ class BoardService {
             console.error(e)
         }
         return subtaskId
-    }
-
-    // Loop through tasks and set the new columnOrderNumber for each using the index of the array
-    async reOrderTasksOfColumn(newOrderArray, columnId) {
-        let column
-        try {
-            await Promise.all(newOrderArray.map(async (id, index) => {
-                const task = await this.store.Task.findByPk(id)
-                task.columnOrderNumber = index
-                await task.save()
-            }))
-            column = await this.store.Column.findByPk(columnId)
-        } catch (e) {
-            console.log(e)
-        }
-        return column
     }
 
     async reOrderTicketsOfColumn(newOrderArray, columnId) {
