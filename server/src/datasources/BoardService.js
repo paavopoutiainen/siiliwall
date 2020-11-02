@@ -232,6 +232,8 @@ class BoardService {
 
     async deleteTaskById(taskId) {
         try {
+            const task = await this.store.Task.findByPk(taskId)
+            await this.comparePrettyId(task)
             await this.store.Task.destroy({
                 where: { id: taskId },
             })
@@ -503,8 +505,33 @@ class BoardService {
         return addedSubtask
     }
 
+    async saveDeletedPrettyIdToBoard(boardId, ticketToBeDeleted) {
+        try {
+            let deletedPrettyIdsOfBoard = []
+            const board = await this.store.Board.findByPk(boardId)
+            deletedPrettyIdsOfBoard.push(ticketToBeDeleted.prettyId)
+            board.deletedPrettyIds = deletedPrettyIdsOfBoard
+            await board.save()
+            console.log('savefunkkari', board)
+        } catch (e) {
+            console.error(e)
+        }
+    }
+
+    async comparePrettyId(ticket) {
+        const largestInt = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(ticket.dataValues.boardId)
+        const ticketPrettyIdInt = parseInt(ticket.prettyId.split('-').splice(1).join('-'))
+        if (ticketPrettyIdInt === largestInt) {
+            await this.saveDeletedPrettyIdToBoard(ticket._previousDataValues.boardId, ticket)
+            return
+        }
+        return
+    }
+
     async deleteSubtaskById(subtaskId) {
         try {
+            const subtask = await this.store.Subtask.findByPk(subtaskId)
+            await this.comparePrettyId(subtask)
             await this.store.Subtask.destroy({
                 where: { id: subtaskId },
             })
