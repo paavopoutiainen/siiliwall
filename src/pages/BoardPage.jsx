@@ -18,7 +18,7 @@ const BoardPage = ({ id }) => {
     const queryResult = useBoardById(id)
     const { data, loading } = useTaskMutated(id)
     const taskRemoved = useTaskRemoved(id)
-    // const subtaskMutated = useSubtaskMutated(id)
+    const subtaskMutated = useSubtaskMutated(id)
 
     useEffect(() => {
         if (!data) return
@@ -33,13 +33,12 @@ const BoardPage = ({ id }) => {
         removeTaskFromCache(taskId, columnId, boardId)
     }, [taskRemoved.data])
 
-    /* useEffect(() => {
+    useEffect(() => {
         if (!subtaskMutated.data) return
         if (subtaskMutated.data.subtaskMutated.mutationType === 'CREATED') {
-            console.log('terve')
             addNewSubtask(subtaskMutated.data.subtaskMutated.subtask)
         }
-    }, [subtaskMutated.data]) */
+    }, [subtaskMutated.data])
 
     if (queryResult.loading) return null
 

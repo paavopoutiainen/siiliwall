@@ -28,7 +28,6 @@ const schema = {
                     subtask: addedSubtask.dataValues,
                 },
             })
-            console.log('tääällä', addedSubtask)
             return addedSubtask
         },
         addMemberForSubtask(root, { id, userId }) {
