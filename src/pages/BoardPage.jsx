@@ -8,7 +8,9 @@ import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
 import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
-import { addNewTask, removeTaskFromCache } from '../cacheService/cacheUpdates'
+import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
+
+import { addNewTask, removeTaskFromCache, addNewSubtask } from '../cacheService/cacheUpdates'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
@@ -16,6 +18,7 @@ const BoardPage = ({ id }) => {
     const queryResult = useBoardById(id)
     const { data, loading } = useTaskMutated(id)
     const taskRemoved = useTaskRemoved(id)
+    // const subtaskMutated = useSubtaskMutated(id)
 
     useEffect(() => {
         if (!data) return
@@ -29,6 +32,14 @@ const BoardPage = ({ id }) => {
         const { taskId, columnId, boardId } = taskRemoved.data.taskRemoved.removeInfo
         removeTaskFromCache(taskId, columnId, boardId)
     }, [taskRemoved.data])
+
+    /* useEffect(() => {
+        if (!subtaskMutated.data) return
+        if (subtaskMutated.data.subtaskMutated.mutationType === 'CREATED') {
+            console.log('terve')
+            addNewSubtask(subtaskMutated.data.subtaskMutated.subtask)
+        }
+    }, [subtaskMutated.data]) */
 
     if (queryResult.loading) return null
 

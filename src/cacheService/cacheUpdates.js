@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SUBTASKS,
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -70,4 +70,21 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     })
     // Delete normalized object itself
     client.cache.evict({ id: taskToBeDeleted })
+}
+
+export const addNewSubtask = (addedSubtask) => {
+    const columnIdForCache = `Column:${addedSubtask.column.id}`
+    const cached = client.readFragment({
+        id: columnIdForCache,
+        fragment: SUBTASKS,
+    })
+    const { subtasks } = cached
+    const newSubtasks = subtasks.concat(addedSubtask)
+    client.writeFragment({
+        id: columnIdForCache,
+        fragment: SUBTASKS,
+        data: {
+            subtasks: newSubtasks,
+        },
+    })
 }
