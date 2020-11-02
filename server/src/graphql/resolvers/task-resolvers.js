@@ -52,6 +52,9 @@ const schema = {
         members(root) {
             return dataSources.boardService.getMembersByTaskId(root.id)
         },
+        board(root) {
+            return dataSources.boardService.getBoardById(root.boardId)
+        },
     },
 }
 

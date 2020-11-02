@@ -62,7 +62,7 @@ export const SUBTASKS = gql`
     }
 `
 export const SUBTASKS_OF_BOARD = gql`
-    fragment subtasks on Board {
+    fragment subtasksOfBoard on Board {
         subtasks {
             id
         }
