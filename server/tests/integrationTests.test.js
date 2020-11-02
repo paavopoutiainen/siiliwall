@@ -10,6 +10,8 @@ const {
     tasksInTheDb,
     taskById,
     getTaskOrderOfColumn,
+    subtasksOfTaskInTheDb,
+    subtasksInTheDb,
 } = require('./utils')
 
 describe('With initial test data in the database, queries', () => {
@@ -153,6 +155,28 @@ describe('mutations', () => {
         const tasksAtEnd = await tasksInTheDb()
         const stillExists = tasksAtEnd.some((task) => task.id === id)
         expect(stillExists).toBe(false)
+    })
+
+    test('addSubtaskForTask mutation responds with JSON', async () => {
+        const response = await testCall('mutation { addSubtaskForTask(taskId: "b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3", columnId: "b23f9b7f-ab9f-4219-9604-2178751ce948", name: "testSubtask", content: "TestContent", size: 4, ownerId: "6baba4dd-1ff4-4185-b8ff-1b735bc56576", memberIds: ["6baba4dd-1ff4-4185-b8ff-1b735bc56576"], ticketOrder: [{ticketId: "6a752e4c-3254-49fa-a860-f1694b4e3fb9",type: "subtask"},{ticketId: "3345bb1f-c8dd-46f2-a099-a1e2c347ae88",type: "subtask"}]) { id } }')
+        const contentType = response.headers['content-type']
+        expect(contentType).toEqual('application/json; charset=utf-8')
+    })
+
+    test('Subtask can be added for certain task by using addSubtaskForTask mutation, Increases the number of subtasks in the db', async () => {
+        const subtasksAtStart = await subtasksOfTaskInTheDb('b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3')
+        await testCall('mutation { addSubtaskForTask(taskId: "b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3", columnId: "b23f9b7f-ab9f-4219-9604-2178751ce948", name: "testSubtask", content: "TestContent", size: 4, ownerId: "6baba4dd-1ff4-4185-b8ff-1b735bc56576", memberIds: ["6baba4dd-1ff4-4185-b8ff-1b735bc56576"], ticketOrder: [{ticketId: "6a752e4c-3254-49fa-a860-f1694b4e3fb9",type: "subtask"},{ticketId: "3345bb1f-c8dd-46f2-a099-a1e2c347ae88",type: "subtask"}]) { id } }')
+
+        const subtasksAtEnd = await subtasksOfTaskInTheDb('b8d2d626-d6a8-4c9a-89f3-a77796d2b2f3')
+        expect(subtasksAtStart.length + 1).toEqual(subtasksAtEnd.length)
+    })
+
+    test('subtask can be deleted by using deleteSubtaskById mutation', async () => {
+        const subtasksAtStart = await subtasksInTheDb()
+        await testCall('mutation {deleteSubtaskById(id: "7ccd9f9b-a706-4fa7-a99c-d07136606840")}')
+
+        const subtasksAtEnd = await subtasksInTheDb()
+        expect(subtasksAtEnd.length).toEqual(subtasksAtStart.length - 1)
     })
 })
 

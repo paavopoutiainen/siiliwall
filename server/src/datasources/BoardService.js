@@ -483,7 +483,8 @@ class BoardService {
             })
             const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
-            // figure out if the created subtask was created into same or different column than its parent task
+            // figure out if the created subtask was created into same column than its parent task
+            // If so, give the added subtask an index one greater than the parent task's so that subtask will appear under parent task
             if (columnId === parentTask.dataValues.columnId) {
                 const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
                 newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })

@@ -132,6 +132,28 @@ const getTaskOrderOfColumn = async (columnId) => {
     return arrayOfIds
 }
 
+const subtasksOfTaskInTheDb = async (taskId) => {
+    let subtasks
+    try {
+        subtasks = await db.Subtask.findAll({
+            where: { taskId },
+        })
+        return subtasks
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const subtasksInTheDb = async () => {
+    let subtasks
+    try {
+        subtasks = await db.Subtask.findAll()
+        return subtasks
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 const initialBoards = dummyData.boards
 
 const testCall = (query) => request
@@ -174,4 +196,6 @@ module.exports = {
     tasksInTheDb,
     taskById,
     getTaskOrderOfColumn,
+    subtasksOfTaskInTheDb,
+    subtasksInTheDb,
 }
