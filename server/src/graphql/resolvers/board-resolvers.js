@@ -6,6 +6,7 @@ const schema = {
             return dataSources.boardService.getBoards()
         },
         boardById(root, args) {
+            console.log('klaskdskjfla')
             return dataSources.boardService.getBoardById(args.id)
         },
     },
