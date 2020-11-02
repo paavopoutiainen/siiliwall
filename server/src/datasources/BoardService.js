@@ -712,6 +712,16 @@ class BoardService {
         return boardId
     }
 
+    async getStoriesByColumnId(columnId) {
+        let storiesFromDb
+        try {
+            storiesFromDb = await this.store.Story.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return storiesFromDb
+    }
+
     async getStoryById(storyId) {
         let storyFromDb
         try {
