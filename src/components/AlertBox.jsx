@@ -91,6 +91,7 @@ const AlertBox = ({
         })
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
+        console.log(subtasksToBeDeleted)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
         archiveTask({
             variables: {

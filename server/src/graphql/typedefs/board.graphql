@@ -6,7 +6,7 @@ type Board {
   columns: [Column!]!
   columnOrder: [ID!]!
   swimlaneOrder: [ID!]!
-  deletedPrettyIdInt: Int
+  prettyIdInt: Int
 }
 
 type Query {

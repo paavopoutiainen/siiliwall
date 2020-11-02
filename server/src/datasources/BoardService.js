@@ -232,8 +232,6 @@ class BoardService {
 
     async deleteTaskById(taskId) {
         try {
-            const task = await this.store.Task.findByPk(taskId)
-            await this.comparePrettyId(task)
             await this.store.Task.destroy({
                 where: { id: taskId },
             })
@@ -366,32 +364,6 @@ class BoardService {
         return largestSwimlaneOrderNumber
     }
 
-    async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
-        //Return the array of all the task and subtask objects with prettyIds in the board
-        let largestInteger
-        const tasksOfTheBoard = await this.store.Task.findAll({
-            attributes: ['prettyId'],
-            where: { boardId }
-        })
-        const subtasksOfTheBoard = await this.store.Subtask.findAll({
-            attributes: ['prettyId'],
-            where: { boardId }
-        })
-        if (!tasksOfTheBoard.length && !subtasksOfTheBoard.length) {
-            largestInteger = 0
-            return largestInteger
-        }
-        //Return an array with contains the unique end integers of the task's and subtask's prettyIds
-        const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-        const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-        const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-        //Finding the largest integer on the list so we can increment it by one to the added task
-        largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
-
-        return largestInteger
-    }
-
-
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
@@ -404,10 +376,13 @@ class BoardService {
             const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
-            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
+
+            tasksBoard.prettyIdInt += 1
+            await tasksBoard.save()
+
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: tasksBoard.deletedPrettyIdInt ? `${prettyIdOfBoard}-${tasksBoard.deletedPrettyIdInt + 1}` : `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: `${prettyIdOfBoard}-${tasksBoard.prettyIdInt + 1}`,
                 boardId,
                 columnId,
                 title,
@@ -468,11 +443,12 @@ class BoardService {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
 
-            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
+            subtasksBoard.prettyIdInt += 1
+            await subtasksBoard.save()
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: subtasksBoard.deletedPrettyIdInt ? `${prettyIdOfBoard}-${subtasksBoard.deletedPrettyIdInt + 1}` : `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: `${prettyIdOfBoard}-${subtasksBoard.prettyIdInt + 1}`,
                 name,
                 content,
                 size,
@@ -503,39 +479,8 @@ class BoardService {
         return addedSubtask
     }
 
-    async saveDeletedPrettyIdToBoard(boardId, ticketToBeDeleted) {
-        try {
-            let deletedPrettyIdOfBoard
-            const board = await this.store.Board.findByPk(boardId)
-            deletedPrettyIdOfBoard = ticketToBeDeleted.prettyId
-            board.deletedPrettyIdInt = parseInt(deletedPrettyIdOfBoard.split('-').splice(1).join('-'))
-            await board.save()
-        } catch (e) {
-            console.error(e)
-        }
-    }
-
-    async comparePrettyId(ticket) {
-        //const board = await this.store.Board.findByPk(boardId)
-        const largestInt = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(ticket.dataValues.boardId)
-        const ticketPrettyIdInt = parseInt(ticket.prettyId.split('-').splice(1).join('-'))
-        /*const largestdeletedPrettyIdOfBoard = parseInt(board.largestDeletedPrettyId.split('-').splice(1).join('-'))
-        if (board.largestDeletedPrettyId) {
-            ticketPrettyIdInt > largestdeletedPrettyIdOfBoard 
-            ?  await this.saveDeletedPrettyIdToBoard(ticket._previousDataValues.boardId, ticket) 
-            :   
-        }*/
-        if (ticketPrettyIdInt === largestInt) {
-            await this.saveDeletedPrettyIdToBoard(ticket._previousDataValues.boardId, ticket)
-            return
-        }
-        return
-    }
-
     async deleteSubtaskById(subtaskId) {
         try {
-            const subtask = await this.store.Subtask.findByPk(subtaskId)
-            await this.comparePrettyId(subtask)
             await this.store.Subtask.destroy({
                 where: { id: subtaskId },
             })
@@ -546,6 +491,7 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
+        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
