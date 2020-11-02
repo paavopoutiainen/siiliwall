@@ -7,6 +7,9 @@ const boards = [{
 },
 {
     id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1,
+},
+{
+    id: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83', prettyId: 'STR', name: 'StoryBoard', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 4,
 }]
 
 const users = [
@@ -126,6 +129,60 @@ const columns = [
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
         orderNumber: 4,
         id: 'f6209adb-91ca-476b-8269-328a82d05drt',
+    },
+    {
+        name: 'Todo',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+        orderNumber: 1,
+        id: 'asd75646-4035-41f5-99d7-7d742f0e8ac5',
+    },
+    {
+        name: 'In progress',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+        orderNumber: 2,
+        id: 'f6209adb-asda-476b-8269-328a82d05d4a',
+    },
+    {
+        name: 'In Review',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+        orderNumber: 3,
+        id: 'f6209adb-91ca-476b-866a-328a82d05d41',
+    },
+    {
+        name: 'Done',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+        orderNumber: 4,
+        id: 'f6209adb-91ca-476b-8269-asda82d05drt',
+    },
+]
+
+const stories = [
+    {
+        title: 'First story',
+        content: 'this is the content',
+        size: 4,
+        columnId: 'asd75646-4035-41f5-99d7-7d742f0e8ac5',
+        id: 'asd75646-6666-41f5-99d7-7d742f0e8ac5',
+        ownerId: '1fd5abe7-159e-4224-8a44-7ae3ee902a54',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+    },
+    {
+        title: 'Second story',
+        content: 'this is the content',
+        size: 2,
+        columnId: 'asd75646-4035-41f5-99d7-7d742f0e8ac5',
+        id: 'asd75646-6666-41f5-99d7-7d742f0e8a77',
+        ownerId: '1fd5abe7-159e-4224-8a44-7ae3ee902a54',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
+    },
+    {
+        title: 'Third story',
+        content: 'this is the content',
+        size: 3.4,
+        columnId: 'f6209adb-91ca-476b-8269-asda82d05drt',
+        id: 'asd75646-6666-41f5-9879-7d742f0e8ac5',
+        ownerId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        boardId: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83',
     },
 ]
 
@@ -323,5 +380,5 @@ const usertasks = [
 ]
 
 module.exports = {
-    boards, columns, tasks, subtasks, users, usertasks, userSubtasks,
+    boards, columns, stories, tasks, subtasks, users, usertasks, userSubtasks,
 }

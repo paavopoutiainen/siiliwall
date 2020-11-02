@@ -456,6 +456,20 @@ class BoardService {
         return subtask
     }
 
+    async addMemberForStory(storyId, userId) {
+        let story
+        try {
+            await this.store.UserStory.create({
+                userId,
+                storyId,
+            })
+            story = await this.store.Story.findByPk(story)
+        } catch (e) {
+            console.error(e)
+        }
+        return story
+    }
+
     async addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
@@ -696,6 +710,42 @@ class BoardService {
             console.log(e)
         }
         return boardId
+    }
+
+    async getStoryById(storyId) {
+        let storyFromDb
+        try {
+            storyFromDb = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return storyFromDb
+    }
+
+    async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+        let addedStory
+        try {
+            const storyBoard = await this.store.Board.findByPk(boardId)
+
+            addedStory = await this.store.Subtask.create({
+                id: uuid(),
+                boardId,
+                columnId,
+                title,
+                size,
+                ownerId,
+                memberIds,
+                description,
+            })
+            await Promise.all(
+                memberIds.map(async (memberIds) => {
+                    await this.addMemberForStory(addedStory.id, memberIds)
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return addedStory
     }
 }
 

@@ -44,6 +44,12 @@ const initializeDb = async () => {
                 return resolved
             }),
         )
+        await Promise.all(
+            dummyData.stories.map(async (story) => {
+                const resolved = await db.Column.create(story)
+                return resolved
+            }),
+        )
     } catch (e) {
         console.log(e)
     }
@@ -87,6 +93,34 @@ const columnsInTheDb = async () => {
     } catch (e) {
         console.log(e)
     }
+}
+
+const storiesOfColumnInTheDb = async (id) => {
+    try {
+        const stories = await db.Story.findAll({ where: { columnId: id } })
+        return stories
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const storiesInTheDb = async () => {
+    try {
+        const stories = await db.Story.findAll()
+        return stories
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const storyById = async (id) => {
+    let story
+    try {
+        story = await db.Story.findByPk(id)
+    } catch (e) {
+        console.log(e)
+    }
+    return story
 }
 
 const tasksOfColumnInTheDb = async (id) => {
@@ -191,6 +225,9 @@ module.exports = {
     initialBoards,
     columnsOfBoardInTheDb,
     columnsInTheDb,
+    storiesOfColumnInTheDb,
+    storiesInTheDb,
+    storyById,
     tasksOfColumnInTheDb,
     testCall,
     tasksInTheDb,

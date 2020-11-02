@@ -1,0 +1,19 @@
+type Story {
+    id: ID!
+    title: String!
+    owner: User
+    size: Float
+    description: String
+    column: Column!
+    deletedAt: String
+    members: [User!]!
+    board: Board
+}
+
+type Query {
+    storyById(id: ID!): Story!
+}
+
+type Mutation {
+    addStoryForColumn(boardId: ID!, columnId: ID!, title: String!, size: Float, ownerId: ID, memberIds: [ID!], description: String): Story
+}
