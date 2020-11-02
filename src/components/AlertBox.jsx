@@ -8,7 +8,7 @@ import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import {
-    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SWIMLANE_ORDER,
+    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SWIMLANE_ORDER
 } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'

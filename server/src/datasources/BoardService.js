@@ -404,12 +404,10 @@ class BoardService {
             const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
-
             const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
-
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: tasksBoard.deletedPrettyIdInt ? `${prettyIdOfBoard}-${tasksBoard.deletedPrettyIdInt + 1}` : `${prettyIdOfBoard}-${largestInteger + 1}`,
                 boardId,
                 columnId,
                 title,
@@ -474,7 +472,7 @@ class BoardService {
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: subtasksBoard.deletedPrettyIdInt ? `${prettyIdOfBoard}-${subtasksBoard.deletedPrettyIdInt + 1}` : `${prettyIdOfBoard}-${largestInteger + 1}`,
                 name,
                 content,
                 size,
@@ -507,20 +505,26 @@ class BoardService {
 
     async saveDeletedPrettyIdToBoard(boardId, ticketToBeDeleted) {
         try {
-            let deletedPrettyIdsOfBoard = []
+            let deletedPrettyIdOfBoard
             const board = await this.store.Board.findByPk(boardId)
-            deletedPrettyIdsOfBoard.push(ticketToBeDeleted.prettyId)
-            board.deletedPrettyIds = deletedPrettyIdsOfBoard
+            deletedPrettyIdOfBoard = ticketToBeDeleted.prettyId
+            board.deletedPrettyIdInt = parseInt(deletedPrettyIdOfBoard.split('-').splice(1).join('-'))
             await board.save()
-            console.log('savefunkkari', board)
         } catch (e) {
             console.error(e)
         }
     }
 
     async comparePrettyId(ticket) {
+        //const board = await this.store.Board.findByPk(boardId)
         const largestInt = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(ticket.dataValues.boardId)
         const ticketPrettyIdInt = parseInt(ticket.prettyId.split('-').splice(1).join('-'))
+        /*const largestdeletedPrettyIdOfBoard = parseInt(board.largestDeletedPrettyId.split('-').splice(1).join('-'))
+        if (board.largestDeletedPrettyId) {
+            ticketPrettyIdInt > largestdeletedPrettyIdOfBoard 
+            ?  await this.saveDeletedPrettyIdToBoard(ticket._previousDataValues.boardId, ticket) 
+            :   
+        }*/
         if (ticketPrettyIdInt === largestInt) {
             await this.saveDeletedPrettyIdToBoard(ticket._previousDataValues.boardId, ticket)
             return
