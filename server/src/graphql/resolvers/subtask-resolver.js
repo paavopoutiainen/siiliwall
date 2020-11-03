@@ -39,10 +39,18 @@ const schema = {
         archiveSubtaskById(root, { id }) {
             return dataSources.boardService.archiveSubtaskById(id)
         },
-        editSubtaskById(root, {
+        async editSubtaskById(root, {
             id, name, content, size, ownerId, oldMemberIds, newMemberIds,
         }) {
-            return dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds)
+            const editedSubtask = await dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds)
+            pubsub.publish(SUBTASK_MUTATED, {
+                boardId: editedSubtask.boardId,
+                subtaskMutated: {
+                    mutationType: 'UPDATED',
+                    subtask: editedSubtask.dataValues,
+                },
+            })
+            return editedSubtask
         },
     },
 

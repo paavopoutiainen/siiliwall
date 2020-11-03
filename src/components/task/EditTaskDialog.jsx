@@ -26,7 +26,7 @@ const EditTaskDialog = ({
     useEffect(() => {
         setTitle(task.title)
         setSize(task.size)
-        setOwner(task.owner ? { value: task.owner.id, label: task.owner.userName } : null)
+        setOwner(task.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task.description)
     }, [task])
@@ -38,7 +38,7 @@ const EditTaskDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        setOwner(action)
+        setOwner(action.value)
     }
 
     const handleSizeChange = (event) => {
@@ -68,7 +68,7 @@ const EditTaskDialog = ({
                 taskId: editId,
                 title,
                 size,
-                ownerId: owner?.value,
+                ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
                 description,
@@ -80,7 +80,7 @@ const EditTaskDialog = ({
     const recoverState = () => {
         setTitle(task?.title)
         setSize(task?.size ? task.size : null)
-        setOwner(task?.owner ? task.owner : null)
+        setOwner(task?.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task?.description)
     }
