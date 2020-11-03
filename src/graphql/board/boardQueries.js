@@ -46,6 +46,9 @@ export const BOARD_BY_ID = gql`
                     column {
                         id
                     }
+                    board {
+                        id
+                    }
                 }
                 subtasks {
                     id

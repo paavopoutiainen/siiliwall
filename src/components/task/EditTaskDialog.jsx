@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
@@ -14,14 +14,23 @@ const EditTaskDialog = ({
 }) => {
     const [editTask] = useEditTask()
     const { loading, data } = useAllUsers()
-    const [title, setTitle] = useState(task?.title)
-    const [size, setSize] = useState(task?.size ? task.size : null)
-    const [description, setDescription] = useState(task?.description)
-    const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
+    const [title, setTitle] = useState()
+    const [size, setSize] = useState()
+    const [description, setDescription] = useState()
+    const [owner, setOwner] = useState()
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
-    const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
+    const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+
+    useEffect(() => {
+        setTitle(task.title)
+        setSize(task.size)
+        setOwner(task.owner ? { value: task.owner.id, label: task.owner.userName } : null)
+        setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setDescription(task.description)
+    }, [task])
+
     if (loading) return null
 
     const handleTitleChange = (event) => {
@@ -29,7 +38,7 @@ const EditTaskDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        setOwner(action.value)
+        setOwner(action)
     }
 
     const handleSizeChange = (event) => {
@@ -59,7 +68,7 @@ const EditTaskDialog = ({
                 taskId: editId,
                 title,
                 size,
-                ownerId: owner,
+                ownerId: owner?.value,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
                 description,
@@ -71,7 +80,7 @@ const EditTaskDialog = ({
     const recoverState = () => {
         setTitle(task?.title)
         setSize(task?.size ? task.size : null)
-        setOwner(task?.owner ? task.owner.id : null)
+        setOwner(task?.owner ? task.owner : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task?.description)
     }
