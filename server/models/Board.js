@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         prettyId: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         prettyIdInt: DataTypes.INTEGER,
         name: {

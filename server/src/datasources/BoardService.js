@@ -296,7 +296,7 @@ class BoardService {
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
-                prettyId: prettyId,
+                prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -378,11 +378,11 @@ class BoardService {
             const prettyIdOfBoard = tasksBoard.prettyId
 
             tasksBoard.prettyIdInt += 1
-            await tasksBoard.save()
+            const updatedBoard = await tasksBoard.save()
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${tasksBoard.prettyIdInt + 1}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.prettyIdInt}`,
                 boardId,
                 columnId,
                 title,
@@ -444,11 +444,11 @@ class BoardService {
             const prettyIdOfBoard = subtasksBoard.prettyId
 
             subtasksBoard.prettyIdInt += 1
-            await subtasksBoard.save()
+            const updatedBoard = await subtasksBoard.save()
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${subtasksBoard.prettyIdInt + 1}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.prettyIdInt}`,
                 name,
                 content,
                 size,
