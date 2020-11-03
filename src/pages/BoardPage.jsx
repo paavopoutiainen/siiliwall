@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
@@ -10,35 +10,13 @@ import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
 import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
 import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
 
-import { addNewTask, removeTaskFromCache, addNewSubtask } from '../cacheService/cacheUpdates'
-
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    const { data, loading } = useTaskMutated(id)
-    const taskRemoved = useTaskRemoved(id)
-    const subtaskMutated = useSubtaskMutated(id)
-
-    useEffect(() => {
-        if (!data) return
-        if (data.taskMutated.mutationType === 'CREATED') {
-            addNewTask(data.taskMutated.node)
-        }
-    }, [data])
-
-    useEffect(() => {
-        if (!taskRemoved.data) return
-        const { taskId, columnId, boardId } = taskRemoved.data.taskRemoved.removeInfo
-        removeTaskFromCache(taskId, columnId, boardId)
-    }, [taskRemoved.data])
-
-    useEffect(() => {
-        if (!subtaskMutated.data) return
-        if (subtaskMutated.data.subtaskMutated.mutationType === 'CREATED') {
-            addNewSubtask(subtaskMutated.data.subtaskMutated.subtask)
-        }
-    }, [subtaskMutated.data])
+    useTaskMutated(id)
+    useTaskRemoved(id)
+    useSubtaskMutated(id)
 
     if (queryResult.loading) return null
 
