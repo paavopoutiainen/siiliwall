@@ -33,6 +33,12 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.stories.map(async (story) => {
+                const resolved = await db.Column.create(story)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.tasks.map(async (task) => {
                 const resolved = await db.Task.create(task)
                 return resolved
@@ -41,12 +47,6 @@ const initializeDb = async () => {
         await Promise.all(
             dummyData.subtasks.map(async (subtask) => {
                 const resolved = await db.Subtask.create(subtask)
-                return resolved
-            }),
-        )
-        await Promise.all(
-            dummyData.stories.map(async (story) => {
-                const resolved = await db.Column.create(story)
                 return resolved
             }),
         )

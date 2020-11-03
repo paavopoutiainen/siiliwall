@@ -56,6 +56,18 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.stories.map(async (story) => {
+                const resolved = await db.Story.create(story)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.userStories.map(async (userStory) => {
+                const resolved = await db.UserStory.create(userStory)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.tasks.map(async (task) => {
                 const resolved = await db.Task.create(task)
                 return resolved

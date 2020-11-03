@@ -159,7 +159,7 @@ const columns = [
 const stories = [
     {
         title: 'First story',
-        content: 'this is the content',
+        description: 'this is the content',
         size: 4,
         columnId: 'asd75646-4035-41f5-99d7-7d742f0e8ac5',
         id: 'asd75646-6666-41f5-99d7-7d742f0e8ac5',
@@ -168,7 +168,7 @@ const stories = [
     },
     {
         title: 'Second story',
-        content: 'this is the content',
+        description: 'this is the content',
         size: 2,
         columnId: 'asd75646-4035-41f5-99d7-7d742f0e8ac5',
         id: 'asd75646-6666-41f5-99d7-7d742f0e8a77',
@@ -177,7 +177,7 @@ const stories = [
     },
     {
         title: 'Third story',
-        content: 'this is the content',
+        description: 'this is the content',
         size: 3.4,
         columnId: 'f6209adb-91ca-476b-8269-asda82d05drt',
         id: 'asd75646-6666-41f5-9879-7d742f0e8ac5',
@@ -357,14 +357,14 @@ const subtasks = [
 
 ]
 
-const userSubtasks = [
+const userStories = [
     {
         userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
-        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
+        storyId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
     },
     {
         userId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
-        subtaskId: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
+        storyId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6',
     },
 ]
 
@@ -379,6 +379,17 @@ const usertasks = [
     },
 ]
 
+const userSubtasks = [
+    {
+        userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9',
+    },
+    {
+        userId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
+        subtaskId: '3345bb1f-c8dd-46f2-a099-a1e2c347ae88',
+    },
+]
+
 module.exports = {
-    boards, columns, stories, tasks, subtasks, users, usertasks, userSubtasks,
+    boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks,
 }

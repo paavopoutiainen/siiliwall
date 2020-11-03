@@ -1,6 +1,7 @@
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
+const { storiesInTheDb } = require('../../tests/utils')
 
 class BoardService {
     constructor({ db }) {
@@ -84,6 +85,16 @@ class BoardService {
         return columnId
     }
 
+    async getStoriesByColumnId(columnId) {
+        let storiesFromDb
+        try {
+            storiesFromDb = await this.store.Story.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return storiesFromDb
+    }
+
     async getTasksByColumnId(columnId) {
         let tasksFromDb
         try {
@@ -102,6 +113,16 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getStoryById(storyId) {
+        let storyFromDb
+        try {
+            storyFromDb = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return storyFromDb
     }
 
     async getTaskById(taskId) {
@@ -132,6 +153,24 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getMembersByStoryId(storyId) {
+        let rowsFromDb
+        let members
+        try {
+            rowsFromDb = await this.store.UserStory.findAll({ where: { storyId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return members
     }
 
     async getMembersByTaskId(taskId) {
@@ -389,6 +428,31 @@ class BoardService {
         return largestInteger
     }
 
+    async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+        let addedStory
+        try {
+            const storyBoard = await this.store.Board.findByPk(boardId)
+
+            addedStory = await this.store.Story.create({
+                id: uuid(),
+                boardId,
+                columnId,
+                title,
+                size,
+                ownerId,
+                memberIds,
+                description,
+            })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    await this.addMemberForStory(addedStory.id, memberId)
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return addedStory
+    }
 
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
@@ -428,6 +492,20 @@ class BoardService {
         return addedTask
     }
 
+    async addMemberForStory(storyId, userId) {
+        let story
+        try {
+            await this.store.UserStory.create({
+                userId,
+                storyId,
+            })
+            story = await this.store.Story.findByPk(story)
+        } catch (e) {
+            console.error(e)
+        }
+        return story
+    }
+
     async addMemberForTask(taskId, userId) {
         let task
         try {
@@ -454,20 +532,6 @@ class BoardService {
             console.error(e)
         }
         return subtask
-    }
-
-    async addMemberForStory(storyId, userId) {
-        let story
-        try {
-            await this.store.UserStory.create({
-                userId,
-                storyId,
-            })
-            story = await this.store.Story.findByPk(story)
-        } catch (e) {
-            console.error(e)
-        }
-        return story
     }
 
     async addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder) {
@@ -710,52 +774,6 @@ class BoardService {
             console.log(e)
         }
         return boardId
-    }
-
-    async getStoriesByColumnId(columnId) {
-        let storiesFromDb
-        try {
-            storiesFromDb = await this.store.Story.findAll({ where: { columnId, deletedAt: null } })
-        } catch (e) {
-            console.error(e)
-        }
-        return storiesFromDb
-    }
-
-    async getStoryById(storyId) {
-        let storyFromDb
-        try {
-            storyFromDb = await this.store.Story.findByPk(storyId)
-        } catch (e) {
-            console.error(e)
-        }
-        return storyFromDb
-    }
-
-    async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
-        let addedStory
-        try {
-            const storyBoard = await this.store.Board.findByPk(boardId)
-
-            addedStory = await this.store.Subtask.create({
-                id: uuid(),
-                boardId,
-                columnId,
-                title,
-                size,
-                ownerId,
-                memberIds,
-                description,
-            })
-            await Promise.all(
-                memberIds.map(async (memberIds) => {
-                    await this.addMemberForStory(addedStory.id, memberIds)
-                }),
-            )
-        } catch (e) {
-            console.error(e)
-        }
-        return addedStory
     }
 }
 

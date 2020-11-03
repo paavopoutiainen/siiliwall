@@ -24,6 +24,10 @@ module.exports = (sequelize, DataTypes) => {
         User.hasMany(models.Task, {
             foreignKey: 'ownerId',
         })
+        User.belongsToMany(models.Story, {
+            through: models.UserStories,
+            foreignKey: 'userId',
+        })
         // User may be working on multiple tasks
         User.belongsToMany(models.Task, {
             through: models.UserTask,

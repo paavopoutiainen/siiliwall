@@ -15,13 +15,18 @@ module.exports = (sequelize, DataTypes) => {
     })
     Story.associate = (models) => {
         Story.belongsTo(models.Column, {
-            foreingKey: 'columnId',
+            foreignKey: 'columnId',
         })
         Story.belongsTo(models.User, {
-            foreingKey: 'ownerId',
+            foreignKey: 'ownerId',
+        })
+        Story.belongsToMany(models.User, {
+            through: models.UserStory,
+            foreignKey: 'storyId',
         })
         Story.belongsTo(models.Board, {
-            foreingKey: 'boardId',
+            foreignKey: 'boardId',
         })
     }
+    return Story
 }
