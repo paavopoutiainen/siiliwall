@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SUBTASKS,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS,
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -85,6 +85,17 @@ export const addNewSubtask = (addedSubtask) => {
         fragment: SUBTASKS,
         data: {
             subtasks: newSubtasks,
+        },
+    })
+}
+
+export const cacheTicketMovedInColumn = (columnId, newOrder) => {
+    const columnIdForCache = `Column:${columnId}`
+    client.writeFragment({
+        id: columnIdForCache,
+        fragment: TICKETORDER,
+        data: {
+            ticketOrder: newOrder,
         },
     })
 }
