@@ -27,11 +27,12 @@ export const addNewTask = (addedTask) => {
         id: boardIdForCache,
         fragment: SWIMLANE_ORDER,
     })
+    const newSwimlaneOrder = swimlaneOrder.concat(addedTask.id)
     client.writeFragment({
         id: boardIdForCache,
         fragment: SWIMLANE_ORDER,
         data: {
-            swimlaneOrder: swimlaneOrder.filter((id) => id !== addedTask.id),
+            swimlaneOrder: newSwimlaneOrder,
         },
     })
 }
