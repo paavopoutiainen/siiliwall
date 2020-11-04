@@ -3,8 +3,9 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
+    TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
 } from '../graphql/fragments'
+import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
 
 export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
     const { destination, source, draggableId } = result
@@ -112,19 +113,15 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedTicketOrderObject] = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicketOrderObject)
 
-        const columnIdForCache = `Column:${column.id}`
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-            data: {
-                ticketOrder: newTicketOrder,
-            },
-        })
+        // Handle cache updates
+        cacheTicketMovedInColumn(column.id, newTicketOrder)
 
+        // Send mutation to the server
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
                 columnId: column.id,
+                boardId,
             },
         })
         return

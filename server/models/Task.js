@@ -5,6 +5,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
             primaryKey: true,
         },
+        prettyId: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
         title: {
             type: DataTypes.STRING,
             allowNull: false,
@@ -14,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: DataTypes.STRING,
         swimlaneOrderNumber: DataTypes.INTEGER,
-        prioritized: DataTypes.BOOLEAN,
         color: DataTypes.STRING,
         size: DataTypes.DOUBLE,
         difficulty: DataTypes.INTEGER,

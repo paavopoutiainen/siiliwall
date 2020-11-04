@@ -2,8 +2,9 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
+    TICKETORDER_AND_TICKETS, COLUMNORDER,
 } from '../graphql/fragments'
+import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
     result,
@@ -67,20 +68,17 @@ export const onDragEnd = async (
             let stask = column.subtasks.map((s) => s.task)
             ticketName = stask[0]?.title
             msg = 'Moved Subtask of ' + ticketName
-            }
+        }
 
-        const columnId = `Column:${column.id}`
-        client.writeFragment({
-            id: columnId,
-            fragment: TICKETORDER,
-            data: {
-                ticketOrder: newTicketOrder,
-            },
-        })
+        // Handle cache updates
+        cacheTicketMovedInColumn(column.id, newTicketOrder)
+       
+        // Send mutation to the server
         await moveTicketInColumn({
             variables: {
                 orderArray: newTicketOrder,
                 columnId: column.id,
+                boardId: board.id
             },
         })
         

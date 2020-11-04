@@ -12,7 +12,7 @@ const schema = {
 
     Mutation: {
         addBoard(root, args) {
-            return dataSources.boardService.addBoard(args.name)
+            return dataSources.boardService.addBoard(args.name, args.prettyId)
         },
         moveSwimlane(root, { boardId, newSwimlaneOrder }) {
             return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder)

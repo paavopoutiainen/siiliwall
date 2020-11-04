@@ -13,9 +13,11 @@ export const BOARD_BY_ID = gql`
     query boardById($boardId: ID!) {
         boardById(id: $boardId) {
             id
+            prettyId
             name
             columnOrder
             swimlaneOrder
+            ticketCount
             columns {
                 id
                 name
@@ -29,6 +31,7 @@ export const BOARD_BY_ID = gql`
                 }
                 tasks {
                     id
+                    prettyId
                     title
                     size
                     owner {
@@ -40,14 +43,17 @@ export const BOARD_BY_ID = gql`
                         userName
                     }
                     description
-                    prioritized
                     swimlaneOrderNumber
                     column {
+                        id
+                    }
+                    board {
                         id
                     }
                 }
                 subtasks {
                     id
+                    prettyId
                     name
                     content
                     size
@@ -60,11 +66,15 @@ export const BOARD_BY_ID = gql`
                     }
                     task {
                         id
+                        prettyId
                         title
                     }
                     members {
                         id
                         userName
+                    }
+                    board {
+                        id
                     }
                 }
             }
@@ -72,10 +82,11 @@ export const BOARD_BY_ID = gql`
     }
 `
 export const ADD_BOARD = gql`
-    mutation addBoard($name: String!) {
-        addBoard(name: $name) {
+    mutation addBoard($name: String!, $prettyId: String!) {
+        addBoard(name: $name, prettyId: $prettyId) {
             id
             name
+            prettyId
         }
     }
 `

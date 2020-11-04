@@ -10,8 +10,7 @@ const Task = ({
     task, index, columnId, boardId,
 }) => {
     const classes = boardPageStyles()
-    let { title, members } = task
-    title = task.prioritized ? `${title} prio` : title
+    const { title, members, prettyId } = task
     const titleLimit = 25
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)
@@ -63,7 +62,7 @@ const Task = ({
                         classes={{ root: classes.taskInner }}
                     >
                         <Grid item>
-                            <h3>{add3Dots(title)}</h3>
+                            <h3>{prettyId}</h3>
                         </Grid>
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
@@ -74,6 +73,9 @@ const Task = ({
                         </Grid>
                     </Grid>
                     <Grid item direction="column" container>
+                        <Grid item>
+                            <p>{add3Dots(task.title)}</p>
+                        </Grid>
                         <Grid item>
                             {task.owner ? (
                                 <p>

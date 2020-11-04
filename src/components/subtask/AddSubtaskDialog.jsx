@@ -79,6 +79,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
             variables: {
                 columnId: inputColumnId || columnId,
                 taskId,
+                boardId,
                 ownerId: owner,
                 memberIds: members,
                 name,
@@ -91,9 +92,9 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         toggleAddDialog(event)
     }
 
-    const handleCancel = () => {
+    const handleCancel = (e) => {
         emptyState()
-        toggleAddDialog()
+        toggleAddDialog(e)
     }
 
     const modifiedData = data.allUsers.map((user) => {
@@ -111,7 +112,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleAddDialog}
+                onClose={handleCancel}
                 open={addDialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
@@ -172,7 +173,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={handleCancel}
+                        onClick={(e) => handleCancel(e)}
                         color="secondary"
                     >
                         Cancel

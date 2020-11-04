@@ -1,5 +1,10 @@
 /* eslint-disable max-len */
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const TASK_MUTATED = 'TASK_MUTATED'
+const TASK_REMOVED = 'TASK_REMOVED'
 
 const schema = {
     Query: {
@@ -8,39 +13,99 @@ const schema = {
         },
     },
 
-    Mutation: {
-        addMemberForTask(root, {
-            id, userId,
-        }) {
-            return dataSources.boardService.addMemberForTask(id, userId)
+    Subscription: {
+        taskMutated: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TASK_MUTATED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
         },
-        addTaskForColumn(root, {
+        taskRemoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TASK_REMOVED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
+        },
+    },
+
+    Mutation: {
+        async addTaskForColumn(root, {
             boardId, columnId, title, size, ownerId, memberIds, description,
         }) {
-            return dataSources.boardService
-                .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
+            let addedTask
+            try {
+                addedTask = await dataSources.boardService
+                    .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
+                pubsub.publish(TASK_MUTATED, {
+                    boardId,
+                    taskMutated: {
+                        mutationType: 'CREATED',
+                        node: addedTask.dataValues,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
+            return addedTask
         },
-        editTaskById(root, {
+        async editTaskById(root, {
             id, title, size, ownerId, oldMemberIds, newMemberIds, description,
         }) {
-            return dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+            let editedTask
+            try {
+                editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+                pubsub.publish(TASK_MUTATED, {
+                    boardId: editedTask.boardId,
+                    taskMutated: {
+                        mutationType: 'UPDATED',
+                        node: editedTask,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return editedTask
         },
-        deleteTaskById(root, { id }) {
-            return dataSources.boardService.deleteTaskById(id)
+        async deleteTaskById(root, { id, columnId, boardId }) {
+            let deletedTaskId
+            try {
+                deletedTaskId = await dataSources.boardService.deleteTaskById(id)
+                pubsub.publish(TASK_REMOVED, {
+                    boardId,
+                    taskRemoved: {
+                        removeType: 'DELETED',
+                        removeInfo: { taskId: id, columnId, boardId },
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return deletedTaskId
         },
-        archiveTaskById(root, { id }) {
-            return dataSources.boardService.archiveTaskById(id)
+        async archiveTaskById(root, { id, columnId, boardId }) {
+            try {
+                await dataSources.boardService.archiveTaskById(id)
+                pubsub.publish(TASK_REMOVED, {
+                    boardId,
+                    taskRemoved: {
+                        removeType: 'ARCHIVED',
+                        removeInfo: { taskId: id, columnId, boardId },
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+
+            return { taskId: id, columnId, boardId }
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
         },
-        prioritizeTask(root, {
-            id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction,
+        addMemberForTask(root, {
+            id, userId,
         }) {
-            return dataSources.boardService.prioritizeTask(id, swimlaneOrderNumber, affectedPrioritizedTaskIds, direction)
-        },
-        unPrioritizeTask(root, { id, prioritizedTaskIds }) {
-            return dataSources.boardService.unPrioritizeTask(id, prioritizedTaskIds)
+            return dataSources.boardService.addMemberForTask(id, userId)
         },
     },
 
@@ -59,6 +124,9 @@ const schema = {
         },
         members(root) {
             return dataSources.boardService.getMembersByTaskId(root.id)
+        },
+        board(root) {
+            return dataSources.boardService.getBoardById(root.boardId)
         },
     },
 }

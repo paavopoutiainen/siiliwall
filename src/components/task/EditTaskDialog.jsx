@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
@@ -14,14 +14,23 @@ const EditTaskDialog = ({
 }) => {
     const [editTask] = useEditTask()
     const { loading, data } = useAllUsers()
-    const [title, setTitle] = useState(task?.title)
-    const [size, setSize] = useState(task?.size ? task.size : null)
-    const [description, setDescription] = useState(task?.description)
-    const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
+    const [title, setTitle] = useState()
+    const [size, setSize] = useState()
+    const [description, setDescription] = useState()
+    const [owner, setOwner] = useState()
+    const [members, setMembers] = useState()
     const arrayOfOldMemberIds = task.members.map((user) => user.id)
-    const [members, setMembers] = useState(task.members.length > 0 ? arrayOfOldMemberIds : [])
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+
+    useEffect(() => {
+        setTitle(task.title)
+        setSize(task.size)
+        setOwner(task.owner ? task.owner.id : null)
+        setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setDescription(task.description)
+    }, [task])
+
     if (loading) return null
 
     const handleTitleChange = (event) => {
@@ -68,6 +77,19 @@ const EditTaskDialog = ({
         toggleDialog()
     }
 
+    const recoverState = () => {
+        setTitle(task?.title)
+        setSize(task?.size ? task.size : null)
+        setOwner(task?.owner ? task.owner.id : null)
+        setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setDescription(task?.description)
+    }
+
+    const handleCancel = () => {
+        recoverState()
+        toggleDialog()
+    }
+
     // Prevents closing dialog when clicking on it to edit task's fields
     const handleDialogClick = (e) => e.stopPropagation()
 
@@ -90,7 +112,7 @@ const EditTaskDialog = ({
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleDialog}
+                onClose={handleCancel}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
@@ -150,7 +172,7 @@ const EditTaskDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel

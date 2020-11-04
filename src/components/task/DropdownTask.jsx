@@ -46,11 +46,18 @@ const DropdownTask = ({
             setAction('DELETE_TASK_IF_SUBTASKS')
             setAlertDialogStatus(true)
             setAnchorEl(null)
-        } else {
-            setAction(order)
+            return
+        }
+        if (order === 'ARCHIVE_TASK' && subtasksOfTask.length) {
+            setCount(subtasksOfTask.length)
+            setAction('ARCHIVE_TASK_IF_SUBTASKS')
             setAlertDialogStatus(true)
             setAnchorEl(null)
+            return
         }
+        setAction(order)
+        setAlertDialogStatus(true)
+        setAnchorEl(null)
     }
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>

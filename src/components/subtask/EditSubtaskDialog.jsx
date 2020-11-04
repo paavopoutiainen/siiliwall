@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
@@ -14,14 +14,22 @@ const EditSubtaskDialog = ({
 }) => {
     const [editSubtask] = useEditSubtask()
     const { loading, data } = useAllUsers()
-    const [name, setName] = useState(subtask?.name)
-    const [size, setSize] = useState(subtask?.size)
-    const [content, setContent] = useState(subtask?.content)
-    const [owner, setOwner] = useState(subtask?.owner ? subtask.owner.id : null)
+    const [name, setName] = useState()
+    const [size, setSize] = useState()
+    const [content, setContent] = useState(subtask.content)
+    const [owner, setOwner] = useState()
     const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
-    const [members, setMembers] = useState(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+    const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+
+    useEffect(() => {
+        setName(subtask.name)
+        setSize(subtask.size)
+        setContent(subtask.content)
+        setOwner(subtask.owner ? subtask.owner.id : null)
+        setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+    }, [subtask])
 
     if (loading) return null
     const handleOwnerChange = (action) => {
@@ -60,6 +68,19 @@ const EditSubtaskDialog = ({
         toggleDialog()
     }
 
+    const recoverState = () => {
+        setName(subtask?.name)
+        setSize(subtask?.size)
+        setOwner(subtask?.owner ? subtask.owner.id : null)
+        setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+        setContent(subtask?.content)
+    }
+
+    const handleCancel = () => {
+        recoverState()
+        toggleDialog()
+    }
+
     // Prevents closing dialog when clicking on it to edit subtask's fields
     const handleDialogClick = (e) => e.stopPropagation()
 
@@ -82,7 +103,7 @@ const EditSubtaskDialog = ({
             <Dialog
                 fullWidth
                 maxWidth="md"
-                onClose={toggleDialog}
+                onClose={handleCancel}
                 open={dialogStatus}
                 aria-labelledby="max-width-dialog-title"
                 classes={{ paper: classes.dialogPaper }}
@@ -101,7 +122,7 @@ const EditSubtaskDialog = ({
                         onChange={handleNameChange}
                     />
                     <TextField
-                        required={true}
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="content"
@@ -142,7 +163,7 @@ const EditSubtaskDialog = ({
                 </DialogContent>
                 <DialogActions>
                     <Button
-                        onClick={toggleDialog}
+                        onClick={handleCancel}
                         color="secondary"
                     >
                         Cancel
