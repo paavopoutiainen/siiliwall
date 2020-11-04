@@ -21,10 +21,11 @@ export const ADD_TASK = gql`
     mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $description: String) {
         addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description) {
             id
+            prettyId
             title
             size
             owner {
-                id 
+                id
                 userName
             }
             members {
@@ -32,6 +33,10 @@ export const ADD_TASK = gql`
                 userName
             }
             description
+            swimlaneOrderNumber
+            column {
+                id
+            }
             board {
                 id
             }

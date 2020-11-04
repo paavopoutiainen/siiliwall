@@ -645,22 +645,6 @@ class BoardService {
         return subtaskId
     }
 
-    // Loop through tasks and set the new columnOrderNumber for each using the index of the array
-    async reOrderTasksOfColumn(newOrderArray, columnId) {
-        let column
-        try {
-            await Promise.all(newOrderArray.map(async (id, index) => {
-                const task = await this.store.Task.findByPk(id)
-                task.columnOrderNumber = index
-                await task.save()
-            }))
-            column = await this.store.Column.findByPk(columnId)
-        } catch (e) {
-            console.log(e)
-        }
-        return column
-    }
-
     async reOrderTicketsOfColumn(newOrderArray, columnId) {
         let column
         try {
