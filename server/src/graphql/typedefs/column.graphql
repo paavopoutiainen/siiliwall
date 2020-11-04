@@ -39,6 +39,22 @@ type Mutation {
 
 type Subscription {
   ticketMovedInColumn(boardId: ID!): TicketMovedInColumnPayload!
+  columnDeleted(boardId: ID!): ColumnRemovePayload!
+}
+
+type ColumnRemovePayload {
+  removeType: RemoveType!
+  removeInfo: RemoveInfo!
+}
+
+type RemoveInfo {
+  columnId: ID!
+  boardId: ID!
+}
+
+enum RemoveType {
+  DELETED
+  ARCHIVED
 }
 
 type TicketMovedInColumnPayload {

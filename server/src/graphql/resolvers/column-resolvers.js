@@ -5,6 +5,7 @@ const { pubsub } = require('../pubsub')
 
 const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
+const COLUMN_DELETED = 'COLUMN_DELETED'
 
 const schema = {
     Query: {
@@ -20,6 +21,12 @@ const schema = {
                 (payload, args) => args.boardId === payload.boardId,
             ),
         },
+        columnDeleted: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(COLUMN_DELETED),
+                (payload, args) => args.boardId === payload.boardId
+            )
+        }
     },
 
     Mutation: {
@@ -31,9 +38,24 @@ const schema = {
         }) {
             return dataSources.boardService.editColumnById(id, name)
         },
-        deleteColumnById(root, { id }) {
-            return dataSources.boardService.deleteColumnById(id)
+
+        async deleteColumnById(root, { id, boardId }) {
+            let deletedColumnId
+            try {
+                deletedColumnId = await dataSources.boardService.deleteColumnById(id)
+                pubsub.publish(DELETE_COLUMN, {
+                    boardId,
+                    columnDeleted: {
+                        removeType: 'DELETED',
+                        removeInfo: { columnId: id, boardId }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return deletedColumnId
         },
+
         async moveTicketInColumn(root, {
             newOrder, columnId, boardId,
         }) {
@@ -47,6 +69,7 @@ const schema = {
             })
             return modifiedColumn
         },
+
         async moveTicketFromColumn(root, {
             type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
         }) {
