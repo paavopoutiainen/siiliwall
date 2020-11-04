@@ -115,7 +115,6 @@ const Task = ({
                         toggleDialog={toggleDialog}
                         editId={task.id}
                         task={task}
-                        arrayOfOldMemberIds={task.members.map((user) => user.id)}
                     />
                 </Grid>
 

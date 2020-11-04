@@ -89,7 +89,6 @@ const Subtask = ({ subtask, index, columnId }) => {
                         toggleDialog={toggleDialog}
                         editId={subtask.id}
                         subtask={subtask}
-                        arrayOfOldMemberIds={subtask.members.map((user) => user.id)}
                     />
                 </Grid>
             )}

@@ -157,6 +157,7 @@ const AlertBox = ({
             id: boardIdForCache,
             fragment: COLUMNORDER_AND_COLUMNS,
         })
+        // Handle the removing of task's subtasks if they exist
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
         subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))

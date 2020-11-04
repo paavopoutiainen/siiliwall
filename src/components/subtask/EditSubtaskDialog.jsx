@@ -10,7 +10,7 @@ import { boardPageStyles } from '../../styles/styles'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const EditSubtaskDialog = ({
-    dialogStatus, editId, toggleDialog, subtask, arrayOfOldMemberIds,
+    dialogStatus, editId, toggleDialog, subtask,
 }) => {
     const [editSubtask] = useEditSubtask()
     const { loading, data } = useAllUsers()
@@ -18,7 +18,7 @@ const EditSubtaskDialog = ({
     const [size, setSize] = useState()
     const [content, setContent] = useState(subtask.content)
     const [owner, setOwner] = useState()
-    // const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
+    const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
     const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
@@ -29,7 +29,7 @@ const EditSubtaskDialog = ({
         setContent(subtask.content)
         setOwner(subtask.owner ? subtask.owner.id : null)
         setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
-    }, [subtask, arrayOfOldMemberIds])
+    }, [subtask])
 
     if (loading) return null
     const handleOwnerChange = (action) => {

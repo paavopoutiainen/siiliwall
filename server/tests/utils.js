@@ -33,6 +33,12 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.stories.map(async (story) => {
+                const resolved = await db.Story.create(story)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.tasks.map(async (task) => {
                 const resolved = await db.Task.create(task)
                 return resolved
@@ -89,6 +95,34 @@ const columnsInTheDb = async () => {
     }
 }
 
+const storiesOfColumnInTheDb = async (id) => {
+    try {
+        const stories = await db.Story.findAll({ where: { columnId: id } })
+        return stories
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const storiesInTheDb = async () => {
+    try {
+        const stories = await db.Story.findAll()
+        return stories
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const storyById = async (id) => {
+    let story
+    try {
+        story = await db.Story.findByPk(id)
+    } catch (e) {
+        console.log(e)
+    }
+    return story
+}
+
 const tasksOfColumnInTheDb = async (id) => {
     try {
         const tasks = await db.Task.findAll({ where: { columnId: id } })
@@ -132,6 +166,28 @@ const getTaskOrderOfColumn = async (columnId) => {
     return arrayOfIds
 }
 
+const subtasksOfTaskInTheDb = async (taskId) => {
+    let subtasks
+    try {
+        subtasks = await db.Subtask.findAll({
+            where: { taskId },
+        })
+        return subtasks
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+const subtasksInTheDb = async () => {
+    let subtasks
+    try {
+        subtasks = await db.Subtask.findAll()
+        return subtasks
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 const initialBoards = dummyData.boards
 
 const testCall = (query) => request
@@ -169,9 +225,14 @@ module.exports = {
     initialBoards,
     columnsOfBoardInTheDb,
     columnsInTheDb,
+    storiesOfColumnInTheDb,
+    storiesInTheDb,
+    storyById,
     tasksOfColumnInTheDb,
     testCall,
     tasksInTheDb,
     taskById,
     getTaskOrderOfColumn,
+    subtasksOfTaskInTheDb,
+    subtasksInTheDb,
 }

@@ -18,6 +18,7 @@ type Column {
   name: String!
   board: Board!
   orderNumber: Int!
+  stories: [Story!]!
   tasks: [Task!]!
   subtasks: [Subtask!]!
   ticketOrder: [TicketOrderObject!]!
