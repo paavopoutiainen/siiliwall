@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
             foreignKey: 'ownerId',
         })
         User.belongsToMany(models.Story, {
-            through: models.UserStories,
+            through: models.UserStory,
             foreignKey: 'userId',
         })
         // User may be working on multiple tasks

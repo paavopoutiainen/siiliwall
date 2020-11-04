@@ -34,7 +34,7 @@ const initializeDb = async () => {
         )
         await Promise.all(
             dummyData.stories.map(async (story) => {
-                const resolved = await db.Column.create(story)
+                const resolved = await db.Story.create(story)
                 return resolved
             }),
         )
