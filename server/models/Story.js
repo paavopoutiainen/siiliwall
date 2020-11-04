@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
         description: DataTypes.STRING,
+        color: DataTypes.STRING,
         size: DataTypes.DOUBLE,
         deletedAt: DataTypes.DATE,
     })

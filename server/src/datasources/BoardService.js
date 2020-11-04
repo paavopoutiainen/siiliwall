@@ -1,7 +1,8 @@
+/* eslint-disable no-shadow */
+/* eslint-disable radix */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
-const { storiesInTheDb } = require('../../tests/utils')
 
 class BoardService {
     constructor({ db }) {
@@ -209,6 +210,36 @@ class BoardService {
         return members
     }
 
+    async editStoryById(storyId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
+        // Logic for figuring out who was deleted and who was added as a new member for the story
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        let story
+        try {
+            story = await this.store.Story.findByPk(storyId)
+            story.title = title
+            story.size = size
+            story.ownerId = ownerId
+            story.description = description
+            await story.save()
+            // Updating userstories junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                await this.addMemberForStory(story.id, userId)
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                await this.store.UserStory.destroy({
+                    where: {
+                        userId,
+                        storyId: story.id,
+                    },
+                })
+            }))
+        } catch (e) {
+            console.error(e)
+        }
+        return story
+    }
+
     async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
@@ -267,6 +298,17 @@ class BoardService {
             console.error(e)
         }
         return subtask
+    }
+
+    async deleteStoryById(storyId) {
+        try {
+            await this.store.Story.destroy({
+                where: { id: storyId },
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return storyId
     }
 
     async deleteTaskById(taskId) {
@@ -335,7 +377,7 @@ class BoardService {
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
-                prettyId: prettyId,
+                prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -404,25 +446,25 @@ class BoardService {
     }
 
     async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
-        //Return the array of all the task and subtask objects with prettyIds in the board
+        // Return the array of all the task and subtask objects with prettyIds in the board
         let largestInteger
         const tasksOfTheBoard = await this.store.Task.findAll({
             attributes: ['prettyId'],
-            where: { boardId }
+            where: { boardId },
         })
         const subtasksOfTheBoard = await this.store.Subtask.findAll({
             attributes: ['prettyId'],
-            where: { boardId }
+            where: { boardId },
         })
         if (!tasksOfTheBoard.length && !subtasksOfTheBoard.length) {
             largestInteger = 0
             return largestInteger
         }
-        //Return an array with contains the unique end integers of the task's and subtask's prettyIds
+        // Return an array with contains the unique end integers of the task's and subtask's prettyIds
         const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
         const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-        //Finding the largest integer on the list so we can increment it by one to the added task
+        // Finding the largest integer on the list so we can increment it by one to the added task
         largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
 
         return largestInteger
@@ -431,7 +473,7 @@ class BoardService {
     async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         let addedStory
         try {
-            const storyBoard = await this.store.Board.findByPk(boardId)
+            // const storyBoard = await this.store.Board.findByPk(boardId)
 
             addedStory = await this.store.Story.create({
                 id: uuid(),
@@ -499,7 +541,7 @@ class BoardService {
                 userId,
                 storyId,
             })
-            story = await this.store.Story.findByPk(story)
+            story = await this.store.Story.findByPk(storyId)
         } catch (e) {
             console.error(e)
         }
@@ -723,6 +765,29 @@ class BoardService {
             console.log(e)
         }
         return owner
+    }
+
+    async archiveStoryById(storyId) {
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = new Date()
+            await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return storyId
+    }
+
+    async restoreStoryById(storyId) {
+        let updatedStory
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = null
+            updatedStory = await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return updatedStory
     }
 
     async archiveTaskById(taskId) {

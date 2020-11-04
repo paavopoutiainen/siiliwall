@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const dataSources = require('../../datasources')
 
 const schema = {
@@ -13,6 +14,25 @@ const schema = {
         }) {
             return dataSources.boardService
                 .addStoryForColumn(boardId, columnId, title, size, ownerId, membersIds, description)
+        },
+        editStoryById(root, {
+            id, title, size, ownerId, oldMemberIds, newMemberIds, description,
+        }) {
+            return dataSources.boardService.editStoryById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
+        },
+        deleteStoryById(root, { id }) {
+            return dataSources.boardService.deleteStoryById(id)
+        },
+        archiveStoryById(root, { id }) {
+            return dataSources.boardService.archiveStoryById(id)
+        },
+        restoreStoryById(root, { id }) {
+            return dataSources.boardService.restoreStoryById(id)
+        },
+        addMemberForStory(root, {
+            id, userId,
+        }) {
+            return dataSources.boardService.addMemberForStory(id, userId)
         },
     },
 
