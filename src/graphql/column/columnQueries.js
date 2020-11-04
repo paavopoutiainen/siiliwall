@@ -29,3 +29,14 @@ export const EDIT_COLUMN = gql`
         }
     }
 `
+export const COLUMN_DELETED = gql`
+    subscription columnDeleted($boardId: ID!) {
+        columnDeleted(boardId: $boardId) {
+            removeType
+            removeInfo: {
+                columnId
+                boardId
+            }
+        }
+    }
+`
