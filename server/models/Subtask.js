@@ -7,21 +7,21 @@ module.exports = (sequelize, DataTypes) => {
         },
         prettyId: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         columnOrderNumber: DataTypes.INTEGER,
         done: DataTypes.BOOLEAN,
         name: DataTypes.STRING,
         content: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         size: DataTypes.FLOAT,
         deletedAt: DataTypes.DATE,
     })
     Subtask.associate = (models) => {
         Subtask.belongsTo(models.Board, {
-            foreignKey: 'boardId'
+            foreignKey: 'boardId',
         })
         Subtask.belongsTo(models.Task, {
             foreignKey: 'taskId',

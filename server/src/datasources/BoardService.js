@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable radix */
 /* eslint-disable class-methods-use-this */
 /* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
@@ -84,6 +86,16 @@ class BoardService {
         return columnId
     }
 
+    async getStoriesByColumnId(columnId) {
+        let storiesFromDb
+        try {
+            storiesFromDb = await this.store.Story.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return storiesFromDb
+    }
+
     async getTasksByColumnId(columnId) {
         let tasksFromDb
         try {
@@ -102,6 +114,16 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getStoryById(storyId) {
+        let storyFromDb
+        try {
+            storyFromDb = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return storyFromDb
     }
 
     async getTaskById(taskId) {
@@ -132,6 +154,24 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getMembersByStoryId(storyId) {
+        let rowsFromDb
+        let members
+        try {
+            rowsFromDb = await this.store.UserStory.findAll({ where: { storyId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return members
     }
 
     async getMembersByTaskId(taskId) {
@@ -168,6 +208,36 @@ class BoardService {
             console.error(e)
         }
         return members
+    }
+
+    async editStoryById(storyId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
+        // Logic for figuring out who was deleted and who was added as a new member for the story
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        let story
+        try {
+            story = await this.store.Story.findByPk(storyId)
+            story.title = title
+            story.size = size
+            story.ownerId = ownerId
+            story.description = description
+            await story.save()
+            // Updating userstories junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                await this.addMemberForStory(story.id, userId)
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                await this.store.UserStory.destroy({
+                    where: {
+                        userId,
+                        storyId: story.id,
+                    },
+                })
+            }))
+        } catch (e) {
+            console.error(e)
+        }
+        return story
     }
 
     async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
@@ -228,6 +298,17 @@ class BoardService {
             console.error(e)
         }
         return subtask
+    }
+
+    async deleteStoryById(storyId) {
+        try {
+            await this.store.Story.destroy({
+                where: { id: storyId },
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return storyId
     }
 
     async deleteTaskById(taskId) {
@@ -389,6 +470,32 @@ class BoardService {
         return largestInteger
     }
 
+    async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+        let addedStory
+        try {
+            // const storyBoard = await this.store.Board.findByPk(boardId)
+
+            addedStory = await this.store.Story.create({
+                id: uuid(),
+                boardId,
+                columnId,
+                title,
+                size,
+                ownerId,
+                memberIds,
+                description,
+            })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    await this.addMemberForStory(addedStory.id, memberId)
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return addedStory
+    }
+
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At the time of new tasks' creation we want to display it as the lower most task in its column,
@@ -425,6 +532,20 @@ class BoardService {
             console.error(e)
         }
         return addedTask
+    }
+
+    async addMemberForStory(storyId, userId) {
+        let story
+        try {
+            await this.store.UserStory.create({
+                userId,
+                storyId,
+            })
+            story = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return story
     }
 
     async addMemberForTask(taskId, userId) {
@@ -628,6 +749,29 @@ class BoardService {
             console.log(e)
         }
         return owner
+    }
+
+    async archiveStoryById(storyId) {
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = new Date()
+            await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return storyId
+    }
+
+    async restoreStoryById(storyId) {
+        let updatedStory
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = null
+            updatedStory = await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return updatedStory
     }
 
     async archiveTaskById(taskId) {

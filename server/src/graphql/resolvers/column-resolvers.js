@@ -41,6 +41,9 @@ const schema = {
         board(root) {
             return dataSources.boardService.getColumnBoardByColumnId(root.id)
         },
+        stories(root) {
+            return dataSources.boardService.getStoriesByColumnId(root.id)
+        },
         tasks(root) {
             return dataSources.boardService.getTasksByColumnId(root.id)
         },
