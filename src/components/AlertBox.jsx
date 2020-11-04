@@ -8,18 +8,19 @@ import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import {
-    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SWIMLANE_ORDER
+    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER,
 } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
+import { removeTaskFromCache } from '../cacheService/cacheUpdates'
 
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
 }) => {
     const [check, toggleCheck] = useState(false)
-    const [archiveTask] = useArchiveTask(columnId, boardId)
+    const [archiveTask] = useArchiveTask()
     const [archiveSubtask] = useArchiveSubtask(columnId)
     const [callDeleteSubtask] = useDeleteSubtask(columnId)
     const classes = boardPageStyles()
@@ -36,29 +37,29 @@ const AlertBox = ({
 
     let alertMsg
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'DELETE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgDeleteTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgArchiveTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        case 'ARCHIVE_SUBTASK':
-            alertMsg = alertMsgArchiveSubtask
-            break
-        case 'DELETE_SUBTASK':
-            alertMsg = alertMsgDeleteSubtask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'DELETE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgDeleteTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgArchiveTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
+    case 'DELETE_SUBTASK':
+        alertMsg = alertMsgDeleteSubtask
+        break
+    default:
+        break
     }
 
     const WhiteCheckbox = withStyles({
@@ -91,11 +92,12 @@ const AlertBox = ({
         })
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
-        console.log(subtasksToBeDeleted)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
         archiveTask({
             variables: {
                 taskId,
+                columnId,
+                boardId,
             },
         })
     }
@@ -148,49 +150,22 @@ const AlertBox = ({
     }
 
     const deleteTask = () => {
-        // Deleting task affects column's tasks list, column's ticketOrder list and board's swimlaneOrder list
-        // In addition the normalized cache object is deleted itself
-        const taskToBeDeleted = `Task:${taskId}`
-        const columnIdForCache = `Column:${columnId}`
+        removeTaskFromCache(taskId, columnId, boardId)
+        // Handle deletion of task's subtasks
         const boardIdForCache = `Board:${boardId}`
-        const data = client.readFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-        })
         const columnData = client.readFragment({
             id: boardIdForCache,
             fragment: COLUMNORDER_AND_COLUMNS,
         })
-        const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
-        client.writeFragment({
-            id: columnIdForCache,
-            fragment: TICKETORDER,
-            data: {
-                ticketOrder: newTicketOrder,
-            },
-        })
-        // Delete related taskId from the board's swimlaneOrder list
-        const { swimlaneOrder } = client.readFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-        })
-        const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
-        client.writeFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-            data: {
-                swimlaneOrder: newSwimlaneOrder,
-            },
-        })
-        // Delete normalized object itself
-        client.cache.evict({ id: taskToBeDeleted })
-        // Handle deletion of task's subtasks
+        // Handle the removing of task's subtasks if they exist
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
         subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
         callDeleteTask({
             variables: {
                 taskId,
+                columnId,
+                boardId,
             },
         })
     }

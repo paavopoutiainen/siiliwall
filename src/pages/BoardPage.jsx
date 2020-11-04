@@ -6,15 +6,23 @@ import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
+import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
+import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
+import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
+import useTicketMovedInColumn from '../graphql/ticket/hooks/useTicketMovedInColumn'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
-    const { data, loading } = useBoardById(id)
+    const queryResult = useBoardById(id)
+    useTaskMutated(id)
+    useTaskRemoved(id)
+    useSubtaskMutated(id)
+    useTicketMovedInColumn(id)
 
-    if (loading) return null
+    if (queryResult.loading) return null
 
-    const board = data.boardById
+    const board = queryResult.data.boardById
     const switchView = () => {
         toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }

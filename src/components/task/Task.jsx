@@ -10,7 +10,7 @@ const Task = ({
     task, index, columnId, boardId,
 }) => {
     const classes = boardPageStyles()
-    let { title, members, prettyId } = task
+    const { title, members, prettyId } = task
     const titleLimit = 25
     const descrLimit = 20
     const [dialogStatus, setDialogStatus] = useState(false)

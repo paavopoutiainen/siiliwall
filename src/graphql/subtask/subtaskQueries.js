@@ -64,3 +64,41 @@ export const DELETE_SUBTASK = gql`
         deleteSubtaskById(id: $subtaskId)
     }
 `
+
+export const SUBTASK_MUTATED = gql`
+  subscription subtaskMutated($boardId: ID!) {
+    subtaskMutated(boardId: $boardId) {
+      mutationType
+      subtask {
+        id
+        prettyId
+        name
+        content
+        size
+        column {
+            id
+            ticketOrder {
+                ticketId
+                type
+            }
+        }
+        owner {
+            id
+            userName
+        }
+        task {
+            id
+            prettyId
+            title
+        }
+        members {
+            id
+            userName
+        }
+        board {
+            id
+        }
+      }
+    }
+  }
+`

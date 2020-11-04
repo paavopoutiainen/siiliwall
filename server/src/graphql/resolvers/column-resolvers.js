@@ -1,10 +1,24 @@
 /* eslint-disable max-len */
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
+const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 
 const schema = {
     Query: {
         columnById(root, args) {
             return dataSources.boardService.getColumnById(args.id)
+        },
+    },
+
+    Subscription: {
+        ticketMovedInColumn: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TICKET_MOVED_IN_COLUMN),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
         },
     },
 
@@ -20,8 +34,18 @@ const schema = {
         deleteColumnById(root, { id }) {
             return dataSources.boardService.deleteColumnById(id)
         },
-        moveTicketInColumn(root, args) {
-            return dataSources.boardService.reOrderTicketsOfColumn(args.newOrder, args.columnId)
+        async moveTicketInColumn(root, {
+            newOrder, columnId, boardId,
+        }) {
+            const modifiedColumn = await dataSources.boardService.reOrderTicketsOfColumn(newOrder, columnId)
+            pubsub.publish(TICKET_MOVED_IN_COLUMN, {
+                boardId,
+                ticketMovedInColumn: {
+                    newOrder,
+                    columnId,
+                },
+            })
+            return modifiedColumn
         },
         async moveTicketFromColumn(root, {
             type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
