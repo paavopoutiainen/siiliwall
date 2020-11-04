@@ -445,31 +445,6 @@ class BoardService {
         return largestSwimlaneOrderNumber
     }
 
-    async findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId) {
-        // Return the array of all the task and subtask objects with prettyIds in the board
-        let largestInteger
-        const tasksOfTheBoard = await this.store.Task.findAll({
-            attributes: ['prettyId'],
-            where: { boardId },
-        })
-        const subtasksOfTheBoard = await this.store.Subtask.findAll({
-            attributes: ['prettyId'],
-            where: { boardId },
-        })
-        if (!tasksOfTheBoard.length && !subtasksOfTheBoard.length) {
-            largestInteger = 0
-            return largestInteger
-        }
-        // Return an array with contains the unique end integers of the task's and subtask's prettyIds
-        const endIntegerOfPrettyIdsOfTasks = tasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-        const endIntegerOfPrettyIdsOfSubtasks = subtasksOfTheBoard.map((obj) => parseInt(obj.prettyId.split('-').splice(1).join('-')))
-        const endIntegerOfPrettyIdsOfTickets = endIntegerOfPrettyIdsOfTasks.concat(endIntegerOfPrettyIdsOfSubtasks)
-        // Finding the largest integer on the list so we can increment it by one to the added task
-        largestInteger = Math.max(...endIntegerOfPrettyIdsOfTickets)
-
-        return largestInteger
-    }
-
     async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         let addedStory
         try {
@@ -509,11 +484,12 @@ class BoardService {
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
 
-            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
+            tasksBoard.ticketCount += 1
+            const updatedBoard = await tasksBoard.save()
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 boardId,
                 columnId,
                 title,
@@ -588,11 +564,12 @@ class BoardService {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
 
-            const largestInteger = await this.findTheLargestUniqueIntegerOfTicketsPrettyIds(boardId)
+            subtasksBoard.ticketCount += 1
+            const updatedBoard = await subtasksBoard.save()
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${largestInteger + 1}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 name,
                 content,
                 size,
@@ -635,6 +612,7 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
+        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()

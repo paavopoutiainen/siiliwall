@@ -26,7 +26,6 @@ const Board = ({ board }) => {
     }
 
     const { columnOrder, columns } = board
-
     return (
         <Grid container>
             <DragDropContext onDragEnd={(result) => onDragEnd(

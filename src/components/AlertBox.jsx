@@ -8,7 +8,7 @@ import { useMutation, useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../styles/styles'
 import { DELETE_COLUMN } from '../graphql/column/columnQueries'
 import {
-    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SWIMLANE_ORDER,
+    COLUMNORDER, COLUMNORDER_AND_COLUMNS, TICKETORDER, SWIMLANE_ORDER
 } from '../graphql/fragments'
 import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
@@ -36,29 +36,29 @@ const AlertBox = ({
 
     let alertMsg
     switch (action) {
-    case 'DELETE_COLUMN':
-        alertMsg = alertMsgDeleteColumn
-        break
-    case 'DELETE_TASK':
-        alertMsg = alertMsgDeleteTask
-        break
-    case 'DELETE_TASK_IF_SUBTASKS':
-        alertMsg = alertMsgDeleteTaskIfSubtasks
-        break
-    case 'ARCHIVE_TASK_IF_SUBTASKS':
-        alertMsg = alertMsgArchiveTaskIfSubtasks
-        break
-    case 'ARCHIVE_TASK':
-        alertMsg = alertMsgArchiveTask
-        break
-    case 'ARCHIVE_SUBTASK':
-        alertMsg = alertMsgArchiveSubtask
-        break
-    case 'DELETE_SUBTASK':
-        alertMsg = alertMsgDeleteSubtask
-        break
-    default:
-        break
+        case 'DELETE_COLUMN':
+            alertMsg = alertMsgDeleteColumn
+            break
+        case 'DELETE_TASK':
+            alertMsg = alertMsgDeleteTask
+            break
+        case 'DELETE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgDeleteTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgArchiveTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK':
+            alertMsg = alertMsgArchiveTask
+            break
+        case 'ARCHIVE_SUBTASK':
+            alertMsg = alertMsgArchiveSubtask
+            break
+        case 'DELETE_SUBTASK':
+            alertMsg = alertMsgDeleteSubtask
+            break
+        default:
+            break
     }
 
     const WhiteCheckbox = withStyles({
@@ -91,6 +91,7 @@ const AlertBox = ({
         })
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
+        console.log(subtasksToBeDeleted)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
         archiveTask({
             variables: {

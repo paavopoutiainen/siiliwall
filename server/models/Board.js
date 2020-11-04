@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING,
             allowNull: false,
         },
+        ticketCount: DataTypes.INTEGER,
         name: {
             type: DataTypes.STRING,
             allowNull: false,
