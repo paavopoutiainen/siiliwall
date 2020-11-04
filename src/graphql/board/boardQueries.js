@@ -17,7 +17,7 @@ export const BOARD_BY_ID = gql`
             name
             columnOrder
             swimlaneOrder
-            prettyIdInt
+            ticketCount
             columns {
                 id
                 name

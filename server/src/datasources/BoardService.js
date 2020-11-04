@@ -377,12 +377,12 @@ class BoardService {
             const tasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = tasksBoard.prettyId
 
-            tasksBoard.prettyIdInt += 1
+            tasksBoard.ticketCount += 1
             const updatedBoard = await tasksBoard.save()
 
             addedTask = await this.store.Task.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${updatedBoard.prettyIdInt}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 boardId,
                 columnId,
                 title,
@@ -443,12 +443,12 @@ class BoardService {
             const subtasksBoard = await this.store.Board.findByPk(boardId)
             const prettyIdOfBoard = subtasksBoard.prettyId
 
-            subtasksBoard.prettyIdInt += 1
+            subtasksBoard.ticketCount += 1
             const updatedBoard = await subtasksBoard.save()
 
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                prettyId: `${prettyIdOfBoard}-${updatedBoard.prettyIdInt}`,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 name,
                 content,
                 size,
