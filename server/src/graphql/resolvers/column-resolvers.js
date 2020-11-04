@@ -19,12 +19,15 @@ const schema = {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TICKET_MOVED_IN_COLUMN),
                 (payload, args) => args.boardId === payload.boardId,
+
             ),
         },
         columnDeleted: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_DELETED),
-                (payload, args) => args.boardId === payload.boardId
+                (payload, args) => args.boardId === payload.boardId,
+                console.log('HALOO')
+
             )
         }
     },
@@ -39,15 +42,17 @@ const schema = {
             return dataSources.boardService.editColumnById(id, name)
         },
 
-        async deleteColumnById(root, { id, boardId }) {
+        async deleteColumnById(root, { id }) {
+
             let deletedColumnId
             try {
+                const board = await dataSources.boardService.getColumnBoardByColumnId(id)
                 deletedColumnId = await dataSources.boardService.deleteColumnById(id)
-                pubsub.publish(DELETE_COLUMN, {
-                    boardId,
+                pubsub.publish(COLUMN_DELETED, {
+                    boardId: board.id,
                     columnDeleted: {
                         removeType: 'DELETED',
-                        removeInfo: { columnId: id, boardId }
+                        removeInfo: { columnId: id, boardId: board.id }
                     }
                 })
             } catch (e) {

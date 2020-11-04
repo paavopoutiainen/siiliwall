@@ -33,7 +33,7 @@ export const COLUMN_DELETED = gql`
     subscription columnDeleted($boardId: ID!) {
         columnDeleted(boardId: $boardId) {
             removeType
-            removeInfo: {
+            removeInfo {
                 columnId
                 boardId
             }

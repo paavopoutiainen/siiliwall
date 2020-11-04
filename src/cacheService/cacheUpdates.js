@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {

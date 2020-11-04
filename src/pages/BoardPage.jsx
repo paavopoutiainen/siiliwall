@@ -10,6 +10,7 @@ import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
 import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
 import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
 import useTicketMovedInColumn from '../graphql/ticket/hooks/useTicketMovedInColumn'
+import useColumnDeleted from '../graphql/column/hooks/useColumnDeleted'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
@@ -19,6 +20,7 @@ const BoardPage = ({ id }) => {
     useTaskRemoved(id)
     useSubtaskMutated(id)
     useTicketMovedInColumn(id)
+    useColumnDeleted(id)
 
     if (queryResult.loading) return null
 
