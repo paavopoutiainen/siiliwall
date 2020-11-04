@@ -10,7 +10,7 @@ import { boardPageStyles } from '../../styles/styles'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const EditTaskDialog = ({
-    dialogStatus, editId, toggleDialog, task,
+    dialogStatus, editId, toggleDialog, task, arrayOfOldMemberIds,
 }) => {
     const [editTask] = useEditTask()
     const { loading, data } = useAllUsers()
@@ -18,7 +18,6 @@ const EditTaskDialog = ({
     const [size, setSize] = useState()
     const [description, setDescription] = useState()
     const [owner, setOwner] = useState()
-    const arrayOfOldMemberIds = task.members.map((user) => user.id)
     const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
@@ -29,7 +28,7 @@ const EditTaskDialog = ({
         setOwner(task.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task.description)
-    }, [task])
+    }, [task, arrayOfOldMemberIds])
 
     if (loading) return null
 

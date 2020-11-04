@@ -2,7 +2,7 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_TICKETS, TICKETORDER, COLUMNORDER,
+    TICKETORDER_AND_TICKETS, COLUMNORDER,
 } from '../graphql/fragments'
 import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
 

@@ -3,7 +3,7 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_SUBTASKS, TICKETORDER, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
+    TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
 } from '../graphql/fragments'
 import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
 
