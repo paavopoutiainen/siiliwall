@@ -27,6 +27,9 @@ module.exports = (sequelize, DataTypes) => {
         Board.belongsTo(models.User, {
             foreignKey: 'creatorId',
         })
+        Board.hasMany(models.Story, {
+            foreignKey: 'boardId',
+        })
         Board.hasMany(models.Task, {
             foreignKey: 'boardId',
         })
