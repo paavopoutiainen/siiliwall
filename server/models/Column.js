@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
         Column.belongsTo(models.Board, {
             foreignKey: 'boardId',
         })
+        Column.hasMany(models.Story, {
+            foreignKey: 'columnId',
+        })
         Column.hasMany(models.Task, {
             foreignKey: 'columnId',
         })

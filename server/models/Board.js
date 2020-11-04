@@ -7,7 +7,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         prettyId: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
         },
         name: {
             type: DataTypes.STRING,
@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         // Board has one creator user
         Board.belongsTo(models.User, {
             foreignKey: 'creatorId',
+        })
+        Board.hasMany(models.Story, {
+            foreignKey: 'boardId',
         })
         Board.hasMany(models.Task, {
             foreignKey: 'boardId',
