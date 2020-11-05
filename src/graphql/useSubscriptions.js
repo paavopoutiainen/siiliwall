@@ -5,16 +5,15 @@ import { COLUMN_DELETED } from './column/columnQueries'
 import { useSubscription } from '@apollo/client'
 import { removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache } from '../cacheService/cacheUpdates'
 
-const useSubscriptions = (id) => {
+const useSubscriptions = (id, eventId) => {
     useSubscription(COLUMN_DELETED,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { columnId, boardId } = data.columnDeleted.removeInfo
                 if (data.columnDeleted.removeType === 'DELETED') {
                     deleteColumnFromCache(columnId, boardId)
                 }
-
             }
         }
     )

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
@@ -8,20 +8,17 @@ import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useSubscriptions from '../graphql/useSubscriptions'
 
-const BoardPage = ({ id }) => {
+const BoardPage = ({ id, eventId }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-
-    useSubscriptions(id)
+    useSubscriptions(id, eventId)
 
     if (queryResult.loading) return null
-
     const board = queryResult.data.boardById
     const switchView = () => {
         toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }
-
     return (
         <Grid
             container

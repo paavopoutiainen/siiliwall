@@ -33,6 +33,8 @@ const AlertBox = ({
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
     const alertMsgArchiveTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Archiving of the task will also archive it's subtasks, but can be examined through the archive setting.`
 
+    const eventId = window.localStorage.getItem('eventId')
+
     let alertMsg
     switch (action) {
         case 'DELETE_COLUMN':
@@ -105,7 +107,8 @@ const AlertBox = ({
         callDeleteColumn({
             variables: {
                 columnId,
-                boardId
+                boardId,
+                eventId
             },
         })
     }

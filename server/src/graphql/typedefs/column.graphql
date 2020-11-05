@@ -31,7 +31,7 @@ type Query {
 type Mutation {
   addColumnForBoard(boardId: ID!, columnName: String!): Column
   editColumnById(id: ID!, name: String!): Column
-  deleteColumnById(id: ID!, boardId: ID!): ID
+  deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!, boardId: ID!): Column
   moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!): [Column!]
   moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
@@ -39,7 +39,7 @@ type Mutation {
 
 type Subscription {
   ticketMovedInColumn(boardId: ID!): TicketMovedInColumnPayload!
-  columnDeleted(boardId: ID!): ColumnRemovePayload!
+  columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
 }
 
 type ColumnRemovePayload {

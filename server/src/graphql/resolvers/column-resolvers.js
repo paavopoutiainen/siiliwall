@@ -24,7 +24,7 @@ const schema = {
         columnDeleted: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_DELETED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             )
         }
     },
@@ -39,12 +39,13 @@ const schema = {
             return dataSources.boardService.editColumnById(id, name)
         },
 
-        async deleteColumnById(root, { id, boardId }) {
+        async deleteColumnById(root, { id, boardId, eventId }) {
             let deletedColumnId
             try {
                 deletedColumnId = await dataSources.boardService.deleteColumnById(id)
                 pubsub.publish(COLUMN_DELETED, {
                     boardId,
+                    eventId,
                     columnDeleted: {
                         removeType: 'DELETED',
                         removeInfo: { columnId: id, boardId }

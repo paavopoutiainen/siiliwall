@@ -17,8 +17,8 @@ export const MOVE_COLUMN = gql`
 `
 
 export const DELETE_COLUMN = gql`
-    mutation deleteColumn($columnId: ID!, $boardId: ID!) {
-        deleteColumnById(id: $columnId, boardId: $boardId)
+    mutation deleteColumn($columnId: ID!, $boardId: ID!, $eventId: ID!) {
+        deleteColumnById(id: $columnId, boardId: $boardId, eventId: $eventId)
     }
 `
 export const EDIT_COLUMN = gql`
@@ -30,8 +30,8 @@ export const EDIT_COLUMN = gql`
     }
 `
 export const COLUMN_DELETED = gql`
-    subscription columnDeleted($boardId: ID!) {
-        columnDeleted(boardId: $boardId) {
+    subscription columnDeleted($boardId: ID!, $eventId: ID!) {
+        columnDeleted(boardId: $boardId, eventId: $eventId) {
             removeType
             removeInfo {
                 columnId
