@@ -12,7 +12,7 @@ import { DELETE_TASK } from '../graphql/task/taskQueries'
 import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
-import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskForCache } from '../cacheService/cacheUpdates'
+import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../cacheService/cacheUpdates'
 
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
@@ -105,13 +105,13 @@ const AlertBox = ({
         callDeleteColumn({
             variables: {
                 columnId,
+                boardId
             },
         })
     }
 
-    const deleteSubtask = (/*columnId, subtaskId*/) => {
-        console.log(columnId, subtaskId)
-        removeSubtaskForCache(subtaskId, columnId)
+    const deleteSubtask = (columnId, subtaskId) => {
+        removeSubtaskFromCache(subtaskId, columnId)
         callDeleteSubtask({
             variables: {
                 subtaskId,
@@ -150,7 +150,7 @@ const AlertBox = ({
             deleteColumn()
         }
         if (action === 'DELETE_SUBTASK') {
-            deleteSubtask(/*columnId, subtaskId*/)
+            deleteSubtask(columnId, subtaskId)
         }
     }
 

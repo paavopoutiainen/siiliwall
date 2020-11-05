@@ -17,11 +17,11 @@ const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    useTaskMutated(id)
+    /*useTaskMutated(id)
     useTaskRemoved(id)
     useSubtaskMutated(id)
     useTicketMovedInColumn(id)
-    useColumnDeleted(id)
+    useColumnDeleted(id)*/
     useSubtaskRemoved(id)
 
     if (queryResult.loading) return null

@@ -58,7 +58,7 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     })
     // Delete related taskId from the board's swimlaneOrder list
     const { swimlaneOrder } = client.readFragment({
-        id: `Board:${boardId}`,
+        id: boardIdForCache,
         fragment: SWIMLANE_ORDER,
     })
     const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
@@ -76,6 +76,7 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
 export const removeSubtaskFromCache = (subtaskId, columnId) => {
     const subtaskIdForCache = `Subtask:${subtaskId}`
     const columnIdForCache = `Column:${columnId}`
+
     const data = client.readFragment({
         id: columnIdForCache,
         fragment: TICKETORDER,

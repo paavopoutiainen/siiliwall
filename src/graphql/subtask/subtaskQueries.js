@@ -67,7 +67,7 @@ export const DELETE_SUBTASK = gql`
 export const SUBTASK_REMOVED = gql`
     subscription subtaskRemoved($boardId: ID!) {
         subtaskRemoved(boardId: $boardId) {
-            removedType
+            removeType
             removeInfo {
                 subtaskId,
                 columnId,

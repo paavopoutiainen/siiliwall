@@ -14,6 +14,12 @@ const schema = {
                 (payload, args) => args.boardId === payload.boardId,
             ),
         },
+        subtaskRemoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(SUBTASK_REMOVED),
+                (payload, args) => args.boardId === payload.boardId
+            )
+        }
     },
 
     Mutation: {
@@ -36,19 +42,23 @@ const schema = {
         },
 
         async deleteSubtaskById(root, { id, columnId, boardId }) {
-            //const board = await dataSources.boardService.getBoardById(root.boardId)
-            const deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
-            pubsub.publish(SUBTASK_REMOVED, {
-                boardId,
-                subtaskRemoved: {
-                    mutationType: 'DELETED',
-                    removeInfo: {
-                        subtaskId: id,
-                        columnId,
-                        boardId
+            let deletedSubtask
+            try {
+                deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
+                pubsub.publish(SUBTASK_REMOVED, {
+                    boardId,
+                    subtaskRemoved: {
+                        removeType: 'DELETED',
+                        removeInfo: {
+                            subtaskId: id,
+                            columnId,
+                            boardId
+                        }
                     }
-                }
-            })
+                })
+            } catch (e) {
+                console.log(e)
+            }
             return deletedSubtask
         },
 

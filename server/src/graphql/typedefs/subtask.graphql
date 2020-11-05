@@ -38,8 +38,8 @@ type SubtaskMutationPayload {
 }
 
 type SubtaskRemovedPayload {
-  removedType: RemoveType!
-  removedInfo: RemoveInfo!
+  removeType: RemoveType!
+  removeInfo: RemoveInfo!
 }
 
 enum MutationType{
@@ -53,7 +53,7 @@ enum RemoveType {
 }
 
 type RemoveInfo {
-  subtaskId
-  columnId
-  boardId
+  subtaskId: ID!
+  columnId: ID!
+  boardId: ID!
 }

@@ -39,16 +39,15 @@ const schema = {
             return dataSources.boardService.editColumnById(id, name)
         },
 
-        async deleteColumnById(root, { id }) {
+        async deleteColumnById(root, { id, boardId }) {
             let deletedColumnId
             try {
-                const board = await dataSources.boardService.getColumnBoardByColumnId(id)
                 deletedColumnId = await dataSources.boardService.deleteColumnById(id)
                 pubsub.publish(COLUMN_DELETED, {
-                    boardId: board.id,
+                    boardId,
                     columnDeleted: {
                         removeType: 'DELETED',
-                        removeInfo: { columnId: id, boardId: board.id }
+                        removeInfo: { columnId: id, boardId }
                     }
                 })
             } catch (e) {
