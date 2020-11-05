@@ -2,7 +2,6 @@
 const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
-
 const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 const COLUMN_DELETED = 'COLUMN_DELETED'
@@ -26,8 +25,6 @@ const schema = {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_DELETED),
                 (payload, args) => args.boardId === payload.boardId,
-                console.log('HALOO')
-
             )
         }
     },
@@ -43,7 +40,6 @@ const schema = {
         },
 
         async deleteColumnById(root, { id }) {
-
             let deletedColumnId
             try {
                 const board = await dataSources.boardService.getColumnBoardByColumnId(id)

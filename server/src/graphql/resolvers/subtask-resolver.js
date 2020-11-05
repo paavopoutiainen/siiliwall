@@ -30,15 +30,32 @@ const schema = {
             })
             return addedSubtask
         },
+
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)
         },
-        deleteSubtaskById(root, { id }) {
-            return dataSources.boardService.deleteSubtaskById(id)
+
+        async deleteSubtaskById(root, { id, columnId, boardId }) {
+            //const board = await dataSources.boardService.getBoardById(root.boardId)
+            const deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
+            pubsub.publish(SUBTASK_REMOVED, {
+                boardId,
+                subtaskRemoved: {
+                    mutationType: 'DELETED',
+                    removeInfo: {
+                        subtaskId: id,
+                        columnId,
+                        boardId
+                    }
+                }
+            })
+            return deletedSubtask
         },
+
         archiveSubtaskById(root, { id }) {
             return dataSources.boardService.archiveSubtaskById(id)
         },
+
         async editSubtaskById(root, {
             id, name, content, size, ownerId, oldMemberIds, newMemberIds,
         }) {
