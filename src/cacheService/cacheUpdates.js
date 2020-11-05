@@ -73,6 +73,24 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     client.cache.evict({ id: taskToBeDeleted })
 }
 
+export const removeSubtaskFromCache = (subtaskId, columnId) => {
+    const subtaskIdForCache = `Subtask:${subtaskId}`
+    const columnIdForCache = `Column:${columnId}`
+    const data = client.readFragment({
+        id: columnIdForCache,
+        fragment: TICKETORDER,
+    })
+    const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+    client.writeFragment({
+        id: columnIdForCache,
+        fragment: TICKETORDER,
+        data: {
+            ticketOrder: newTicketOrder,
+        },
+    })
+    client.cache.evict({ id: subtaskIdForCache })
+}
+
 export const deleteColumnFromCache = (columnId, boardId) => {
     const idToBeDeleted = `Column:${columnId}`
     const boardIdForCache = `Board:${boardId}`

@@ -60,8 +60,20 @@ export const ARCHIVE_SUBTASK = gql`
 `
 
 export const DELETE_SUBTASK = gql`
-    mutation deleteSubtask($subtaskId: ID!) {
-        deleteSubtaskById(id: $subtaskId)
+    mutation deleteSubtask($subtaskId: ID!, $columnId: ID!, $boardId: ID!) {
+        deleteSubtaskById(id: $subtaskId, columnId: $columnId, boardId: $boardId)
+    }
+`
+export const SUBTASK_REMOVED = gql`
+    subscription subtaskRemoved($boardId: ID!) {
+        subtaskRemoved(boardId: $boardId) {
+            removedType
+            removeInfo {
+                subtaskId,
+                columnId,
+                boardId
+            }
+        }
     }
 `
 
