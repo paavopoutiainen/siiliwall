@@ -1,11 +1,11 @@
-import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED } from '../../task/taskQueries'
-import { TICKET_MOVED_IN_COLUMN } from '../../ticket/ticketQueries'
-import { COLUMN_DELETED } from '../../column/columnQueries'
+import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
+import { TASK_MUTATED, TASK_REMOVED } from './task/taskQueries'
+import { TICKET_MOVED_IN_COLUMN } from './ticket/ticketQueries'
+import { COLUMN_DELETED } from './column/columnQueries'
 import { useSubscription } from '@apollo/client'
-import { removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache } from '../../../cacheService/cacheUpdates'
+import { removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache } from '../cacheService/cacheUpdates'
 
-const useSubtaskRemoved = (id) => {
+const useSubscriptions = (id) => {
     useSubscription(COLUMN_DELETED,
         {
             variables: { boardId: id },
@@ -23,7 +23,6 @@ const useSubtaskRemoved = (id) => {
             variables: { boardId: id },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { subtaskId, columnId } = data.subtaskRemoved.removeInfo
-                console.log(subtaskId, columnId)
                 if (data.subtaskRemoved.removeType === 'DELETED') {
                     removeSubtaskFromCache(subtaskId, columnId)
                 }
@@ -78,4 +77,4 @@ const useSubtaskRemoved = (id) => {
         }
     )
 }
-export default useSubtaskRemoved
+export default useSubscriptions

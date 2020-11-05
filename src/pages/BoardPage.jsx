@@ -6,23 +6,14 @@ import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
-import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
-import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
-import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
-import useTicketMovedInColumn from '../graphql/ticket/hooks/useTicketMovedInColumn'
-import useColumnDeleted from '../graphql/column/hooks/useColumnDeleted'
-import useSubtaskRemoved from '../graphql/subtask/hooks/useSubtaskRemoved'
+import useSubscriptions from '../graphql/useSubscriptions'
 
 const BoardPage = ({ id }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    /*useTaskMutated(id)
-    useTaskRemoved(id)
-    useSubtaskMutated(id)
-    useTicketMovedInColumn(id)
-    useColumnDeleted(id)*/
-    useSubtaskRemoved(id)
+
+    useSubscriptions(id)
 
     if (queryResult.loading) return null
 
