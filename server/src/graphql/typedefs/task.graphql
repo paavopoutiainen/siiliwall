@@ -30,7 +30,7 @@ type Mutation {
 
 type Subscription {
   taskMutated(boardId: ID!, eventId: ID!): TaskMutationPayload!
-  taskRemoved(boardId: ID!): TaskRemovedPayload!
+  taskRemoved(boardId: ID!, eventId: ID!): TaskRemovedPayload!
 }
 
 type TaskMutationPayload {
