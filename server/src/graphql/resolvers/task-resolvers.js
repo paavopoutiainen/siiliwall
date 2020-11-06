@@ -51,13 +51,14 @@ const schema = {
             return addedTask
         },
         async editTaskById(root, {
-            id, title, size, ownerId, oldMemberIds, newMemberIds, description,
+            id, title, size, ownerId, oldMemberIds, newMemberIds, description, eventId,
         }) {
             let editedTask
             try {
                 editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
                 pubsub.publish(TASK_MUTATED, {
                     boardId: editedTask.boardId,
+                    eventId,
                     taskMutated: {
                         mutationType: 'UPDATED',
                         node: editedTask,

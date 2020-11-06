@@ -63,6 +63,7 @@ const EditTaskDialog = ({
 
     const handleSave = (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         editTask({
             variables: {
                 taskId: editId,
@@ -72,6 +73,7 @@ const EditTaskDialog = ({
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
                 description,
+                eventId,
             },
         })
         toggleDialog()
