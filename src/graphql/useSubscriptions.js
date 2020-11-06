@@ -34,7 +34,6 @@ const useSubscriptions = (id, eventId) => {
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { taskId, columnId, boardId } = data.taskRemoved.removeInfo
                 // At some point these cases will probably be handled differently
-                console.log('kldjsglksjdfklfjklh')
                 if (data.taskRemoved.removeType === 'DELETED') {
                     removeTaskFromCache(taskId, columnId, boardId)
                 } else if (data.taskRemoved.removeType === 'ARCHIVED') {
