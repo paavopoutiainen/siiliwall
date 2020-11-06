@@ -37,29 +37,29 @@ const AlertBox = ({
 
     let alertMsg
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'DELETE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgDeleteTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgArchiveTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        case 'ARCHIVE_SUBTASK':
-            alertMsg = alertMsgArchiveSubtask
-            break
-        case 'DELETE_SUBTASK':
-            alertMsg = alertMsgDeleteSubtask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'DELETE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgDeleteTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgArchiveTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
+    case 'DELETE_SUBTASK':
+        alertMsg = alertMsgDeleteSubtask
+        break
+    default:
+        break
     }
 
     const WhiteCheckbox = withStyles({
@@ -108,7 +108,7 @@ const AlertBox = ({
             variables: {
                 columnId,
                 boardId,
-                eventId
+                eventId,
             },
         })
     }
@@ -119,7 +119,7 @@ const AlertBox = ({
             variables: {
                 subtaskId,
                 columnId,
-                boardId
+                boardId,
             },
         })
     }
@@ -141,6 +141,7 @@ const AlertBox = ({
                 taskId,
                 columnId,
                 boardId,
+                eventId,
             },
         })
     }

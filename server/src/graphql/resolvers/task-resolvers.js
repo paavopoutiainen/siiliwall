@@ -23,7 +23,7 @@ const schema = {
         taskRemoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TASK_REMOVED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
     },
@@ -69,12 +69,15 @@ const schema = {
             }
             return editedTask
         },
-        async deleteTaskById(root, { id, columnId, boardId }) {
+        async deleteTaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             let deletedTaskId
             try {
                 deletedTaskId = await dataSources.boardService.deleteTaskById(id)
                 pubsub.publish(TASK_REMOVED, {
                     boardId,
+                    eventId,
                     taskRemoved: {
                         removeType: 'DELETED',
                         removeInfo: { taskId: id, columnId, boardId },
