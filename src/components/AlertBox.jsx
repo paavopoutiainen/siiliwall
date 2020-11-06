@@ -85,6 +85,9 @@ const AlertBox = ({
     }
 
     const archiveTaskById = () => {
+        // Handle cache
+        removeTaskFromCache(taskId, columnId, boardId)
+        // Find the related subtasks and archive them
         const boardIdForCache = `Board:${boardId}`
         const columnData = client.readFragment({
             id: boardIdForCache,
@@ -93,11 +96,13 @@ const AlertBox = ({
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
+        // Send mutaion to the server
         archiveTask({
             variables: {
                 taskId,
                 columnId,
                 boardId,
+                eventId,
             },
         })
     }

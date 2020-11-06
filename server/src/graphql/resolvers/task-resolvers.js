@@ -88,11 +88,14 @@ const schema = {
             }
             return deletedTaskId
         },
-        async archiveTaskById(root, { id, columnId, boardId }) {
+        async archiveTaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             try {
                 await dataSources.boardService.archiveTaskById(id)
                 pubsub.publish(TASK_REMOVED, {
                     boardId,
+                    eventId,
                     taskRemoved: {
                         removeType: 'ARCHIVED',
                         removeInfo: { taskId: id, columnId, boardId },
