@@ -29,7 +29,7 @@ const EditTaskDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        setOwner(action.value)
+        setOwner(action != null ? action.value : null)
     }
 
     const handleSizeChange = (event) => {
@@ -94,9 +94,17 @@ const EditTaskDialog = ({
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
     // data for showing only the members not yet chosen
     const modifiedMemberOptions = modifiedData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
+
+    const chosenOwnerData = modifiedData.map((user) => {
+        if (user.value === owner) {
+            const newObject = { value: user.value, label: user.label }
+            return newObject
+        }
+    })
 
     return (
         <Grid>
@@ -133,8 +141,10 @@ const EditTaskDialog = ({
                     />
                     <Select
                         className="selectField"
-                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
+                        isClearable
+                        placeholder="Select owner"
                         options={modifiedData}
+                        defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
                     />
                     <Select
