@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -58,7 +58,7 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     })
     // Delete related taskId from the board's swimlaneOrder list
     const { swimlaneOrder } = client.readFragment({
-        id: `Board:${boardId}`,
+        id: boardIdForCache,
         fragment: SWIMLANE_ORDER,
     })
     const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
@@ -71,6 +71,44 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     })
     // Delete normalized object itself
     client.cache.evict({ id: taskToBeDeleted })
+}
+
+export const removeSubtaskFromCache = (subtaskId, columnId) => {
+    const subtaskIdForCache = `Subtask:${subtaskId}`
+    const columnIdForCache = `Column:${columnId}`
+
+    const data = client.readFragment({
+        id: columnIdForCache,
+        fragment: TICKETORDER,
+    })
+    const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+    client.writeFragment({
+        id: columnIdForCache,
+        fragment: TICKETORDER,
+        data: {
+            ticketOrder: newTicketOrder,
+        },
+    })
+    client.cache.evict({ id: subtaskIdForCache })
+}
+
+export const deleteColumnFromCache = (columnId, boardId) => {
+    const idToBeDeleted = `Column:${columnId}`
+    const boardIdForCache = `Board:${boardId}`
+    const data = client.readFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER,
+    })
+    const newColumnOrder = data.columnOrder.filter((id) => id !== columnId)
+
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER,
+        data: {
+            columnOrder: newColumnOrder,
+        },
+    })
+    client.cache.evict({ id: idToBeDeleted })
 }
 
 export const addNewSubtask = (addedSubtask) => {
