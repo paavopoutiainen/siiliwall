@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
 } from '@material-ui/core'
@@ -14,14 +14,22 @@ const EditSubtaskDialog = ({
 }) => {
     const [editSubtask] = useEditSubtask()
     const { loading, data } = useAllUsers()
-    const [name, setName] = useState(subtask?.name)
-    const [size, setSize] = useState(subtask?.size)
-    const [content, setContent] = useState(subtask?.content)
-    const [owner, setOwner] = useState(subtask?.owner ? subtask.owner.id : null)
+    const [name, setName] = useState()
+    const [size, setSize] = useState()
+    const [content, setContent] = useState(subtask.content)
+    const [owner, setOwner] = useState()
     const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
-    const [members, setMembers] = useState(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+    const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+
+    useEffect(() => {
+        setName(subtask.name)
+        setSize(subtask.size)
+        setContent(subtask.content)
+        setOwner(subtask.owner ? subtask.owner.id : null)
+        setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+    }, [subtask])
 
     if (loading) return null
     const handleOwnerChange = (action) => {

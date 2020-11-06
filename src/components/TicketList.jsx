@@ -4,7 +4,7 @@ import Task from './task/Task'
 import Subtask from './subtask/Subtask'
 
 const TicketList = ({
-    tasks, subtasks, ticketOrder, columnId, boardId,
+    ticketOrder, tasks, subtasks, columnId, boardId,
 }) => {
     const ticketsInOrder = ticketOrder.map((obj) => {
         let foundTicket
@@ -34,10 +34,11 @@ const TicketList = ({
                         </Grid>
                     )
                 }
+
                 return component
             })}
         </Grid>
     )
 }
 
-export default TicketList
+export default React.memo(TicketList)

@@ -1,30 +1,35 @@
 import { gql } from '@apollo/client'
 
 export const ADD_SUBTASK = gql`
-    mutation createSubtask($taskId: ID!, $columnId: ID!, $name: String, $content: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $ticketOrder: [TicketOrderInput!]) {
-        addSubtaskForTask(taskId: $taskId, columnId: $columnId, name: $name, content: $content, size: $size, ownerId: $ownerId, memberIds: $memberIds, ticketOrder: $ticketOrder) {
+    mutation createSubtask($taskId: ID!, $columnId: ID!, $boardId: ID!, $name: String, $content: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $ticketOrder: [TicketOrderInput!]) {
+        addSubtaskForTask(taskId: $taskId, columnId: $columnId, boardId: $boardId, name: $name, content: $content, size: $size, ownerId: $ownerId, memberIds: $memberIds, ticketOrder: $ticketOrder) {
             id
+            prettyId
             name
             content
             size
-            owner {
-                id
-                userName
-            }
-            task {
-                id
-                title
-            }
-            members {
-                id
-                userName
-            }
             column {
                 id
                 ticketOrder {
                     ticketId
                     type
                 }
+            }
+            owner {
+                id
+                userName
+            }
+            task {
+                id
+                prettyId
+                title
+            }
+            members {
+                id
+                userName
+            }
+            board {
+                id
             }
         }
     }
@@ -58,4 +63,42 @@ export const DELETE_SUBTASK = gql`
     mutation deleteSubtask($subtaskId: ID!) {
         deleteSubtaskById(id: $subtaskId)
     }
+`
+
+export const SUBTASK_MUTATED = gql`
+  subscription subtaskMutated($boardId: ID!) {
+    subtaskMutated(boardId: $boardId) {
+      mutationType
+      subtask {
+        id
+        prettyId
+        name
+        content
+        size
+        column {
+            id
+            ticketOrder {
+                ticketId
+                type
+            }
+        }
+        owner {
+            id
+            userName
+        }
+        task {
+            id
+            prettyId
+            title
+        }
+        members {
+            id
+            userName
+        }
+        board {
+            id
+        }
+      }
+    }
+  }
 `
