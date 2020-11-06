@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
@@ -6,27 +6,19 @@ import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
-import useTaskMutated from '../graphql/task/hooks/useTaskMutated'
-import useTaskRemoved from '../graphql/task/hooks/useTaskRemoved'
-import useSubtaskMutated from '../graphql/subtask/hooks/useSubtaskMutated'
-import useTicketMovedInColumn from '../graphql/ticket/hooks/useTicketMovedInColumn'
+import useSubscriptions from '../graphql/useSubscriptions'
 
-const BoardPage = ({ id }) => {
+const BoardPage = ({ id, eventId }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    useTaskMutated(id)
-    useTaskRemoved(id)
-    useSubtaskMutated(id)
-    useTicketMovedInColumn(id)
+    useSubscriptions(id, eventId)
 
     if (queryResult.loading) return null
-
     const board = queryResult.data.boardById
     const switchView = () => {
         toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }
-
     return (
         <Grid
             container

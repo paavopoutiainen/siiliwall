@@ -2,9 +2,9 @@
 const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
-
 const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
+const COLUMN_DELETED = 'COLUMN_DELETED'
 
 const schema = {
     Query: {
@@ -18,8 +18,15 @@ const schema = {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TICKET_MOVED_IN_COLUMN),
                 (payload, args) => args.boardId === payload.boardId,
+
             ),
         },
+        columnDeleted: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(COLUMN_DELETED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            )
+        }
     },
 
     Mutation: {
@@ -31,9 +38,25 @@ const schema = {
         }) {
             return dataSources.boardService.editColumnById(id, name)
         },
-        deleteColumnById(root, { id }) {
-            return dataSources.boardService.deleteColumnById(id)
+
+        async deleteColumnById(root, { id, boardId, eventId }) {
+            let deletedColumnId
+            try {
+                deletedColumnId = await dataSources.boardService.deleteColumnById(id)
+                pubsub.publish(COLUMN_DELETED, {
+                    boardId,
+                    eventId,
+                    columnDeleted: {
+                        removeType: 'DELETED',
+                        removeInfo: { columnId: id, boardId }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return deletedColumnId
         },
+
         async moveTicketInColumn(root, {
             newOrder, columnId, boardId,
         }) {
@@ -47,6 +70,7 @@ const schema = {
             })
             return modifiedColumn
         },
+
         async moveTicketFromColumn(root, {
             type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
         }) {
