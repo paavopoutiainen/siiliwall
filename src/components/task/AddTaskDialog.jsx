@@ -56,7 +56,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const handleSave = (event) => {
         event.preventDefault()
 
-
+        const eventId = window.localStorage.getItem('eventId')
         addTask({
             variables: {
                 boardId: column.board.id,
@@ -66,6 +66,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                 ownerId: owner,
                 memberIds: members,
                 description,
+                eventId,
             },
         })
         emptyState()

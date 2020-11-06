@@ -17,7 +17,7 @@ const schema = {
         taskMutated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TASK_MUTATED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
         taskRemoved: {
@@ -30,7 +30,7 @@ const schema = {
 
     Mutation: {
         async addTaskForColumn(root, {
-            boardId, columnId, title, size, ownerId, memberIds, description,
+            boardId, columnId, title, size, ownerId, memberIds, description, eventId,
         }) {
             let addedTask
             try {
@@ -38,6 +38,7 @@ const schema = {
                     .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
                 pubsub.publish(TASK_MUTATED, {
                     boardId,
+                    eventId,
                     taskMutated: {
                         mutationType: 'CREATED',
                         node: addedTask.dataValues,

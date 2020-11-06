@@ -1,9 +1,11 @@
+import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED } from './task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN } from './ticket/ticketQueries'
 import { COLUMN_DELETED } from './column/columnQueries'
-import { useSubscription } from '@apollo/client'
-import { removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache } from '../cacheService/cacheUpdates'
+import {
+    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache,
+} from '../cacheService/cacheUpdates'
 
 const useSubscriptions = (id, eventId) => {
     useSubscription(COLUMN_DELETED,
@@ -14,9 +16,8 @@ const useSubscriptions = (id, eventId) => {
                 if (data.columnDeleted.removeType === 'DELETED') {
                     deleteColumnFromCache(columnId, boardId)
                 }
-            }
-        }
-    )
+            },
+        })
     useSubscription(SUBTASK_REMOVED,
         {
             variables: { boardId: id },
@@ -25,9 +26,8 @@ const useSubscriptions = (id, eventId) => {
                 if (data.subtaskRemoved.removeType === 'DELETED') {
                     removeSubtaskFromCache(subtaskId, columnId)
                 }
-            }
-        }
-    )
+            },
+        })
     useSubscription(TASK_REMOVED,
         {
             variables: { boardId: id },
@@ -40,11 +40,10 @@ const useSubscriptions = (id, eventId) => {
                     removeTaskFromCache(taskId, columnId, boardId)
                 }
             },
-        }
-    )
+        })
     useSubscription(TASK_MUTATED,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 // At some point different kind of actions will be taken according to the mutationType
                 // For example notifying the user that something got updated when mutationType is "UPDATED"
@@ -54,8 +53,7 @@ const useSubscriptions = (id, eventId) => {
                     addNewTask(data.taskMutated.node)
                 }
             },
-        }
-    )
+        })
     useSubscription(SUBTASK_MUTATED,
         {
             variables: { boardId: id },
@@ -64,8 +62,7 @@ const useSubscriptions = (id, eventId) => {
                     addNewSubtask(data.subtaskMutated.subtask)
                 }
             },
-        }
-    )
+        })
     useSubscription(TICKET_MOVED_IN_COLUMN,
         {
             variables: { boardId: id },
@@ -73,7 +70,6 @@ const useSubscriptions = (id, eventId) => {
                 const { columnId, newOrder } = data.ticketMovedInColumn
                 cacheTicketMovedInColumn(columnId, newOrder)
             },
-        }
-    )
+        })
 }
 export default useSubscriptions

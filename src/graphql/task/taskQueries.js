@@ -18,8 +18,8 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $description: String) {
-        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description) {
+    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
+        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -94,8 +94,8 @@ export const MOVE_SWIMLANE = gql`
     }
 `
 export const TASK_MUTATED = gql`
-  subscription taskMutated($boardId: ID!) {
-    taskMutated(boardId: $boardId) {
+  subscription taskMutated($boardId: ID!, $eventId: ID!) {
+    taskMutated(boardId: $boardId, eventId: $eventId) {
       mutationType
       node {
         id
