@@ -29,7 +29,7 @@ export const landingPageStyles = makeStyles({
         minWidth: '16rem',
     },
 
-    addBoardButton: {
+    addNewButton: {
         height: '6rem',
         width: '6rem',
         fontSize: '0.7rem',
@@ -40,6 +40,7 @@ export const landingPageStyles = makeStyles({
         textAlign: 'center',
         textDecoration: 'none',
     },
+
 })
 
 export const boardPageStyles = makeStyles({
@@ -92,6 +93,27 @@ export const boardPageStyles = makeStyles({
         backgroundColor: 'rgba(255, 140, 85, .8)',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
+        flexWrap: 'nowrap',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+    },
+
+    subtaskHeaderTitleItem: {
+        width: 200,
+    },
+
+    foreingKeyIcon: {
+        fontSize: 12
+    },
+
+    taskPrettyIdInSubtask: {
+        fontSize: 12,
+    },
+
+    subtaskHeaderTitleText: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
 
     subtaskDropdownComponent: {
@@ -101,6 +123,18 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownButton: {
         height: '100%',
     },
+
+    subtaskContentAndName: {
+        maxWidth: 300,
+
+    },
+
+    subtaskContentAndNameText: {
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+    },
+
     taskDropdownComponent: {
         height: 25,
     },
@@ -136,6 +170,13 @@ export const boardPageStyles = makeStyles({
         margin: 5,
     },
 
+    alertCheckbox: {
+        color: 'white',
+        '&$checked': {
+            color: 'white',
+        },
+    },
+
     dialogPaper: {
         minHeight: '80vh',
         maxHeight: '80vh',
@@ -152,11 +193,12 @@ export const swimlaneStyles = makeStyles({
 
     swimlaneColumnName: {
         textAlign: 'center',
-        width: 300,
+        width: 335,
     },
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
+        backgroundColor: 'white',
     },
 
     swimlaneTitle: {
@@ -167,11 +209,12 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumnList: {
         minHeight: 133,
         width: '100%',
+        flexWrap: 'nowrap',
     },
 
     swimlaneColumn: {
         border: '2px solid lightgrey',
-        width: 300,
+        width: 327,
         minHeight: 133,
         backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',

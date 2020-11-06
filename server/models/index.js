@@ -1,3 +1,5 @@
+/* eslint-disable global-require */
+/* eslint-disable import/no-dynamic-require */
 const fs = require('fs')
 const path = require('path')
 const Sequelize = require('sequelize')
@@ -50,6 +52,18 @@ const initializeDb = async () => {
         await Promise.all(
             dummyData.columns.map(async (column) => {
                 const resolved = await db.Column.create(column)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.stories.map(async (story) => {
+                const resolved = await db.Story.create(story)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.userStories.map(async (userStory) => {
+                const resolved = await db.UserStory.create(userStory)
                 return resolved
             }),
         )

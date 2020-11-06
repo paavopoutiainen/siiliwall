@@ -9,3 +9,7 @@ type Query {
   allUsers: [User!]!
   userById(id: ID!): User!
 }
+
+type Mutation {
+  addUser(userName: String!): User
+}

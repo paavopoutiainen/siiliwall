@@ -1,16 +1,18 @@
 type Task {
   id: ID!
+  prettyId: String!
   title: String!
   owner: User
   size: Int
   description: String
   column: Column!
   columnOrderNumber: Int!
-  swimlaneOrderNumber: Int!
+  swimlaneOrderNumber: Int
   subtasks: [Subtask!]!
   subtaskOrder: [ID!]!
   deletedAt: String
   members: [User!]!
+  board: Board
 }
 
 type Query {
@@ -20,9 +22,41 @@ type Query {
 type Mutation {
   addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Int, ownerId: ID, memberIds: [ID!], description: String): Task
   editTaskById(id: ID!, title: String!, size: Int, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String): Task
-  deleteTaskById(id: ID!): ID
-  archiveTaskById(id: ID!): ID
+  deleteTaskById(id: ID!, columnId: ID!, boardId:ID!): ID
+  archiveTaskById(id: ID!, columnId: ID!, boardId:ID!): RemoveInfo!
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
-  moveSwimlane(boardId: ID!, newSwimlaneOrder: [ID!]!): ID!
 }
+
+type Subscription {
+  taskMutated(boardId: ID!): TaskMutationPayload!
+  taskRemoved(boardId: ID!): TaskRemovedPayload!
+}
+
+type TaskMutationPayload {
+  mutationType: MutationType!
+  node: Task!
+}
+
+type TaskRemovedPayload {
+  removeType: RemoveType!
+  removeInfo: RemoveInfo!
+}
+
+type RemoveInfo {
+  taskId: ID!
+  columnId: ID!
+  boardId: ID!
+}
+
+enum MutationType{
+  CREATED
+  UPDATED
+}
+
+enum RemoveType {
+  DELETED
+  ARCHIVED
+}
+
+

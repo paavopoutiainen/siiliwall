@@ -3,16 +3,25 @@ import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
-import { Delete, Edit, Archive } from '@material-ui/icons'
+import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../AlertBox'
+import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
+import { useApolloClient } from '@apollo/client'
 
 const DropdownSubtask = ({ columnId, subtaskId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [action, setAction] = useState(null)
+    const client = useApolloClient()
+    const columnIdForCache = `Column:${columnId}`
 
+    const columnData = client.readFragment({
+        id: columnIdForCache,
+        fragment: BOARD_ID_BY_COLUMN_ID
+    })
+    const boardId = columnData.board.id
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
     const handleClick = (event) => {
@@ -45,12 +54,6 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem>
-                    <ListItemIcon>
-                        <Edit />
-                    </ListItemIcon>
-                    <ListItemText primary="Edit" />
-                </MenuItem>
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_SUBTASK')}>
                     <ListItemIcon>
                         <Archive />
@@ -70,6 +73,7 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                 action={action}
                 subtaskId={subtaskId}
                 columnId={columnId}
+                boardId={boardId}
             />
         </Grid>
     )

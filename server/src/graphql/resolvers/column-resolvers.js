@@ -1,10 +1,24 @@
 /* eslint-disable max-len */
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
+const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 
 const schema = {
     Query: {
         columnById(root, args) {
             return dataSources.boardService.getColumnById(args.id)
+        },
+    },
+
+    Subscription: {
+        ticketMovedInColumn: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TICKET_MOVED_IN_COLUMN),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
         },
     },
 
@@ -20,20 +34,19 @@ const schema = {
         deleteColumnById(root, { id }) {
             return dataSources.boardService.deleteColumnById(id)
         },
-        /* moveTaskInColumn(root, args) {
-            return dataSources.boardService.reOrderTasksOfColumn(args.newOrder, args.columnId)
-        }, */
-        moveTicketInColumn(root, args) {
-            return dataSources.boardService.reOrderTicketsOfColumn(args.newOrder, args.columnId)
-        },
-        /* async moveTaskFromColumn(root, {
-            taskId, sourceColumnId, destColumnId, sourceTaskOrder, destTaskOrder,
+        async moveTicketInColumn(root, {
+            newOrder, columnId, boardId,
         }) {
-            await dataSources.boardService.changeTasksColumnId(taskId, destColumnId)
-            const sourceColumn = await dataSources.boardService.reOrderTasksOfColumn(sourceTaskOrder, sourceColumnId)
-            const destColumn = await dataSources.boardService.reOrderTasksOfColumn(destTaskOrder, destColumnId)
-            return [sourceColumn, destColumn]
-        }, */
+            const modifiedColumn = await dataSources.boardService.reOrderTicketsOfColumn(newOrder, columnId)
+            pubsub.publish(TICKET_MOVED_IN_COLUMN, {
+                boardId,
+                ticketMovedInColumn: {
+                    newOrder,
+                    columnId,
+                },
+            })
+            return modifiedColumn
+        },
         async moveTicketFromColumn(root, {
             type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
         }) {
@@ -52,17 +65,14 @@ const schema = {
         board(root) {
             return dataSources.boardService.getColumnBoardByColumnId(root.id)
         },
+        stories(root) {
+            return dataSources.boardService.getStoriesByColumnId(root.id)
+        },
         tasks(root) {
             return dataSources.boardService.getTasksByColumnId(root.id)
         },
         subtasks(root) {
             return dataSources.boardService.getSubtasksByColumnId(root.id)
-        },
-        taskOrder(root) {
-            return dataSources.boardService.getTaskOrderOfColumn(root.id)
-        },
-        subtaskOrder(root) {
-            return dataSources.boardService.getSubtaskOrderOfColumn(root.id)
         },
         ticketOrder(root) {
             return dataSources.boardService.getTicketOrderOfColumn(root.id)

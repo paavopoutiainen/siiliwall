@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import {
-    Delete, Edit, Archive, Add,
+    Delete, Archive, Add,
 } from '@material-ui/icons'
+import { useApolloClient } from '@apollo/client'
 import AlertBox from '../AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
+import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
-    columnId, taskId, handleEdit, boardId,
+    columnId, task, boardId,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
+    const [count, setCount] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [addDialogStatus, setAddDialogStatus] = useState(false)
     const classes = boardPageStyles()
+    const client = useApolloClient()
 
     const toggleAddDialog = () => {
         setAnchorEl(null)
@@ -30,17 +34,31 @@ const DropdownTask = ({
     }
 
     const openAlertDialog = (order) => {
+        const boardIdForCache = `Board:${boardId}`
+        const columnData = client.readFragment({
+            id: boardIdForCache,
+            fragment: COLUMNORDER_AND_COLUMNS,
+        })
+        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksOfTask = columnsSubtasks.filter((subtask) => subtask.task.id === task.id)
+        if (order === 'DELETE_TASK' && subtasksOfTask.length) {
+            setCount(subtasksOfTask.length)
+            setAction('DELETE_TASK_IF_SUBTASKS')
+            setAlertDialogStatus(true)
+            setAnchorEl(null)
+            return
+        }
+        if (order === 'ARCHIVE_TASK' && subtasksOfTask.length) {
+            setCount(subtasksOfTask.length)
+            setAction('ARCHIVE_TASK_IF_SUBTASKS')
+            setAlertDialogStatus(true)
+            setAnchorEl(null)
+            return
+        }
         setAction(order)
         setAlertDialogStatus(true)
         setAnchorEl(null)
     }
-
-    useEffect(() => {
-        if (handleEdit) {
-            setAnchorEl(null)
-        }
-    }, [handleEdit])
-
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>
             <Button
@@ -67,12 +85,6 @@ const DropdownTask = ({
                     </ListItemIcon>
                     <ListItemText primary="Create subtask" />
                 </MenuItem>
-                <MenuItem onClick={handleEdit}>
-                    <ListItemIcon>
-                        <Edit />
-                    </ListItemIcon>
-                    <ListItemText primary="Edit" />
-                </MenuItem>
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
                     <ListItemIcon>
                         <Archive />
@@ -89,15 +101,17 @@ const DropdownTask = ({
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                taskId={taskId}
+                taskId={task.id}
                 columnId={columnId}
+                boardId={boardId}
                 action={action}
+                count={count}
             />
             <AddSubtaskDialog
                 addDialogStatus={addDialogStatus}
                 toggleAddDialog={toggleAddDialog}
                 columnId={columnId}
-                taskId={taskId}
+                taskId={task.id}
                 boardId={boardId}
             />
         </Grid>

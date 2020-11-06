@@ -1,12 +1,34 @@
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const SUBTASK_MUTATED = 'SUBTASK_MUTATED'
+const SUBTASK_REMOVED = 'SUBTASK_REMOVED'
 
 const schema = {
 
+    Subscription: {
+        subtaskMutated: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(SUBTASK_MUTATED),
+                (payload, args) => args.boardId === payload.boardId,
+            ),
+        },
+    },
+
     Mutation: {
-        addSubtaskForTask(root, {
-            taskId, columnId, content, ownerId, memberIds, ticketOrder,
+        async addSubtaskForTask(root, {
+            taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder,
         }) {
-            return dataSources.boardService.addSubtaskForTask(taskId, columnId, content, ownerId, memberIds, ticketOrder)
+            const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
+            pubsub.publish(SUBTASK_MUTATED, {
+                boardId,
+                subtaskMutated: {
+                    mutationType: 'CREATED',
+                    subtask: addedSubtask.dataValues,
+                },
+            })
+            return addedSubtask
         },
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)
@@ -17,6 +39,19 @@ const schema = {
         archiveSubtaskById(root, { id }) {
             return dataSources.boardService.archiveSubtaskById(id)
         },
+        async editSubtaskById(root, {
+            id, name, content, size, ownerId, oldMemberIds, newMemberIds,
+        }) {
+            const editedSubtask = await dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds)
+            pubsub.publish(SUBTASK_MUTATED, {
+                boardId: editedSubtask.boardId,
+                subtaskMutated: {
+                    mutationType: 'UPDATED',
+                    subtask: editedSubtask.dataValues,
+                },
+            })
+            return editedSubtask
+        },
     },
 
     Subtask: {
@@ -25,6 +60,9 @@ const schema = {
         },
         column(root) {
             return dataSources.boardService.getColumnById(root.columnId)
+        },
+        board(root) {
+            return dataSources.boardService.getBoardById(root.boardId)
         },
         owner(root) {
             if (!root.ownerId) {

@@ -1,3 +1,5 @@
+/* eslint-disable no-shadow */
+/* eslint-disable radix */
 /* eslint-disable class-methods-use-this */
 const { v4: uuid } = require('uuid')
 const sanitize = require('../utils/sanitize')
@@ -85,6 +87,16 @@ class BoardService {
         return columnId
     }
 
+    async getStoriesByColumnId(columnId) {
+        let storiesFromDb
+        try {
+            storiesFromDb = await this.store.Story.findAll({ where: { columnId, deletedAt: null } })
+        } catch (e) {
+            console.error(e)
+        }
+        return storiesFromDb
+    }
+
     async getTasksByColumnId(columnId) {
         let tasksFromDb
         try {
@@ -105,6 +117,16 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getStoryById(storyId) {
+        let storyFromDb
+        try {
+            storyFromDb = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return storyFromDb
     }
 
     async getTaskById(taskId) {
@@ -135,6 +157,24 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getMembersByStoryId(storyId) {
+        let rowsFromDb
+        let members
+        try {
+            rowsFromDb = await this.store.UserStory.findAll({ where: { storyId }, attributes: ['userId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.userId)
+            members = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const user = await this.store.User.findByPk(id)
+                    return user
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return members
     }
 
     async getMembersByTaskId(taskId) {
@@ -173,6 +213,36 @@ class BoardService {
         return members
     }
 
+    async editStoryById(storyId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
+        // Logic for figuring out who was deleted and who was added as a new member for the story
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        let story
+        try {
+            story = await this.store.Story.findByPk(storyId)
+            story.title = title
+            story.size = size
+            story.ownerId = ownerId
+            story.description = description
+            await story.save()
+            // Updating userstories junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                await this.addMemberForStory(story.id, userId)
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                await this.store.UserStory.destroy({
+                    where: {
+                        userId,
+                        storyId: story.id,
+                    },
+                })
+            }))
+        } catch (e) {
+            console.error(e)
+        }
+        return story
+    }
+
     async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
@@ -205,6 +275,47 @@ class BoardService {
         return task
     }
 
+    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds) {
+        // Logic for figuring out who was deleted and who was added as a new member for the subtask
+        const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
+        const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        let subtask
+        try {
+            subtask = await this.store.Subtask.findByPk(id)
+            subtask.name = name
+            subtask.content = content
+            subtask.size = size
+            subtask.ownerId = ownerId
+            await subtask.save()
+            // Updating userSubtasks junction table
+            await Promise.all(addedMembers.map(async (userId) => {
+                await this.addMemberForSubtask(subtask.id, userId)
+            }))
+            await Promise.all(removedMemberIds.map(async (userId) => {
+                await this.store.UserSubtask.destroy({
+                    where: {
+                        userId,
+                        subtaskId: subtask.id,
+                    },
+                })
+            }))
+        } catch (e) {
+            console.error(e)
+        }
+        return subtask
+    }
+
+    async deleteStoryById(storyId) {
+        try {
+            await this.store.Story.destroy({
+                where: { id: storyId },
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return storyId
+    }
+
     async deleteTaskById(taskId) {
         try {
             await this.store.Task.destroy({
@@ -219,7 +330,7 @@ class BoardService {
     /*
     Gets the order of columns in certain board, returns an array of columnIds in the correct order.
     This field is for keeping track of the order in which the columns are displayed in the board
-  */
+    */
     async getColumnOrderOfBoard(boardId) {
         let arrayOfIds
         try {
@@ -229,55 +340,6 @@ class BoardService {
                 order: this.sequelize.literal('orderNumber ASC'),
             })
             arrayOfIds = columns.map((column) => column.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    async getSwimlaneOrderOfBoard(boardId) {
-        let arrayOfIds
-        try {
-            const swimlanes = await this.store.Task.findAll({
-                attributes: ['id'],
-                where: { boardId },
-                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
-            })
-            arrayOfIds = swimlanes.map((swimlane) => swimlane.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    /*
-    Gets the order of tasks in certain column, returns an array of taskIds in the correct order.
-    This field is for keeping track of the order in which the tasks are displayed in the column
-  */
-    async getTaskOrderOfColumn(columnId) {
-        let arrayOfIds
-        try {
-            const tasks = await this.store.Task.findAll({
-                attributes: ['id'],
-                where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
-            })
-            arrayOfIds = tasks.map((task) => task.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    async getSubtaskOrderOfColumn(columnId) {
-        let arrayOfIds
-        try {
-            const subtasks = await this.store.Subtask.findAll({
-                attributes: ['id'],
-                where: { columnId, deletedAt: null },
-                order: this.sequelize.literal('columnOrderNumber ASC'),
-            })
-            arrayOfIds = subtasks.map((task) => task.dataValues.id)
         } catch (e) {
             console.error(e)
         }
@@ -303,9 +365,9 @@ class BoardService {
             arrayOfObjectsInOrder = arrayOfTaskObjects.concat(arrayOfSubtaskObjects)
                 .sort((a, b) => a.columnOrderNumber - b.columnOrderNumber)
                 .map((obj) => {
-                    // eslint-disable-next-line no-param-reassign
-                    delete obj.columnOrderNumber
-                    return { ...obj }
+                    const copy = { ...obj }
+                    delete copy.columnOrderNumber
+                    return { ...copy }
                 })
         } catch (e) {
             console.error(e)
@@ -313,22 +375,7 @@ class BoardService {
         return arrayOfObjectsInOrder
     }
 
-    async getSubtaskOrderOfTask(taskId) {
-        let arrayOfIds
-        try {
-            const subtasks = await this.store.Subtask.findAll({
-                attributes: ['id'],
-                where: { taskId },
-                order: this.sequelize.literal('orderNumber ASC'),
-            })
-            arrayOfIds = subtasks.map((subtask) => subtask.dataValues.id)
-        } catch (e) {
-            console.error(e)
-        }
-        return arrayOfIds
-    }
-
-    async addBoard(boardName) {
+    async addBoard(boardName, prettyId) {
         let addedBoard
         try {
             const bname = sanitize(boardName)
@@ -336,6 +383,7 @@ class BoardService {
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: bname,
+                prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -393,24 +441,67 @@ class BoardService {
         return largestColumnOrderNumber || 0
     }
 
+    async findTheLargestSwimlaneOrderNumberOfBoard(boardId) {
+        let largestSwimlaneOrderNumber
+        try {
+            largestSwimlaneOrderNumber = await this.store.Task.max('swimlaneOrderNumber', {
+                where: {
+                    boardId,
+                },
+            }) || 0
+        } catch (e) {
+            console.log(e)
+        }
+        return largestSwimlaneOrderNumber
+    }
+
+    async addStoryForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+        let addedStory
+        try {
+            // const storyBoard = await this.store.Board.findByPk(boardId)
+
+            addedStory = await this.store.Story.create({
+                id: uuid(),
+                boardId,
+                columnId,
+                title,
+                size,
+                ownerId,
+                memberIds,
+                description,
+            })
+            await Promise.all(
+                memberIds.map(async (memberId) => {
+                    await this.addMemberForStory(addedStory.id, memberId)
+                }),
+            )
+        } catch (e) {
+            console.error(e)
+        }
+        return addedStory
+    }
+
     async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
         /*
           At a new tasks' creation we want to display it as the lowermost task in its column,
           hence it is given the biggest columnOrderNumber of the column
-          By default new task will be displyed at the bottom of the swimlane view
+          By default new task will be dirssplyed at the bottom of the swimlane view
         */
         let addedTask
         try {
             const newtitle = sanitize(title)
             const ndescr = sanitize(description)
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
-            const largestSwimlaneOrderNumber = await this.store.Task.max('columnOrderNumber', {
-                where: {
-                    boardId,
-                },
-            }) || 0
+            const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
+            const tasksBoard = await this.store.Board.findByPk(boardId)
+            const prettyIdOfBoard = tasksBoard.prettyId
+
+            tasksBoard.ticketCount += 1
+            const updatedBoard = await tasksBoard.save()
+
             addedTask = await this.store.Task.create({
                 id: uuid(),
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 boardId,
                 columnId,
                 title: newtitle,
@@ -429,6 +520,20 @@ class BoardService {
             console.error(e)
         }
         return addedTask
+    }
+
+    async addMemberForStory(storyId, userId) {
+        let story
+        try {
+            await this.store.UserStory.create({
+                userId,
+                storyId,
+            })
+            story = await this.store.Story.findByPk(storyId)
+        } catch (e) {
+            console.error(e)
+        }
+        return story
     }
 
     async addMemberForTask(taskId, userId) {
@@ -459,7 +564,9 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, content, ownerId, memberIds, ticketOrder) {
+    async addSubtaskForTask(
+        taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder,
+    ) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
@@ -468,18 +575,28 @@ class BoardService {
         */
         let addedSubtask
         try {
-            const ncont = sanitize(content)
+            const subtasksBoard = await this.store.Board.findByPk(boardId)
+            const prettyIdOfBoard = subtasksBoard.prettyId
+
+            subtasksBoard.ticketCount += 1
+            const updatedBoard = await subtasksBoard.save()
+
             addedSubtask = await this.store.Subtask.create({
                 id: uuid(),
-                content: ncont,
+                prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
+                name,
+                content,
+                size,
                 taskId,
                 columnId,
+                boardId,
                 ownerId,
             })
-
             const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
-            // see if created subtask was created into same or different column than its parent task
+            // figure out if the created subtask was created into same column than its parent task
+            // If so, give the added subtask an index one greater than the parent task's so that
+            // subtask will appear under parent task
             if (columnId === parentTask.dataValues.columnId) {
                 const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
                 newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
@@ -510,6 +627,7 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
+        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
@@ -518,22 +636,6 @@ class BoardService {
             console.error(e)
         }
         return subtaskId
-    }
-
-    // Loop through tasks and set the new columnOrderNumber for each using the index of the array
-    async reOrderTasksOfColumn(newOrderArray, columnId) {
-        let column
-        try {
-            await Promise.all(newOrderArray.map(async (id, index) => {
-                const task = await this.store.Task.findByPk(id)
-                task.columnOrderNumber = index
-                await task.save()
-            }))
-            column = await this.store.Column.findByPk(columnId)
-        } catch (e) {
-            console.log(e)
-        }
-        return column
     }
 
     async reOrderTicketsOfColumn(newOrderArray, columnId) {
@@ -619,6 +721,19 @@ class BoardService {
         return usersFromDb
     }
 
+    async addUser(userName) {
+        let addedUser
+        try {
+            addedUser = await this.store.User.create({
+                id: uuid(),
+                userName,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedUser
+    }
+
     async getOwnerById(ownerId) {
         let owner
         try {
@@ -627,6 +742,29 @@ class BoardService {
             console.log(e)
         }
         return owner
+    }
+
+    async archiveStoryById(storyId) {
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = new Date()
+            await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return storyId
+    }
+
+    async restoreStoryById(storyId) {
+        let updatedStory
+        try {
+            const story = await this.store.Story.findByPk(storyId)
+            story.deletedAt = null
+            updatedStory = await story.save()
+        } catch (e) {
+            console.log(e)
+        }
+        return updatedStory
     }
 
     async archiveTaskById(taskId) {
@@ -650,6 +788,34 @@ class BoardService {
             console.log(e)
         }
         return updatedTask
+    }
+
+    async getSwimlaneOrderOfBoard(boardId) {
+        let swimlaneOrder
+        try {
+            swimlaneOrder = await this.store.Task.findAll({
+                attributes: ['id'],
+                where: { boardId, deletedAt: null },
+                order: this.sequelize.literal('swimlaneOrderNumber ASC'),
+            })
+            swimlaneOrder = swimlaneOrder.map((item) => item.dataValues.id)
+        } catch (e) {
+            console.log(e)
+        }
+        return swimlaneOrder
+    }
+
+    async updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder) {
+        try {
+            await Promise.all(newSwimlaneOrder.map(async (obj) => {
+                const task = await this.store.Task.findByPk(obj.id)
+                task.swimlaneOrderNumber = obj.swimlaneOrderNumber
+                await task.save()
+            }))
+        } catch (e) {
+            console.log(e)
+        }
+        return boardId
     }
 }
 

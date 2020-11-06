@@ -8,6 +8,5 @@ const useAddBoard = () => {
         refetchQueries: [{ query: ALL_BOARDS }],
     })
     return returnValue
-
 }
 export default useAddBoard
