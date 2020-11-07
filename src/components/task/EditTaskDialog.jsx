@@ -155,6 +155,7 @@ const EditTaskDialog = ({
                         options={modifiedData}
                         defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         className="selectField"
@@ -165,6 +166,7 @@ const EditTaskDialog = ({
                         components={animatedComponents}
                         isMulti
                         onChange={handleMembersChange}
+                        id="taskSelectMember"
                     />
                     <TextField
                         id="standard-multiline-static"
@@ -190,6 +192,7 @@ const EditTaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
+                        id="submitEditTaskButton"
                     >
                         Submit edit
                     </Button>
