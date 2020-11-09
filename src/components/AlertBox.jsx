@@ -117,7 +117,6 @@ const AlertBox = ({
     }
 
     const deleteSubtask = (columnId, subtaskId) => {
-        console.log(eventId)
         removeSubtaskFromCache(subtaskId, columnId)
         callDeleteSubtask({
             variables: {
