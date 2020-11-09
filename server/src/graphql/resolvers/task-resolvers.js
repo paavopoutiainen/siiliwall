@@ -105,7 +105,7 @@ const schema = {
                 console.log(e)
             }
 
-            return { taskId: id, columnId, boardId }
+            return id
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)
