@@ -80,6 +80,9 @@ const AlertBox = ({
         archiveSubtask({
             variables: {
                 subtaskId,
+                columnId,
+                boardId,
+                eventId
             },
         })
     }
@@ -114,12 +117,14 @@ const AlertBox = ({
     }
 
     const deleteSubtask = (columnId, subtaskId) => {
+        console.log(eventId)
         removeSubtaskFromCache(subtaskId, columnId)
         callDeleteSubtask({
             variables: {
                 subtaskId,
                 columnId,
-                boardId
+                boardId,
+                eventId
             },
         })
     }
