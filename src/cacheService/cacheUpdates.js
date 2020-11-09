@@ -43,17 +43,19 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
     const taskToBeDeleted = `Task:${taskId}`
     const columnIdForCache = `Column:${columnId}`
     const boardIdForCache = `Board:${boardId}`
-    const data = client.readFragment({
+    const { ticketOrder, tasks } = client.readFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_TASKS,
     })
 
-    const newTicketOrder = data.ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
+    const newTicketOrder = ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
+    const newTasks = tasks.filter((task) => task.id !== taskId)
     client.writeFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_TASKS,
         data: {
             ticketOrder: newTicketOrder,
+            tasks: newTasks,
         },
     })
     // Delete related taskId from the board's swimlaneOrder list

@@ -48,7 +48,7 @@ const Swimlane = ({
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item onClick={toggleEditTaskDialog}><SwimlaneHeader prettyId={task.prettyId} /></Grid>
+                    <Grid item onClick={toggleEditTaskDialog}><SwimlaneHeader prettyId={task.prettyId} title={task.title} /></Grid>
                     <Grid item container direction="row" alignItems="center" spacing={1} onClick={toggleEditTaskDialog}>
                         <Grid item>
                             <Button size="small" variant="outlined" onClick={(e) => handleShowClick(e)}>{show ? 'hide' : 'show'}</Button>
@@ -69,7 +69,7 @@ const Swimlane = ({
                     <AddSubtaskDialog
                         addDialogStatus={addDialogStatus}
                         toggleAddDialog={toggleAddDialog}
-                        columnId={task.column.id}
+                        columnId={task?.column?.id}
                         taskId={task.id}
                         boardId={boardId}
                     />

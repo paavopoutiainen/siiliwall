@@ -25,10 +25,8 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         id: `Board:${boardId}`,
         fragment: BOARDS_COLUMNS_AND_COLUMNORDER,
     })
-
-    const columnOfParentTask = columns.find((col) => col.id === columnId).name
-
     if (loading) return null
+    const columnOfParentTask = columns.find((col) => col.id === columnId)?.name
 
     const handleNameChange = (event) => {
         setName(event.target.value)
