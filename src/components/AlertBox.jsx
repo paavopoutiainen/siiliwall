@@ -80,6 +80,9 @@ const AlertBox = ({
         archiveSubtask({
             variables: {
                 subtaskId,
+                columnId,
+                boardId,
+                eventId
             },
         })
     }
@@ -119,7 +122,8 @@ const AlertBox = ({
             variables: {
                 subtaskId,
                 columnId,
-                boardId
+                boardId,
+                eventId
             },
         })
     }
