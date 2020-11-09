@@ -35,6 +35,7 @@ const EditTaskDialog = ({
         setOwner(task.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task.description)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
     if (loading) return null
@@ -135,10 +136,11 @@ const EditTaskDialog = ({
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
     const chosenOwnerData = modifiedData.map((user) => {
+        let newObject
         if (user.value === owner) {
-            const newObject = { value: user.value, label: user.label }
-            return newObject
+            newObject = { value: user.value, label: user.label }
         }
+        return newObject
     })
 
     return (
