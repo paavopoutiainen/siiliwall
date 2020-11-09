@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import { Grid, Button } from '@material-ui/core'
+import AddIcon from '@material-ui/icons/Add'
 import { boardPageStyles } from '../../styles/styles'
 import TicketList from '../TicketList'
 import DropdownColumn from './DropdownColumn'
@@ -25,17 +26,24 @@ const Column = ({ column, index }) => {
                     container
                     direction="column"
                     classes={{ root: classes.column }}
-                    alignItems="center"
                     {...provided.draggableProps}
                     ref={provided.innerRef}
                     spacing={2}
                 >
-                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" alignItems="center" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction='row' justify='space-between' {...provided.dragHandleProps}>
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
-                        <Grid item>
-                            <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                        <Grid item container direction='row' alignItems='center' classes={{ root: classes.columnButtons }} style={{ width: 25 }}>
+                            <Grid item>
+                                <Button classes={{ root: classes.columnButton }} className="addTaskButton" >
+                                    <AddIcon className="addTaskButton" />
+
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                            </Grid>
                         </Grid>
                     </Grid>
 
@@ -44,6 +52,8 @@ const Column = ({ column, index }) => {
                             <Grid
                                 item
                                 container
+                                classes={{ root: classes.ticketList }}
+
                                 {...provided.droppableProps}
                                 ref={provided.innerRef}
                             >

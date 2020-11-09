@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
 import EditText from 'react-editext'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
+import { boardPageStyles } from '../../styles/styles'
 
 const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
     const [name] = useState(column?.name)
+    const classes = boardPageStyles()
 
     const handleSave = (newName) => {
         editColumn({

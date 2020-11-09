@@ -2,14 +2,16 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Delete from '@material-ui/icons/Delete'
 import AlertBox from '../AlertBox'
+import { boardPageStyles } from '../../styles/styles'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
+    const classes = boardPageStyles()
 
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
@@ -29,8 +31,9 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                classes={{ root: classes.columnButton }}
             >
-                <MoreHorizIcon fontSize="large" />
+                <MoreVertIcon className="dropDownColumn" />
             </Button>
             <Menu
                 id="simple-menu"

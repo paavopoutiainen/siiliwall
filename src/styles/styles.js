@@ -63,25 +63,60 @@ export const boardPageStyles = makeStyles({
     },
 
     column: {
-        backgroundColor: '#EBECF0',
+        backgroundColor: '#F5F5F5',
         minHeight: 600,
         width: 330,
-        borderRadius: 6,
     },
 
     columnHeader: {
         flexWrap: 'nowrap',
+        alignItems: 'space-between'
+    },
+
+    columnButton: {
+        minWidth: 20,
+        color: '#949494'
+    },
+
+    columnButtonGrid: {
+        width: 80
+
+    },
+
+    columnButtons: {
+        minWidth: 80,
+    },
+
+    columnName: {
+        fontFamily: 'Arial, Helvetica, sans-serif',
     },
 
     task: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         minHeight: 100,
         borderRadius: 4,
+        backgroundColor: 'white',
+        width: 312
     },
 
     taskInner: {
+        background: '#000000',
         flexWrap: 'nowrap',
+        color: 'white'
+
     },
+
+    taskInnerDropDownGrid: {
+        width: '50px'
+    },
+    taskTitle: {
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        color: 'white',
+        fontSize: 12
+    },
+    taskName: {
+        fontSize: 24,
+    },
+
 
     subtaskComponent: {
         borderRadius: 5,

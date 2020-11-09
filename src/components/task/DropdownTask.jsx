@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {
     Delete, Archive, Add,
 } from '@material-ui/icons'
@@ -67,7 +67,7 @@ const DropdownTask = ({
                 onClick={handleClick}
                 classes={{ root: classes.taskDropdownButton }}
             >
-                <MoreHorizIcon fontSize="large" />
+                <MoreVertIcon style={{ color: 'white', fontSize: 21 }} />
             </Button>
             <Menu
                 id="simple-menu"

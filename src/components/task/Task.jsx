@@ -59,56 +59,26 @@ const Task = ({
                         container
                         direction="row"
                         justify="space-between"
-                        alignItems="flex-start"
+                        alignItems="center"
                         classes={{ root: classes.taskInner }}
                     >
-                        <Grid item>
+                        <Grid item classes={{ root: classes.taskTitle }}>
                             <h3>{prettyId}</h3>
                         </Grid>
-                        <Grid item onClick={handleDialogClick}>
+                        <Grid item onClick={handleDialogClick} classes={{ root: classes.taskInnerDropDownGrid }}>
                             <DropdownTask
                                 task={task}
                                 columnId={columnId}
                                 boardId={boardId}
+                                classes={{ root: classes.taskInnerDropDownGrid }}
                             />
                         </Grid>
                     </Grid>
-                    <Grid item direction="column" container>
-                        <Grid item>
-                            <p>{add3Dots(task.title)}</p>
+                    <Grid item direction="column" container classes={{ root: classes.taskName }}>
+                        <Grid item >
+                            <p  >{add3Dots(task.title)}</p>
                         </Grid>
-                        <Grid item>
-                            {task.owner ? (
-                                <p>
-                                    owner:&nbsp;
-                                    {task.owner.userName}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.size ? (
-                                <p>
-                                    size:&nbsp;
-                                    {task.size}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.members.length !== 0 ? (
-                                // this part renders commas after name only if formatting is like below
-                                <p>
-                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.description ? (
-                                <p>
-                                    description:&nbsp;
-                                    {descrDots(task.description)}
-                                </p>
-                            ) : null}
-                        </Grid>
+
                     </Grid>
 
                     <TaskEditDialog
