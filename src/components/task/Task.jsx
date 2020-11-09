@@ -52,6 +52,7 @@ const Task = ({
                     ref={provided.innerRef}
                     spacing={1}
                     onClick={handleClick}
+                    id="clickableTask"
                 >
                     <Grid
                         item

@@ -35,7 +35,7 @@ const SwimlaneView = ({ board }) => {
     columns.forEach((column) => {
         subtasks = subtasks.concat(column.subtasks)
     })
-    const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id))
+    const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id)).filter((task) => task)
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
 
     const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
@@ -69,17 +69,16 @@ const SwimlaneView = ({ board }) => {
     const handleShowClick = () => {
         setShowAll(!showAll)
     }
-
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
             <Grid container direction="column" spacing={3}>
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
                 <Grid container item spacing={1}>
                     <Grid item>
-                        <Button size="small" variant="outlined" onClick={() => handleShowClick()}>{showAll ? 'Hide all' : 'Show all'}</Button>
+                        <Button size="small" variant="outlined" onClick={() => handleShowClick()} disabled={tasks.length === 0}>{showAll ? 'Hide all' : 'Show all'}</Button>
                     </Grid>
                     <Grid item>
-                        <Button size="small" variant="outlined" onClick={() => toggleDialog()}>Add task</Button>
+                        <Button size="small" variant="outlined" onClick={() => toggleDialog()} disabled={columns.length === 0}>Add task</Button>
                     </Grid>
                 </Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
@@ -95,6 +94,7 @@ const SwimlaneView = ({ board }) => {
                 dialogStatus={dialogStatus}
                 toggleDialog={toggleDialog}
                 column={columnsInOrder[0]}
+                boardId={board.id}
             />
         </DragDropContext>
     )

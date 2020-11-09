@@ -20,17 +20,17 @@ type Query {
 }
 
 type Mutation {
-  addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Float, ownerId: ID, memberIds: [ID!], description: String): Task
-  editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String): Task
-  deleteTaskById(id: ID!, columnId: ID!, boardId:ID!): ID
-  archiveTaskById(id: ID!, columnId: ID!, boardId:ID!): RemoveInfo!
+  addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Float, ownerId: ID, memberIds: [ID!], description: String, eventId: ID!): Task
+  editTaskById(id: ID!, title: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String, eventId: ID!): Task
+  deleteTaskById(id: ID!, columnId: ID!, boardId:ID!, eventId: ID!): ID
+  archiveTaskById(id: ID!, columnId: ID!, boardId:ID!, eventId: ID!): ID
   restoreTaskById(id: ID!): Task
   addMemberForTask(id: ID!, userId: ID!): Task
 }
 
 type Subscription {
-  taskMutated(boardId: ID!): TaskMutationPayload!
-  taskRemoved(boardId: ID!): TaskRemovedPayload!
+  taskMutated(boardId: ID!, eventId: ID!): TaskMutationPayload!
+  taskRemoved(boardId: ID!, eventId: ID!): TaskRemovedPayload!
 }
 
 type TaskMutationPayload {

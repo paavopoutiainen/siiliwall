@@ -17,20 +17,20 @@ const schema = {
         taskMutated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TASK_MUTATED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
         taskRemoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TASK_REMOVED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
     },
 
     Mutation: {
         async addTaskForColumn(root, {
-            boardId, columnId, title, size, ownerId, memberIds, description,
+            boardId, columnId, title, size, ownerId, memberIds, description, eventId,
         }) {
             let addedTask
             try {
@@ -38,6 +38,7 @@ const schema = {
                     .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
                 pubsub.publish(TASK_MUTATED, {
                     boardId,
+                    eventId,
                     taskMutated: {
                         mutationType: 'CREATED',
                         node: addedTask.dataValues,
@@ -50,13 +51,14 @@ const schema = {
             return addedTask
         },
         async editTaskById(root, {
-            id, title, size, ownerId, oldMemberIds, newMemberIds, description,
+            id, title, size, ownerId, oldMemberIds, newMemberIds, description, eventId,
         }) {
             let editedTask
             try {
                 editedTask = await dataSources.boardService.editTaskById(id, title, size, ownerId, oldMemberIds, newMemberIds, description)
                 pubsub.publish(TASK_MUTATED, {
                     boardId: editedTask.boardId,
+                    eventId,
                     taskMutated: {
                         mutationType: 'UPDATED',
                         node: editedTask,
@@ -67,12 +69,15 @@ const schema = {
             }
             return editedTask
         },
-        async deleteTaskById(root, { id, columnId, boardId }) {
+        async deleteTaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             let deletedTaskId
             try {
                 deletedTaskId = await dataSources.boardService.deleteTaskById(id)
                 pubsub.publish(TASK_REMOVED, {
                     boardId,
+                    eventId,
                     taskRemoved: {
                         removeType: 'DELETED',
                         removeInfo: { taskId: id, columnId, boardId },
@@ -83,11 +88,14 @@ const schema = {
             }
             return deletedTaskId
         },
-        async archiveTaskById(root, { id, columnId, boardId }) {
+        async archiveTaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             try {
                 await dataSources.boardService.archiveTaskById(id)
                 pubsub.publish(TASK_REMOVED, {
                     boardId,
+                    eventId,
                     taskRemoved: {
                         removeType: 'ARCHIVED',
                         removeInfo: { taskId: id, columnId, boardId },
@@ -97,7 +105,7 @@ const schema = {
                 console.log(e)
             }
 
-            return { taskId: id, columnId, boardId }
+            return id
         },
         restoreTaskById(root, { id }) {
             return dataSources.boardService.restoreTaskById(id)

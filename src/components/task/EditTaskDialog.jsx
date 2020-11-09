@@ -19,7 +19,7 @@ const EditTaskDialog = ({
     const [description, setDescription] = useState()
     const [owner, setOwner] = useState()
     const [members, setMembers] = useState()
-    const arrayOfOldMemberIds = task.members.map((user) => user.id)
+    const arrayOfOldMemberIds = task?.members?.map((user) => user.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
 
@@ -38,7 +38,7 @@ const EditTaskDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        setOwner(action.value)
+        setOwner(action != null ? action.value : null)
     }
 
     const handleSizeChange = (event) => {
@@ -63,6 +63,7 @@ const EditTaskDialog = ({
 
     const handleSave = (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         editTask({
             variables: {
                 taskId: editId,
@@ -72,6 +73,7 @@ const EditTaskDialog = ({
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
                 description,
+                eventId,
             },
         })
         toggleDialog()
@@ -103,9 +105,17 @@ const EditTaskDialog = ({
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
     // data for showing only the members not yet chosen
     const modifiedMemberOptions = modifiedData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
+
+    const chosenOwnerData = modifiedData.map((user) => {
+        if (user.value === owner) {
+            const newObject = { value: user.value, label: user.label }
+            return newObject
+        }
+    })
 
     return (
         <Grid>
@@ -142,9 +152,12 @@ const EditTaskDialog = ({
                     />
                     <Select
                         className="selectField"
-                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
+                        isClearable
+                        placeholder="Select owner"
                         options={modifiedData}
+                        defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         className="selectField"
@@ -155,6 +168,7 @@ const EditTaskDialog = ({
                         components={animatedComponents}
                         isMulti
                         onChange={handleMembersChange}
+                        id="taskSelectMember"
                     />
                     <TextField
                         id="standard-multiline-static"
@@ -180,6 +194,7 @@ const EditTaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
+                        id="submitEditTaskButton"
                     >
                         Submit edit
                     </Button>

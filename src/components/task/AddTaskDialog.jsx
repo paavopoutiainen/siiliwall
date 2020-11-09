@@ -9,7 +9,7 @@ import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const { loading, data } = useAllUsers()
-    const [addTask] = useAddTask(column.id)
+    const [addTask] = useAddTask(column?.id)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState(null)
     const [size, setSize] = useState(null)
@@ -55,17 +55,17 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
 
     const handleSave = (event) => {
         event.preventDefault()
-
-
+        const eventId = window.localStorage.getItem('eventId')
         addTask({
             variables: {
-                boardId: column.board.id,
+                boardId,
                 columnId: column.id,
                 title,
                 size,
                 ownerId: owner,
                 memberIds: members,
                 description,
+                eventId,
             },
         })
         emptyState()
@@ -104,6 +104,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         value={title}
                         fullWidth
                         onChange={handleTitleChange}
+                        id="inputTaskName"
                     />
                     <TextField
                         autoComplete="off"
@@ -120,6 +121,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         isMulti
@@ -154,6 +156,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         disabled={!title.length}
                         onClick={handleSave}
                         color="primary"
+                        id="createTaskButton"
                     >
                         Create task
                     </Button>
