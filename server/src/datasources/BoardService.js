@@ -2,7 +2,6 @@
 /* eslint-disable radix */
 /* eslint-disable class-methods-use-this */
 const { v4: uuid } = require('uuid')
-const sanitize = require('../utils/sanitize')
 
 class BoardService {
     constructor({ db }) {
@@ -66,9 +65,8 @@ class BoardService {
     async editColumnById(columnId, name) {
         let column
         try {
-            const cname = sanitize(name)
             column = await this.store.Column.findByPk(columnId)
-            column.name = cname
+            column.name = name
             await column.save()
         } catch (e) {
             console.error(e)
@@ -248,14 +246,13 @@ class BoardService {
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         let task
+
         try {
-            const ntitle = sanitize(title)
-            const ndescr = sanitize(description)
             task = await this.store.Task.findByPk(taskId)
-            task.title = ntitle
+            task.title = title
             task.size = size
             task.ownerId = ownerId
-            task.description = ndescr
+            task.description = description
             await task.save()
             // Updating usertasks junction table
             await Promise.all(addedMembers.map(async (userId) => {
@@ -378,11 +375,10 @@ class BoardService {
     async addBoard(boardName, prettyId) {
         let addedBoard
         try {
-            const bname = sanitize(boardName)
             const largestOrderNumber = await this.store.Board.max('orderNumber')
             addedBoard = await this.store.Board.create({
                 id: uuid(),
-                name: bname,
+                name: boardName,
                 prettyId,
                 orderNumber: largestOrderNumber + 1,
             })
@@ -400,14 +396,13 @@ class BoardService {
         */
         let addedColumn
         try {
-            const cname = sanitize(columnName)
             const largestOrderNumber = await this.store.Column.max('orderNumber', {
                 where: { boardId },
             })
             addedColumn = await this.store.Column.create({
                 id: uuid(),
                 boardId,
-                name: cname,
+                name: columnName,
                 orderNumber: largestOrderNumber + 1,
             })
         } catch (e) {
@@ -489,8 +484,6 @@ class BoardService {
         */
         let addedTask
         try {
-            const newtitle = sanitize(title)
-            const ndescr = sanitize(description)
             const largestOrderNumber = await this.findTheLargestOrderNumberOfColumn(columnId)
             const largestSwimlaneOrderNumber = await this.findTheLargestSwimlaneOrderNumberOfBoard(boardId)
             const tasksBoard = await this.store.Board.findByPk(boardId)
@@ -504,10 +497,10 @@ class BoardService {
                 prettyId: `${prettyIdOfBoard}-${updatedBoard.ticketCount}`,
                 boardId,
                 columnId,
-                title: newtitle,
+                title,
                 size,
                 ownerId,
-                description: ndescr,
+                description,
                 columnOrderNumber: largestOrderNumber + 1,
                 swimlaneOrderNumber: largestSwimlaneOrderNumber + 1,
             })
