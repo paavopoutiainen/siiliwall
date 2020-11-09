@@ -33,7 +33,7 @@ const EditSubtaskDialog = ({
 
     if (loading) return null
     const handleOwnerChange = (action) => {
-        setOwner(action.value)
+        setOwner(action != null ? action.value : null)
     }
 
     const handleSizeChange = (event) => {
@@ -98,6 +98,13 @@ const EditSubtaskDialog = ({
     const modifiedMemberOptions = modifiedData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
+    const chosenOwnerData = modifiedData.map((user) => {
+        if (user.value === owner) {
+            const newObject = { value: user.value, label: user.label }
+            return newObject
+        }
+    })
+
     return (
         <Grid>
             <Dialog
@@ -146,8 +153,10 @@ const EditSubtaskDialog = ({
                     />
                     <Select
                         className="selectField"
-                        placeholder={subtask?.owner ? subtask.owner.userName : 'Select owner'}
+                        isClearable
+                        placeholder="Select owner"
                         options={modifiedData}
+                        defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
                     />
                     <Select
