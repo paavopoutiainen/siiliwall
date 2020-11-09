@@ -17,7 +17,7 @@ const schema = {
         subtaskRemoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(SUBTASK_REMOVED),
-                (payload, args) => args.boardId === payload.boardId
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId)
             )
         }
     },
@@ -41,12 +41,13 @@ const schema = {
             return dataSources.boardService.addMemberForSubtask(id, userId)
         },
 
-        async deleteSubtaskById(root, { id, columnId, boardId }) {
+        async deleteSubtaskById(root, { id, columnId, boardId, eventId }) {
             let deletedSubtask
             try {
                 deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
                 pubsub.publish(SUBTASK_REMOVED, {
                     boardId,
+                    eventId,
                     subtaskRemoved: {
                         removeType: 'DELETED',
                         removeInfo: {
@@ -62,8 +63,26 @@ const schema = {
             return deletedSubtask
         },
 
-        archiveSubtaskById(root, { id }) {
-            return dataSources.boardService.archiveSubtaskById(id)
+        async archiveSubtaskById(root, { id, columnId, boardId, eventId }) {
+            let archivedSubtask
+            try {
+                archivedSubtask = await dataSources.boardService.archiveSubtaskById(id)
+                pubsub.publish(SUBTASK_REMOVED, {
+                    boardId,
+                    eventId,
+                    subtaskRemoved: {
+                        removeType: 'ARCHIVED',
+                        removeInfo: {
+                            subtaskId: id,
+                            columnId,
+                            boardId
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return archivedSubtask
         },
 
         async editSubtaskById(root, {

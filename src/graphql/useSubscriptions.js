@@ -20,10 +20,12 @@ const useSubscriptions = (id, eventId) => {
         })
     useSubscription(SUBTASK_REMOVED,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { subtaskId, columnId } = data.subtaskRemoved.removeInfo
                 if (data.subtaskRemoved.removeType === 'DELETED') {
+                    removeSubtaskFromCache(subtaskId, columnId)
+                } else if (data.subtaskRemoved.removeType === 'ARCHIVED') {
                     removeSubtaskFromCache(subtaskId, columnId)
                 }
             },

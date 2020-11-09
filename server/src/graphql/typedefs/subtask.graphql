@@ -23,13 +23,13 @@ type Mutation {
   addSubtaskForTask(taskId: ID!, columnId: ID!, boardId: ID!, name: String, content: String!, size: Float, ownerId: ID, memberIds: [ID!], ticketOrder: [TicketOrderInput!]): Subtask
   editSubtaskById(id: ID!, name: String, content: String!, size: Float, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!]): Subtask
   addMemberForSubtask(id: ID!, userId: ID!): Task
-  deleteSubtaskById(id: ID!, columnId: ID!, boardId: ID!): ID
-  archiveSubtaskById(id: ID!): ID
+  deleteSubtaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
+  archiveSubtaskById(id: ID!, columnId: ID!, boardId: ID!, eventId: ID!): ID
 }
 
 type Subscription {
   subtaskMutated(boardId: ID!): SubtaskMutationPayload!
-  subtaskRemoved(boardId: ID!): SubtaskRemovedPayload!
+  subtaskRemoved(boardId: ID!, eventId: ID!): SubtaskRemovedPayload!
 }
 
 type SubtaskMutationPayload {

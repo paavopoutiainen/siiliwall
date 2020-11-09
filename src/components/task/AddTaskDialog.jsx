@@ -104,6 +104,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         value={title}
                         fullWidth
                         onChange={handleTitleChange}
+                        id="inputTaskName"
                     />
                     <TextField
                         autoComplete="off"
@@ -120,6 +121,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         isMulti
@@ -154,6 +156,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         disabled={!title.length}
                         onClick={handleSave}
                         color="primary"
+                        id="createTaskButton"
                     >
                         Create task
                     </Button>
