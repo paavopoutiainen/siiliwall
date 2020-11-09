@@ -69,6 +69,7 @@ const Column = ({ column, index }) => {
                             <Button
                                 onClick={toggleDialog}
                                 color="primary"
+                                id="addTaskButton"
                             >
                                 Add task
                             </Button>
