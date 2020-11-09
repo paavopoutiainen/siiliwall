@@ -9,7 +9,7 @@ import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const { loading, data } = useAllUsers()
-    const [addTask] = useAddTask(column.id)
+    const [addTask] = useAddTask(column?.id)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState(null)
     const [size, setSize] = useState(null)
@@ -56,10 +56,9 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const handleSave = (event) => {
         event.preventDefault()
 
-
         addTask({
             variables: {
-                boardId: column.board.id,
+                boardId,
                 columnId: column.id,
                 title,
                 size,
