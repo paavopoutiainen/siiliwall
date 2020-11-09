@@ -37,29 +37,29 @@ const AlertBox = ({
 
     let alertMsg
     switch (action) {
-        case 'DELETE_COLUMN':
-            alertMsg = alertMsgDeleteColumn
-            break
-        case 'DELETE_TASK':
-            alertMsg = alertMsgDeleteTask
-            break
-        case 'DELETE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgDeleteTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK_IF_SUBTASKS':
-            alertMsg = alertMsgArchiveTaskIfSubtasks
-            break
-        case 'ARCHIVE_TASK':
-            alertMsg = alertMsgArchiveTask
-            break
-        case 'ARCHIVE_SUBTASK':
-            alertMsg = alertMsgArchiveSubtask
-            break
-        case 'DELETE_SUBTASK':
-            alertMsg = alertMsgDeleteSubtask
-            break
-        default:
-            break
+    case 'DELETE_COLUMN':
+        alertMsg = alertMsgDeleteColumn
+        break
+    case 'DELETE_TASK':
+        alertMsg = alertMsgDeleteTask
+        break
+    case 'DELETE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgDeleteTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK_IF_SUBTASKS':
+        alertMsg = alertMsgArchiveTaskIfSubtasks
+        break
+    case 'ARCHIVE_TASK':
+        alertMsg = alertMsgArchiveTask
+        break
+    case 'ARCHIVE_SUBTASK':
+        alertMsg = alertMsgArchiveSubtask
+        break
+    case 'DELETE_SUBTASK':
+        alertMsg = alertMsgDeleteSubtask
+        break
+    default:
+        break
     }
 
     const WhiteCheckbox = withStyles({
@@ -82,12 +82,15 @@ const AlertBox = ({
                 subtaskId,
                 columnId,
                 boardId,
-                eventId
+                eventId,
             },
         })
     }
 
     const archiveTaskById = () => {
+        // Handle cache
+        removeTaskFromCache(taskId, columnId, boardId)
+        // Find the related subtasks and archive them
         const boardIdForCache = `Board:${boardId}`
         const columnData = client.readFragment({
             id: boardIdForCache,
@@ -96,11 +99,13 @@ const AlertBox = ({
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
+        // Send mutaion to the server
         archiveTask({
             variables: {
                 taskId,
                 columnId,
                 boardId,
+                eventId,
             },
         })
     }
@@ -111,7 +116,7 @@ const AlertBox = ({
             variables: {
                 columnId,
                 boardId,
-                eventId
+                eventId,
             },
         })
     }
@@ -123,7 +128,7 @@ const AlertBox = ({
                 subtaskId,
                 columnId,
                 boardId,
-                eventId
+                eventId,
             },
         })
     }
@@ -145,6 +150,7 @@ const AlertBox = ({
                 taskId,
                 columnId,
                 boardId,
+                eventId,
             },
         })
     }
