@@ -1,8 +1,7 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useAllBoards from '../graphql/board/hooks/useAllBoards'
-
 import NewBoardForm from '../components/board/NewBoardForm'
 import NewUserForm from '../components/user/NewUserForm'
 import { landingPageStyles } from '../styles/styles'
@@ -23,7 +22,6 @@ const LandingPage = () => {
     }
 
     if (loading) return null
-
     const boardsInOrder = data.allBoards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
 
     return (

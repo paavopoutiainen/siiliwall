@@ -25,7 +25,7 @@ const EditTaskDialog = ({
     const [sizeError, setSizeError] = useState('')
     const [titleError, setTitleError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
-    const arrayOfOldMemberIds = task.members.map((user) => user.id)
+    const arrayOfOldMemberIds = task?.members?.map((user) => user.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
 
@@ -49,7 +49,7 @@ const EditTaskDialog = ({
     }
 
     const handleOwnerChange = (action) => {
-        setOwner(action.value)
+        setOwner(action != null ? action.value : null)
     }
 
     const handleSizeChange = (event) => {
@@ -84,6 +84,7 @@ const EditTaskDialog = ({
 
     const handleSave = async (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         const isValid = await taskSchema.isValid({ title, size, description })
         if (isValid) {
             editTask({
@@ -95,6 +96,7 @@ const EditTaskDialog = ({
                     oldMemberIds: arrayOfOldMemberIds,
                     newMemberIds: members,
                     description,
+                    eventId,
                 },
             })
             toggleDialog()
@@ -127,9 +129,17 @@ const EditTaskDialog = ({
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
     // data for showing only the members not yet chosen
     const modifiedMemberOptions = modifiedData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
+
+    const chosenOwnerData = modifiedData.map((user) => {
+        if (user.value === owner) {
+            const newObject = { value: user.value, label: user.label }
+            return newObject
+        }
+    })
 
     return (
         <Grid>
@@ -174,9 +184,12 @@ const EditTaskDialog = ({
                     />
                     <Select
                         className="selectField"
-                        placeholder={task?.owner ? task.owner.userName : 'Select owner'}
+                        isClearable
+                        placeholder="Select owner"
                         options={modifiedData}
+                        defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         className="selectField"
@@ -187,6 +200,7 @@ const EditTaskDialog = ({
                         components={animatedComponents}
                         isMulti
                         onChange={handleMembersChange}
+                        id="taskSelectMember"
                     />
                     <TextField
                         error={descriptionError.length > 0}
@@ -214,6 +228,7 @@ const EditTaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
+                        id="submitEditTaskButton"
                     >
                         Submit edit
                     </Button>

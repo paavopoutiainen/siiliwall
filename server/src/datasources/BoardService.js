@@ -74,15 +74,15 @@ class BoardService {
         return column
     }
 
-    async deleteColumnById(columnId) {
+    async deleteColumnById(id) {
         try {
             await this.store.Column.destroy({
-                where: { id: columnId },
+                where: { id },
             })
         } catch (e) {
             console.error(e)
         }
-        return columnId
+        return id
     }
 
     async getStoriesByColumnId(columnId) {

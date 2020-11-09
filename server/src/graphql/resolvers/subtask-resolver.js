@@ -14,6 +14,12 @@ const schema = {
                 (payload, args) => args.boardId === payload.boardId,
             ),
         },
+        subtaskRemoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(SUBTASK_REMOVED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId)
+            )
+        }
     },
 
     Mutation: {
@@ -30,15 +36,55 @@ const schema = {
             })
             return addedSubtask
         },
+
         addMemberForSubtask(root, { id, userId }) {
             return dataSources.boardService.addMemberForSubtask(id, userId)
         },
-        deleteSubtaskById(root, { id }) {
-            return dataSources.boardService.deleteSubtaskById(id)
+
+        async deleteSubtaskById(root, { id, columnId, boardId, eventId }) {
+            let deletedSubtask
+            try {
+                deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
+                pubsub.publish(SUBTASK_REMOVED, {
+                    boardId,
+                    eventId,
+                    subtaskRemoved: {
+                        removeType: 'DELETED',
+                        removeInfo: {
+                            subtaskId: id,
+                            columnId,
+                            boardId
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return deletedSubtask
         },
-        archiveSubtaskById(root, { id }) {
-            return dataSources.boardService.archiveSubtaskById(id)
+
+        async archiveSubtaskById(root, { id, columnId, boardId, eventId }) {
+            let archivedSubtask
+            try {
+                archivedSubtask = await dataSources.boardService.archiveSubtaskById(id)
+                pubsub.publish(SUBTASK_REMOVED, {
+                    boardId,
+                    eventId,
+                    subtaskRemoved: {
+                        removeType: 'ARCHIVED',
+                        removeInfo: {
+                            subtaskId: id,
+                            columnId,
+                            boardId
+                        }
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return archivedSubtask
         },
+
         async editSubtaskById(root, {
             id, name, content, size, ownerId, oldMemberIds, newMemberIds,
         }) {

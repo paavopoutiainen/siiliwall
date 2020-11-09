@@ -11,9 +11,11 @@ import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
+const AddTaskDialog = ({
+    dialogStatus, column, toggleDialog, boardId,
+}) => {
     const { loading, data } = useAllUsers()
-    const [addTask] = useAddTask(column.id)
+    const [addTask] = useAddTask(column?.id)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState(null)
     const [size, setSize] = useState(null)
@@ -80,17 +82,19 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
 
     const handleSave = async (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         const isValid = await taskSchema.isValid({ title, size, description })
         if (isValid) {
             addTask({
                 variables: {
-                    boardId: column.board.id,
+                    boardId,
                     columnId: column.id,
                     title,
                     size,
                     ownerId: owner,
                     memberIds: members,
                     description,
+                    eventId,
                 },
             })
             emptyState()
@@ -132,7 +136,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                 <DialogContent>
                     <TextField
                         error={titleError.length > 0}
-                        id="filled-error-helper-text"
+                        id="filled-error-helper-text, inputTaskName"
                         autoComplete="off"
                         autoFocus={true}
                         required={true}
@@ -163,6 +167,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         placeholder="Select owner"
                         options={modifiedData}
                         onChange={handleOwnerChange}
+                        id="taskSelectOwner"
                     />
                     <Select
                         isMulti
@@ -199,6 +204,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog }) => {
                         disabled={isDisabled()}
                         onClick={handleSave}
                         color="primary"
+                        id="createTaskButton"
                     >
                         Create task
                     </Button>

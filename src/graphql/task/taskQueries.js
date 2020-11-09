@@ -18,8 +18,8 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $description: String) {
-        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description) {
+    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
+        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -45,14 +45,14 @@ export const ADD_TASK = gql`
 `
 
 export const DELETE_TASK = gql`
-    mutation deleteTask($taskId: ID!, $columnId: ID!, $boardId: ID!) {
-        deleteTaskById(id: $taskId, columnId: $columnId, boardId: $boardId)
+    mutation deleteTask($taskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!) {
+        deleteTaskById(id: $taskId, columnId: $columnId, boardId: $boardId, eventId: $eventId)
     }
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Int, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String) {
-        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, description: $description) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Int, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String, $eventId: ID!) {
+        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -78,13 +78,8 @@ export const EDIT_TASK = gql`
     }
 `
 export const ARCHIVE_TASK = gql`
-    mutation archiveTask($taskId: ID!, $columnId: ID!, $boardId: ID!) {
-        archiveTaskById(id: $taskId, columnId: $columnId, boardId: $boardId){
-            taskId
-            columnId
-            boardId
-            
-        }
+    mutation archiveTask($taskId: ID!, $columnId: ID!, $boardId: ID!, $eventId: ID!) {
+        archiveTaskById(id: $taskId, columnId: $columnId, boardId: $boardId, eventId: $eventId)
     }
 `
 
@@ -94,8 +89,8 @@ export const MOVE_SWIMLANE = gql`
     }
 `
 export const TASK_MUTATED = gql`
-  subscription taskMutated($boardId: ID!) {
-    taskMutated(boardId: $boardId) {
+  subscription taskMutated($boardId: ID!, $eventId: ID!) {
+    taskMutated(boardId: $boardId, eventId: $eventId) {
       mutationType
       node {
         id
@@ -124,8 +119,8 @@ export const TASK_MUTATED = gql`
 `
 
 export const TASK_REMOVED = gql`
-  subscription taskRemoved($boardId: ID!) {
-    taskRemoved(boardId: $boardId) {
+  subscription taskRemoved($boardId: ID!, $eventId: ID!) {
+    taskRemoved(boardId: $boardId, eventId: $eventId) {
       removeType
       removeInfo {
           taskId
