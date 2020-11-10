@@ -18,7 +18,7 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Float, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
+    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
         addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description, eventId: $eventId) {
             id
             prettyId
@@ -51,7 +51,7 @@ export const DELETE_TASK = gql`
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Float, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String, $eventId: ID!) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Int, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String, $eventId: ID!) {
         editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, description: $description, eventId: $eventId) {
             id
             prettyId

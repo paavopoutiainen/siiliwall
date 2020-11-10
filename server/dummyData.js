@@ -191,7 +191,7 @@ const tasks = [
         prettyId: 'KNBN-2',
         title: 'Add drag and drop function to cards',
         content: 'Add drag and drop function to cards',
-        size: 1.1,
+        size: 1,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 0,
         swimlaneOrderNumber: 1,
