@@ -28,18 +28,18 @@ const schema = {
             return dataSources.boardService.addBoard(args.name, args.prettyId)
         },
         moveSwimlane(root, {
-            boardId, newSwimlaneOrder, swimlaneOrder, eventId,
+            boardId, affectedSwimlanes, swimlaneOrder, eventId,
         }) {
             pubsub.publish(SWIMLANE_MOVED, {
                 boardId,
                 eventId,
                 swimlaneMoved: {
                     boardId,
-                    newSwimlaneOrder,
+                    affectedSwimlanes,
                     swimlaneOrder,
                 },
             })
-            return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder)
+            return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, affectedSwimlanes)
         },
     },
 

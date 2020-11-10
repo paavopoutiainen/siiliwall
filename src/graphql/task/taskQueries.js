@@ -84,8 +84,8 @@ export const ARCHIVE_TASK = gql`
 `
 
 export const MOVE_SWIMLANE = gql`
-    mutation moveSwimlane($boardId: ID!, $newSwimlaneOrder: [newSwimlaneOrderInput!]!, $swimlaneOrder: [ID!]!, $eventId: ID!) {
-        moveSwimlane(boardId: $boardId, newSwimlaneOrder: $newSwimlaneOrder, swimlaneOrder: $swimlaneOrder, eventId: $eventId) 
+    mutation moveSwimlane($boardId: ID!, $affectedSwimlanes: [newSwimlaneOrderInput!]!, $swimlaneOrder: [ID!]!, $eventId: ID!) {
+        moveSwimlane(boardId: $boardId, affectedSwimlanes: $affectedSwimlanes, swimlaneOrder: $swimlaneOrder, eventId: $eventId) 
     }
 `
 export const TASK_MUTATED = gql`
@@ -135,7 +135,7 @@ export const SWIMLANE_MOVED = gql`
 subscription swimlaneMoved($boardId: ID!, $eventId: ID!) {
     swimlaneMoved(boardId: $boardId, eventId: $eventId) {
         boardId
-        newSwimlaneOrder {
+        affectedSwimlanes {
             id
             swimlaneOrderNumber
         }

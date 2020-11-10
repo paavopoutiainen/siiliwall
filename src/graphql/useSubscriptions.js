@@ -89,9 +89,9 @@ const useSubscriptions = (id, eventId) => {
             variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const {
-                    boardId, newSwimlaneOrder, swimlaneOrder,
+                    boardId, affectedSwimlanes, swimlaneOrder,
                 } = data.swimlaneMoved
-                updateSwimlaneOrderOfBoardToTheCache(boardId, swimlaneOrder, newSwimlaneOrder)
+                updateSwimlaneOrderOfBoardToTheCache(boardId, affectedSwimlanes, swimlaneOrder)
             },
         })
 }

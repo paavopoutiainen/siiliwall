@@ -212,7 +212,7 @@ export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColum
     }
 }
 
-export const updateSwimlaneOrderOfBoardToTheCache = (boardId, newSwimlaneOrder, newSwimlaneOrderObjects) => {
+export const updateSwimlaneOrderOfBoardToTheCache = (boardId, affectedSwimlanes, newSwimlaneOrder) => {
     client.writeFragment({
         id: `Board:${boardId}`,
         fragment: SWIMLANE_ORDER,
@@ -222,7 +222,7 @@ export const updateSwimlaneOrderOfBoardToTheCache = (boardId, newSwimlaneOrder, 
     })
 
     // Update the swimlaneOrderNumbers of the affected tasks to the cache
-    newSwimlaneOrderObjects.map((task) => {
+    affectedSwimlanes.map((task) => {
         client.writeFragment({
             id: `Task:${task.id}`,
             fragment: SWIMLANE_ORDER_NUMBER,

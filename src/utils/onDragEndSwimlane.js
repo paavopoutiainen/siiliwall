@@ -64,32 +64,13 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         newSwimlaneOrder.splice(destination.index, 0, movedId)
 
         // update the cache
-        updateSwimlaneOrderOfBoardToTheCache(boardId, newSwimlaneOrder, newSwimlaneOrderObjects)
+        updateSwimlaneOrderOfBoardToTheCache(boardId, newSwimlaneOrderObjects, newSwimlaneOrder)
 
-        /* client.writeFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-            data: {
-                swimlaneOrder: newSwimlaneOrder,
-            },
-        })
-
-        // Update the swimlaneOrderNumbers of the affected tasks to the cache
-        newSwimlaneOrderObjects.map((task) => {
-            client.writeFragment({
-                id: `Task:${task.id}`,
-                fragment: SWIMLANE_ORDER_NUMBER,
-                data: {
-                    swimlaneOrderNumber: task.swimlaneOrderNumber,
-                },
-            })
-        })
-*/
         // Send mutation to the server for updating the database
         moveSwimlane({
             variables: {
                 boardId,
-                newSwimlaneOrder: newSwimlaneOrderObjects,
+                affectedSwimlanes: newSwimlaneOrderObjects,
                 swimlaneOrder: newSwimlaneOrder,
                 eventId,
             },
