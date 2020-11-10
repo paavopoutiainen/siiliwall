@@ -20,6 +20,7 @@ export const onDragEnd = async (
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+    const eventId = window.localStorage.getItem("eventId")
 
     // When user is moving column
     if (result.type === 'column') {
@@ -178,6 +179,7 @@ export const onDragEnd = async (
                 destColumnId: destinationColumn.id,
                 sourceTicketOrder: newTicketOrderOfSourceColumn,
                 destTicketOrder: newTicketOrderOfDestinationColumn,
+                eventId
             },
         })
         let ticketTitle = null

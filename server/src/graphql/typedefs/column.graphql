@@ -33,12 +33,13 @@ type Mutation {
   editColumnById(id: ID!, name: String!): Column
   deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!, boardId: ID!): Column
-  moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!): [Column!]
+  moveTicketFromColumn(type: String!, ticketId: ID!, sourceColumnId: ID!, destColumnId: ID!, sourceTicketOrder: [TicketOrderInput!]!, destTicketOrder: [TicketOrderInput!]!, eventId: ID!): [Column!]
   moveColumn(boardId: ID!, newColumnOrder: [ID!]!): ID!
 }
 
 type Subscription {
   ticketMovedInColumn(boardId: ID!): TicketMovedInColumnPayload!
+  ticketMovedFromColumn(boardId: ID!, eventId: ID!): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
 }
 
@@ -61,3 +62,12 @@ type TicketMovedInColumnPayload {
   newOrder: [TicketOrderObject!]!
   columnId: ID!
 }
+
+type TicketMovedFromColumnPayload {
+  ticketInfo: TicketOrderObject!
+  sourceColumnId: ID!
+  destColumnId: ID!
+  sourceTicketOrder: [TicketOrderObject!]!
+  destTicketOrder: [TicketOrderObject!]!
+}
+
