@@ -64,9 +64,12 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         newSwimlaneOrder.splice(destination.index, 0, movedId)
 
         // update the cache
+        // newSwimlaneOrderObjects variable contains the new swimlaneOrderNumbers of the tasks that got affected by the move
+        // newSwimlaneOrder is an array of all task id's of the board in new order
+        // both information is sent to the cache update function as well as the server for database update and subscribed clients
         updateSwimlaneOrderOfBoardToTheCache(boardId, newSwimlaneOrderObjects, newSwimlaneOrder)
 
-        // Send mutation to the server for updating the database
+        // Send mutation to the server for updating the database and subscribed clients
         moveSwimlane({
             variables: {
                 boardId,
