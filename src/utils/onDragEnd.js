@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/prefer-default-export */
-import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_TICKETS, COLUMNORDER,
+    COLUMNORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
     result,
@@ -20,6 +19,7 @@ export const onDragEnd = async (
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+    const eventId = window.localStorage.getItem("eventId")
 
     // When user is moving column
     if (result.type === 'column') {
@@ -97,15 +97,10 @@ export const onDragEnd = async (
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
         newTicketOrderOfDestinationColumn.splice(destination.index, 0, movedTicketOrderObject)
 
-        // Find from the cache the board
-        const dataInCache = client.readQuery(
-            { query: BOARD_BY_ID, variables: { boardId: board.id } },
-        )
-
-        // Find from the cache the columns being manipulated
-        const sourceColumnFromCache = dataInCache.boardById.columns
+        // Find the columns being manipulated
+        const sourceColumnFromCache = columns
             .find((column) => column.id === sourceColumn.id)
-        const destinationColumnFromCache = dataInCache.boardById.columns
+        const destinationColumnFromCache = columns
             .find((column) => column.id === destinationColumn.id)
 
         // Combine the tasks and the subtasks into single array
@@ -147,29 +142,14 @@ export const onDragEnd = async (
             }
         })
 
-        const sourceColumnId = `Column:${sourceColumn.id}`
-        const destinationColumnId = `Column:${destinationColumn.id}`
         // update the manipulated columns in the cache
-        client.writeFragment({
-            id: sourceColumnId,
-            fragment: TICKETORDER_AND_TICKETS,
-            data: {
-                ticketOrder: newTicketOrderOfSourceColumn,
-                tasks: updatedTasksOfSourceColumn,
-                subtasks: updatedSubtasksOfSourceColumn,
-            },
-        })
-
-        client.writeFragment({
-            id: destinationColumnId,
-            fragment: TICKETORDER_AND_TICKETS,
-            data: {
-                ticketOrder: newTicketOrderOfDestinationColumn,
-                tasks: updatedTasksOfDestinationColumn,
-                subtasks: updatedsubtasksOfDestinationColumn,
-            },
-        })
-
+        cacheTicketMovedFromColumn(
+            {type: movedTicketOrderObject.type, ticketId: draggableId}, 
+            sourceColumn.id,
+            destinationColumn.id,
+            newTicketOrderOfSourceColumn,
+            newTicketOrderOfDestinationColumn
+        )
         await moveTicketFromColumn({
             variables: {
                 type: movedTicketOrderObject.type,
@@ -178,6 +158,7 @@ export const onDragEnd = async (
                 destColumnId: destinationColumn.id,
                 sourceTicketOrder: newTicketOrderOfSourceColumn,
                 destTicketOrder: newTicketOrderOfDestinationColumn,
+                eventId
             },
         })
         let ticketTitle = null

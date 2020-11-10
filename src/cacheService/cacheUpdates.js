@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN,
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -139,4 +139,75 @@ export const cacheTicketMovedInColumn = (columnId, newOrder) => {
             ticketOrder: newOrder,
         },
     })
+}
+
+const updateTheColumnOfTheMovedSubtask = (ticketId, columnId) => {
+    const newColumnForMovedSubtask = { id: columnId, __typename: 'Column' }
+
+    client.writeFragment({
+        id: `Subtask:${ticketId}`,
+        fragment: SUBTASKS_COLUMN,
+        data: {
+            column: newColumnForMovedSubtask,
+        },
+    })
+}
+
+export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder) => {
+    // Column attribute of the moved subtask has to be updated to the
+    // cache in order to avoid lagging when subtask is moved
+    updateTheColumnOfTheMovedSubtask(ticketInfo.ticketId, destColumnId)
+    const sourceColumnIdForCache = `Column:${sourceColumnId}`
+    const destinationColumnIdForCache = `Column:${destColumnId}`
+    const sourceColumn = client.readFragment({
+        id: sourceColumnIdForCache,
+        fragment: ticketInfo.type === 'task' ? TICKETORDER_AND_TASKS : TICKETORDER_AND_SUBTASKS,
+    })
+    const destinationColumn = client.readFragment({
+        id: destinationColumnIdForCache,
+        fragment: ticketInfo.type === 'task' ? TICKETORDER_AND_TASKS : TICKETORDER_AND_SUBTASKS,
+    })
+
+    if (ticketInfo.type === 'task') {
+        const newSourceTasks = Array.from(sourceColumn.tasks).filter((task) => task.id !== ticketInfo.ticketId)
+        const movedTicket = sourceColumn.tasks.find((task) => task.id === ticketInfo.ticketId)
+        const newDestinationTasks = Array.from(destinationColumn.tasks).concat(movedTicket)
+        client.writeFragment({
+            id: sourceColumnIdForCache,
+            fragment: TICKETORDER_AND_TASKS,
+            data: {
+                ticketOrder: sourceTicketOrder,
+                tasks: newSourceTasks,
+            },
+        })
+        client.writeFragment({
+            id: destinationColumnIdForCache,
+            fragment: TICKETORDER_AND_TASKS,
+            data: {
+                ticketOrder: destTicketOrder,
+                tasks: newDestinationTasks,
+            },
+        })
+    } else {
+        const newSourceSubtasks = Array.from(sourceColumn.subtasks).filter((subtask) => subtask.id !== ticketInfo.ticketId)
+        const movedTicket = sourceColumn.subtasks.find((subtask) => subtask.id === ticketInfo.ticketId)
+        const newDestinationSubtasks = Array.from(destinationColumn.subtasks).concat(movedTicket)
+
+        client.writeFragment({
+            id: sourceColumnIdForCache,
+            fragment: TICKETORDER_AND_SUBTASKS,
+            data: {
+                ticketOrder: sourceTicketOrder,
+                subtasks: newSourceSubtasks,
+            },
+        })
+        client.writeFragment({
+            id: destinationColumnIdForCache,
+            fragment: TICKETORDER_AND_SUBTASKS,
+            data: {
+                ticketOrder: destTicketOrder,
+                subtasks: newDestinationSubtasks,
+            },
+        })
+    }
 }

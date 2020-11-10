@@ -3,15 +3,17 @@
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
+    SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
 
 export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
     const { destination, source, draggableId } = result
     if (!destination) return
 
     if (destination.droppableId === source.droppableId && destination.index === source.index) return
+
+    const eventId = window.localStorage.getItem('eventId')
 
     /*
     WHEN SWIMLANE IS MOVED
@@ -168,38 +170,14 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
         newTicketOrderOfDestinationColumn.splice(destinationIndex, 0, movedTicketOrderObject)
 
-        const sourceColumnIdForCache = `Column:${sourceColumnId}`
-        const destinationColumnIdForCache = `Column:${destinationColumnId}`
-
-        // Column attribute of the moved subtask has to be updated to the
-        // cache in order to avoid lagging when subtask is moved
-        const newColumnForMovedSubtask = { id: destinationColumnFromCache.id, __typename: 'Column' }
-
-        client.writeFragment({
-            id: `Subtask:${draggableId}`,
-            fragment: SUBTASKS_COLUMN,
-            data: {
-                column: newColumnForMovedSubtask,
-            },
-        })
-
-        client.writeFragment({
-            id: sourceColumnIdForCache,
-            fragment: TICKETORDER_AND_SUBTASKS,
-            data: {
-                ticketOrder: newTicketOrderOfSourceColumn,
-                subtasks: updatedSubtasksOfSourceColumn,
-            },
-        })
-
-        client.writeFragment({
-            id: destinationColumnIdForCache,
-            fragment: TICKETORDER_AND_SUBTASKS,
-            data: {
-                ticketOrder: newTicketOrderOfDestinationColumn,
-                subtasks: updatedSubtasksOfDestinationColumn,
-            },
-        })
+        // update the manipulated columns in the cache
+        cacheTicketMovedFromColumn(
+            { type: movedTicketOrderObject.type, ticketId: draggableId },
+            sourceColumnId,
+            destinationColumnId,
+            newTicketOrderOfSourceColumn,
+            newTicketOrderOfDestinationColumn,
+        )
 
         await moveTicketFromColumn({
             variables: {
@@ -209,6 +187,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 destColumnId: destinationColumnId,
                 sourceTicketOrder: newTicketOrderOfSourceColumn,
                 destTicketOrder: newTicketOrderOfDestinationColumn,
+                eventId,
             },
         })
     }

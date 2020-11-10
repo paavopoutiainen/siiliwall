@@ -12,7 +12,7 @@ import { onDragEnd } from '../../utils/onDragEnd'
 import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
-const Board = ({ board }) => {
+const Board = ({ board, eventId }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
