@@ -4,7 +4,7 @@ import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
     TICKETORDER_AND_TICKETS, COLUMNORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
 
 export const onDragEnd = async (
     result,
@@ -150,27 +150,15 @@ export const onDragEnd = async (
 
         const sourceColumnId = `Column:${sourceColumn.id}`
         const destinationColumnId = `Column:${destinationColumn.id}`
+
         // update the manipulated columns in the cache
-        client.writeFragment({
-            id: sourceColumnId,
-            fragment: TICKETORDER_AND_TICKETS,
-            data: {
-                ticketOrder: newTicketOrderOfSourceColumn,
-                tasks: updatedTasksOfSourceColumn,
-                subtasks: updatedSubtasksOfSourceColumn,
-            },
-        })
-
-        client.writeFragment({
-            id: destinationColumnId,
-            fragment: TICKETORDER_AND_TICKETS,
-            data: {
-                ticketOrder: newTicketOrderOfDestinationColumn,
-                tasks: updatedTasksOfDestinationColumn,
-                subtasks: updatedsubtasksOfDestinationColumn,
-            },
-        })
-
+        cacheTicketMovedFromColumn(
+            {type: movedTicketOrderObject.type, ticketId: draggableId}, 
+            sourceColumn.id,
+            destinationColumn.id,
+            newTicketOrderOfSourceColumn,
+            newTicketOrderOfDestinationColumn
+        )
         await moveTicketFromColumn({
             variables: {
                 type: movedTicketOrderObject.type,
