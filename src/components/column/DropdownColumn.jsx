@@ -4,12 +4,21 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import Delete from '@material-ui/icons/Delete'
+import { useApolloClient } from '@apollo/client'
+import { TICKETORDER } from '../../graphql/fragments'
 import AlertBox from '../AlertBox'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
+    const client = useApolloClient()
+
+    const { ticketOrder } = client.readFragment({
+        id: `Column:${columnId}`,
+        fragment: TICKETORDER,
+    })
+    const hasTickets = ticketOrder.length
 
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
@@ -43,7 +52,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 elevation={0}
                 selected
             >
-                <MenuItem onClick={() => openAlertDialog('DELETE_COLUMN')}>
+                <MenuItem onClick={() => openAlertDialog(hasTickets ? 'COLUMN_HAS_TICKETS' : 'DELETE_COLUMN')}>
                     <ListItemIcon>
                         <Delete fontSize="default" />
                     </ListItemIcon>
