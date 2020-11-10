@@ -98,15 +98,10 @@ export const onDragEnd = async (
         const [movedTicketOrderObject] = newTicketOrderOfSourceColumn.splice(source.index, 1)
         newTicketOrderOfDestinationColumn.splice(destination.index, 0, movedTicketOrderObject)
 
-        // Find from the cache the board
-        const dataInCache = client.readQuery(
-            { query: BOARD_BY_ID, variables: { boardId: board.id } },
-        )
-
-        // Find from the cache the columns being manipulated
-        const sourceColumnFromCache = dataInCache.boardById.columns
+        // Find the columns being manipulated
+        const sourceColumnFromCache = columns
             .find((column) => column.id === sourceColumn.id)
-        const destinationColumnFromCache = dataInCache.boardById.columns
+        const destinationColumnFromCache = columns
             .find((column) => column.id === destinationColumn.id)
 
         // Combine the tasks and the subtasks into single array
