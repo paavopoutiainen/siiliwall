@@ -1,8 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/prefer-default-export */
-import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
-    TICKETORDER_AND_TICKETS, COLUMNORDER,
+    COLUMNORDER,
 } from '../graphql/fragments'
 import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
 
@@ -142,9 +141,6 @@ export const onDragEnd = async (
                 updatedsubtasksOfDestinationColumn.push(ticket)
             }
         })
-
-        const sourceColumnId = `Column:${sourceColumn.id}`
-        const destinationColumnId = `Column:${destinationColumn.id}`
 
         // update the manipulated columns in the cache
         cacheTicketMovedFromColumn(

@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN,
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -141,7 +141,22 @@ export const cacheTicketMovedInColumn = (columnId, newOrder) => {
     })
 }
 
+const updateTheColumnOfTheMovedSubtask = (ticketId, columnId) => {
+    const newColumnForMovedSubtask = { id: columnId, __typename: 'Column' }
+
+    client.writeFragment({
+        id: `Subtask:${ticketId}`,
+        fragment: SUBTASKS_COLUMN,
+        data: {
+            column: newColumnForMovedSubtask,
+        },
+    })
+}
+
 export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder) => {
+    // Column attribute of the moved subtask has to be updated to the
+    // cache in order to avoid lagging when subtask is moved
+    updateTheColumnOfTheMovedSubtask(ticketInfo.ticketId, destColumnId)
     const sourceColumnIdForCache = `Column:${sourceColumnId}`
     const destinationColumnIdForCache = `Column:${destColumnId}`
     const sourceColumn = client.readFragment({
