@@ -5,7 +5,7 @@ import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
     SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, updateSwimlaneOrderOfBoardToTheCache } from '../cacheService/cacheUpdates'
 
 export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
     const { destination, source, draggableId } = result
@@ -63,7 +63,10 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedId] = newSwimlaneOrder.splice(indexOfTaskBeforeDrag, 1)
         newSwimlaneOrder.splice(destination.index, 0, movedId)
 
-        client.writeFragment({
+        // update the cache
+        updateSwimlaneOrderOfBoardToTheCache(boardId, newSwimlaneOrder, newSwimlaneOrderObjects)
+
+        /* client.writeFragment({
             id: `Board:${boardId}`,
             fragment: SWIMLANE_ORDER,
             data: {
@@ -81,12 +84,14 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 },
             })
         })
-
+*/
         // Send mutation to the server for updating the database
         moveSwimlane({
             variables: {
                 boardId,
                 newSwimlaneOrder: newSwimlaneOrderObjects,
+                swimlaneOrder: newSwimlaneOrder,
+                eventId,
             },
         })
 
