@@ -15,7 +15,7 @@ export default function Routes() {
     return (
         <Switch>
             <Route exact path="/">
-                <LandingPage />
+                <LandingPage eventId={eventId} />
             </Route>
             { match && (
                 <Route exact path="/boards/:id">

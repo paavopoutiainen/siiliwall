@@ -6,8 +6,9 @@ import NewBoardForm from '../components/board/NewBoardForm'
 import NewUserForm from '../components/user/NewUserForm'
 import { landingPageStyles } from '../styles/styles'
 import '../styles.css'
+import useSubscriptions from '../graphql/useSubscriptions'
 
-const LandingPage = () => {
+const LandingPage = (eventId) => {
     const { data, loading } = useAllBoards()
     const [open, setOpen] = useState(false)
     const [openUserForm, setUserFormOpen] = useState(false)
@@ -20,6 +21,7 @@ const LandingPage = () => {
     const handleClickOpenUser = () => {
         setUserFormOpen(true)
     }
+    useSubscriptions(eventId)
 
     if (loading) return null
     const boardsInOrder = data.allBoards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
