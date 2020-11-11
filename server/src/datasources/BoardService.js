@@ -11,6 +11,28 @@ class BoardService {
 
     initialize() { }
 
+    async getProjectById(projectId) {
+        let projectFromDb
+        try {
+            projectFromDb = await this.store.Project.findByPk(projectId)
+        } catch (e) {
+            console.log(e)
+        }
+        return projectFromDb
+    }
+
+    async getBoardsByProjectId(projectId) {
+        let boardsFromDb
+        try {
+            boardsFromDb = await this.store.Board.findAll({
+                where: { projectId }
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return boardsFromDb
+    }
+
     async getBoards() {
         let boardsFromDb
         try {
