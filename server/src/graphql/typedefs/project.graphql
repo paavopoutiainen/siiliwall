@@ -1,0 +1,9 @@
+type Project {
+    id: ID!
+    name: String!
+    boards: [Board!]!
+}
+
+type Query {
+    projectById(id: ID!): Project!
+}
