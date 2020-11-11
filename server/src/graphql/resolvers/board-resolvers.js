@@ -3,6 +3,7 @@ const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
 
 const SWIMLANE_MOVED = 'SWIMLANE_MOVED'
+const BOARD_ADDED = 'BOARD_ADDED'
 
 const schema = {
     Query: {
@@ -21,12 +22,32 @@ const schema = {
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
+        boardAdded: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(BOARD_ADDED),
+                (payload, args) => args.eventId !== payload.eventId,
+            ),
+        },
     },
 
     Mutation: {
-        addBoard(root, args) {
-            return dataSources.boardService.addBoard(args.name, args.prettyId)
+        async addBoard(root, args) {
+            let addedBoard
+            try {
+                addedBoard = await dataSources.boardService.addBoard(args.name, args.prettyId)
+                pubsub.publish(BOARD_ADDED, {
+                    eventId: args.eventId,
+                    boardAdded: {
+                        mutationType: 'CREATED',
+                        board: addedBoard.dataValues
+                    }
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return addedBoard
         },
+
         moveSwimlane(root, {
             boardId, affectedSwimlanes, swimlaneOrder, eventId,
         }) {

@@ -10,7 +10,7 @@ const NewBoardForm = ({ setOpen, open }) => {
     const [name, setName] = useState('')
     const [prettyId, setPrettyId] = useState('')
     const [valid, setValid] = useState(true)
-
+    const eventId = window.localStorage.getItem('eventId')
     const handleChangeName = (event) => {
         setName(event.target.value)
     }
@@ -47,7 +47,8 @@ const NewBoardForm = ({ setOpen, open }) => {
             addBoard({
                 variables: {
                     name,
-                    prettyId
+                    prettyId,
+                    eventId
                 },
             })
             closeDialog()

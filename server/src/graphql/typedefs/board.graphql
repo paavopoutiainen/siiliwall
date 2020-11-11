@@ -45,13 +45,9 @@ type SwimlaneMovedPayload {
 
 type boardAddedPayload {
   mutationType: MutationType!
-  mutationInfo: MutationInfo!
+  board: Board!
 }
 
-type MutationInfo {
-  eventId: ID!
-  
-}
 enum MutationType {
   CREATED
 }
