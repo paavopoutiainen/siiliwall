@@ -1,4 +1,8 @@
+const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
+const { pubsub } = require('../pubsub')
+
+const SWIMLANE_MOVED = 'SWIMLANE_MOVED'
 
 const schema = {
     Query: {
@@ -10,12 +14,32 @@ const schema = {
         },
     },
 
+    Subscription: {
+        swimlaneMoved: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(SWIMLANE_MOVED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
+    },
+
     Mutation: {
         addBoard(root, args) {
             return dataSources.boardService.addBoard(args.name, args.prettyId)
         },
-        moveSwimlane(root, { boardId, newSwimlaneOrder }) {
-            return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, newSwimlaneOrder)
+        moveSwimlane(root, {
+            boardId, affectedSwimlanes, swimlaneOrder, eventId,
+        }) {
+            pubsub.publish(SWIMLANE_MOVED, {
+                boardId,
+                eventId,
+                swimlaneMoved: {
+                    boardId,
+                    affectedSwimlanes,
+                    swimlaneOrder,
+                },
+            })
+            return dataSources.boardService.updateSwimlaneOrderNumbers(boardId, affectedSwimlanes)
         },
     },
 

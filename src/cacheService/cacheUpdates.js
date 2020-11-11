@@ -1,7 +1,7 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER,
 } from '../graphql/fragments'
 
 export const addNewTask = (addedTask) => {
@@ -210,4 +210,25 @@ export const cacheTicketMovedFromColumn = (ticketInfo, sourceColumnId, destColum
             },
         })
     }
+}
+
+export const updateSwimlaneOrderOfBoardToTheCache = (boardId, affectedSwimlanes, newSwimlaneOrder) => {
+    client.writeFragment({
+        id: `Board:${boardId}`,
+        fragment: SWIMLANE_ORDER,
+        data: {
+            swimlaneOrder: newSwimlaneOrder,
+        },
+    })
+
+    // Update the swimlaneOrderNumbers of the affected tasks to the cache
+    affectedSwimlanes.map((task) => {
+        client.writeFragment({
+            id: `Task:${task.id}`,
+            fragment: SWIMLANE_ORDER_NUMBER,
+            data: {
+                swimlaneOrderNumber: task.swimlaneOrderNumber,
+            },
+        })
+    })
 }

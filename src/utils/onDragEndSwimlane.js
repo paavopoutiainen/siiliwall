@@ -5,7 +5,7 @@ import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import {
     SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
 } from '../graphql/fragments'
-import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn } from '../cacheService/cacheUpdates'
+import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, updateSwimlaneOrderOfBoardToTheCache } from '../cacheService/cacheUpdates'
 
 export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
     const { destination, source, draggableId } = result
@@ -63,30 +63,19 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const [movedId] = newSwimlaneOrder.splice(indexOfTaskBeforeDrag, 1)
         newSwimlaneOrder.splice(destination.index, 0, movedId)
 
-        client.writeFragment({
-            id: `Board:${boardId}`,
-            fragment: SWIMLANE_ORDER,
-            data: {
-                swimlaneOrder: newSwimlaneOrder,
-            },
-        })
+        // update the cache
+        // newSwimlaneOrderObjects variable contains the new swimlaneOrderNumbers of the tasks that got affected by the move
+        // newSwimlaneOrder is an array of all task id's of the board in new order
+        // both information is sent to the cache update function as well as the server for database update and subscribed clients
+        updateSwimlaneOrderOfBoardToTheCache(boardId, newSwimlaneOrderObjects, newSwimlaneOrder)
 
-        // Update the swimlaneOrderNumbers of the affected tasks to the cache
-        newSwimlaneOrderObjects.map((task) => {
-            client.writeFragment({
-                id: `Task:${task.id}`,
-                fragment: SWIMLANE_ORDER_NUMBER,
-                data: {
-                    swimlaneOrderNumber: task.swimlaneOrderNumber,
-                },
-            })
-        })
-
-        // Send mutation to the server for updating the database
+        // Send mutation to the server for updating the database and subscribed clients
         moveSwimlane({
             variables: {
                 boardId,
-                newSwimlaneOrder: newSwimlaneOrderObjects,
+                affectedSwimlanes: newSwimlaneOrderObjects,
+                swimlaneOrder: newSwimlaneOrder,
+                eventId,
             },
         })
 

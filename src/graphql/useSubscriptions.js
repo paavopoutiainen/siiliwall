@@ -1,10 +1,10 @@
 import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED } from './task/taskQueries'
+import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from './task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from './ticket/ticketQueries'
 import { COLUMN_DELETED } from './column/columnQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache,
+    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
 } from '../cacheService/cacheUpdates'
 
 const useSubscriptions = (id, eventId) => {
@@ -82,6 +82,16 @@ const useSubscriptions = (id, eventId) => {
                     ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
                 } = data.ticketMovedFromColumn
                 cacheTicketMovedFromColumn(ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder)
+            },
+        })
+    useSubscription(SWIMLANE_MOVED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                const {
+                    boardId, affectedSwimlanes, swimlaneOrder,
+                } = data.swimlaneMoved
+                updateSwimlaneOrderOfBoardToTheCache(boardId, affectedSwimlanes, swimlaneOrder)
             },
         })
 }
