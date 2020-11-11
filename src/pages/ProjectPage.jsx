@@ -9,8 +9,8 @@ import '../styles.css'
 import useSubscriptions from '../graphql/useSubscriptions'
 
 const ProjectPage = ({ eventId }) => {
-    const id = '9da1b35f-181a-4397-a5a5-47abced10a66'
-    const queryResult = useBoardsByProjectId(id)
+    const projectId = '9da1b35f-181a-4397-a5a5-47abced10a66'
+    const queryResult = useBoardsByProjectId(projectId)
     const [open, setOpen] = useState(false)
     const [openUserForm, setUserFormOpen] = useState(false)
     const classes = projectPageStyles()

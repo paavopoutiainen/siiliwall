@@ -33,6 +33,18 @@ class BoardService {
         return boardsFromDb
     }
 
+    async getProjectByBoardId(boardId) {
+        let projectFromDb
+        try {
+            projectFromDb = await this.store.Project.findAll({
+                where: { boardId }
+            })
+        } catch (e) {
+            console.log(e)
+        }
+        return projectFromDb
+    }
+
     async getBoards() {
         let boardsFromDb
         try {

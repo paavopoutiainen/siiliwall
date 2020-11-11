@@ -4,6 +4,10 @@ import {
     TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER,
 } from '../graphql/fragments'
 
+export const addNewBoard = (addedBoard) => {
+
+}
+
 export const addNewTask = (addedTask) => {
     // Update the column's tasks and ticketOrder lists
     const columnIdForCache = `Column:${addedTask.column.id}`

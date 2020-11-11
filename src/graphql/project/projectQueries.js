@@ -14,6 +14,7 @@ export const BOARDS_BY_PROJECT_ID = gql`
             id
             name
             orderNumber
+            
         }   
     }
 `

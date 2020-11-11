@@ -74,6 +74,9 @@ const schema = {
         swimlaneOrder(root) {
             return dataSources.boardService.getSwimlaneOrderOfBoard(root.id)
         },
+        project(root) {
+            return dataSources.boardService.getProjectByBoardId(root.id)
+        }
     },
 }
 
