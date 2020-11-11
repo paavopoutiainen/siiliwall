@@ -97,7 +97,10 @@ const schema = {
             })
             return [sourceColumn, destColumn]
         },
-
+        async moveColumn(root, { boardId, newColumnOrder }) {
+            await dataSources.boardService.reOrderColumns(newColumnOrder)
+            return boardId
+        },
     },
 
     Column: {
