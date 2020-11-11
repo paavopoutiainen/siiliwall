@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
-import LandingPage from '../pages/LandingPage'
+import ProjectPage from '../pages/ProjectPage'
 import BoardPage from '../pages/BoardPage'
 
 export default function Routes() {
@@ -14,8 +14,8 @@ export default function Routes() {
 
     return (
         <Switch>
-            <Route exact path="/">
-                <LandingPage eventId={eventId} />
+            <Route exact path={["/", "/projects/:id"]}>
+                <ProjectPage eventId={eventId} />
             </Route>
             { match && (
                 <Route exact path="/boards/:id">
