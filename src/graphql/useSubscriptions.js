@@ -1,13 +1,23 @@
+/* eslint-disable max-len */
 import { useSubscription } from '@apollo/client'
 import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from './task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from './ticket/ticketQueries'
-import { COLUMN_DELETED } from './column/columnQueries'
+import { COLUMN_MUTATED, COLUMN_DELETED } from './column/columnQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
+    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache, addNewColumn,
 } from '../cacheService/cacheUpdates'
 
 const useSubscriptions = (id, eventId) => {
+    useSubscription(COLUMN_MUTATED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                if (data.columnMutated.mutationType === 'CREATED') {
+                    addNewColumn(data.columnMutated.column)
+                }
+            },
+        })
     useSubscription(COLUMN_DELETED,
         {
             variables: { boardId: id, eventId },

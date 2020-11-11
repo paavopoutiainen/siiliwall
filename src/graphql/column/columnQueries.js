@@ -29,6 +29,22 @@ export const EDIT_COLUMN = gql`
         }
     }
 `
+
+export const COLUMN_MUTATED = gql`
+    subscription columnMutated($boardId: ID!, eventId: ID!) {
+        columnMutated(boardId: $boardId, eventId: $eventId) {
+            mutationType
+            node {
+                id
+                name
+            }
+            board {
+                id
+            }
+        }
+    }
+`
+
 export const COLUMN_DELETED = gql`
     subscription columnDeleted($boardId: ID!, $eventId: ID!) {
         columnDeleted(boardId: $boardId, eventId: $eventId) {

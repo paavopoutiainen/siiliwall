@@ -1,8 +1,28 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, COLUMNORDER_AND_COLUMNS,
 } from '../graphql/fragments'
+
+export const addNewColumn = (addedColumn) => {
+    const boardIdForCache = `Board:${addedColumn.boardId}`
+    const { columnOrder, columns } = client.readFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+    })
+    const newColumns = columns.concat(addedColumn)
+    const newColumnOrder = columnOrder.concat({ columnId: addedColumn.id })
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+        data: {
+            columnOrder: newColumnOrder,
+            columns: newColumns,
+        },
+    })
+}
 
 export const addNewTask = (addedTask) => {
     // Update the column's tasks and ticketOrder lists
