@@ -6,4 +6,5 @@ type Project {
 
 type Query {
     projectById(id: ID!): Project!
+    boardsByProjectId(id: ID!): [Board!]!
 }

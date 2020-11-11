@@ -4,7 +4,7 @@ import ProjectPage from '../pages/ProjectPage'
 import BoardPage from '../pages/BoardPage'
 
 export default function Routes() {
-    const match = useRouteMatch('/boards/:id')
+    const boardMatch = useRouteMatch('/boards/:id')
     const { v4: uuid } = require('uuid')
     const eventId = uuid()
 
@@ -14,12 +14,13 @@ export default function Routes() {
 
     return (
         <Switch>
-            <Route exact path={["/", "/projects/:id"]}>
+            <Route exact path="/">
                 <ProjectPage eventId={eventId} />
             </Route>
-            { match && (
+
+            { boardMatch && (
                 <Route exact path="/boards/:id">
-                    <BoardPage id={match.params.id} eventId={eventId} />
+                    <BoardPage id={boardMatch.params.id} eventId={eventId} />
                 </Route>
             )}
         </Switch>
