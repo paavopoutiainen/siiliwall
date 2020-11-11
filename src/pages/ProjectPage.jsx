@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useBoardsByProjectId from '../graphql/project/hooks/useBoardsByProjectId'
+import useProjectById from '../graphql/project/hooks/useProjectById'
 import NewBoardForm from '../components/board/NewBoardForm'
 import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
@@ -10,7 +11,8 @@ import useSubscriptions from '../graphql/useSubscriptions'
 
 const ProjectPage = ({ eventId }) => {
     const projectId = '9da1b35f-181a-4397-a5a5-47abced10a66'
-    const queryResult = useBoardsByProjectId(projectId)
+    //const queryResult = useBoardsByProjectId(projectId)
+    const queryResult = useProjectById(projectId)
     const [open, setOpen] = useState(false)
     const [openUserForm, setUserFormOpen] = useState(false)
     const classes = projectPageStyles()
@@ -25,7 +27,7 @@ const ProjectPage = ({ eventId }) => {
     useSubscriptions(eventId)
 
     if (queryResult.loading) return null
-    const boardsInOrder = queryResult.data.boardsByProjectId.slice().sort((a, b) => a.orderNumber - b.orderNumber)
+    const boardsInOrder = queryResult.data.projectById.boards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
 
     return (
         <Grid
@@ -36,7 +38,7 @@ const ProjectPage = ({ eventId }) => {
             classes={{ root: classes.root }}
             spacing={7}
         >
-            {open && <NewBoardForm setOpen={setOpen} open={open} />}
+            {open && <NewBoardForm setOpen={setOpen} open={open} projectId={projectId} />}
             {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
             <Grid item classes={{ root: classes.title }}>
                 <h1 id="landingTitle">Welcome!</h1>

@@ -2,8 +2,12 @@ import { gql } from '@apollo/client'
 
 export const PROJECT_BY_ID = gql`
     query projectById($projectId: ID!) {
-        projectById(projectId: $projectId) {
+        projectById(id: $projectId) {
             id
+            boards {
+                id
+                name
+            }
         }
     }
 `
@@ -14,7 +18,7 @@ export const BOARDS_BY_PROJECT_ID = gql`
             id
             name
             orderNumber
-            
+
         }   
     }
 `

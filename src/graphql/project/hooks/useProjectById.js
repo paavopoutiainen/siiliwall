@@ -1,12 +1,12 @@
 import { useQuery } from '@apollo/client'
 import { PROJECT_BY_ID } from '../projectQueries'
 
-const useProjectById = (id) => {
+const useProjectById = (projectId) => {
     const {
         loading, error, data,
     } = useQuery(PROJECT_BY_ID, {
         variables: {
-            taskId: id,
+            projectId
         },
     })
     return { data, error, loading }

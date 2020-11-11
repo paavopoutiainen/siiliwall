@@ -5,8 +5,8 @@ import {
 } from '@material-ui/core'
 import useAddBoard from '../../graphql/board/hooks/useAddBoard'
 
-const NewBoardForm = ({ setOpen, open }) => {
-    const [addBoard] = useAddBoard()
+const NewBoardForm = ({ setOpen, open, projectId }) => {
+    const [addBoard] = useAddBoard(projectId)
     const [name, setName] = useState('')
     const [prettyId, setPrettyId] = useState('')
     const [valid, setValid] = useState(true)
@@ -48,7 +48,8 @@ const NewBoardForm = ({ setOpen, open }) => {
                 variables: {
                     name,
                     prettyId,
-                    eventId
+                    eventId,
+                    projectId
                 },
             })
             closeDialog()

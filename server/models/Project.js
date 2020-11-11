@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
     })
     Project.associate = (models) => {
         Project.hasMany(models.Board, {
-            foreignKey: 'projectId'
+            foreignKey: 'boardId'
         })
     }
     return Project
