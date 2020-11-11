@@ -394,5 +394,5 @@ const userSubtasks = [
 ]
 
 module.exports = {
-    boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks,
+    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks,
 }
