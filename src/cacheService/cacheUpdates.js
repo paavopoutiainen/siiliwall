@@ -76,22 +76,30 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
 }
 
 export const removeSubtaskFromCache = (subtaskId, columnId) => {
-    const subtaskIdForCache = `Subtask:${subtaskId}`
+    // fetch certain column from the cache
     const columnIdForCache = `Column:${columnId}`
-
-    const data = client.readFragment({
+    const { ticketOrder, subtasks } = client.readFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_SUBTASKS,
     })
-    const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+
+    // update column's ticketOrder and subtasks
+    const newSubtasks = subtasks.filter((subtask) => subtask.id !== subtaskId)
+    const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+
     client.writeFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_SUBTASKS,
         data: {
             ticketOrder: newTicketOrder,
+            subtasks: newSubtasks,
         },
     })
-    client.cache.evict({ id: subtaskIdForCache })
+    // finally remove the normalized subtask entity
+    const subtaskIdForCache = `Subtask:${subtaskId}`
+    client.cache.evict({
+        id: subtaskIdForCache,
+    })
 }
 
 export const deleteColumnFromCache = (columnId, boardId) => {

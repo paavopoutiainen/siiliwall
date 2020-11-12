@@ -80,17 +80,6 @@ const AlertBox = ({
         toggleCheck(!check)
     }
 
-    const archiveSubtaskById = (subtaskId) => {
-        archiveSubtask({
-            variables: {
-                subtaskId,
-                columnId,
-                boardId,
-                eventId,
-            },
-        })
-    }
-
     const archiveTaskById = () => {
         // Find the related subtasks and archive them
         const boardIdForCache = `Board:${boardId}`
@@ -102,7 +91,7 @@ const AlertBox = ({
 
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id))
+        subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id, subtask.column.id))
         removeTaskFromCache(taskId, columnId, boardId)
         // Send mutaion to the server
         archiveTask({
@@ -126,7 +115,19 @@ const AlertBox = ({
         })
     }
 
-    const deleteSubtask = (columnId, subtaskId) => {
+    const archiveSubtaskById = (subtaskId, columnId) => {
+        removeSubtaskFromCache(subtaskId, columnId)
+        archiveSubtask({
+            variables: {
+                subtaskId,
+                columnId,
+                boardId,
+                eventId,
+            },
+        })
+    }
+
+    const deleteSubtask = (subtaskId, columnId) => {
         removeSubtaskFromCache(subtaskId, columnId)
         callDeleteSubtask({
             variables: {
@@ -148,7 +149,7 @@ const AlertBox = ({
         // Handle the removing of task's subtasks if they exist
         const allSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = allSubtasks.filter((subtask) => subtask.task.id === taskId)
-        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.column.id, subtask.id))
+        subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.id, subtask.column.id))
         // Remove task from cache
         removeTaskFromCache(taskId, columnId, boardId)
         // Send mutation

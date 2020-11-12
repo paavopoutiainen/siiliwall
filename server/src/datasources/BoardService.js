@@ -620,7 +620,6 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
-        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
