@@ -1,6 +1,6 @@
 // dummy data
 const projects = [{
-    id: '9da1b35f-181a-4397-a5a5-47abced10a66', name: 'SiiliWall',
+    id: '9da1b35f-181a-4397-a5a5-47abced10a66', name: 'SiiliWall', orderNumber: 1,
 }]
 const boards = [{
     id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'

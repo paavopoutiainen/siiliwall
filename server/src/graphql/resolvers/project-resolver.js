@@ -8,6 +8,14 @@ const schema = {
         boardsByProjectId(root, args) {
             return dataSources.boardService.getBoardsByProjectId(args.id)
         },
+        allProjects() {
+            return dataSources.boardService.getProjects()
+        }
+    },
+    Mutation: {
+        async addProject(root, { name }) {
+            return dataSources.boardService.addProject(name)
+        },
     },
     Project: {
         boards(root) {

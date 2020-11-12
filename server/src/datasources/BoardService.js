@@ -11,6 +11,16 @@ class BoardService {
 
     initialize() { }
 
+    async getProjects() {
+        let projectsFromDb
+        try {
+            projectsFromDb = await this.store.Project.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return projectsFromDb
+    }
+
     async getProjectById(projectId) {
         let projectFromDb
         try {
@@ -31,6 +41,21 @@ class BoardService {
             console.error(e)
         }
         return boardsFromDb
+    }
+
+    async addProject(projectName) {
+        let addedProject
+        try {
+            const largestOrderNumber = await this.store.Project.max('orderNumber')
+            addedProject = await this.store.Project.create({
+                id: uuid(),
+                name: projectName,
+                orderNumber: largestOrderNumber + 1,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedProject
     }
 
     async getBoardById(boardId) {
