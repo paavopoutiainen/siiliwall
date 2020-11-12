@@ -6,7 +6,7 @@ import NewBoardForm from '../components/board/NewBoardForm'
 import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
-import useProjectSubscriptions from '../subscriptions/useProjectSubscriptions'
+import useProjectSubscriptions from '../graphql/subscriptions/useProjectSubscriptions'
 
 const ProjectPage = ({ id, eventId }) => {
     const queryResult = useProjectById(id)
@@ -51,12 +51,12 @@ const ProjectPage = ({ id, eventId }) => {
                 <Grid item>
                     <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
                         Add Board
-                        </Button>
+                    </Button>
                 </Grid>
                 <Grid item>
                     <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
                         Add User
-                        </Button>
+                    </Button>
                 </Grid>
             </Grid>
             <Grid

@@ -1,6 +1,6 @@
 import { useSubscription } from '@apollo/client'
-import { BOARD_ADDED } from '../graphql/board/boardQueries'
-import { addNewBoard } from '../cacheService/cacheUpdates'
+import { BOARD_ADDED } from '../board/boardQueries'
+import { addNewBoard } from '../../cacheService/cacheUpdates'
 
 const useProjectSubscriptions = (id, eventId) => {
     useSubscription(BOARD_ADDED,
@@ -10,7 +10,7 @@ const useProjectSubscriptions = (id, eventId) => {
                 if (data.boardAdded.mutationType === 'CREATED') {
                     addNewBoard(data.boardAdded.board, id)
                 }
-            }
+            },
         })
 }
 export default useProjectSubscriptions

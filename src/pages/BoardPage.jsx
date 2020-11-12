@@ -6,7 +6,7 @@ import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
-import useBoardSubscriptions from '../subscriptions/useBoardSubscriptions'
+import useBoardSubscriptions from '../graphql/subscriptions/useBoardSubscriptions'
 
 const BoardPage = ({ id, eventId }) => {
     const classes = boardPageStyles()

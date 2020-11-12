@@ -1,11 +1,11 @@
 import { useSubscription } from '@apollo/client'
-import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../graphql/subtask/subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../graphql/task/taskQueries'
-import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../graphql/ticket/ticketQueries'
-import { COLUMN_DELETED } from '../graphql/column/columnQueries'
+import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
+import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
+import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
+import { COLUMN_DELETED } from '../column/columnQueries'
 import {
     removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
-} from '../cacheService/cacheUpdates'
+} from '../../cacheService/cacheUpdates'
 
 const useBoardSubscriptions = (id, eventId) => {
     useSubscription(COLUMN_DELETED,

@@ -41,7 +41,7 @@ const LandingPage = () => {
                 <Grid item>
                     <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
                         Add Project
-                        </Button>
+                    </Button>
                 </Grid>
             </Grid>
             <Grid

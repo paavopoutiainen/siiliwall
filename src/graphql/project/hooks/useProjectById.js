@@ -6,8 +6,9 @@ const useProjectById = (projectId) => {
         loading, error, data,
     } = useQuery(PROJECT_BY_ID, {
         variables: {
-            projectId
+            projectId,
         },
+        fetchPolicy: 'cache-and-network',
     })
     return { data, error, loading }
 }
