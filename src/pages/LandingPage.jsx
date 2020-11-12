@@ -17,7 +17,7 @@ const LandingPage = () => {
 
     if (queryResult.loading) return null
     const projectsInOrder = queryResult.data.allProjects.slice().sort((a, b) => a.orderNumber - b.orderNumber)
-    console.log(queryResult.data.allProjects)
+
     return (
         <Grid
             container

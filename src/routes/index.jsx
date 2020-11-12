@@ -21,7 +21,7 @@ export default function Routes() {
             </Route>
             { projectMatch && (
                 <Route exact path="/projects/:id">
-                    <ProjectPage eventId={eventId} />
+                    <ProjectPage id={projectMatch.params.id} eventId={eventId} />
                 </Route>
             )}
             { boardMatch && (

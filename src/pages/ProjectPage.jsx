@@ -8,13 +8,11 @@ import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useProjectSubscriptions from '../subscriptions/useProjectSubscriptions'
 
-const ProjectPage = ({ eventId }) => {
-    const projectId = '9da1b35f-181a-4397-a5a5-47abced10a66'
-    const queryResult = useProjectById(projectId)
+const ProjectPage = ({ id, eventId }) => {
+    const queryResult = useProjectById(id)
     const [open, setOpen] = useState(false)
     const [openUserForm, setUserFormOpen] = useState(false)
     const classes = projectPageStyles()
-
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -23,7 +21,7 @@ const ProjectPage = ({ eventId }) => {
         setUserFormOpen(true)
     }
 
-    useProjectSubscriptions(projectId, eventId)
+    useProjectSubscriptions(id, eventId)
 
     if (queryResult.loading) return null
     const boardsInOrder = queryResult.data.projectById.boards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
@@ -38,7 +36,7 @@ const ProjectPage = ({ eventId }) => {
             classes={{ root: classes.root }}
             spacing={7}
         >
-            {open && <NewBoardForm setOpen={setOpen} open={open} projectId={projectId} />}
+            {open && <NewBoardForm setOpen={setOpen} open={open} projectId={id} />}
             {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
             <Grid item classes={{ root: classes.title }}>
                 <h1 id="landingTitle">{projectName}</h1>
