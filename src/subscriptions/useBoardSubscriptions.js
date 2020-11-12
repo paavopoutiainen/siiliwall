@@ -1,23 +1,13 @@
 import { useSubscription } from '@apollo/client'
-import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from './task/taskQueries'
-import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from './ticket/ticketQueries'
-import { COLUMN_DELETED } from './column/columnQueries'
-import { BOARD_ADDED } from './board/boardQueries'
+import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../graphql/subtask/subtaskQueries'
+import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../graphql/task/taskQueries'
+import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../graphql/ticket/ticketQueries'
+import { COLUMN_DELETED } from '../graphql/column/columnQueries'
 import {
-    addNewBoard, removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
+    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
 } from '../cacheService/cacheUpdates'
 
-const useSubscriptions = (id, eventId) => {
-    useSubscription(BOARD_ADDED,
-        {
-            variables: { projectId: id, eventId },
-            onSubscriptionData: ({ subscriptionData: { data } }) => {
-                if (data.boardAdded.mutationType === 'CREATED') {
-                    addNewBoard(data.boardAdded.board, id)
-                }
-            }
-        })
+const useBoardSubscriptions = (id, eventId) => {
     useSubscription(COLUMN_DELETED,
         {
             variables: { boardId: id, eventId },
@@ -105,4 +95,4 @@ const useSubscriptions = (id, eventId) => {
             },
         })
 }
-export default useSubscriptions
+export default useBoardSubscriptions

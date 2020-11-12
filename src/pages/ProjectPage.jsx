@@ -1,17 +1,15 @@
 import React, { useState } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import useBoardsByProjectId from '../graphql/project/hooks/useBoardsByProjectId'
 import useProjectById from '../graphql/project/hooks/useProjectById'
 import NewBoardForm from '../components/board/NewBoardForm'
 import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
-import useSubscriptions from '../graphql/useSubscriptions'
+import useProjectSubscriptions from '../subscriptions/useProjectSubscriptions'
 
 const ProjectPage = ({ eventId }) => {
     const projectId = '9da1b35f-181a-4397-a5a5-47abced10a66'
-    //const queryResult = useBoardsByProjectId(projectId)
     const queryResult = useProjectById(projectId)
     const [open, setOpen] = useState(false)
     const [openUserForm, setUserFormOpen] = useState(false)
@@ -25,7 +23,7 @@ const ProjectPage = ({ eventId }) => {
         setUserFormOpen(true)
     }
 
-    useSubscriptions(projectId, eventId)
+    useProjectSubscriptions(projectId, eventId)
 
     if (queryResult.loading) return null
     const boardsInOrder = queryResult.data.projectById.boards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
