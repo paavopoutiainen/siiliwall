@@ -24,7 +24,8 @@ const ProjectPage = ({ eventId }) => {
     const handleClickOpenUser = () => {
         setUserFormOpen(true)
     }
-    useSubscriptions(eventId)
+
+    useSubscriptions(projectId, eventId)
 
     if (queryResult.loading) return null
     const boardsInOrder = queryResult.data.projectById.boards.slice().sort((a, b) => a.orderNumber - b.orderNumber)

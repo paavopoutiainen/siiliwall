@@ -82,11 +82,13 @@ export const ADD_BOARD = gql`
     }
 `
 export const BOARD_ADDED = gql`
-    subscription boardAdded($eventId: ID!) {
-        boardAdded(eventId: $eventId) {
+    subscription boardAdded($projectId: ID!, $eventId: ID!) {
+        boardAdded(projectId: $projectId, eventId: $eventId) {
             mutationType
             board {
+                id
                 name
+                orderNumber
                 prettyId
             }
         }

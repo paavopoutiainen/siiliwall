@@ -7,6 +7,7 @@ export const PROJECT_BY_ID = gql`
             boards {
                 id
                 name
+                orderNumber
             }
         }
     }
@@ -18,7 +19,6 @@ export const BOARDS_BY_PROJECT_ID = gql`
             id
             name
             orderNumber
-
         }   
     }
 `

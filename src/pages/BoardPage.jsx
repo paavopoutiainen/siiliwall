@@ -13,7 +13,7 @@ const BoardPage = ({ id, eventId }) => {
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
     useSubscriptions(id, eventId)
-
+    console.log("kjhkhjhlkjkhkklkl")
     if (queryResult.loading) return null
     const board = queryResult.data.boardById
     const switchView = () => {

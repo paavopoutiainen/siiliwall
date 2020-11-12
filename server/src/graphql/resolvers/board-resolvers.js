@@ -7,9 +7,6 @@ const BOARD_ADDED = 'BOARD_ADDED'
 
 const schema = {
     Query: {
-        allBoards() {
-            return dataSources.boardService.getBoards()
-        },
         boardById(root, args) {
             return dataSources.boardService.getBoardById(args.id)
         },
@@ -25,26 +22,24 @@ const schema = {
         boardAdded: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(BOARD_ADDED),
-                (payload, args) => args.eventId !== payload.eventId,
+                (payload, args) => {
+                    return (args.projectId === payload.projectId && args.eventId !== payload.eventId)
+                }
             ),
         },
     },
 
     Mutation: {
-        async addBoard(root, args) {
-            let addedBoard
-            try {
-                addedBoard = await dataSources.boardService.addBoard(args.name, args.prettyId)
-                pubsub.publish(BOARD_ADDED, {
-                    eventId: args.eventId,
-                    boardAdded: {
-                        mutationType: 'CREATED',
-                        board: addedBoard.dataValues
-                    }
-                })
-            } catch (e) {
-                console.log(e)
-            }
+        async addBoard(root, { name, prettyId, eventId, projectId }) {
+            const addedBoard = await dataSources.boardService.addBoard(name, prettyId, projectId)
+            pubsub.publish(BOARD_ADDED, {
+                projectId,
+                eventId,
+                boardAdded: {
+                    mutationType: 'CREATED',
+                    board: addedBoard.dataValues
+                }
+            })
             return addedBoard
         },
 

@@ -33,30 +33,6 @@ class BoardService {
         return boardsFromDb
     }
 
-    /*async getProjectByBoardId(boardId) {
-        let projectFromDb
-        try {
-            console.log('jou', boardId)
-            projectFromDb = await this.store.Project.findAll({
-                //where: { boardId }
-            })
-            console.log('hei', projectFromDb)
-        } catch (e) {
-            console.log(e)
-        }
-        return projectFromDb
-    }*/
-
-    /*async getBoards() {
-        let boardsFromDb
-        try {
-            boardsFromDb = await this.store.Board.findAll()
-        } catch (e) {
-            console.error(e)
-        }
-        return boardsFromDb
-    }*/
-
     async getBoardById(boardId) {
         let boardFromDb
         try {
@@ -408,15 +384,18 @@ class BoardService {
         return arrayOfObjectsInOrder
     }
 
-    async addBoard(boardName, prettyId) {
+    async addBoard(boardName, prettyId, projectId) {
         let addedBoard
         try {
-            const largestOrderNumber = await this.store.Board.max('orderNumber')
+            const largestOrderNumber = await this.store.Board.max('orderNumber', {
+                where: { projectId }
+            })
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
                 prettyId,
                 orderNumber: largestOrderNumber + 1,
+                projectId
             })
         } catch (e) {
             console.error(e)

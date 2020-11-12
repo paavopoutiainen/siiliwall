@@ -3,11 +3,21 @@ import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
 import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from './task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from './ticket/ticketQueries'
 import { COLUMN_DELETED } from './column/columnQueries'
+import { BOARD_ADDED } from './board/boardQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
+    addNewBoard, removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache,
 } from '../cacheService/cacheUpdates'
 
 const useSubscriptions = (id, eventId) => {
+    useSubscription(BOARD_ADDED,
+        {
+            variables: { projectId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                if (data.boardAdded.mutationType === 'CREATED') {
+                    addNewBoard(data.boardAdded.board, id)
+                }
+            }
+        })
     useSubscription(COLUMN_DELETED,
         {
             variables: { boardId: id, eventId },

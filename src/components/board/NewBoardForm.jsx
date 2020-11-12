@@ -44,6 +44,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
             return
         }
         else {
+            console.log(projectId, eventId)
             addBoard({
                 variables: {
                     name,
