@@ -7,13 +7,13 @@ import {
 } from '../graphql/fragments'
 
 export const addNewColumn = (addedColumn) => {
-    const boardIdForCache = `Board:${addedColumn.boardId}`
+    const boardIdForCache = `Board:${addedColumn.board.id}`
     const { columnOrder, columns } = client.readFragment({
         id: boardIdForCache,
         fragment: COLUMNORDER_AND_COLUMNS,
     })
     const newColumns = columns.concat(addedColumn)
-    const newColumnOrder = columnOrder.concat({ columnId: addedColumn.id })
+    const newColumnOrder = columnOrder.concat(addedColumn.id)
     client.writeFragment({
         id: boardIdForCache,
         fragment: COLUMNORDER_AND_COLUMNS,

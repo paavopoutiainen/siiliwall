@@ -2,10 +2,13 @@
 import { gql } from '@apollo/client'
 
 export const ADD_COLUMN = gql`
-    mutation addColumnForBoard($boardId: ID!, $columnName: String!) {
-        addColumnForBoard(boardId: $boardId, columnName: $columnName) {
+    mutation addColumnForBoard($boardId: ID!, $columnName: String!, $eventId: ID!) {
+        addColumnForBoard(boardId: $boardId, columnName: $columnName, eventId: $eventId) {
             id
             name
+            board {
+                id
+            }
         }
     }
 `
@@ -31,15 +34,15 @@ export const EDIT_COLUMN = gql`
 `
 
 export const COLUMN_MUTATED = gql`
-    subscription columnMutated($boardId: ID!, eventId: ID!) {
+    subscription columnMutated($boardId: ID!, $eventId: ID!) {
         columnMutated(boardId: $boardId, eventId: $eventId) {
             mutationType
-            node {
+            column {
                 id
                 name
-            }
-            board {
-                id
+                board {
+                    id
+                }
             }
         }
     }
