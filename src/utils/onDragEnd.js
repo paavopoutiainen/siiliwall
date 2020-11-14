@@ -13,7 +13,7 @@ export const onDragEnd = async (
     client,
     columns,
     board,
-    toggleSnackbar,
+    enqueueSnackbar,
 ) => {
     const { destination, source, draggableId } = result
     if (!destination) return
@@ -44,7 +44,7 @@ export const onDragEnd = async (
             },
         })
         let msg = 'Moved Column ' + colName
-        toggleSnackbar(msg)
+        enqueueSnackbar(msg)
         return
     }
 
@@ -82,7 +82,7 @@ export const onDragEnd = async (
             },
         })
         
-        toggleSnackbar(msg)
+        enqueueSnackbar(msg)
     }
 
     // When ticket is moved into another column
@@ -168,6 +168,6 @@ export const onDragEnd = async (
         if (ticketBeingMoved.['__typename'] === 'Task') {
             ticketTitle = 'Moved Task ' + ticketBeingMoved.title
         }
-        toggleSnackbar(ticketTitle)
+        enqueueSnackbar(ticketTitle)
     }
 }
