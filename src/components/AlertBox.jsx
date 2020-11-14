@@ -13,6 +13,7 @@ import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
 import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
 import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
 import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../cacheService/cacheUpdates'
+import { useSnackbarContext } from '../contexts/SnackbarContext'
 
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
@@ -33,6 +34,7 @@ const AlertBox = ({
     const alertMsgDeleteTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Deletion of the task will permanently remove all the subtasks as well!`
     const alertMsgArchiveTaskIfSubtasks = `This task has ${count} unfinished subtask on the board! Archiving of the task will also archive it's subtasks, but can be examined through the archive setting.`
     const alertMsgColumnHasTickets = 'This column has tickets, you must empty the column before deleting it.'
+    const { setSnackbarMessage } = useSnackbarContext()
 
     const eventId = window.localStorage.getItem('eventId')
 
@@ -157,6 +159,7 @@ const AlertBox = ({
                 eventId,
             },
         })
+        setSnackbarMessage('Poistettu')
     }
 
     const handleDelete = () => {
