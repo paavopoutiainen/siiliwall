@@ -1,12 +1,15 @@
 import {
     useMutation,
 } from '@apollo/client'
-import { ADD_BOARD, ALL_BOARDS } from '../boardQueries'
+import { ADD_BOARD } from '../boardQueries'
+import { addNewBoard } from '../../../cacheService/cacheUpdates'
 
-const useAddBoard = () => {
-    const returnValue = useMutation(ADD_BOARD, {
-        refetchQueries: [{ query: ALL_BOARDS }],
+const useAddBoard = (projectId) => {
+    const retVal = useMutation(ADD_BOARD, {
+        update: async (cache, response) => {
+            addNewBoard(response.data.addBoard, projectId)
+        }
     })
-    return returnValue
+    return retVal
 }
 export default useAddBoard

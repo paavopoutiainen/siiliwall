@@ -1,14 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const ALL_BOARDS = gql`
-    query {
-        allBoards {
-           id
-           name
-           orderNumber
-        }
-    }
-`
 export const BOARD_BY_ID = gql`
     query boardById($boardId: ID!) {
         boardById(id: $boardId) {
@@ -82,11 +73,24 @@ export const BOARD_BY_ID = gql`
     }
 `
 export const ADD_BOARD = gql`
-    mutation addBoard($name: String!, $prettyId: String!) {
-        addBoard(name: $name, prettyId: $prettyId) {
+    mutation addBoard($name: String!, $prettyId: String!, $eventId: ID!, $projectId: ID!) {
+        addBoard(name: $name, prettyId: $prettyId, eventId: $eventId, projectId: $projectId) {
             id
             name
             prettyId
+        }
+    }
+`
+export const BOARD_ADDED = gql`
+    subscription boardAdded($projectId: ID!, $eventId: ID!) {
+        boardAdded(projectId: $projectId, eventId: $eventId) {
+            mutationType
+            board {
+                id
+                name
+                orderNumber
+                prettyId
+            }
         }
     }
 `
