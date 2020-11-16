@@ -10,8 +10,8 @@ export const MOVE_TICKET_IN_COLUMN = gql`
 `
 
 export const MOVE_TICKET_FROM_COLUMN = gql`
-    mutation moveTicketFromColumn($type: String!, $ticketId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTicketOrder: [TicketOrderInput!]!, $destTicketOrder:  [TicketOrderInput!]!) {
-        moveTicketFromColumn(type: $type, ticketId: $ticketId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTicketOrder: $sourceTicketOrder, destTicketOrder: $destTicketOrder) {
+    mutation moveTicketFromColumn($type: String!, $ticketId: ID!, $sourceColumnId: ID!, $destColumnId: ID!, $sourceTicketOrder: [TicketOrderInput!]!, $destTicketOrder:  [TicketOrderInput!]!, $eventId: ID!) {
+        moveTicketFromColumn(type: $type, ticketId: $ticketId, sourceColumnId: $sourceColumnId, destColumnId: $destColumnId, sourceTicketOrder: $sourceTicketOrder, destTicketOrder: $destTicketOrder, eventId: $eventId) {
             id
             subtasks {
                 id
@@ -37,6 +37,27 @@ export const TICKET_MOVED_IN_COLUMN = gql`
           type
       }
       columnId
+    }
+  }
+`
+
+export const TICKET_MOVED_FROM_COLUMN = gql`
+  subscription ticketMovedFromColumn($boardId: ID!, $eventId: ID!) {
+    ticketMovedFromColumn(boardId: $boardId, eventId: $eventId) {
+        ticketInfo { 
+            ticketId
+            type
+        }
+        sourceColumnId
+        destColumnId
+        sourceTicketOrder { 
+            ticketId
+            type
+        }
+        destTicketOrder { 
+            ticketId
+            type
+        }
     }
   }
 `

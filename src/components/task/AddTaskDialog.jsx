@@ -1,13 +1,19 @@
-/* eslint-disable object-curly-newline */
 import React, { useState } from 'react'
-import { Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle } from '@material-ui/core'
+import {
+    Dialog, Grid, Button, TextField, DialogContent, DialogActions, DialogTitle,
+} from '@material-ui/core'
 import Select from 'react-select'
+import {
+    sizeSchema, titleSchema, descriptionSchema, taskSchema,
+} from './validationSchema'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
-const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
+const AddTaskDialog = ({
+    dialogStatus, column, toggleDialog, boardId,
+}) => {
     const { loading, data } = useAllUsers()
     const [addTask] = useAddTask(column?.id)
     const [title, setTitle] = useState('')
@@ -16,33 +22,54 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
     const [owner, setOwner] = useState(null)
     const classes = boardPageStyles()
     const [members, setMembers] = useState([])
+    const [sizeError, setSizeError] = useState('')
+    const [titleError, setTitleError] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
 
     if (loading) return null
 
     const handleTitleChange = (event) => {
-        setTitle(event.target.value)
+        const input = event.target.value
+        titleSchema.validate(input).catch((err) => {
+            setTitleError(err.message)
+        })
+        setTitleError('')
+        setTitle(input)
     }
-    const handleDescriptionChange = (event) => {
-        if (event.target.value === '') {
-            setDescription(null)
+
+    const handleSizeChange = (event) => {
+        const input = parseInt(event.target.value, 10)
+        if (input === '') {
+            setSize(null)
             return
         }
-        setDescription(event.target.value)
+        sizeSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setSize(input)
+        setSizeError('')
     }
 
     const handleOwnerChange = (action) => {
         setOwner(action.value)
     }
 
-    const handleSizeChange = (event) => {
-        if (event.target.value === '') {
-            setSize(null)
-            return
-        }
-        setSize(parseFloat(event.target.value))
-    }
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
+
+    const handleDescriptionChange = (event) => {
+        const input = event.target.value
+        if (input === '') {
+            setDescription(null)
+            return
+        }
+
+        descriptionSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setDescriptionError('')
+        setDescription(input)
     }
 
     const emptyState = () => {
@@ -53,23 +80,26 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
         setDescription(null)
     }
 
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault()
         const eventId = window.localStorage.getItem('eventId')
-        addTask({
-            variables: {
-                boardId,
-                columnId: column.id,
-                title,
-                size,
-                ownerId: owner,
-                memberIds: members,
-                description,
-                eventId,
-            },
-        })
-        emptyState()
-        toggleDialog()
+        const isValid = await taskSchema.isValid({ title, size, description })
+        if (isValid) {
+            addTask({
+                variables: {
+                    boardId,
+                    columnId: column.id,
+                    title,
+                    size,
+                    ownerId: owner,
+                    memberIds: members,
+                    description,
+                    eventId,
+                },
+            })
+            emptyState()
+            toggleDialog()
+        }
     }
 
     const handleCancel = () => {
@@ -81,6 +111,16 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
+    const isDisabled = () => {
+        if (!title.length
+            || sizeError.length > 0
+            || titleError.length > 0
+            || descriptionError.length > 0) {
+            return true
+        }
+        return false
+    }
 
     return (
         <Grid>
@@ -95,18 +135,23 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new task</DialogTitle>
                 <DialogContent>
                     <TextField
-                        required
+                        error={titleError.length > 0}
+                        id="filled-error-helper-text, inputTaskName"
                         autoComplete="off"
+                        autoFocus={true}
+                        required={true}
                         margin="dense"
                         name="title"
-                        label="Name"
+                        label="Title"
                         type="text"
                         value={title}
                         fullWidth
+                        helperText={titleError}
                         onChange={handleTitleChange}
-                        id="inputTaskName"
                     />
                     <TextField
+                        error={sizeError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="size"
@@ -114,6 +159,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         type="number"
                         value={size || ''}
                         fullWidth
+                        helperText={sizeError}
                         onChange={handleSizeChange}
                     />
                     <Select
@@ -132,12 +178,14 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         closeMenuOnSelect={false}
                     />
                     <TextField
-                        id="standard-multiline-static"
+                        error={descriptionError.length > 0}
+                        id="standard-multiline-static, filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="description"
                         label="Description"
                         type="text"
+                        helperText={descriptionError}
                         multiline
                         rows={3}
                         value={description || ''}
@@ -153,7 +201,7 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
                         Cancel
                     </Button>
                     <Button
-                        disabled={!title.length}
+                        disabled={isDisabled()}
                         onClick={handleSave}
                         color="primary"
                         id="createTaskButton"
@@ -165,4 +213,5 @@ const AddTaskDialog = ({ dialogStatus, column, toggleDialog, boardId }) => {
         </Grid>
     )
 }
+
 export default AddTaskDialog

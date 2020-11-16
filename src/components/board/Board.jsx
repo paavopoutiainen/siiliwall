@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable max-len */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import { useApolloClient } from '@apollo/client'
+import { useSnackbar } from 'notistack'
 import ColumnList from '../column/ColumnList'
 import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInColumn'
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
@@ -12,24 +13,22 @@ import { onDragEnd } from '../../utils/onDragEnd'
 import SnackbarAlert from '../SnackbarAlert'
 import '../../styles.css'
 
-const Board = ({ board }) => {
+const Board = ({ board, eventId }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
     const client = useApolloClient()
-    const [snackbarStatus, setSnackbarStatus] = useState(false)
     const [snackbarMessage, setSnackbarMessage] = useState(null)
-
-    const toggleSnackbar = (message) => {
+    const { enqueueSnackbar } = useSnackbar()
+    useEffect((message) => {
         setSnackbarMessage(message)
-        setSnackbarStatus(!snackbarStatus)
-    }
+    }, [])
 
     const { columnOrder, columns } = board
     return (
         <Grid container>
             <DragDropContext onDragEnd={(result) => onDragEnd(
-                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, toggleSnackbar,
+                result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, enqueueSnackbar,
             )}
             >
 
@@ -52,7 +51,7 @@ const Board = ({ board }) => {
 
             </DragDropContext>
             <Grid container item>
-                <SnackbarAlert snackbarStatus={snackbarStatus} toggleSnackbar={toggleSnackbar} message={snackbarMessage} />
+                <SnackbarAlert message={snackbarMessage} />
             </Grid>
         </Grid>
     )

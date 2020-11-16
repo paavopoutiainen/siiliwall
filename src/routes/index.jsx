@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react'
 import { Switch, Route, useRouteMatch } from 'react-router-dom'
-import LandingPage from '../pages/LandingPage'
+import ProjectPage from '../pages/ProjectPage'
 import BoardPage from '../pages/BoardPage'
+import LandingPage from '../pages/LandingPage'
 
 export default function Routes() {
-    const match = useRouteMatch('/boards/:id')
+    const boardMatch = useRouteMatch('/boards/:id')
+    const projectMatch = useRouteMatch('/projects/:id')
     const { v4: uuid } = require('uuid')
     const eventId = uuid()
 
@@ -17,9 +19,14 @@ export default function Routes() {
             <Route exact path="/">
                 <LandingPage />
             </Route>
-            { match && (
+            { projectMatch && (
+                <Route exact path="/projects/:id">
+                    <ProjectPage id={projectMatch.params.id} eventId={eventId} />
+                </Route>
+            )}
+            { boardMatch && (
                 <Route exact path="/boards/:id">
-                    <BoardPage id={match.params.id} eventId={eventId} />
+                    <BoardPage id={boardMatch.params.id} eventId={eventId} />
                 </Route>
             )}
         </Switch>

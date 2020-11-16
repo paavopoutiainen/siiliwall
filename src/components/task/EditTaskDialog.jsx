@@ -5,6 +5,9 @@ import {
 import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import useEditTask from '../../graphql/task/hooks/useEditTask'
+import {
+    sizeSchema, titleSchema, descriptionSchema, taskSchema,
+} from './validationSchema'
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
@@ -14,11 +17,14 @@ const EditTaskDialog = ({
 }) => {
     const [editTask] = useEditTask()
     const { loading, data } = useAllUsers()
-    const [title, setTitle] = useState()
-    const [size, setSize] = useState()
-    const [description, setDescription] = useState()
-    const [owner, setOwner] = useState()
+    const [title, setTitle] = useState(task?.title)
+    const [size, setSize] = useState(task?.size ? task.size : null)
+    const [description, setDescription] = useState(task?.description)
+    const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
     const [members, setMembers] = useState()
+    const [sizeError, setSizeError] = useState('')
+    const [titleError, setTitleError] = useState('')
+    const [descriptionError, setDescriptionError] = useState('')
     const arrayOfOldMemberIds = task?.members?.map((user) => user.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
@@ -29,12 +35,18 @@ const EditTaskDialog = ({
         setOwner(task.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setDescription(task.description)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
     if (loading) return null
 
     const handleTitleChange = (event) => {
-        setTitle(event.target.value)
+        const input = event.target.value
+        titleSchema.validate(input).catch((err) => {
+            setTitleError(err.message)
+        })
+        setTitleError('')
+        setTitle(input)
     }
 
     const handleOwnerChange = (action) => {
@@ -42,41 +54,54 @@ const EditTaskDialog = ({
     }
 
     const handleSizeChange = (event) => {
-        if (event.target.value === '') {
+        const input = parseInt(event.target.value, 10)
+        if (input === '') {
             setSize(null)
             return
         }
-        setSize(parseFloat(event.target.value))
+        sizeSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setSize(input)
+        setSizeError('')
     }
 
     const handleDescriptionChange = (event) => {
-        if (event.target.value === '') {
+        const input = event.target.value
+        if (input === '') {
             setDescription(null)
             return
         }
-        setDescription(event.target.value)
+        descriptionSchema.validate(input).catch((err) => {
+            setSizeError(err.message)
+        })
+        setDescriptionError('')
+        setDescription(input)
     }
 
     const handleMembersChange = (event) => {
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
-    const handleSave = (event) => {
+    const handleSave = async (event) => {
         event.preventDefault()
         const eventId = window.localStorage.getItem('eventId')
-        editTask({
-            variables: {
-                taskId: editId,
-                title,
-                size,
-                ownerId: owner,
-                oldMemberIds: arrayOfOldMemberIds,
-                newMemberIds: members,
-                description,
-                eventId,
-            },
-        })
-        toggleDialog()
+        const isValid = await taskSchema.isValid({ title, size, description })
+        if (isValid) {
+            editTask({
+                variables: {
+                    taskId: editId,
+                    title,
+                    size,
+                    ownerId: owner,
+                    oldMemberIds: arrayOfOldMemberIds,
+                    newMemberIds: members,
+                    description,
+                    eventId,
+                },
+            })
+            toggleDialog()
+        }
     }
 
     const recoverState = () => {
@@ -111,10 +136,11 @@ const EditTaskDialog = ({
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
     const chosenOwnerData = modifiedData.map((user) => {
+        let newObject
         if (user.value === owner) {
-            const newObject = { value: user.value, label: user.label }
-            return newObject
+            newObject = { value: user.value, label: user.label }
         }
+        return newObject
     })
 
     return (
@@ -131,16 +157,23 @@ const EditTaskDialog = ({
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit task</DialogTitle>
                 <DialogContent>
                     <TextField
+                        error={titleError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
+                        autoFocus={true}
+                        required={true}
                         margin="dense"
                         name="title"
                         label="Name"
                         type="text"
                         value={title}
                         fullWidth
+                        helperText={titleError}
                         onChange={handleTitleChange}
                     />
                     <TextField
+                        error={sizeError.length > 0}
+                        id="filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="size"
@@ -148,6 +181,7 @@ const EditTaskDialog = ({
                         type="number"
                         value={size || ''}
                         fullWidth
+                        helperText={sizeError}
                         onChange={handleSizeChange}
                     />
                     <Select
@@ -171,13 +205,15 @@ const EditTaskDialog = ({
                         id="taskSelectMember"
                     />
                     <TextField
-                        id="standard-multiline-static"
+                        error={descriptionError.length > 0}
+                        id="standard-multiline-static, filled-error-helper-text"
                         autoComplete="off"
                         margin="dense"
                         name="description"
                         label="Description"
                         type="text"
                         multiline
+                        helperText={descriptionError}
                         rows={3}
                         value={description || ''}
                         fullWidth

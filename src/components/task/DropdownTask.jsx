@@ -39,8 +39,8 @@ const DropdownTask = ({
             id: boardIdForCache,
             fragment: COLUMNORDER_AND_COLUMNS,
         })
-        const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
-        const subtasksOfTask = columnsSubtasks.filter((subtask) => subtask.task.id === task.id)
+        const allSubtasks = columnData.columns.map((column) => column.subtasks).flat()
+        const subtasksOfTask = allSubtasks.filter((subtask) => subtask.task.id === task.id)
         if (order === 'DELETE_TASK' && subtasksOfTask.length) {
             setCount(subtasksOfTask.length)
             setAction('DELETE_TASK_IF_SUBTASKS')

@@ -1,13 +1,23 @@
+/* eslint-disable max-len */
 import { useSubscription } from '@apollo/client'
-import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED } from './task/taskQueries'
-import { TICKET_MOVED_IN_COLUMN } from './ticket/ticketQueries'
-import { COLUMN_DELETED } from './column/columnQueries'
+import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
+import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
+import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
+import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, deleteColumnFromCache,
-} from '../cacheService/cacheUpdates'
+    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache, addNewColumn,
+} from '../../cacheService/cacheUpdates'
 
-const useSubscriptions = (id, eventId) => {
+const useBoardSubscriptions = (id, eventId) => {
+    useSubscription(COLUMN_MUTATED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                if (data.columnMutated.mutationType === 'CREATED') {
+                    addNewColumn(data.columnMutated.column)
+                }
+            },
+        })
     useSubscription(COLUMN_DELETED,
         {
             variables: { boardId: id, eventId },
@@ -58,9 +68,12 @@ const useSubscriptions = (id, eventId) => {
         })
     useSubscription(SUBTASK_MUTATED,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
+                console.log('hllkfskdfls')
                 if (data.subtaskMutated.mutationType === 'CREATED') {
+                    console.log('hllkfskdfls')
+
                     addNewSubtask(data.subtaskMutated.subtask)
                 }
             },
@@ -73,5 +86,26 @@ const useSubscriptions = (id, eventId) => {
                 cacheTicketMovedInColumn(columnId, newOrder)
             },
         })
+
+    useSubscription(TICKET_MOVED_FROM_COLUMN,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                const {
+                    ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
+                } = data.ticketMovedFromColumn
+                cacheTicketMovedFromColumn(ticketInfo, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder)
+            },
+        })
+    useSubscription(SWIMLANE_MOVED,
+        {
+            variables: { boardId: id, eventId },
+            onSubscriptionData: ({ subscriptionData: { data } }) => {
+                const {
+                    boardId, affectedSwimlanes, swimlaneOrder,
+                } = data.swimlaneMoved
+                updateSwimlaneOrderOfBoardToTheCache(boardId, affectedSwimlanes, swimlaneOrder)
+            },
+        })
 }
-export default useSubscriptions
+export default useBoardSubscriptions
