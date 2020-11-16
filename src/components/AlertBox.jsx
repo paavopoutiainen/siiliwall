@@ -125,6 +125,7 @@ const AlertBox = ({
                 eventId,
             },
         })
+        setSnackbarMessage('Kolumni poistettu')
     }
 
     const deleteSubtask = (columnId, subtaskId) => {
@@ -137,6 +138,7 @@ const AlertBox = ({
                 eventId,
             },
         })
+        setSnackbarMessage('Subtask poistettu')
     }
 
     const deleteTask = () => {
@@ -159,7 +161,7 @@ const AlertBox = ({
                 eventId,
             },
         })
-        setSnackbarMessage('Poistettu')
+        setSnackbarMessage('Task poistettu')
     }
 
     const handleDelete = () => {
