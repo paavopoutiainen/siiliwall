@@ -101,7 +101,7 @@ const DropdownTask = ({
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                taskId={task.id}
+                task={task}
                 columnId={columnId}
                 boardId={boardId}
                 action={action}
