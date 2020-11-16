@@ -114,6 +114,7 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
 export const removeSubtaskFromCache = (subtaskId, columnId) => {
     // fetch certain column from the cache
     const columnIdForCache = `Column:${columnId}`
+    console.log(client)
     const { ticketOrder, subtasks } = client.readFragment({
         id: columnIdForCache,
         fragment: TICKETORDER_AND_SUBTASKS,

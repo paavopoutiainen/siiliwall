@@ -30,7 +30,7 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                     spacing={2}
                 >
-                    <Grid classes={{ root: classes.columnHeader }} item container direction='row' justify='space-between' {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction='row' justify='space-between' {...provided.dragHandleProps} >
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>

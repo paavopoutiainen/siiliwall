@@ -64,12 +64,12 @@ const Task = ({
                         direction="row"
                         justify="space-between"
                         alignItems="center"
-                        classes={{ root: classes.taskInner }}
+                        classes={{ root: classes.taskHeader }}
                     >
                         <Grid item classes={{ root: classes.taskTitle }}>
                             <h3>{prettyId}</h3>
                         </Grid>
-                        <Grid item onClick={handleDialogClick} classes={{ root: classes.taskInnerDropDownGrid }}>
+                        <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 task={task}
                                 columnId={columnId}

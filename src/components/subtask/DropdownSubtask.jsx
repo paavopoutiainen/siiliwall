@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../AlertBox'
@@ -35,14 +35,14 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
     }
 
     return (
-        <Grid item classes={{ root: classes.subtaskDropdownComponent }}>
+        <Grid item >
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
                 classes={{ root: classes.subtaskDropdownButton }}
             >
-                <MoreHorizIcon />
+                <MoreVertIcon classes={{ root: classes.subtaskDropDownIcon }} />
             </Button>
             <Menu
                 id="simple-menu"

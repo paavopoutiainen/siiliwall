@@ -9,7 +9,8 @@ const colours = {
     blue: '#3232FF',
     white: '#FFFFFF',
     black: '#000000',
-    gray: '#949494'
+    gray: '#949494',
+    lightgrey: '#E3E3E3'
 }
 
 export const projectPageStyles = makeStyles({
@@ -33,7 +34,7 @@ export const projectPageStyles = makeStyles({
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         borderRadius: 3,
         border: 0,
-        color: 'white',
+        color: colours.white,
         height: 48,
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
@@ -82,7 +83,7 @@ export const boardPageStyles = makeStyles({
 
     columnHeader: {
         flexWrap: 'nowrap',
-        alignItems: 'space-between'
+        marginTop: 10
     },
 
     columnButtonGrid: {
@@ -109,22 +110,24 @@ export const boardPageStyles = makeStyles({
     task: {
         minHeight: 100,
         borderRadius: 4,
-        backgroundColor: 'white',
+        backgroundColor: colours.white,
         width: 320
     },
 
-    taskInner: {
+    taskButtonIcons: {
+        fontSize: 22,
+        color: colours.white
+    },
+
+    taskHeader: {
         background: colours.black,
         flexWrap: 'nowrap',
-        color: 'white'
-
+        color: colours.white,
+        height: 30
     },
 
-    taskInnerDropDownGrid: {
-        width: '50px'
-    },
     taskTitle: {
-        color: 'white',
+        color: colours.white,
         fontSize: 12
     },
     taskName: {
@@ -133,26 +136,18 @@ export const boardPageStyles = makeStyles({
 
 
     subtaskComponent: {
-        borderRadius: 5,
         backgroundColor: '#fff',
         minHeight: 115,
+        width: 320
     },
 
     subtaskHeader: {
-        backgroundColor: 'rgba(255, 140, 85, .8)',
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        backgroundColor: colours.lightgrey,
         flexWrap: 'nowrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
     },
 
     subtaskHeaderTitleItem: {
         width: 200,
-    },
-
-    foreingKeyIcon: {
-        fontSize: 12
     },
 
     taskPrettyIdInSubtask: {
@@ -165,8 +160,9 @@ export const boardPageStyles = makeStyles({
         textOverflow: 'ellipsis',
     },
 
-    subtaskDropdownComponent: {
+    subtaskDropdownGrid: {
         height: 30,
+        minWidth: 30
     },
 
     subtaskDropdownButton: {
@@ -184,11 +180,12 @@ export const boardPageStyles = makeStyles({
         textOverflow: 'ellipsis',
     },
 
-    taskDropdownComponent: {
-        height: 25,
+    subtaskDropDownIcon: {
+        minWidth: 30,
     },
+
     taskDropdownButton: {
-        height: '100%',
+        minWidth: 30
     },
 
     dialogFocus: {
@@ -220,9 +217,9 @@ export const boardPageStyles = makeStyles({
     },
 
     alertCheckbox: {
-        color: 'white',
+        color: colours.white,
         '&$checked': {
-            color: 'white',
+            color: colours.white,
         },
     },
 
@@ -247,7 +244,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
-        backgroundColor: 'white',
+        backgroundcolor: colours.white,
     },
 
     swimlaneTitle: {

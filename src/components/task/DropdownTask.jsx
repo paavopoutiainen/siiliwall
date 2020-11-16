@@ -60,15 +60,18 @@ const DropdownTask = ({
         setAnchorEl(null)
     }
     return (
-        <Grid item classes={{ root: classes.taskDropdownComponent }}>
-            <Button
-                aria-owns={anchorEl ? 'simple-menu' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-                classes={{ root: classes.taskDropdownButton }}
-            >
-                <MoreVertIcon style={{ color: 'white', fontSize: 21 }} />
-            </Button>
+        <Grid item container direction='row' justify='flex-end' alignItems='center'>
+            <Grid item>
+                <Button
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                    classes={{ root: classes.taskDropdownButton }}
+                >
+                    <MoreVertIcon classes={{ root: classes.taskButtonIcons }} />
+                </Button>
+            </Grid>
+
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
