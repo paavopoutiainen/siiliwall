@@ -68,9 +68,12 @@ const useBoardSubscriptions = (id, eventId) => {
         })
     useSubscription(SUBTASK_MUTATED,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
+                console.log('hllkfskdfls')
                 if (data.subtaskMutated.mutationType === 'CREATED') {
+                    console.log('hllkfskdfls')
+
                     addNewSubtask(data.subtaskMutated.subtask)
                 }
             },
