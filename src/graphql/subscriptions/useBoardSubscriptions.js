@@ -1,14 +1,14 @@
 /* eslint-disable max-len */
 import { useSubscription } from '@apollo/client'
-import { SUBTASK_REMOVED, SUBTASK_MUTATED } from './subtask/subtaskQueries'
-import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from './task/taskQueries'
-import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from './ticket/ticketQueries'
-import { COLUMN_MUTATED, COLUMN_DELETED } from './column/columnQueries'
+import { SUBTASK_REMOVED, SUBTASK_MUTATED } from '../subtask/subtaskQueries'
+import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
+import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
+import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
 import {
     removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache, addNewColumn,
-} from '../cacheService/cacheUpdates'
+} from '../../cacheService/cacheUpdates'
 
-const useSubscriptions = (id, eventId) => {
+const useBoardSubscriptions = (id, eventId) => {
     useSubscription(COLUMN_MUTATED,
         {
             variables: { boardId: id, eventId },
@@ -105,4 +105,4 @@ const useSubscriptions = (id, eventId) => {
             },
         })
 }
-export default useSubscriptions
+export default useBoardSubscriptions
