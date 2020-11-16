@@ -1,8 +1,32 @@
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER,
+    TICKETORDER_AND_TASKS,
+    SWIMLANE_ORDER,
+    TICKETORDER,
+    SUBTASKS,
+    COLUMNORDER,
+    TICKETORDER_AND_SUBTASKS,
+    SUBTASKS_COLUMN,
+    SWIMLANE_ORDER_NUMBER,
+    PROJECTS_BOARDS,
 } from '../graphql/fragments'
+
+export const addNewBoard = (addedBoard, projectId) => {
+    const projectIdForCache = `Project:${projectId}`
+    const { boards } = client.readFragment({
+        id: projectIdForCache,
+        fragment: PROJECTS_BOARDS
+    })
+    const newBoards = boards.concat(addedBoard)
+    client.writeFragment({
+        id: projectIdForCache,
+        fragment: PROJECTS_BOARDS,
+        data: {
+            boards: newBoards
+        }
+    })
+}
 
 export const addNewTask = (addedTask) => {
     // Update the column's tasks and ticketOrder lists

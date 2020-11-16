@@ -3,12 +3,10 @@ const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
 
 const SWIMLANE_MOVED = 'SWIMLANE_MOVED'
+const BOARD_ADDED = 'BOARD_ADDED'
 
 const schema = {
     Query: {
-        allBoards() {
-            return dataSources.boardService.getBoards()
-        },
         boardById(root, args) {
             return dataSources.boardService.getBoardById(args.id)
         },
@@ -21,12 +19,30 @@ const schema = {
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
+        boardAdded: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(BOARD_ADDED),
+                (payload, args) => {
+                    return (args.projectId === payload.projectId && args.eventId !== payload.eventId)
+                }
+            ),
+        },
     },
 
     Mutation: {
-        addBoard(root, args) {
-            return dataSources.boardService.addBoard(args.name, args.prettyId)
+        async addBoard(root, { name, prettyId, eventId, projectId }) {
+            const addedBoard = await dataSources.boardService.addBoard(name, prettyId, projectId)
+            pubsub.publish(BOARD_ADDED, {
+                projectId,
+                eventId,
+                boardAdded: {
+                    mutationType: 'CREATED',
+                    board: addedBoard.dataValues
+                }
+            })
+            return addedBoard
         },
+
         moveSwimlane(root, {
             boardId, affectedSwimlanes, swimlaneOrder, eventId,
         }) {
@@ -53,6 +69,7 @@ const schema = {
         swimlaneOrder(root) {
             return dataSources.boardService.getSwimlaneOrderOfBoard(root.id)
         },
+
     },
 }
 

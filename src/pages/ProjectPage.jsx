@@ -1,22 +1,31 @@
 import React, { useState } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import { Link } from 'react-router-dom'
+import useProjectById from '../graphql/project/hooks/useProjectById'
+import NewBoardForm from '../components/board/NewBoardForm'
+import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
-import useAllProjects from '../graphql/project/hooks/useAllProjects'
-import NewProjectForm from '../components/project/NewProjectForm'
+import useProjectSubscriptions from '../graphql/subscriptions/useProjectSubscriptions'
 
-const LandingPage = () => {
-    const queryResult = useAllProjects()
+const ProjectPage = ({ id, eventId }) => {
+    const queryResult = useProjectById(id)
     const [open, setOpen] = useState(false)
+    const [openUserForm, setUserFormOpen] = useState(false)
     const classes = projectPageStyles()
-
     const handleClickOpen = () => {
         setOpen(true)
     }
 
+    const handleClickOpenUser = () => {
+        setUserFormOpen(true)
+    }
+
+    useProjectSubscriptions(id, eventId)
+
     if (queryResult.loading) return null
-    const projectsInOrder = queryResult.data.allProjects.slice().sort((a, b) => a.orderNumber - b.orderNumber)
+    const boardsInOrder = queryResult.data.projectById.boards.slice().sort((a, b) => a.orderNumber - b.orderNumber)
+    const projectName = queryResult.data.projectById.name
 
     return (
         <Grid
@@ -27,9 +36,10 @@ const LandingPage = () => {
             classes={{ root: classes.root }}
             spacing={7}
         >
-            {open && <NewProjectForm setOpen={setOpen} open={open} />}
+            {open && <NewBoardForm setOpen={setOpen} open={open} projectId={id} />}
+            {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
             <Grid item classes={{ root: classes.title }}>
-                <h1 id="landingTitle">Welcome!</h1>
+                <h1 id="landingTitle">{projectName}</h1>
             </Grid>
             <Grid
                 item
@@ -40,7 +50,12 @@ const LandingPage = () => {
             >
                 <Grid item>
                     <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
-                        Add Project
+                        Add Board
+                    </Button>
+                </Grid>
+                <Grid item>
+                    <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                        Add User
                     </Button>
                 </Grid>
             </Grid>
@@ -51,9 +66,9 @@ const LandingPage = () => {
                 alignItems="center"
                 spacing={2}
             >
-                {projectsInOrder.map(({ id, name }) => (
+                {boardsInOrder.map(({ id, name }) => (
                     <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
-                        <Link to={`/projects/${id}`} className="boardList__button__link">
+                        <Link to={`/boards/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}
                             </Button>
@@ -64,4 +79,4 @@ const LandingPage = () => {
         </Grid>
     )
 }
-export default LandingPage
+export default ProjectPage
