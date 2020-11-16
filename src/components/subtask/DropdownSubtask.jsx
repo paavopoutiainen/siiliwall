@@ -35,14 +35,14 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
     }
 
     return (
-        <Grid item >
+        <Grid item container direction='row' justify='flex-end' alignItems='center' >
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
                 classes={{ root: classes.subtaskDropdownButton }}
             >
-                <MoreVertIcon classes={{ root: classes.subtaskDropDownIcon }} />
+                <MoreVertIcon classes={{ root: classes.subtaskButtonIcons }} />
             </Button>
             <Menu
                 id="simple-menu"

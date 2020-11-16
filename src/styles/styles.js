@@ -63,6 +63,7 @@ export const boardPageStyles = makeStyles({
         padding: 30,
     },
 
+    // BOARD STYLES
     boardHeader: {
         width: '100%',
     },
@@ -75,6 +76,7 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
+    // COLUMN STYLES
     column: {
         backgroundColor: '#F5F5F5',
         minHeight: 600,
@@ -104,9 +106,7 @@ export const boardPageStyles = makeStyles({
         width: 18
     },
 
-    columnName: {
-    },
-
+    // TASK STYLES
     task: {
         minHeight: 100,
         borderRadius: 4,
@@ -117,6 +117,10 @@ export const boardPageStyles = makeStyles({
     taskButtonIcons: {
         fontSize: 22,
         color: colours.white
+    },
+
+    taskDropdownButton: {
+        minWidth: 30
     },
 
     taskHeader: {
@@ -130,11 +134,12 @@ export const boardPageStyles = makeStyles({
         color: colours.white,
         fontSize: 12
     },
+
     taskName: {
         fontSize: 20,
     },
 
-
+    // SUBTASK STYLES
     subtaskComponent: {
         backgroundColor: '#fff',
         minHeight: 115,
@@ -144,20 +149,18 @@ export const boardPageStyles = makeStyles({
     subtaskHeader: {
         backgroundColor: colours.lightgrey,
         flexWrap: 'nowrap',
+        height: 30
+    },
+    subtaskTitle: {
+        fontSize: 14
     },
 
     subtaskHeaderTitleItem: {
         width: 200,
     },
 
-    taskPrettyIdInSubtask: {
-        fontSize: 12,
-    },
-
-    subtaskHeaderTitleText: {
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
+    subtaskName: {
+        fontSize: 20
     },
 
     subtaskDropdownGrid: {
@@ -165,8 +168,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 30
     },
 
+    subtaskButtonIcons: {
+        fontSize: 22,
+    },
+
     subtaskDropdownButton: {
-        height: '100%',
+        minWidth: 30
     },
 
     subtaskContentAndName: {
@@ -184,10 +191,7 @@ export const boardPageStyles = makeStyles({
         minWidth: 30,
     },
 
-    taskDropdownButton: {
-        minWidth: 30
-    },
-
+    // DIALOG STYLES
     dialogFocus: {
         minWidth: '100vw',
         maxWidth: '100vw',
@@ -204,6 +208,12 @@ export const boardPageStyles = makeStyles({
         maxHeight: '100vh',
     },
 
+    dialogPaper: {
+        minHeight: '80vh',
+        maxHeight: '80vh',
+    },
+
+    // ALERT BOX STYLES
     undoAlertButton: {
         margin: 5,
     },
@@ -222,15 +232,8 @@ export const boardPageStyles = makeStyles({
             color: colours.white,
         },
     },
-
-    dialogPaper: {
-        minHeight: '80vh',
-        maxHeight: '80vh',
-    },
-    textColor: {
-        color: '#3F51C0',
-    },
 })
+
 export const swimlaneStyles = makeStyles({
     swimlaneColumnNames: {
         width: '100%',

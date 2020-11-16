@@ -120,6 +120,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 <DialogTitle aria-labelledby="max-width-dialog-title">Create new subtask</DialogTitle>
                 <DialogContent>
                     <TextField
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="name"
@@ -130,7 +131,6 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                         onChange={handleNameChange}
                     />
                     <TextField
-                        required
                         autoComplete="off"
                         margin="dense"
                         name="content"
@@ -179,7 +179,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                         Cancel
                     </Button>
                     <Button
-                        disabled={!content.length}
+                        disabled={!name.length}
                         onClick={handleSave}
                         color="primary"
                     >

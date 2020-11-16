@@ -119,6 +119,7 @@ const EditSubtaskDialog = ({
                 <DialogTitle aria-labelledby="max-width-dialog-title">Edit subtask</DialogTitle>
                 <DialogContent>
                     <TextField
+                        required
                         autoComplete="off"
                         margin="dense"
                         name="name"
@@ -129,7 +130,6 @@ const EditSubtaskDialog = ({
                         onChange={handleNameChange}
                     />
                     <TextField
-                        required
                         autoComplete="off"
                         margin="dense"
                         name="content"
@@ -180,7 +180,7 @@ const EditSubtaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
-                        disabled={!content.length}
+                        disabled={!name.length}
                     >
                         Submit edit
                     </Button>

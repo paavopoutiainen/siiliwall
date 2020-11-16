@@ -74,13 +74,12 @@ const Task = ({
                                 task={task}
                                 columnId={columnId}
                                 boardId={boardId}
-                                classes={{ root: classes.taskInnerDropDownGrid }}
                             />
                         </Grid>
                     </Grid>
                     <Grid item direction="column" container classes={{ root: classes.taskName }}>
-                        <Grid item >
-                            <p  >{add3Dots(task.title)}</p>
+                        <Grid item>
+                            <p>{add3Dots(task.title)}</p>
                         </Grid>
 
                     </Grid>

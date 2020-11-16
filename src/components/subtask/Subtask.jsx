@@ -8,7 +8,11 @@ import EditSubtaskDialog from './EditSubtaskDialog'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
+    const { name } = subtask
+    const nameLimit = 25
+    const dots = '...'
     const [dialogStatus, setDialogStatus] = useState(false)
+
     const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const handleClick = () => {
@@ -16,6 +20,14 @@ const Subtask = ({ subtask, index, columnId }) => {
     }
 
     const handleDialogClick = (e) => e.stopPropagation()
+
+    const add3Dots = () => {
+        let checkedName = name
+        if (name.length > nameLimit) {
+            checkedName = name.substring(0, nameLimit) + dots
+        }
+        return checkedName
+    }
 
     return (
         <Draggable draggableId={subtask.id} index={index}>
@@ -31,8 +43,14 @@ const Subtask = ({ subtask, index, columnId }) => {
                     spacing={1}
                     onClick={handleClick}
                 >
-                    <Grid item container classes={{ root: classes.subtaskHeader }} direction="row" alignItems="center">
-                        <Grid item>
+                    <Grid item
+                        container
+                        classes={{ root: classes.subtaskHeader }}
+                        direction="row"
+                        justify="space-between"
+                        alignItems="center"
+                    >
+                        <Grid item classes={{ root: classes.subtaskTitle }}>
                             <b>{subtask.prettyId}</b>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskDropdownGrid }} onClick={handleDialogClick}>
@@ -42,40 +60,11 @@ const Subtask = ({ subtask, index, columnId }) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid item container direction="column">
-                        {subtask.name && (
-                            <Grid item className={classes.subtaskContentAndName}>
-                                <p className={classes.subtaskContentAndNameText}>
-                                    {`Name: ${subtask.name}`}
-                                </p>
-                            </Grid>
-                        )}
-                        <Grid item className={classes.subtaskContentAndName}>
-                            <p className={classes.subtaskContentAndNameText}>
-                                {`Content: ${subtask.content}`}
-                            </p>
-                        </Grid>
+                    <Grid item container direction="column" classes={{ root: classes.subtaskName }}>
                         <Grid item>
-                            {subtask.owner ? (
-                                <p>
-                                    {`Owner: ${subtask.owner.userName}`}
-                                </p>
-                            ) : null}
+                            <p>{add3Dots(subtask.name)}</p>
                         </Grid>
-                        {subtask.size && (
-                            <Grid item>
-                                <p>
-                                    {`Size: ${subtask.size}`}
-                                </p>
-                            </Grid>
-                        )}
-                        <Grid item>
-                            {subtask.members?.length !== 0 ? (
-                                <p>
-                                    {`Members:  ${subtask.members.map((member) => ` ${member.userName}`)}`}
-                                </p>
-                            ) : null}
-                        </Grid>
+
                     </Grid>
                     <EditSubtaskDialog
                         dialogStatus={dialogStatus}
