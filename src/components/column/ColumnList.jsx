@@ -7,17 +7,20 @@ import useAddColumn from '../../graphql/column/hooks/useAddColumn'
 const ColumnList = ({ columns, columnOrder, boardId }) => {
     const classes = boardPageStyles()
     const [columnName, setColumnName] = useState('')
-    const [addColumn] = useAddColumn(boardId)
+    const [addColumn] = useAddColumn()
 
     const handleChange = (event) => {
         setColumnName(event.target.value)
     }
 
     const handleSave = () => {
+        const eventId = window.localStorage.getItem('eventId')
+
         addColumn({
             variables: {
                 boardId,
                 columnName,
+                eventId,
             },
         })
         setColumnName('')

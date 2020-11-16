@@ -1,30 +1,42 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS,
-    SWIMLANE_ORDER,
-    TICKETORDER,
-    SUBTASKS,
-    COLUMNORDER,
-    TICKETORDER_AND_SUBTASKS,
-    SUBTASKS_COLUMN,
-    SWIMLANE_ORDER_NUMBER,
-    PROJECTS_BOARDS,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, PROJECTS_BOARDS, COLUMNORDER_AND_COLUMNS,
 } from '../graphql/fragments'
+
+export const addNewColumn = (addedColumn) => {
+    const boardIdForCache = `Board:${addedColumn.board.id}`
+    const { columnOrder, columns } = client.readFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+    })
+    const newColumns = columns.concat(addedColumn)
+    const newColumnOrder = columnOrder.concat(addedColumn.id)
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+        data: {
+            columnOrder: newColumnOrder,
+            columns: newColumns,
+        },
+    })
+}
 
 export const addNewBoard = (addedBoard, projectId) => {
     const projectIdForCache = `Project:${projectId}`
     const { boards } = client.readFragment({
         id: projectIdForCache,
-        fragment: PROJECTS_BOARDS
+        fragment: PROJECTS_BOARDS,
     })
     const newBoards = boards.concat(addedBoard)
     client.writeFragment({
         id: projectIdForCache,
         fragment: PROJECTS_BOARDS,
         data: {
-            boards: newBoards
-        }
+            boards: newBoards,
+        },
     })
 }
 
