@@ -42,7 +42,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
                 onClick={handleClick}
                 classes={{ root: classes.columnButton }}
             >
-                <MoreVertIcon className="dropDownColumn" />
+                <MoreVertIcon className="dropDownColumn" classes={{ root: classes.columnButtonIcons }} />
             </Button>
             <Menu
                 id="simple-menu"

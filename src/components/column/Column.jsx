@@ -34,14 +34,13 @@ const Column = ({ column, index }) => {
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
-                        <Grid item container direction='row' alignItems='center' classes={{ root: classes.columnButtons }} style={{ width: 25 }}>
-                            <Grid item>
-                                <Button classes={{ root: classes.columnButton }} className="addTaskButton" >
-                                    <AddIcon className="addTaskButton" />
-
+                        <Grid item container direction='row' alignItems='center' justify='flex-end' classes={{ root: classes.columnButtonGrid }}>
+                            <Grid item >
+                                <Button classes={{ root: classes.columnButton }}>
+                                    <AddIcon classes={{ root: classes.columnButtonIcons }} onClick={toggleDialog} />
                                 </Button>
                             </Grid>
-                            <Grid item>
+                            <Grid item >
                                 <DropdownColumn columnId={column.id} boardId={column.board.id} />
                             </Grid>
                         </Grid>
@@ -68,6 +67,14 @@ const Column = ({ column, index }) => {
                             </Grid>
                         )}
                     </Droppable>
+                    <Grid item>
+                        <AddTaskDialog
+                            dialogStatus={dialogStatus}
+                            toggleDialog={toggleDialog}
+                            column={column}
+                            boardId={board.id}
+                        />
+                    </Grid>
                 </Grid>
             )}
         </Draggable>

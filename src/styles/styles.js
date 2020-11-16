@@ -85,18 +85,22 @@ export const boardPageStyles = makeStyles({
         alignItems: 'space-between'
     },
 
-    columnButton: {
-        minWidth: 20,
-        color: '#949494'
-    },
-
     columnButtonGrid: {
-        width: 80
+        width: 150
+    },
+
+    columnButtonIcons: {
+        fontSize: 22,
+        color: '#949494',
 
     },
 
-    columnButtons: {
-        minWidth: 80,
+    columnButton: {
+        minWidth: 30
+    },
+
+    dropDownColumn: {
+        width: 18
     },
 
     columnName: {
