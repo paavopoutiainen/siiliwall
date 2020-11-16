@@ -68,23 +68,6 @@ const Column = ({ column, index }) => {
                             </Grid>
                         )}
                     </Droppable>
-                    <Grid item container direction="column">
-                        <Grid item>
-                            <AddTaskDialog
-                                dialogStatus={dialogStatus}
-                                toggleDialog={toggleDialog}
-                                column={column}
-                                boardId={board.id}
-                            />
-                            <Button
-                                onClick={toggleDialog}
-                                color="primary"
-                                id="addTaskButton"
-                            >
-                                Add task
-                            </Button>
-                        </Grid>
-                    </Grid>
                 </Grid>
             )}
         </Draggable>

@@ -1,5 +1,17 @@
 import { makeStyles } from '@material-ui/styles'
 
+const colours = {
+    yellow: '#FFE100',
+    green: '#00F09B',
+    red: '#FA0000',
+    pink: '#FF41FF',
+    purple: '#AA32FF',
+    blue: '#3232FF',
+    white: '#FFFFFF',
+    black: '#000000',
+    gray: '#949494'
+}
+
 export const projectPageStyles = makeStyles({
     root: {
         minHeight: '100vh',
@@ -88,18 +100,17 @@ export const boardPageStyles = makeStyles({
     },
 
     columnName: {
-        fontFamily: 'Arial, Helvetica, sans-serif',
     },
 
     task: {
         minHeight: 100,
         borderRadius: 4,
         backgroundColor: 'white',
-        width: 312
+        width: 320
     },
 
     taskInner: {
-        background: '#000000',
+        background: colours.black,
         flexWrap: 'nowrap',
         color: 'white'
 
@@ -109,12 +120,11 @@ export const boardPageStyles = makeStyles({
         width: '50px'
     },
     taskTitle: {
-        fontFamily: 'Arial, Helvetica, sans-serif',
         color: 'white',
         fontSize: 12
     },
     taskName: {
-        fontSize: 24,
+        fontSize: 20,
     },
 
 

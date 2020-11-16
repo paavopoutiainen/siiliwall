@@ -13,9 +13,12 @@ const Task = ({
     const { title, members, prettyId } = task
     const titleLimit = 25
     const descrLimit = 20
-    const [dialogStatus, setDialogStatus] = useState(false)
-    const toggleDialog = () => setDialogStatus(!dialogStatus)
     const dots = '...'
+
+    const [dialogStatus, setDialogStatus] = useState(false)
+
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
+
     const add3Dots = () => {
         let checkedTitle = title
         if (title.length > titleLimit) {
@@ -23,6 +26,7 @@ const Task = ({
         }
         return checkedTitle
     }
+
     const descrDots = (description) => {
         let retVal = description
         if (description.length > descrLimit) {
