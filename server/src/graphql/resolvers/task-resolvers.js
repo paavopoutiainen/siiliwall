@@ -136,6 +136,9 @@ const schema = {
         board(root) {
             return dataSources.boardService.getBoardById(root.boardId)
         },
+        colors(root) {
+            return dataSources.boardService.getColorsByTaskId(root.id)
+        }
     },
 }
 

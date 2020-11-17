@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
         },
         description: DataTypes.STRING,
         swimlaneOrderNumber: DataTypes.INTEGER,
-        color: DataTypes.STRING,
         size: DataTypes.INTEGER,
         difficulty: DataTypes.INTEGER,
         deletedAt: DataTypes.DATE,
@@ -38,6 +37,10 @@ module.exports = (sequelize, DataTypes) => {
         Task.belongsToMany(models.User, {
             through: models.UserTask,
             foreignKey: 'taskId',
+        })
+        Task.belongsToMany(models.Color, {
+            through: models.ColorTask,
+            foreignKey: 'taskId'
         })
         Task.belongsTo(models.Board, {
             foreignKey: 'boardId',

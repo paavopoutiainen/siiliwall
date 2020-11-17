@@ -180,7 +180,7 @@ const EditSubtaskDialog = ({
                     <Button
                         onClick={handleSave}
                         color="primary"
-                        disabled={!name.length}
+                        disabled={!name}
                     >
                         Submit edit
                     </Button>

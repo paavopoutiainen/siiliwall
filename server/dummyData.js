@@ -360,6 +360,19 @@ const subtasks = [
 
 ]
 
+const colors = [
+    { id: 'ca1b1793-e569-4fb3-8498-5a36406eeca6', color: 'yellow' },
+    { id: 'f7606b69-3755-497b-9ed4-206ab0712198', color: 'green' },
+    { id: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab', color: 'red' },
+    { id: 'adbb918c-de93-4a4c-8a1b-87af8afc2811', color: 'pink' },
+    { id: '55c528bb-6200-4614-8177-653149de7306', color: 'purple' },
+    { id: '4e935d81-665e-4efc-92b1-c22b05c5abd1', color: 'blue' },
+    { id: '4073f982-6a0d-4bb7-84c3-939477b9fd79', color: 'white' },
+    { id: '516f1621-718b-4cda-9e2d-05f16c865ea8', color: 'black' },
+    { id: '9a965133-5817-42b3-8b3c-ce1c453e0b88', color: 'gray' },
+    { id: '99d0f5f1-6ff4-4e02-a564-fad8f3726c27', color: 'lightgrey' },
+]
+
 const userStories = [
     {
         userId: '1fd5abe7-159e-4224-8a44-7ae3ee902a54',
@@ -382,6 +395,25 @@ const usertasks = [
     },
 ]
 
+const colortasks = [
+    {
+        colorId: 'ca1b1793-e569-4fb3-8498-5a36406eeca6',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
+    },
+    {
+        colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
+    },
+    {
+        colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
+        taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
+    },
+    {
+        colorId: '516f1621-718b-4cda-9e2d-05f16c865ea8',
+        taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
+    },
+]
+
 const userSubtasks = [
     {
         userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
@@ -394,5 +426,5 @@ const userSubtasks = [
 ]
 
 module.exports = {
-    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks,
+    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks, colors, colortasks
 }

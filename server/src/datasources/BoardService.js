@@ -194,6 +194,24 @@ class BoardService {
         return subtasksFromDb
     }
 
+    async getColorsByTaskId(taskId) {
+        let rowsFromDb
+        let colors
+        try {
+            rowsFromDb = await this.store.ColorTask.findAll({ where: { taskId }, attributes: ['colorId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.colorId)
+            colors = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const color = await this.store.Color.findByPk(id)
+                    return color
+                })
+            )
+        } catch (e) {
+            console.log(e)
+        }
+        return colors
+    }
+
     async getMembersByStoryId(storyId) {
         let rowsFromDb
         let members

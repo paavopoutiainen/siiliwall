@@ -5,6 +5,7 @@ import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
+import ColorPill from './ColorPill'
 
 const Task = ({
     task, index, columnId, boardId,
@@ -14,7 +15,6 @@ const Task = ({
     const titleLimit = 25
     const descrLimit = 20
     const dots = '...'
-
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -25,14 +25,6 @@ const Task = ({
             checkedTitle = title.substring(0, titleLimit) + dots
         }
         return checkedTitle
-    }
-
-    const descrDots = (description) => {
-        let retVal = description
-        if (description.length > descrLimit) {
-            retVal = description.substring(0, descrLimit) + dots
-        }
-        return retVal
     }
 
     // Opens task editing dialog
@@ -77,11 +69,17 @@ const Task = ({
                             />
                         </Grid>
                     </Grid>
-                    <Grid item direction="column" container classes={{ root: classes.taskName }}>
+                    <Grid item direction="column" container classes={{ root: classes.taskName }} spacing={1}>
                         <Grid item>
                             <p>{add3Dots(task.title)}</p>
                         </Grid>
-
+                        <Grid item container direction='row' justify='flex-start' spacing={1}>
+                            {task.colors ? (
+                                task.colors.map((colorObj) => (
+                                    <Grid item><ColorPill key={colorObj.id} color={colorObj.color} /></Grid>
+                                ))
+                            ) : null}
+                        </Grid>
                     </Grid>
 
                     <TaskEditDialog

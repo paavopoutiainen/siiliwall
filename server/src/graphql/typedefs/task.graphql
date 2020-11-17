@@ -12,6 +12,7 @@ type Task {
   subtaskOrder: [ID!]!
   deletedAt: String
   members: [User!]!
+  colors: [Color!]!
   board: Board
 }
 

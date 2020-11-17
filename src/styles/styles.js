@@ -137,6 +137,14 @@ export const boardPageStyles = makeStyles({
 
     taskName: {
         fontSize: 20,
+        marginTop: 5,
+        marginLeft: 5
+    },
+
+    colorPill: {
+        borderRadius: 20,
+        height: 13,
+        width: 46
     },
 
     // SUBTASK STYLES
@@ -149,7 +157,7 @@ export const boardPageStyles = makeStyles({
     subtaskHeader: {
         backgroundColor: colours.lightgrey,
         flexWrap: 'nowrap',
-        height: 30
+        height: 33
     },
     subtaskTitle: {
         fontSize: 14
@@ -160,7 +168,9 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskName: {
-        fontSize: 20
+        fontSize: 20,
+        marginTop: 5,
+        marginLeft: 5
     },
 
     subtaskDropdownGrid: {
