@@ -4,12 +4,8 @@ import { Grid } from '@material-ui/core'
 
 const ColorPill = ({ color }) => {
     const classes = boardPageStyles()
-    console.log(color)
     return (
-        <Grid
-            item
-            container
-        >
+        <Grid item container>
             <Grid item style={{ backgroundColor: `${color}` }} classes={{ root: classes.colorPill }} />
         </Grid>
     )

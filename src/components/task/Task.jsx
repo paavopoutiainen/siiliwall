@@ -1,22 +1,29 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
 import ColorPill from './ColorPill'
+import MemberCircle from './MemberCircle'
 
 const Task = ({
     task, index, columnId, boardId,
 }) => {
     const classes = boardPageStyles()
-    const { title, members, prettyId } = task
+    const { title, members, owner, prettyId } = task
     const titleLimit = 25
-    const descrLimit = 20
     const dots = '...'
-    const [dialogStatus, setDialogStatus] = useState(false)
+    let tasksOwnerAndMembers
+    if (owner) {
+        tasksOwnerAndMembers = members.concat(owner)
+    } else {
+        tasksOwnerAndMembers = members
+    }
 
+    const [dialogStatus, setDialogStatus] = useState(false)
+    console.log(tasksOwnerAndMembers)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const add3Dots = () => {
@@ -59,7 +66,7 @@ const Task = ({
                         classes={{ root: classes.taskHeader }}
                     >
                         <Grid item classes={{ root: classes.taskTitle }}>
-                            <h3>{prettyId}</h3>
+                            <p>{prettyId}</p>
                         </Grid>
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
@@ -69,11 +76,11 @@ const Task = ({
                             />
                         </Grid>
                     </Grid>
-                    <Grid item direction="column" container classes={{ root: classes.taskName }} spacing={1}>
-                        <Grid item>
+                    <Grid item direction="column" container spacing={1}>
+                        <Grid item classes={{ root: classes.taskName }}>
                             <p>{add3Dots(task.title)}</p>
                         </Grid>
-                        <Grid item container direction='row' justify='flex-start' spacing={1}>
+                        <Grid item container direction='row' spacing={1} classes={{ root: classes.taskColorPillsGrid }}>
                             {task.colors ? (
                                 task.colors.map((colorObj) => (
                                     <Grid item><ColorPill key={colorObj.id} color={colorObj.color} /></Grid>
@@ -81,17 +88,25 @@ const Task = ({
                             ) : null}
                         </Grid>
                     </Grid>
-
+                    <Grid item >
+                        <Divider classes={{ root: classes.taskDivider }} />
+                    </Grid>
+                    <Grid item container direction='row' justify='flex-end'>
+                        {tasksOwnerAndMembers.length && (
+                            tasksOwnerAndMembers.map((personObj) => (
+                                <Grid item><MemberCircle key={personObj.id} name={personObj.userName} /></Grid>
+                            ))
+                        )}
+                    </Grid>
                     <TaskEditDialog
                         dialogStatus={dialogStatus}
                         toggleDialog={toggleDialog}
                         editId={task.id}
                         task={task}
                     />
-                </Grid>
-
+                </Grid >
             )}
-        </Draggable>
+        </Draggable >
     )
 }
 export default Task

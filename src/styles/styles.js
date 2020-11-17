@@ -108,7 +108,7 @@ export const boardPageStyles = makeStyles({
 
     // TASK STYLES
     task: {
-        minHeight: 100,
+        minHeight: 115,
         borderRadius: 4,
         backgroundColor: colours.white,
         width: 320
@@ -140,11 +140,27 @@ export const boardPageStyles = makeStyles({
         marginTop: 5,
         marginLeft: 5
     },
+    taskColorPillsGrid: {
+        marginLeft: 1.5
+    },
 
     colorPill: {
         borderRadius: 20,
         height: 13,
         width: 46
+    },
+
+    taskDivider: {
+        marginLeft: -4,
+        marginRight: -3
+    },
+
+    memberCircle: {
+        borderRadius: 100,
+        height: 32,
+        width: 32,
+        textAlign: 'center',
+        backgroundColor: colours.lightgrey,
     },
 
     // SUBTASK STYLES

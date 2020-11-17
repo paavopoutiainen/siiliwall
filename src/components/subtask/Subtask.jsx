@@ -51,7 +51,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                         alignItems="center"
                     >
                         <Grid item classes={{ root: classes.subtaskTitle }}>
-                            <b>{subtask.prettyId}</b>
+                            <p>{subtask.prettyId}</p>
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskDropdownGrid }} onClick={handleDialogClick}>
                             <DropDownSubtask
