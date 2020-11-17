@@ -1,40 +1,19 @@
-const express = require('express')
-
-const app = express()
-const bodyParser = require('body-parser')
-const { ApolloServer } = require('apollo-server-express')
+const { ApolloServer } = require('apollo-server')
 const http = require('http')
+require('dotenv').config('../.env')
 const { makeExecutableSchema } = require('graphql-tools')
 const { execute, subscribe } = require('graphql')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
-const config = require('./utils/config')
 const typeDefs = require('./graphql/typedefs')
 const resolvers = require('./graphql/resolvers')
 
+const { PORT } = process.env
+
 const schema = makeExecutableSchema({ typeDefs, resolvers })
-app.use('/graphql', bodyParser.json())
 
-const apollo = new ApolloServer({ schema })
-apollo.applyMiddleware({ app, path: '/graphql' })
+const server = new ApolloServer({ schema })
 
-const server = http.createServer(app)
-apollo.installSubscriptionHandlers(app)
-
-server.listen({ port: config.PORT }, () => {
-    console.log(`Server running on port ${config.PORT}`)
-    // eslint-disable-next-line no-new
-    new SubscriptionServer({
-        execute,
-        subscribe,
-        schema,
-    }, {
-        server,
-        path: '/graphql',
-    })
+server.listen().then(({ url, subscriptionsUrl }) => {
+    console.log(`Server ready at ${url}`)
+    console.log(`Subscriptions ready at ${subscriptionsUrl}`)
 })
-
-const closeHttpServer = () => {
-    server.close()
-}
-
-module.exports = { app, closeHttpServer }
