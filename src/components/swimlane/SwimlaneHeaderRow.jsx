@@ -4,13 +4,15 @@ import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Grid } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 
-const SwimlaneHeaderRow = ({ prettyId, title, numberOfSubtasks }) => {
+const SwimlaneHeaderRow = ({
+    prettyId, title, numberOfSubtasks, handleShowClick,
+}) => {
     const classes = swimlaneStyles()
 
     return (
         <Grid container item direction="row" classes={{ root: classes.swimlaneHeaderRow }}>
             <Grid item container spacing={3} classes={{ root: classes.swimlaneHeaderRowLeft }}>
-                <Grid item><ExpandMoreIcon /></Grid>
+                <Grid item><ExpandMoreIcon onClick={(e) => handleShowClick(e)} /></Grid>
                 <Grid item><p style={{ color: '#3232FF' }}>{prettyId}</p></Grid>
                 <Grid item><p>{title}</p></Grid>
             </Grid>

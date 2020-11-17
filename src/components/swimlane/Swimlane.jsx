@@ -61,8 +61,24 @@ const Swimlane = ({
                         columnId={task?.column?.id}
                         prettyId={task.prettyId}
                         title={task.title}
+                        s
                         numberOfSubtasks={numberOfSubtasks}
+                        handleShowClick={handleShowClick}
                     />
+
+                    {show
+                        && (
+                            <Grid item>
+                                <hr
+                                    style={{
+                                        color: '#f7f7f7',
+                                        backgroundColor: '#f7f7f7',
+                                        height: 0.3,
+                                    }}
+                                />
+                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
+                            </Grid>
+                        )}
 
                     <AddSubtaskDialog
                         addDialogStatus={addDialogStatus}

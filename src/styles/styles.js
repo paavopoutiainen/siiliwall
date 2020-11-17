@@ -228,10 +228,8 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneColumn: {
-        border: '2px solid lightgrey',
         width: 327,
         minHeight: 133,
-        backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
     },
 })
