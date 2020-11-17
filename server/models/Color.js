@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         Color.belongsToMany(models.Task, {
             through: models.ColorTask,
             foreignKey: 'colorId',
+            unique: false
         })
     }
 

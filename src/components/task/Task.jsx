@@ -93,11 +93,11 @@ const Task = ({
                         <Divider classes={{ root: classes.taskDivider }} />
                     </Grid>
                     <Grid item container direction='row' justify='flex-end'>
-                        {tasksOwnerAndMembers.length && (
+                        {tasksOwnerAndMembers.length ? (
                             tasksOwnerAndMembers.map((personObj) => (
                                 <Grid item><MemberCircle key={personObj.id} name={personObj.userName} /></Grid>
                             ))
-                        )}
+                        ) : null}
                     </Grid>
                     <TaskEditDialog
                         dialogStatus={dialogStatus}

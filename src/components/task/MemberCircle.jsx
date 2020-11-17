@@ -4,7 +4,6 @@ import { boardPageStyles } from '../../styles/styles'
 
 const MemberCircle = ({ name }) => {
     const classes = boardPageStyles()
-
     return (
         <Grid item container>
             <Grid item container direction='column' justify='center' classes={{ root: classes.memberCircle }}>

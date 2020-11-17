@@ -296,10 +296,12 @@ class BoardService {
         return story
     }
 
-    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
+    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds, description) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        const removedColorIds = oldColorIds.filter((id) => !newColorIds.includes(id))
+        const addedColors = newColorIds.filter((id) => !oldMemberIds.includes(id))
         let task
 
         try {
@@ -319,6 +321,17 @@ class BoardService {
                         userId,
                         taskId: task.id,
                     },
+                })
+            }))
+            await Promise.all(addedColors.map(async (colorId) => {
+                await this.addColorForTask(task.id, colorId)
+            }))
+            await Promise.all(removedColorIds.map(async (colorId) => {
+                await this.store.ColorTask.destroy({
+                    where: {
+                        colorId,
+                        taskId: task.id
+                    }
                 })
             }))
         } catch (e) {
@@ -624,6 +637,7 @@ class BoardService {
         let task
         try {
             await this.store.ColorTask.create({
+                id: uuid(),
                 colorId,
                 taskId
             })

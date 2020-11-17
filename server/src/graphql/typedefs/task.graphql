@@ -23,7 +23,7 @@ type Query {
 
 type Mutation {
   addTaskForColumn(boardId: ID!, columnId: ID!, title: String!, size: Int, ownerId: ID, memberIds: [ID!], colorIds: [ID!], description: String, eventId: ID!): Task
-  editTaskById(id: ID!, title: String!, size: Int, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], description: String, eventId: ID!): Task
+  editTaskById(id: ID!, title: String!, size: Int, ownerId: ID, oldMemberIds: [ID!], newMemberIds: [ID!], oldColorIds: [ID!], newColorIds: [ID!], description: String, eventId: ID!): Task
   deleteTaskById(id: ID!, columnId: ID!, boardId:ID!, eventId: ID!): ID
   archiveTaskById(id: ID!, columnId: ID!, boardId:ID!, eventId: ID!): ID
   restoreTaskById(id: ID!): Task

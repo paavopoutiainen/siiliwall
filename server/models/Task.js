@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
         })
         Task.belongsToMany(models.Color, {
             through: models.ColorTask,
-            foreignKey: 'taskId'
+            foreignKey: 'taskId',
         })
         Task.belongsTo(models.Board, {
             foreignKey: 'boardId',

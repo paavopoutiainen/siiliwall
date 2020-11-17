@@ -9,23 +9,26 @@ import {
     sizeSchema, titleSchema, descriptionSchema, taskSchema,
 } from './validationSchema'
 import { boardPageStyles } from '../../styles/styles'
-
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import useAllColors from '../../graphql/task/hooks/useAllColors'
 
 const EditTaskDialog = ({
     dialogStatus, editId, toggleDialog, task,
 }) => {
     const [editTask] = useEditTask()
-    const { loading, data } = useAllUsers()
+    const userQuery = useAllUsers()
+    const colorQuery = useAllColors()
     const [title, setTitle] = useState(task?.title)
     const [size, setSize] = useState(task?.size ? task.size : null)
     const [description, setDescription] = useState(task?.description)
     const [owner, setOwner] = useState(task?.owner ? task.owner.id : null)
     const [members, setMembers] = useState()
+    const [colors, setColors] = useState()
     const [sizeError, setSizeError] = useState('')
     const [titleError, setTitleError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
     const arrayOfOldMemberIds = task?.members?.map((user) => user.id)
+    const arrayOfOldColorIds = task?.colors?.map((color) => color.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
 
@@ -34,11 +37,12 @@ const EditTaskDialog = ({
         setSize(task.size)
         setOwner(task.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setColors(task.colors.length > 0 ? arrayOfOldColorIds : [])
         setDescription(task.description)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [task])
 
-    if (loading) return null
+    if (userQuery.loading || colorQuery.loading) return null
 
     const handleTitleChange = (event) => {
         const input = event.target.value
@@ -83,6 +87,10 @@ const EditTaskDialog = ({
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const handleColorsChange = (event) => {
+        setColors(Array.isArray(event) ? event.map((color) => color.value) : [])
+    }
+
     const handleSave = async (event) => {
         event.preventDefault()
         const eventId = window.localStorage.getItem('eventId')
@@ -96,6 +104,8 @@ const EditTaskDialog = ({
                     ownerId: owner,
                     oldMemberIds: arrayOfOldMemberIds,
                     newMemberIds: members,
+                    oldColorIds: arrayOfOldColorIds,
+                    newColorIds: colors,
                     description,
                     eventId,
                 },
@@ -109,6 +119,7 @@ const EditTaskDialog = ({
         setSize(task?.size ? task.size : null)
         setOwner(task?.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
+        setColors(task.colors.length > 0 ? arrayOfOldColorIds : [])
         setDescription(task?.description)
     }
 
@@ -121,7 +132,7 @@ const EditTaskDialog = ({
     const handleDialogClick = (e) => e.stopPropagation()
 
     // Modifiying userData to be of form expected by the react select component
-    const modifiedData = data.allUsers.map((user) => {
+    const modifiedUserData = userQuery.data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
@@ -131,11 +142,24 @@ const EditTaskDialog = ({
         return newObject
     })
 
+    const chosenColorsData = task.colors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        return newObject
+    })
+
+    const modifiedColorData = colorQuery.data.allColors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        return newObject
+    })
+
     // data for showing only the members not yet chosen
-    const modifiedMemberOptions = modifiedData
+    const modifiedMemberOptions = modifiedUserData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
-    const chosenOwnerData = modifiedData.map((user) => {
+    const modifiedColorOptions = modifiedColorData
+        .filter((color) => !arrayOfOldColorIds.includes(color.id))
+
+    const chosenOwnerData = modifiedUserData.map((user) => {
         let newObject
         if (user.value === owner) {
             newObject = { value: user.value, label: user.label }
@@ -186,9 +210,20 @@ const EditTaskDialog = ({
                     />
                     <Select
                         className="selectField"
+                        closeMenuOnSelect={false}
+                        placeholder="Select colors"
+                        options={modifiedColorOptions}
+                        defaultValue={chosenColorsData}
+                        components={animatedComponents}
+                        isMulti
+                        onChange={handleColorsChange}
+                        id="taskSelectMember"
+                    />
+                    <Select
+                        className="selectField"
                         isClearable
                         placeholder="Select owner"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
                         id="taskSelectOwner"
