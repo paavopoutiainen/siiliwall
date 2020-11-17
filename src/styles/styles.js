@@ -103,7 +103,7 @@ export const boardPageStyles = makeStyles({
     },
 
     foreingKeyIcon: {
-        fontSize: 12
+        fontSize: 12,
     },
 
     taskPrettyIdInSubtask: {
@@ -197,8 +197,23 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlane: {
-        border: '2px solid rgba(0, 0, 0, .3)',
-        backgroundColor: 'white',
+        backgroundColor: '#F5F5F5',
+    },
+
+    swimlaneHeaderRow: {
+        height: 60,
+    },
+
+    swimlaneHeaderRowLeft: {
+        width: '50%',
+        marginLeft: 5,
+        alignItems: 'center',
+    },
+
+    swimlaneHeaderRowRight: {
+        width: '50%',
+        marginRight: 5,
+        alignItems: 'center',
     },
 
     swimlaneTitle: {

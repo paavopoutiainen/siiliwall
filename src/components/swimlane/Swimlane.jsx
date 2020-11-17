@@ -1,10 +1,14 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Draggable } from 'react-beautiful-dnd'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
+import SwimlaneHeaderRow from './SwimlaneHeaderRow'
+
+import ProgressBarComponent from './ProgressBarComponent'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import TaskEditDialog from '../task/EditTaskDialog'
 
@@ -19,6 +23,9 @@ const Swimlane = ({
         setEditTaskDialogStatus(!editTaskDialogStatus)
     }
 
+    // Calculate the percentage for progressBar
+    const percentageForProgressBar = ((task.swimlaneColumns
+        .findIndex((swimlaneColumn) => swimlaneColumn.id === task.column.id) + 1) / task.swimlaneColumns.length) * 100
     const toggleAddDialog = (e) => {
         e.stopPropagation()
         setAddDialogStatus(!addDialogStatus)
@@ -42,30 +49,21 @@ const Swimlane = ({
                 <Grid
                     container
                     direction="column"
-                    spacing={2}
                     classes={{ root: classes.swimlane }}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     ref={provided.innerRef}
                 >
-                    <Grid item onClick={toggleEditTaskDialog}><SwimlaneHeader prettyId={task.prettyId} title={task.title} /></Grid>
-                    <Grid item container direction="row" alignItems="center" spacing={1} onClick={toggleEditTaskDialog}>
-                        <Grid item>
-                            <Button size="small" variant="outlined" onClick={(e) => handleShowClick(e)}>{show ? 'hide' : 'show'}</Button>
-                        </Grid>
-                        {show && (
-                            <Grid item>
-                                <Button size="small" variant="outlined" onClick={(e) => toggleAddDialog(e)}>add subtask</Button>
-                            </Grid>
-                        )}
-                        <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
-                    </Grid>
-                    {show
-                        && (
-                            <Grid item>
-                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
-                            </Grid>
-                        )}
+                    <Grid item><ProgressBarComponent percentage={percentageForProgressBar} /></Grid>
+                    <SwimlaneHeaderRow
+                        taskId={task.id}
+                        boardId={boardId}
+                        columnId={task?.column?.id}
+                        prettyId={task.prettyId}
+                        title={task.title}
+                        numberOfSubtasks={numberOfSubtasks}
+                    />
+
                     <AddSubtaskDialog
                         addDialogStatus={addDialogStatus}
                         toggleAddDialog={toggleAddDialog}
