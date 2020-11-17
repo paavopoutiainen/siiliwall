@@ -118,7 +118,6 @@ export const removeSubtaskFromCache = (subtaskId, columnId) => {
         id: columnIdForCache,
         fragment: TICKETORDER_AND_SUBTASKS,
     })
-
     // update column's ticketOrder and subtasks
     const newSubtasks = subtasks.filter((subtask) => subtask.id !== subtaskId)
     const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
