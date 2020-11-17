@@ -18,8 +18,8 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
-        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description, eventId: $eventId) {
+    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $colorIds: [ID!], $description: String, $eventId: ID!) {
+        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, colorIds: $colorIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -31,6 +31,10 @@ export const ADD_TASK = gql`
             members {
                 id
                 userName
+            }
+            colors {
+                id
+                color
             }
             description
             swimlaneOrderNumber
@@ -97,6 +101,7 @@ export const TASK_MUTATED = gql`
         prettyId
         title
         size
+        colors
         owner {
             id
             userName
@@ -142,4 +147,12 @@ subscription swimlaneMoved($boardId: ID!, $eventId: ID!) {
         swimlaneOrder
     }
   }
+`
+export const ALL_COLORS = gql`
+    query {
+        allColors {
+            id
+            color
+        }
+    }
 `

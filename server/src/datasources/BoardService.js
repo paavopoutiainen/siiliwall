@@ -534,7 +534,7 @@ class BoardService {
         return addedStory
     }
 
-    async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+    async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, colorIds, description) {
         /*
           At a new tasks' creation we want to display it as the lowermost task in its column,
           hence it is given the biggest columnOrderNumber of the column
@@ -566,6 +566,11 @@ class BoardService {
                 memberIds.map(async (memberId) => {
                     await this.addMemberForTask(addedTask.id, memberId)
                 }),
+            )
+            await Promise.all(
+                colorIds.map(async (colorId) => {
+                    await this.addColorForTask(addedTask.id, colorId)
+                })
             )
         } catch (e) {
             console.error(e)
@@ -613,6 +618,20 @@ class BoardService {
             console.error(e)
         }
         return subtask
+    }
+
+    async addColorForTask(taskId, colorId) {
+        let task
+        try {
+            await this.store.ColorTask.create({
+                colorId,
+                taskId
+            })
+            task = await this.store.Task.findByPk(taskId)
+        } catch (e) {
+            console.log(e)
+        }
+        return task
     }
 
     async addSubtaskForTask(
@@ -759,6 +778,16 @@ class BoardService {
         } catch (e) {
             console.error(e)
         }
+    }
+
+    async getColors() {
+        let colorsFromDb
+        try {
+            colorsFromDb = await this.store.Color.findAll()
+        } catch (e) {
+            console.log(e)
+        }
+        return colorsFromDb
     }
 
     async getUsers() {

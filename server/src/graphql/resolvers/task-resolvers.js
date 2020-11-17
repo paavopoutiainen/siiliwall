@@ -11,6 +11,9 @@ const schema = {
         taskById(root, args) {
             return dataSources.boardService.getTaskById(args.id)
         },
+        allColors() {
+            return dataSources.boardService.getColors()
+        },
     },
 
     Subscription: {
@@ -30,12 +33,12 @@ const schema = {
 
     Mutation: {
         async addTaskForColumn(root, {
-            boardId, columnId, title, size, ownerId, memberIds, description, eventId,
+            boardId, columnId, title, size, ownerId, memberIds, colorIds, description, eventId,
         }) {
             let addedTask
             try {
                 addedTask = await dataSources.boardService
-                    .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description)
+                    .addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, colorIds, description)
                 pubsub.publish(TASK_MUTATED, {
                     boardId,
                     eventId,

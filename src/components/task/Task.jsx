@@ -15,6 +15,7 @@ const Task = ({
     const { title, members, owner, prettyId } = task
     const titleLimit = 25
     const dots = '...'
+
     let tasksOwnerAndMembers
     if (owner) {
         tasksOwnerAndMembers = members.concat(owner)
@@ -23,7 +24,7 @@ const Task = ({
     }
 
     const [dialogStatus, setDialogStatus] = useState(false)
-    console.log(tasksOwnerAndMembers)
+
     const toggleDialog = () => setDialogStatus(!dialogStatus)
 
     const add3Dots = () => {
