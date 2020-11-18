@@ -27,7 +27,7 @@ const BoardPage = ({ id, eventId }) => {
             direction="row"
             classes={{ root: classes.root }}
             id="boardElement"
-            spacing={3}
+        //spacing={3}
         >
             <Grid container item direction="column" justify="space-between" classes={{ root: classes.boardHeader }} id="boardHeader">
                 <Grid item>
@@ -42,7 +42,7 @@ const BoardPage = ({ id, eventId }) => {
                 </Grid>
             </Grid>
 
-            <Grid item classes={{ root: classes.boardView }}>
+            <Grid item >
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>
         </Grid>

@@ -40,7 +40,7 @@ const SwimlaneView = ({ board }) => {
     const tasksInCorrectOrder = swimlaneOrder.map((id) => tasks.find((task) => task.id === id)).filter((task) => task)
     const columnsInOrder = board.columnOrder.map((id) => columns.find((column) => column.id === id))
 
-    const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name }))
+    const columnsForSwimlaneViewHeader = columnsInOrder.map((column) => ({ id: column.id, name: column.name, tasks: column.tasks }))
     // This object is passed to swimlaneList
     const tasksInOrder = tasksInCorrectOrder.map((task) => {
         const swimlaneColumns = columnsInOrder.map((column) => {
@@ -78,7 +78,7 @@ const SwimlaneView = ({ board }) => {
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
-            <Grid container direction="column" spacing={2} classes={{ root: classes.root }}>
+            <Grid container direction="column" spacing={2}>
                 <Grid item container direction='row'>
                     <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
                         <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>

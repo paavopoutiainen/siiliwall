@@ -70,6 +70,7 @@ export const boardPageStyles = makeStyles({
     boardHeader: {
         width: '100%',
         fontFamily: font,
+        marginBottom: 20
     },
 
     addColumn: {
@@ -279,10 +280,6 @@ export const boardPageStyles = makeStyles({
 })
 
 export const swimlaneStyles = makeStyles({
-    root: {
-        minWidth: '96vw'
-    },
-
     swimlaneAddButtonGrid: {
         width: '20%'
     },
@@ -297,6 +294,7 @@ export const swimlaneStyles = makeStyles({
         fontFamily: font,
         fontSize: 14
     },
+
     swimlaneHideButton: {
         color: colours.blue,
         fontFamily: font,
@@ -311,14 +309,31 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneColumnNames: {
-        width: '100%',
         flexWrap: 'nowrap',
+        backgroundColor: colours.lightergrey,
+    },
+
+    swimlaneColumnGrid: {
+        width: 350,
+        fontFamily: font,
+        fontWeight: 600,
+        height: 50
+    },
+
+    swimlaneColumnNameGrid: {
+        width: '99%'
     },
 
     swimlaneColumnName: {
-        textAlign: 'center',
-        width: 335,
-        fontFamily: font,
+        paddingLeft: 15
+    },
+
+    swimlaneNumberOfTasks: {
+        paddingRight: 20
+    },
+
+    swimlaneColumnDivider: {
+        width: '1%'
     },
 
     swimlane: {

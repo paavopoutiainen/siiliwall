@@ -1,8 +1,7 @@
 /* eslint-disable array-callback-return */
 import React, { useState, useEffect } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
-import Divider from '@material-ui/core/Divider'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneColumnList from './SwimlaneColumnList'
 import SwimlaneHeaderRow from './SwimlaneHeaderRow'
