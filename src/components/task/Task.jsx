@@ -7,7 +7,7 @@ import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
 
 const Task = ({
-    task, index, columnId, boardId,
+    task, index, column, boardId,
 }) => {
     const classes = boardPageStyles()
     const { title, members, prettyId } = task
@@ -68,7 +68,7 @@ const Task = ({
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 task={task}
-                                columnId={columnId}
+                                column={column}
                                 boardId={boardId}
                             />
                         </Grid>

@@ -35,7 +35,7 @@ const Column = ({ column, index }) => {
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
                         <Grid item>
-                            <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                            <DropdownColumn column={column} boardId={column.board.id} />
                         </Grid>
                     </Grid>
 
@@ -51,7 +51,7 @@ const Column = ({ column, index }) => {
                                     tasks={tasks}
                                     subtasks={subtasks}
                                     ticketOrder={ticketOrder}
-                                    columnId={column.id}
+                                    column={column}
                                     boardId={board.id}
                                 />
                                 {provided.placeholder}

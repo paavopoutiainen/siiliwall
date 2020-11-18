@@ -13,7 +13,7 @@ import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
-    columnId, task, boardId,
+    column, task, boardId,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
@@ -102,7 +102,7 @@ const DropdownTask = ({
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
                 task={task}
-                columnId={columnId}
+                column={column}
                 boardId={boardId}
                 action={action}
                 count={count}
@@ -110,7 +110,7 @@ const DropdownTask = ({
             <AddSubtaskDialog
                 addDialogStatus={addDialogStatus}
                 toggleAddDialog={toggleAddDialog}
-                columnId={columnId}
+                column={column}
                 taskId={task.id}
                 boardId={boardId}
             />

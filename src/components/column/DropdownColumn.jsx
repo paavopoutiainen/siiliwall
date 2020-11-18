@@ -8,14 +8,14 @@ import { useApolloClient } from '@apollo/client'
 import { TICKETORDER } from '../../graphql/fragments'
 import AlertBox from '../AlertBox'
 
-const DropdownColumn = ({ columnId, boardId }) => {
+const DropdownColumn = ({ column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const client = useApolloClient()
 
     const { ticketOrder } = client.readFragment({
-        id: `Column:${columnId}`,
+        id: `Column:${column.id}`,
         fragment: TICKETORDER,
     })
     const hasTickets = ticketOrder.length
@@ -62,7 +62,7 @@ const DropdownColumn = ({ columnId, boardId }) => {
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                columnId={columnId}
+                column={column}
                 boardId={boardId}
                 action={action}
             />

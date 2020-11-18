@@ -9,13 +9,13 @@ import AlertBox from '../AlertBox'
 import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
 import { useApolloClient } from '@apollo/client'
 
-const DropdownSubtask = ({ columnId, subtaskId }) => {
+const DropdownSubtask = ({ subtask, column }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [action, setAction] = useState(null)
     const client = useApolloClient()
-    const columnIdForCache = `Column:${columnId}`
+    const columnIdForCache = `Column:${column.id}`
 
     const columnData = client.readFragment({
         id: columnIdForCache,
@@ -71,8 +71,8 @@ const DropdownSubtask = ({ columnId, subtaskId }) => {
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
                 action={action}
-                subtaskId={subtaskId}
-                columnId={columnId}
+                subtask={subtask}
+                column={column}
                 boardId={boardId}
             />
         </Grid>

@@ -9,7 +9,7 @@ import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragments'
 
-const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, boardId }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, boardId }) => {
     const { loading, data } = useAllUsers()
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask()
@@ -26,7 +26,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         fragment: BOARDS_COLUMNS_AND_COLUMNORDER,
     })
     if (loading) return null
-    const columnOfParentTask = columns.find((col) => col.id === columnId)?.name
+    const columnOfParentTask = columns.find((col) => col.id === column.id)?.name
 
     const handleNameChange = (event) => {
         setName(event.target.value)
@@ -69,13 +69,13 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         event.preventDefault()
         // Get the ticketOrder of the column to which user is creating the subtask
         const { ticketOrder } = client.cache.readFragment({
-            id: `Column:${inputColumnId || columnId}`,
+            id: `Column:${inputColumnId || column.id}`,
             fragment: TICKETORDER,
         })
         const ticketOrderWithoutTypename = ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
         addSubtask({
             variables: {
-                columnId: inputColumnId || columnId,
+                columnId: inputColumnId || column.id,
                 taskId,
                 boardId,
                 ownerId: owner,

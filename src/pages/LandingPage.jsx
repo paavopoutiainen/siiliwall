@@ -52,7 +52,10 @@ const LandingPage = () => {
                         </Button>
                     </Grid>
                     <Grid item>
-                        <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                        <Button
+                            onClick={handleClickOpenUser}
+                            classes={{ root: classes.addNewButton }}
+                        >
                             Add User
                         </Button>
                     </Grid>

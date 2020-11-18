@@ -69,7 +69,7 @@ const Swimlane = ({
                     <AddSubtaskDialog
                         addDialogStatus={addDialogStatus}
                         toggleAddDialog={toggleAddDialog}
-                        columnId={task?.column?.id}
+                        column={task?.column}
                         taskId={task.id}
                         boardId={boardId}
                     />
