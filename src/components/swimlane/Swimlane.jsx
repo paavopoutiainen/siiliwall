@@ -57,6 +57,7 @@ const Swimlane = ({
                         numberOfSubtasks={numberOfSubtasks}
                         handleShowClick={handleShowClick}
                         toggleEditTaskDialog={toggleEditTaskDialog}
+                        show={show}
                     />
                     {show
                         && (

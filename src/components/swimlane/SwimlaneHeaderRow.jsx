@@ -1,11 +1,11 @@
 import React from 'react'
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
+import { ExpandMore, ExpandLess } from '@material-ui/icons'
 import { Grid, IconButton } from '@material-ui/core'
 import { swimlaneStyles } from '../../styles/styles'
 import DropdownTask from '../task/DropdownTask'
 
 const SwimlaneHeaderRow = ({
-    task, columnId, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog,
+    task, columnId, boardId, prettyId, title, numberOfSubtasks, handleShowClick, toggleEditTaskDialog, show
 }) => {
     const classes = swimlaneStyles()
     const handleDialogClick = (e) => e.stopPropagation()
@@ -17,7 +17,10 @@ const SwimlaneHeaderRow = ({
                     <IconButton
                         onClick={(e) => handleShowClick(e)}
                     >
-                        <ExpandMoreIcon />
+                        {!show
+                            ? <ExpandMore />
+                            : <ExpandLess />
+                        }
                     </IconButton>
                 </Grid>
                 <Grid item classes={{ root: classes.swimlanePrettyId }}><p>{prettyId}</p></Grid>

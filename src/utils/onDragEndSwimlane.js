@@ -2,9 +2,7 @@
 /* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { BOARD_BY_ID } from '../graphql/board/boardQueries'
-import {
-    SWIMLANE_ORDER_NUMBER, SWIMLANE_ORDER,
-} from '../graphql/fragments'
+import { SWIMLANE_ORDER } from '../graphql/fragments'
 import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, updateSwimlaneOrderOfBoardToTheCache } from '../cacheService/cacheUpdates'
 
 export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
@@ -39,7 +37,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
             // Change the swimlaneOrderNumber of the moved task to be the index which it was dropped into
             newSwimlaneOrderObjects = newSwimlaneOrderObjectsWithoutMovedTask.concat({ id: movedTask.id, swimlaneOrderNumber: destination.index })
 
-        // IF SWIMLANE IS MOVED DOWNWARDS
+            // IF SWIMLANE IS MOVED DOWNWARDS
         } else {
             // Find out the tasks the drag and drop affected
             affectedTasks = tasksInOrder.slice(source.index, source.index + (destination.index - source.index + 1))

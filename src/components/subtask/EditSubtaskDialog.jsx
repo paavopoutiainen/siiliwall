@@ -126,10 +126,11 @@ const EditSubtaskDialog = ({
         .filter((color) => !arrayOfOldColorIds.includes(color.id))
 
     const chosenOwnerData = modifiedUserData.map((user) => {
+        let newObject
         if (user.value === owner) {
-            const newObject = { value: user.value, label: user.label }
-            return newObject
+            newObject = { value: user.value, label: user.label }
         }
+        return newObject
     })
 
     return (
