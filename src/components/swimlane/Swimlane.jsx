@@ -58,7 +58,7 @@ const Swimlane = ({
                                 <Button size="small" variant="outlined" onClick={(e) => toggleAddDialog(e)}>add subtask</Button>
                             </Grid>
                         )}
-                        <Grid item>{`${numberOfSubtasks} subtasks`}</Grid>
+                        <Grid item classes={{ root: classes.subtaskText }}>{`${numberOfSubtasks} subtasks`}</Grid>
                     </Grid>
                     {show
                         && (

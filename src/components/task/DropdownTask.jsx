@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import {
     Delete, Archive, Add,
 } from '@material-ui/icons'
@@ -60,15 +60,18 @@ const DropdownTask = ({
         setAnchorEl(null)
     }
     return (
-        <Grid item classes={{ root: classes.taskDropdownComponent }}>
-            <Button
-                aria-owns={anchorEl ? 'simple-menu' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-                classes={{ root: classes.taskDropdownButton }}
-            >
-                <MoreHorizIcon fontSize="large" />
-            </Button>
+        <Grid item container direction='row' justify='flex-end' alignItems='center'>
+            <Grid item>
+                <Button
+                    aria-owns={anchorEl ? 'simple-menu' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                    classes={{ root: classes.taskDropdownButton }}
+                >
+                    <MoreVertIcon classes={{ root: classes.taskButtonIcons }} />
+                </Button>
+            </Grid>
+
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}

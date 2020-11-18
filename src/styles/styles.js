@@ -1,5 +1,20 @@
 import { makeStyles } from '@material-ui/styles'
 
+const colours = {
+    yellow: '#FFE100',
+    green: '#00F09B',
+    red: '#FA0000',
+    pink: '#FF41FF',
+    purple: '#AA32FF',
+    blue: '#3232FF',
+    white: '#FFFFFF',
+    black: '#000000',
+    gray: '#949494',
+    lightgrey: '#E3E3E3',
+}
+
+const font = 'Arial Regular'
+
 export const projectPageStyles = makeStyles({
     root: {
         minHeight: '100vh',
@@ -21,7 +36,7 @@ export const projectPageStyles = makeStyles({
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         borderRadius: 3,
         border: 0,
-        color: 'white',
+        color: colours.white,
         height: 48,
         padding: '0 30px',
         boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
@@ -50,8 +65,10 @@ export const boardPageStyles = makeStyles({
         padding: 30,
     },
 
+    // BOARD STYLES
     boardHeader: {
         width: '100%',
+        fontFamily: font,
     },
 
     addColumn: {
@@ -62,66 +79,144 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
     },
 
+    // COLUMN STYLES
     column: {
-        backgroundColor: '#EBECF0',
+        backgroundColor: '#F5F5F5',
         minHeight: 600,
         width: 330,
-        borderRadius: 6,
     },
 
     columnHeader: {
         flexWrap: 'nowrap',
+        marginTop: 10,
     },
 
+    columnName: {
+        fontFamily: font,
+        fontWeight: 'lighter',
+    },
+
+    columnButtonGrid: {
+        width: 150,
+    },
+
+    columnButtonIcons: {
+        fontSize: 22,
+        color: '#949494',
+
+    },
+
+    columnButton: {
+        minWidth: 30,
+    },
+
+    dropDownColumn: {
+        width: 18,
+    },
+
+    // TASK STYLES
     task: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        minHeight: 100,
+        minHeight: 115,
         borderRadius: 4,
+        backgroundColor: colours.white,
+        width: 320,
     },
 
-    taskInner: {
+    taskButtonIcons: {
+        fontSize: 22,
+        color: colours.white,
+    },
+
+    taskDropdownButton: {
+        minWidth: 30,
+    },
+
+    taskHeader: {
+        background: colours.black,
         flexWrap: 'nowrap',
+        color: colours.white,
+        height: 30,
     },
 
+    taskTitle: {
+        color: colours.white,
+        fontSize: 12,
+        marginLeft: 5,
+        fontFamily: font,
+    },
+
+    taskName: {
+        fontSize: 18,
+        marginTop: 5,
+        marginLeft: 5,
+        fontFamily: font,
+    },
+
+    ticketColorPillsGrid: {
+        marginLeft: 1.5,
+    },
+
+    colorPill: {
+        borderRadius: 20,
+        height: 13,
+        width: 46,
+    },
+
+    ticketDivider: {
+        marginLeft: -4,
+        marginRight: -3,
+    },
+
+    memberCircle: {
+        borderRadius: 100,
+        height: 32,
+        width: 32,
+        textAlign: 'center',
+        backgroundColor: colours.lightgrey,
+        fontFamily: font,
+    },
+
+    // SUBTASK STYLES
     subtaskComponent: {
-        borderRadius: 5,
         backgroundColor: '#fff',
         minHeight: 115,
+        width: 320,
     },
 
     subtaskHeader: {
-        backgroundColor: 'rgba(255, 140, 85, .8)',
-        borderTopLeftRadius: 5,
-        borderTopRightRadius: 5,
+        backgroundColor: colours.lightgrey,
         flexWrap: 'nowrap',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+        height: 33,
+    },
+
+    subtaskTitle: {
+        fontSize: 14,
+        marginLeft: 5,
+        fontFamily: font,
     },
 
     subtaskHeaderTitleItem: {
         width: 200,
     },
 
-    foreingKeyIcon: {
-        fontSize: 12
+    subtaskName: {
+        fontSize: 18,
+        marginTop: 5,
+        marginLeft: 5,
+        fontFamily: font,
     },
 
-    taskPrettyIdInSubtask: {
-        fontSize: 12,
-    },
-
-    subtaskHeaderTitleText: {
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
-        textOverflow: 'ellipsis',
-    },
-
-    subtaskDropdownComponent: {
+    subtaskDropdownGrid: {
         height: 30,
+        minWidth: 30,
+    },
+
+    subtaskButtonIcons: {
+        fontSize: 22,
     },
 
     subtaskDropdownButton: {
-        height: '100%',
+        minWidth: 30,
     },
 
     subtaskContentAndName: {
@@ -135,13 +230,11 @@ export const boardPageStyles = makeStyles({
         textOverflow: 'ellipsis',
     },
 
-    taskDropdownComponent: {
-        height: 25,
-    },
-    taskDropdownButton: {
-        height: '100%',
+    subtaskDropDownIcon: {
+        minWidth: 30,
     },
 
+    // DIALOG STYLES
     dialogFocus: {
         minWidth: '100vw',
         maxWidth: '100vw',
@@ -158,6 +251,12 @@ export const boardPageStyles = makeStyles({
         maxHeight: '100vh',
     },
 
+    dialogPaper: {
+        minHeight: '80vh',
+        maxHeight: '80vh',
+    },
+
+    // ALERT BOX STYLES
     undoAlertButton: {
         margin: 5,
     },
@@ -171,20 +270,13 @@ export const boardPageStyles = makeStyles({
     },
 
     alertCheckbox: {
-        color: 'white',
+        color: colours.white,
         '&$checked': {
-            color: 'white',
+            color: colours.white,
         },
     },
-
-    dialogPaper: {
-        minHeight: '80vh',
-        maxHeight: '80vh',
-    },
-    textColor: {
-        color: '#3F51C0',
-    },
 })
+
 export const swimlaneStyles = makeStyles({
     swimlaneColumnNames: {
         width: '100%',
@@ -194,16 +286,22 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumnName: {
         textAlign: 'center',
         width: 335,
+        fontFamily: font,
     },
 
     swimlane: {
         border: '2px solid rgba(0, 0, 0, .3)',
-        backgroundColor: 'white',
+        backgroundcolor: colours.white,
     },
 
     swimlaneTitle: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         width: '100%',
+        fontFamily: font,
+    },
+
+    subtaskText: {
+        fontFamily: font,
     },
 
     swimlaneColumnList: {

@@ -10,11 +10,13 @@ import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import useAllColors from '../../graphql/task/hooks/useAllColors'
 
 const AddTaskDialog = ({
     dialogStatus, column, toggleDialog, boardId,
 }) => {
-    const { loading, data } = useAllUsers()
+    const userQuery = useAllUsers()
+    const colorQuery = useAllColors()
     const [addTask] = useAddTask(column?.id)
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState(null)
@@ -22,11 +24,12 @@ const AddTaskDialog = ({
     const [owner, setOwner] = useState(null)
     const classes = boardPageStyles()
     const [members, setMembers] = useState([])
+    const [colors, setColors] = useState([])
     const [sizeError, setSizeError] = useState('')
     const [titleError, setTitleError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
 
-    if (loading) return null
+    if (userQuery.loading || colorQuery.loading) return null
 
     const handleTitleChange = (event) => {
         const input = event.target.value
@@ -58,6 +61,10 @@ const AddTaskDialog = ({
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const handleColorsChange = (event) => {
+        setColors(Array.isArray(event) ? event.map((color) => color.value) : [])
+    }
+
     const handleDescriptionChange = (event) => {
         const input = event.target.value
         if (input === '') {
@@ -77,6 +84,7 @@ const AddTaskDialog = ({
         setSize(null)
         setOwner(null)
         setMembers([])
+        setColors([])
         setDescription(null)
     }
 
@@ -93,6 +101,7 @@ const AddTaskDialog = ({
                     size,
                     ownerId: owner,
                     memberIds: members,
+                    colorIds: colors,
                     description,
                     eventId,
                 },
@@ -107,8 +116,13 @@ const AddTaskDialog = ({
         toggleDialog()
     }
 
-    const modifiedData = data.allUsers.map((user) => {
+    const modifiedUserData = userQuery.data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
+
+    const modifiedColorData = colorQuery.data.allColors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
         return newObject
     })
 
@@ -163,9 +177,17 @@ const AddTaskDialog = ({
                         onChange={handleSizeChange}
                     />
                     <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select colors"
+                        options={modifiedColorData}
+                        onChange={handleColorsChange}
+                        closeMenuOnSelect={false}
+                    />
+                    <Select
                         className="selectField"
                         placeholder="Select owner"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         onChange={handleOwnerChange}
                         id="taskSelectOwner"
                     />
@@ -173,7 +195,7 @@ const AddTaskDialog = ({
                         isMulti
                         className="selectField"
                         placeholder="Select members"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         onChange={handleMembersChange}
                         closeMenuOnSelect={false}
                     />

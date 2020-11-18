@@ -82,8 +82,22 @@ export const client = new ApolloClient({
                             return [...incoming]
                         },
                     },
+                    colors: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        }
+                    }
                 },
             },
+            Subtask: {
+                fields: {
+                    colors: {
+                        merge(existing, incoming) {
+                            return [...incoming]
+                        }
+                    }
+                }
+            }
         },
     }),
 })
