@@ -73,6 +73,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
             fragment: TICKETORDER,
         })
         const ticketOrderWithoutTypename = ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type }))
+        const eventId = window.localStorage.getItem('eventId')
         addSubtask({
             variables: {
                 columnId: inputColumnId || columnId,
@@ -84,6 +85,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 content,
                 size,
                 ticketOrder: ticketOrderWithoutTypename,
+                eventId,
             },
         })
         emptyState()

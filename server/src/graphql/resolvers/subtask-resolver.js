@@ -11,24 +11,25 @@ const schema = {
         subtaskMutated: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(SUBTASK_MUTATED),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
             ),
         },
         subtaskRemoved: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(SUBTASK_REMOVED),
-                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId)
-            )
-        }
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
     },
 
     Mutation: {
         async addSubtaskForTask(root, {
-            taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder,
+            taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder, eventId,
         }) {
             const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
             pubsub.publish(SUBTASK_MUTATED, {
                 boardId,
+                eventId,
                 subtaskMutated: {
                     mutationType: 'CREATED',
                     subtask: addedSubtask.dataValues,
@@ -41,7 +42,9 @@ const schema = {
             return dataSources.boardService.addMemberForSubtask(id, userId)
         },
 
-        async deleteSubtaskById(root, { id, columnId, boardId, eventId }) {
+        async deleteSubtaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             let deletedSubtask
             try {
                 deletedSubtask = await dataSources.boardService.deleteSubtaskById(id)
@@ -53,9 +56,9 @@ const schema = {
                         removeInfo: {
                             subtaskId: id,
                             columnId,
-                            boardId
-                        }
-                    }
+                            boardId,
+                        },
+                    },
                 })
             } catch (e) {
                 console.log(e)
@@ -63,7 +66,9 @@ const schema = {
             return deletedSubtask
         },
 
-        async archiveSubtaskById(root, { id, columnId, boardId, eventId }) {
+        async archiveSubtaskById(root, {
+            id, columnId, boardId, eventId,
+        }) {
             let archivedSubtask
             try {
                 archivedSubtask = await dataSources.boardService.archiveSubtaskById(id)
@@ -75,9 +80,9 @@ const schema = {
                         removeInfo: {
                             subtaskId: id,
                             columnId,
-                            boardId
-                        }
-                    }
+                            boardId,
+                        },
+                    },
                 })
             } catch (e) {
                 console.log(e)

@@ -44,6 +44,12 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.projects.map(async (project) => {
+                const resolved = await db.Project.create(project)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.boards.map(async (board) => {
                 const resolved = await db.Board.create(board)
                 return resolved

@@ -1,8 +1,44 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable max-len */
 /* eslint-disable import/prefer-default-export */
 import { client } from '../apollo'
 import {
-    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER,
+    TICKETORDER_AND_TASKS, SWIMLANE_ORDER, TICKETORDER, SUBTASKS, COLUMNORDER, TICKETORDER_AND_SUBTASKS, SUBTASKS_COLUMN, SWIMLANE_ORDER_NUMBER, PROJECTS_BOARDS, COLUMNORDER_AND_COLUMNS,
 } from '../graphql/fragments'
+
+export const addNewColumn = (addedColumn) => {
+    const boardIdForCache = `Board:${addedColumn.board.id}`
+    const { columnOrder, columns } = client.readFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+    })
+    const newColumns = columns.concat(addedColumn)
+    const newColumnOrder = columnOrder.concat(addedColumn.id)
+    client.writeFragment({
+        id: boardIdForCache,
+        fragment: COLUMNORDER_AND_COLUMNS,
+        data: {
+            columnOrder: newColumnOrder,
+            columns: newColumns,
+        },
+    })
+}
+
+export const addNewBoard = (addedBoard, projectId) => {
+    const projectIdForCache = `Project:${projectId}`
+    const { boards } = client.readFragment({
+        id: projectIdForCache,
+        fragment: PROJECTS_BOARDS,
+    })
+    const newBoards = boards.concat(addedBoard)
+    client.writeFragment({
+        id: projectIdForCache,
+        fragment: PROJECTS_BOARDS,
+        data: {
+            boards: newBoards,
+        },
+    })
+}
 
 export const addNewTask = (addedTask) => {
     // Update the column's tasks and ticketOrder lists
@@ -76,22 +112,30 @@ export const removeTaskFromCache = (taskId, columnId, boardId) => {
 }
 
 export const removeSubtaskFromCache = (subtaskId, columnId) => {
-    const subtaskIdForCache = `Subtask:${subtaskId}`
+    // fetch certain column from the cache
     const columnIdForCache = `Column:${columnId}`
-
-    const data = client.readFragment({
+    const { ticketOrder, subtasks } = client.readFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_SUBTASKS,
     })
-    const newTicketOrder = data.ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+
+    // update column's ticketOrder and subtasks
+    const newSubtasks = subtasks.filter((subtask) => subtask.id !== subtaskId)
+    const newTicketOrder = ticketOrder.filter((obj) => obj.ticketId !== subtaskId)
+
     client.writeFragment({
         id: columnIdForCache,
-        fragment: TICKETORDER,
+        fragment: TICKETORDER_AND_SUBTASKS,
         data: {
             ticketOrder: newTicketOrder,
+            subtasks: newSubtasks,
         },
     })
-    client.cache.evict({ id: subtaskIdForCache })
+    // finally remove the normalized subtask entity
+    const subtaskIdForCache = `Subtask:${subtaskId}`
+    client.cache.evict({
+        id: subtaskIdForCache,
+    })
 }
 
 export const deleteColumnFromCache = (columnId, boardId) => {

@@ -29,7 +29,7 @@ type Query {
 }
 
 type Mutation {
-  addColumnForBoard(boardId: ID!, columnName: String!): Column
+  addColumnForBoard(boardId: ID!, columnName: String!, eventId: ID!): Column
   editColumnById(id: ID!, name: String!): Column
   deleteColumnById(id: ID!, boardId: ID!, eventId: ID!): ID
   moveTicketInColumn(newOrder: [TicketOrderInput!]!, columnId: ID!, boardId: ID!): Column
@@ -41,6 +41,17 @@ type Subscription {
   ticketMovedInColumn(boardId: ID!): TicketMovedInColumnPayload!
   ticketMovedFromColumn(boardId: ID!, eventId: ID!): TicketMovedFromColumnPayload!
   columnDeleted(boardId: ID!, eventId: ID!): ColumnRemovePayload!
+  columnMutated(boardId: ID!, eventId: ID!): ColumnMutatedPayload!
+}
+
+type ColumnMutatedPayload {
+  mutationType: MutationType!
+  column: Column!
+}
+
+enum MutationType {
+  CREATED
+  EDITED
 }
 
 type ColumnRemovePayload {
