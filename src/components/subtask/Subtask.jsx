@@ -52,7 +52,8 @@ const Subtask = ({ subtask, index, columnId }) => {
                     spacing={1}
                     onClick={handleClick}
                 >
-                    <Grid item
+                    <Grid
+                        item
                         container
                         classes={{ root: classes.subtaskHeader }}
                         direction="row"
@@ -73,7 +74,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                         <Grid item classes={{ root: classes.subtaskName }}>
                             <p>{add3Dots(subtask.name)}</p>
                         </Grid>
-                        <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
+                        <Grid item container direction="row" spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {subtask.colors ? (
                                 subtask.colors.map((colorObj) => (
                                     <Grid item key={colorObj.id}><ColorPill color={colorObj.color} /></Grid>
@@ -81,15 +82,15 @@ const Subtask = ({ subtask, index, columnId }) => {
                             ) : null}
                         </Grid>
                     </Grid>
-                    <Grid item >
+                    <Grid item>
                         {subtasksOwnerAndMembers.length ? (
                             <Divider classes={{ root: classes.ticketDivider }} />
                         ) : null}
                     </Grid>
-                    <Grid item container direction='row' justify='flex-end'>
+                    <Grid item container direction="row" justify="flex-end">
                         {subtasksOwnerAndMembers.length ? (
-                            subtasksOwnerAndMembers.map((personObj) => (
-                                <Grid item key={personObj.id}><MemberCircle name={personObj.userName} /></Grid>
+                            subtasksOwnerAndMembers.map((personObj, i) => (
+                                <Grid item key={i}><MemberCircle name={personObj.userName} /></Grid>
                             ))
                         ) : null}
                     </Grid>

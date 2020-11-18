@@ -71,9 +71,9 @@ const SwimlaneView = ({ board }) => {
     }
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
-            <Grid container direction="column" spacing={3}>
+            <Grid container direction="column">
                 <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
-                <Grid container item spacing={1}>
+                <Grid container item>
                     <Grid item>
                         <Button size="small" variant="outlined" onClick={() => handleShowClick()} disabled={tasks.length === 0}>{showAll ? 'Hide all' : 'Show all'}</Button>
                     </Grid>

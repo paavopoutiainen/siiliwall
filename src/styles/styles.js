@@ -11,6 +11,7 @@ const colours = {
     black: '#000000',
     gray: '#949494',
     lightgrey: '#E3E3E3',
+    lightergrey: '#F5F5F5',
 }
 
 const font = 'Arial Regular'
@@ -81,7 +82,7 @@ export const boardPageStyles = makeStyles({
 
     // COLUMN STYLES
     column: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: colours.lightergrey,
         minHeight: 600,
         width: 330,
     },
@@ -290,31 +291,66 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlane: {
-        border: '2px solid rgba(0, 0, 0, .3)',
-        backgroundcolor: colours.white,
+        backgroundColor: colours.lightergrey,
+        minWidth: 500,
+        marginBottom: 14,
     },
 
-    swimlaneTitle: {
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-        width: '100%',
-        fontFamily: font,
+    swimlaneHeaderRow: {
+        height: 60,
+    },
+
+    swimlaneHeaderRowLeft: {
+        width: '80%',
+        marginLeft: 5,
+        alignItems: 'center',
+    },
+
+    swimlaneHeaderRowRight: {
+        width: '20%',
+        marginRight: 0,
+        alignItems: 'center',
     },
 
     subtaskText: {
         fontFamily: font,
     },
 
+    progressBarRoot: {
+        height: 8,
+    },
+
+    progressBarBackground: {
+        backgroundColor: colours.lightgrey,
+
+    },
+
+    progressBarColor: {
+        backgroundColor: colours.black,
+
+    },
+
     swimlaneColumnList: {
-        minHeight: 133,
         width: '100%',
         flexWrap: 'nowrap',
     },
 
     swimlaneColumn: {
-        border: '2px solid lightgrey',
         width: 327,
-        minHeight: 133,
-        backgroundColor: '#EBECF0',
         flexWrap: 'nowrap',
+    },
+
+    swimlanePrettyId: {
+        color: colours.blue,
+        fontFamily: font,
+    },
+
+    swimlaneTitle: {
+        fontFamily: font,
+        fontWeight: 500,
+    },
+
+    swimlaneNumberOfSubtasks: {
+        fontFamily: font,
     },
 })
