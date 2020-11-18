@@ -68,6 +68,10 @@ export const BOARD_BY_ID = gql`
                         id
                         userName
                     }
+                    colors {
+                        id
+                        color
+                    }
                     board {
                         id
                     }

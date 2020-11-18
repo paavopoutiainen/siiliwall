@@ -5,8 +5,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
-import ColorPill from './ColorPill'
-import MemberCircle from './MemberCircle'
+import ColorPill from '../ColorPill'
+import MemberCircle from '../MemberCircle'
 
 const Task = ({
     task, index, columnId, boardId,
@@ -81,7 +81,7 @@ const Task = ({
                         <Grid item classes={{ root: classes.taskName }}>
                             <p>{add3Dots(task.title)}</p>
                         </Grid>
-                        <Grid item container direction='row' spacing={1} classes={{ root: classes.taskColorPillsGrid }}>
+                        <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {task.colors ? (
                                 task.colors.map((colorObj) => (
                                     <Grid item><ColorPill key={colorObj.id} color={colorObj.color} /></Grid>

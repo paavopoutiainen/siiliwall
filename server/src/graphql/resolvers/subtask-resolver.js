@@ -24,9 +24,9 @@ const schema = {
 
     Mutation: {
         async addSubtaskForTask(root, {
-            taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder, eventId,
+            taskId, columnId, boardId, name, content, size, ownerId, memberIds, colorIds, ticketOrder, eventId,
         }) {
-            const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder)
+            const addedSubtask = await dataSources.boardService.addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, colorIds, ticketOrder)
             pubsub.publish(SUBTASK_MUTATED, {
                 boardId,
                 eventId,
@@ -91,9 +91,9 @@ const schema = {
         },
 
         async editSubtaskById(root, {
-            id, name, content, size, ownerId, oldMemberIds, newMemberIds,
+            id, name, content, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds
         }) {
-            const editedSubtask = await dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds)
+            const editedSubtask = await dataSources.boardService.editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds)
             pubsub.publish(SUBTASK_MUTATED, {
                 boardId: editedSubtask.boardId,
                 subtaskMutated: {
@@ -124,6 +124,9 @@ const schema = {
         members(root) {
             return dataSources.boardService.getMembersBySubtaskId(root.id)
         },
+        colors(root) {
+            return dataSources.boardService.getColorsBySubtaskId(root.id)
+        }
     },
 }
 

@@ -367,7 +367,6 @@ const colors = [
     { id: 'adbb918c-de93-4a4c-8a1b-87af8afc2811', color: 'pink' },
     { id: '55c528bb-6200-4614-8177-653149de7306', color: 'purple' },
     { id: '4e935d81-665e-4efc-92b1-c22b05c5abd1', color: 'blue' },
-    { id: '4073f982-6a0d-4bb7-84c3-939477b9fd79', color: 'white' },
     { id: '516f1621-718b-4cda-9e2d-05f16c865ea8', color: 'black' },
     { id: '9a965133-5817-42b3-8b3c-ce1c453e0b88', color: 'gray' },
     { id: '99d0f5f1-6ff4-4e02-a564-fad8f3726c27', color: 'lightgrey' },
@@ -397,24 +396,39 @@ const usertasks = [
 
 const colortasks = [
     {
-        //id: 'c067dfe0-f817-40a0-b62d-f77870119e5e',
         colorId: 'ca1b1793-e569-4fb3-8498-5a36406eeca6',
         taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
     },
     {
-        //id: '2cb5262a-e627-4118-90c7-b8eba626ebcc',
         colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
         taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
     },
     {
-        //id: 'b464d673-02f1-484c-907a-4760c6dadeac',
         colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
         taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
     },
     {
-        //id: '9bd77d91-f0a2-4ca4-b60f-208891a5e477',
         colorId: '516f1621-718b-4cda-9e2d-05f16c865ea8',
         taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
+    },
+]
+
+const colorsubtasks = [
+    {
+        colorId: 'adbb918c-de93-4a4c-8a1b-87af8afc2811',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9'
+    },
+    {
+        colorId: '4e935d81-665e-4efc-92b1-c22b05c5abd1',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9'
+    },
+    {
+        colorId: 'ca1b1793-e569-4fb3-8498-5a36406eeca6',
+        subtaskId: '7ccd9f9b-a706-4fa7-a99c-d07136606840'
+    },
+    {
+        colorId: 'f7606b69-3755-497b-9ed4-206ab0712198',
+        subtaskId: '5d689892-f627-4ae3-84ab-766d45532601'
     },
 ]
 
@@ -430,5 +444,5 @@ const userSubtasks = [
 ]
 
 module.exports = {
-    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks, colors, colortasks
+    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks, colors, colortasks, colorsubtasks
 }

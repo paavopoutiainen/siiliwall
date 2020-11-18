@@ -140,7 +140,8 @@ export const boardPageStyles = makeStyles({
         marginTop: 5,
         marginLeft: 5
     },
-    taskColorPillsGrid: {
+
+    ticketColorPillsGrid: {
         marginLeft: 1.5
     },
 

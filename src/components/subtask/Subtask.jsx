@@ -1,17 +1,26 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
 import EditSubtaskDialog from './EditSubtaskDialog'
+import ColorPill from '../ColorPill'
+import MemberCircle from '../MemberCircle'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()
-    const { name } = subtask
+    const { name, members, owner } = subtask
     const nameLimit = 25
     const dots = '...'
     const [dialogStatus, setDialogStatus] = useState(false)
+
+    let subtasksOwnerAndMembers
+    if (owner) {
+        subtasksOwnerAndMembers = members.concat(owner)
+    } else {
+        subtasksOwnerAndMembers = members
+    }
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
 
@@ -60,11 +69,27 @@ const Subtask = ({ subtask, index, columnId }) => {
                             />
                         </Grid>
                     </Grid>
-                    <Grid item container direction="column" classes={{ root: classes.subtaskName }}>
-                        <Grid item>
+                    <Grid item container direction="column" spacing={1}>
+                        <Grid item classes={{ root: classes.subtaskName }}>
                             <p>{add3Dots(subtask.name)}</p>
                         </Grid>
-
+                        <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
+                            {subtask.colors ? (
+                                subtask.colors.map((colorObj) => (
+                                    <Grid item><ColorPill key={colorObj.id} color={colorObj.color} /></Grid>
+                                ))
+                            ) : null}
+                        </Grid>
+                    </Grid>
+                    <Grid item >
+                        <Divider classes={{ root: classes.taskDivider }} />
+                    </Grid>
+                    <Grid item container direction='row' justify='flex-end'>
+                        {subtasksOwnerAndMembers.length ? (
+                            subtasksOwnerAndMembers.map((personObj) => (
+                                <Grid item><MemberCircle key={personObj.id} name={personObj.userName} /></Grid>
+                            ))
+                        ) : null}
                     </Grid>
                     <EditSubtaskDialog
                         dialogStatus={dialogStatus}
@@ -74,9 +99,7 @@ const Subtask = ({ subtask, index, columnId }) => {
                     />
                 </Grid>
             )}
-
         </Draggable>
-
     )
 }
 export default Subtask
