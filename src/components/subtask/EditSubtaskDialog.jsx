@@ -6,20 +6,23 @@ import Select from 'react-select'
 import makeAnimated from 'react-select/animated'
 import useEditSubtask from '../../graphql/subtask/hooks/useEditSubtask'
 import { boardPageStyles } from '../../styles/styles'
-
+import useAllColors from '../../graphql/task/hooks/useAllColors'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 
 const EditSubtaskDialog = ({
     dialogStatus, editId, toggleDialog, subtask,
 }) => {
     const [editSubtask] = useEditSubtask()
-    const { loading, data } = useAllUsers()
+    const userQuery = useAllUsers()
+    const colorQuery = useAllColors()
     const [name, setName] = useState()
     const [size, setSize] = useState()
     const [content, setContent] = useState(subtask.content)
     const [owner, setOwner] = useState()
     const arrayOfOldMemberIds = subtask.members.map((user) => user.id)
+    const arrayOfOldColorIds = subtask?.colors?.map((color) => color.id)
     const [members, setMembers] = useState()
+    const [colors, setColors] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
 
@@ -29,9 +32,11 @@ const EditSubtaskDialog = ({
         setContent(subtask.content)
         setOwner(subtask.owner ? subtask.owner.id : null)
         setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+        setColors(subtask.colors.length > 0 ? arrayOfOldColorIds : [])
     }, [subtask])
 
-    if (loading) return null
+    if (userQuery.loading || colorQuery.loading) return null
+
     const handleOwnerChange = (action) => {
         setOwner(action != null ? action.value : null)
     }
@@ -52,8 +57,13 @@ const EditSubtaskDialog = ({
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const handleColorsChange = (event) => {
+        setColors(Array.isArray(event) ? event.map((color) => color.value) : [])
+    }
+
     const handleSave = (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         editSubtask({
             variables: {
                 id: editId,
@@ -63,6 +73,9 @@ const EditSubtaskDialog = ({
                 ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
+                oldColorIds: arrayOfOldColorIds,
+                newColorIds: colors,
+                eventId
             },
         })
         toggleDialog()
@@ -73,6 +86,7 @@ const EditSubtaskDialog = ({
         setSize(subtask?.size)
         setOwner(subtask?.owner ? subtask.owner.id : null)
         setMembers(subtask.members.length > 0 ? arrayOfOldMemberIds : [])
+        setColors(subtask.colors.length > 0 ? arrayOfOldColorIds : [])
         setContent(subtask?.content)
     }
 
@@ -85,7 +99,7 @@ const EditSubtaskDialog = ({
     const handleDialogClick = (e) => e.stopPropagation()
 
     // Modifiying userData to be of form expected by the react select component
-    const modifiedData = data.allUsers.map((user) => {
+    const modifiedUserData = userQuery.data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
@@ -94,11 +108,24 @@ const EditSubtaskDialog = ({
         const newObject = { value: user.id, label: user.userName }
         return newObject
     })
+
+    const modifiedColorData = colorQuery.data.allColors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        return newObject
+    })
+    const chosenColorsData = subtask.colors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        return newObject
+    })
+
     // data for showing only the members not yet chosen
-    const modifiedMemberOptions = modifiedData
+    const modifiedMemberOptions = modifiedUserData
         .filter((user) => !arrayOfOldMemberIds.includes(user.id))
 
-    const chosenOwnerData = modifiedData.map((user) => {
+    const modifiedColorOptions = modifiedColorData
+        .filter((color) => !arrayOfOldColorIds.includes(color.id))
+
+    const chosenOwnerData = modifiedUserData.map((user) => {
         if (user.value === owner) {
             const newObject = { value: user.value, label: user.label }
             return newObject
@@ -153,9 +180,19 @@ const EditSubtaskDialog = ({
                     />
                     <Select
                         className="selectField"
+                        closeMenuOnSelect={false}
+                        placeholder="Select colors"
+                        options={modifiedColorOptions}
+                        defaultValue={chosenColorsData}
+                        components={animatedComponents}
+                        isMulti
+                        onChange={handleColorsChange}
+                    />
+                    <Select
+                        className="selectField"
                         isClearable
                         placeholder="Select owner"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         defaultValue={chosenOwnerData}
                         onChange={handleOwnerChange}
                     />

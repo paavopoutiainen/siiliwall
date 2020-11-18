@@ -217,7 +217,7 @@ const EditTaskDialog = ({
                         components={animatedComponents}
                         isMulti
                         onChange={handleColorsChange}
-                        id="taskSelectMember"
+                        id="taskSelectColor"
                     />
                     <Select
                         className="selectField"

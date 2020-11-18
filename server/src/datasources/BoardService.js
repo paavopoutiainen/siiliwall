@@ -358,10 +358,12 @@ class BoardService {
         return task
     }
 
-    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds) {
+    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds) {
         // Logic for figuring out who was deleted and who was added as a new member for the subtask
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        const removedColorIds = oldColorIds.filter((id) => !newColorIds.includes(id))
+        const addedColors = newColorIds.filter((id) => !oldColorIds.includes(id))
         let subtask
         try {
             subtask = await this.store.Subtask.findByPk(id)
@@ -378,6 +380,17 @@ class BoardService {
                 await this.store.UserSubtask.destroy({
                     where: {
                         userId,
+                        subtaskId: subtask.id,
+                    },
+                })
+            }))
+            await Promise.all(addedColors.map(async (colorId) => {
+                await this.addColorForSubtask(subtask.id, colorId)
+            }))
+            await Promise.all(removedColorIds.map(async (colorId) => {
+                await this.store.ColorSubtask.destroy({
+                    where: {
+                        colorId,
                         subtaskId: subtask.id,
                     },
                 })
