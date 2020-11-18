@@ -43,7 +43,7 @@ export const onDragEnd = async (
                 boardId: board.id,
             },
         })
-        let msg = 'Moved Column ' + colName
+        let msg = `Moved column ${colName}`
         setSnackbarMessage(msg)
         return
     }
@@ -62,12 +62,12 @@ export const onDragEnd = async (
         if (movedTicket[0]?.type === 'task') {
             ticketName = column.tasks.filter((t) => t.id === movedTicket[0]?.ticketId)
                 .map((f) => f.title)
-            msg = 'Moved Task ' + ticketName
+            msg = `Moved task ${ticketName}`
         }
         if (movedTicket[0]?.type === 'subtask') {
             let stask = column.subtasks.map((s) => s.task)
             ticketName = stask[0]?.title
-            msg = 'Moved Subtask of ' + ticketName
+            msg = `Moved Subtask of ${ticketName}`
         }
 
         // Handle cache updates
@@ -163,10 +163,10 @@ export const onDragEnd = async (
         })
         let ticketTitle = null
         if (ticketBeingMoved.['__typename'] === 'Subtask') {
-            ticketTitle = 'Moved Subtask of ' + ticketBeingMoved.task.title
+            ticketTitle = `Moved Subtask of ${ticketBeingMoved.task.title}`
         }
         if (ticketBeingMoved.['__typename'] === 'Task') {
-            ticketTitle = 'Moved Task ' + ticketBeingMoved.title
+            ticketTitle = `Moved Task ${ticketBeingMoved.title}`
         }
         setSnackbarMessage(ticketTitle)
     }

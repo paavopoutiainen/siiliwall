@@ -11,6 +11,7 @@ import {
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const EditTaskDialog = ({
     dialogStatus, editId, toggleDialog, task,
@@ -28,6 +29,7 @@ const EditTaskDialog = ({
     const arrayOfOldMemberIds = task?.members?.map((user) => user.id)
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+    const { setSnackbarMessage } = useSnackbarContext()
 
     useEffect(() => {
         setTitle(task.title)
@@ -102,6 +104,7 @@ const EditTaskDialog = ({
             })
             toggleDialog()
         }
+        setSnackbarMessage('Changes saved')
     }
 
     const recoverState = () => {

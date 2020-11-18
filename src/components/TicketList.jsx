@@ -30,7 +30,7 @@ const TicketList = ({
                 } else if (ticket.type === 'subtask') {
                     component = (
                         <Grid item key={ticket.id}>
-                            <Subtask key={ticket.id} index={index} subtask={ticket} column={column} />
+                            <Subtask key={ticket.id} index={index} subtask={ticket} column={column} boardId={boardId} />
                         </Grid>
                     )
                 }

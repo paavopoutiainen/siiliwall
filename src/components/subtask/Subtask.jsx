@@ -7,7 +7,7 @@ import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
 import EditSubtaskDialog from './EditSubtaskDialog'
 
-const Subtask = ({ subtask, index, column }) => {
+const Subtask = ({ subtask, index, column, boardId }) => {
     const classes = boardPageStyles()
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
@@ -46,6 +46,7 @@ const Subtask = ({ subtask, index, column }) => {
                             <DropDownSubtask
                                 subtask={subtask}
                                 column={column}
+                                boardId={boardId}
                             />
                         </Grid>
                     </Grid>

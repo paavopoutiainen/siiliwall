@@ -8,6 +8,7 @@ import useEditSubtask from '../../graphql/subtask/hooks/useEditSubtask'
 import { boardPageStyles } from '../../styles/styles'
 
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const EditSubtaskDialog = ({
     dialogStatus, editId, toggleDialog, subtask,
@@ -22,6 +23,7 @@ const EditSubtaskDialog = ({
     const [members, setMembers] = useState()
     const animatedComponents = makeAnimated()
     const classes = boardPageStyles()
+    const { setSnackbarMessage } = useSnackbarContext()
 
     useEffect(() => {
         setName(subtask.name)
@@ -68,6 +70,7 @@ const EditSubtaskDialog = ({
             },
         })
         toggleDialog()
+        setSnackbarMessage('Changes saved')
     }
 
     const recoverState = () => {

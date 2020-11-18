@@ -4,12 +4,12 @@ import {
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import { Delete, Archive } from '@material-ui/icons'
+import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../AlertBox'
 import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
-import { useApolloClient } from '@apollo/client'
 
-const DropdownSubtask = ({ subtask, column }) => {
+const DropdownSubtask = ({ subtask, column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
@@ -19,19 +19,20 @@ const DropdownSubtask = ({ subtask, column }) => {
 
     const columnData = client.readFragment({
         id: columnIdForCache,
-        fragment: BOARD_ID_BY_COLUMN_ID
+        fragment: BOARD_ID_BY_COLUMN_ID,
     })
-    const boardId = columnData.board.id
-    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
-    }
+    if (!columnData) return null
 
     const openAlertDialog = (order) => {
         setAction(order)
         setAlertDialogStatus(true)
         setAnchorEl(null)
+    }
+
+    const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
+
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget)
     }
 
     return (

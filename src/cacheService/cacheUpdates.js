@@ -73,19 +73,19 @@ export const addNewTask = (addedTask) => {
     })
 }
 
-export const removeTaskFromCache = (task, column, boardId) => {
+export const removeTaskFromCache = (taskId, columnId, boardId) => {
     // Deleting task affects column's tasks list, column's ticketOrder list and board's swimlaneOrder list
     // In addition the normalized cache object is deleted itself
-    const taskToBeDeleted = `Task:${task.id}`
-    const columnIdForCache = `Column:${column.id}`
+    const taskToBeDeleted = `Task:${taskId}`
+    const columnIdForCache = `Column:${columnId}`
     const boardIdForCache = `Board:${boardId}`
     const { ticketOrder, tasks } = client.readFragment({
         id: columnIdForCache,
         fragment: TICKETORDER_AND_TASKS,
     })
 
-    const newTicketOrder = ticketOrder.filter((taskObj) => taskObj.ticketId !== task.id)
-    const newTasks = tasks.filter((task) => task.id !== task.id)
+    const newTicketOrder = ticketOrder.filter((taskObj) => taskObj.ticketId !== taskId)
+    const newTasks = tasks.filter((task) => task.id !== taskId)
     client.writeFragment({
         id: columnIdForCache,
         fragment: TICKETORDER_AND_TASKS,
@@ -99,7 +99,7 @@ export const removeTaskFromCache = (task, column, boardId) => {
         id: boardIdForCache,
         fragment: SWIMLANE_ORDER,
     })
-    const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== task.id)
+    const newSwimlaneOrder = swimlaneOrder.filter((id) => id !== taskId)
     client.writeFragment({
         id: boardIdForCache,
         fragment: SWIMLANE_ORDER,

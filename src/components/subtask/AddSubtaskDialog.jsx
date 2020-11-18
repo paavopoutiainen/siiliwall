@@ -8,6 +8,7 @@ import '../../styles.css'
 import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragments'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, boardId }) => {
     const { loading, data } = useAllUsers()
@@ -20,6 +21,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, bo
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
     const [inputColumnId, setInputColumnId] = useState(null)
+    const { setSnackbarMessage } = useSnackbarContext()
 
     const { columns, columnOrder } = client.cache.readFragment({
         id: `Board:${boardId}`,
@@ -90,6 +92,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, bo
         })
         emptyState()
         toggleAddDialog(event)
+        setSnackbarMessage('New subtask created')
     }
 
     const handleCancel = (e) => {

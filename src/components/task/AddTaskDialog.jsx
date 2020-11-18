@@ -10,6 +10,7 @@ import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import useAddTask from '../../graphql/task/hooks/useAddTask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
+import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
 const AddTaskDialog = ({
     dialogStatus, column, toggleDialog, boardId,
@@ -25,6 +26,7 @@ const AddTaskDialog = ({
     const [sizeError, setSizeError] = useState('')
     const [titleError, setTitleError] = useState('')
     const [descriptionError, setDescriptionError] = useState('')
+    const { setSnackbarMessage } = useSnackbarContext()
 
     if (loading) return null
 
@@ -100,6 +102,7 @@ const AddTaskDialog = ({
             emptyState()
             toggleDialog()
         }
+        setSnackbarMessage('New task created')
     }
 
     const handleCancel = () => {

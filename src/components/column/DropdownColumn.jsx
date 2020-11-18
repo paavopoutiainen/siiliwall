@@ -14,11 +14,12 @@ const DropdownColumn = ({ column, boardId }) => {
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const client = useApolloClient()
 
-    const { ticketOrder } = client.readFragment({
+    const data = client.readFragment({
         id: `Column:${column.id}`,
         fragment: TICKETORDER,
     })
-    const hasTickets = ticketOrder.length
+    if (!data) return null
+    const hasTickets = data.ticketOrder.length
 
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
