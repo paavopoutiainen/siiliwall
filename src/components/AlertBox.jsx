@@ -171,7 +171,7 @@ const AlertBox = ({
             deleteColumn()
         }
         if (action === 'DELETE_SUBTASK') {
-            deleteSubtask(columnId, subtaskId)
+            deleteSubtask(subtaskId, columnId)
         }
     }
 
@@ -184,7 +184,7 @@ const AlertBox = ({
             archiveTaskById()
         }
         if (action === 'ARCHIVE_SUBTASK') {
-            archiveSubtaskById(subtaskId)
+            archiveSubtaskById(subtaskId, columnId)
         }
     }
 
