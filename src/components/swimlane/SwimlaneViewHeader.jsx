@@ -7,7 +7,7 @@ const SwimlaneViewHeader = ({ columns }) => {
 
     return (
         <Grid container direction="row" justify="space-evenly" classes={{ root: classes.swimlaneColumnNames }}>
-            {columns.map((column) => <Grid item classes={{ root: classes.swimlaneColumnName }} key={column.id}><h3>{column.name}</h3></Grid>)}
+            {columns.map((column) => <Grid item classes={{ root: classes.swimlaneColumnName }} key={column.id}><b>{column.name}</b></Grid>)}
         </Grid>
     )
 }

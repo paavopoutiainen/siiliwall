@@ -20,11 +20,11 @@ const SwimlaneHeaderRow = ({
                         <ExpandMoreIcon />
                     </IconButton>
                 </Grid>
-                <Grid item><p style={{ color: '#3232FF' }}>{prettyId}</p></Grid>
-                <Grid item><p>{title}</p></Grid>
+                <Grid item classes={{ root: classes.swimlanePrettyId }}><p>{prettyId}</p></Grid>
+                <Grid item classes={{ root: classes.swimlaneTitle }}><p>{title}</p></Grid>
             </Grid>
             <Grid item container spacing={3} classes={{ root: classes.swimlaneHeaderRowRight }} justify="flex-end">
-                <Grid item>{numberOfSubtasks}</Grid>
+                <Grid item classes={{ root: classes.swimlaneNumberOfSubtasks }}>{numberOfSubtasks}</Grid>
                 <Grid item classes={{ root: classes.taskDropdownButtonSwimlane }} onClick={(e) => handleDialogClick(e)}>
                     <DropdownTask
                         task={task}

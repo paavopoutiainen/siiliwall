@@ -7,12 +7,9 @@ const SwimlaneHeader = ({ prettyId, title }) => {
 
     return (
         <Grid container direction="row" classes={{ root: classes.swimlaneHeader }}>
-            <Grid item classes={{ root: classes.swimlaneTitle }}>
-                <h3>
-                    {prettyId}
-                    {'   '}
-                    {title}
-                </h3>
+            <Grid item container direction="row" classes={{ root: classes.swimlaneTitle }}>
+                <Grid item><p>{prettyId}</p></Grid>
+                <Grid item><b>{title}</b></Grid>
             </Grid>
         </Grid>
     )

@@ -11,7 +11,7 @@ const ProgressBarComponent = ({ percentage }) => {
     }, [])
 
     return (
-        <div>
+        <>
             <LinearProgress
                 variant="determinate"
                 value={progress}
@@ -21,7 +21,7 @@ const ProgressBarComponent = ({ percentage }) => {
                     barColorPrimary: classes.progressBarColor,
                 }}
             />
-        </div>
+        </>
     )
 }
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, IconButton,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import {
     Delete, Archive, Add,
@@ -63,28 +62,30 @@ const DropdownTask = ({
         setAnchorEl(null)
     }
     return (
-        <Grid item classes={{ root: classes.taskDropdownComponent }}>
+        <Grid item container direction="row" justify="flex-end" alignItems="center">
+            <Grid>
+                {calledFromSwimlane
+                    ? (
+                        <IconButton
+                            aria-owns={anchorEl ? 'simple-menu' : undefined}
+                            aria-haspopup="true"
+                            onClick={(e) => handleClick(e)}
+                        >
+                            <MoreVertIcon />
+                        </IconButton>
+                    )
+                    : (
+                        <Button
+                            aria-owns={anchorEl ? 'simple-menu' : undefined}
+                            aria-haspopup="true"
+                            onClick={handleClick}
+                            classes={{ root: classes.taskDropdownButton }}
+                        >
+                            <MoreVertIcon classes={{ root: classes.taskButtonIcons }} />
+                        </Button>
+                    )}
+            </Grid>
 
-            {calledFromSwimlane
-                ? (
-                    <IconButton
-                        aria-owns={anchorEl ? 'simple-menu' : undefined}
-                        aria-haspopup="true"
-                        onClick={(e) => handleClick(e)}
-                    >
-                        <MoreVertIcon />
-                    </IconButton>
-                )
-                : (
-                    <Button
-                        aria-owns={anchorEl ? 'simple-menu' : undefined}
-                        aria-haspopup="true"
-                        onClick={(e) => handleClick(e)}
-                        classes={{ root: classes.taskDropdownButton }}
-                    >
-                        <MoreHorizIcon fontSize="large" />
-                    </Button>
-                )}
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
