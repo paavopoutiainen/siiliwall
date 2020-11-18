@@ -11,6 +11,7 @@ import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInCol
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveSwimlane from '../../graphql/task/hooks/useMoveSwimlane'
 import AddTaskDialog from '../task/AddTaskDialog'
+import { swimlaneStyles } from '../../styles/styles'
 
 const SwimlaneView = ({ board }) => {
     // Modifying data's form to match the needs of swimlane components
@@ -24,6 +25,7 @@ const SwimlaneView = ({ board }) => {
     const [dialogStatus, setDialogStatus] = useState(false)
     const toggleDialog = () => setDialogStatus(!dialogStatus)
     const client = useApolloClient()
+    const classes = swimlaneStyles()
 
     const { columns, swimlaneOrder } = board
     let tasks = []
@@ -67,19 +69,31 @@ const SwimlaneView = ({ board }) => {
     })
 
     const handleShowClick = () => {
-        setShowAll(!showAll)
+        setShowAll(true)
     }
+
+    const handleHideClick = () => {
+        setShowAll(false)
+    }
+
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
-            <Grid container direction="column">
-                <Grid item><SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} /></Grid>
-                <Grid container item>
-                    <Grid item>
-                        <Button size="small" variant="outlined" onClick={() => handleShowClick()} disabled={tasks.length === 0}>{showAll ? 'Hide all' : 'Show all'}</Button>
+            <Grid container direction="column" spacing={2} classes={{ root: classes.root }}>
+                <Grid item container direction='row'>
+                    <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
+                        <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>
                     </Grid>
-                    <Grid item>
-                        <Button size="small" variant="outlined" onClick={() => toggleDialog()} disabled={columns.length === 0}>Add task</Button>
+                    <Grid item container classes={{ root: classes.swimlaneToggleSwimlanesButtonGrid }} justify='flex-end' spacing={1}>
+                        <Grid item>
+                            <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }}>Hide all swimlanes</Button>
+                        </Grid>
+                        <Grid item>
+                            <Button onClick={() => handleShowClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneShowButton }}>Expand all swimlanes</Button>
+                        </Grid>
                     </Grid>
+                </Grid>
+                <Grid item>
+                    <SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} />
                 </Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (

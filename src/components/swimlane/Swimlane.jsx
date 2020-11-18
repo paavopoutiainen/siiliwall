@@ -18,7 +18,6 @@ const Swimlane = ({
     const toggleEditTaskDialog = () => {
         setEditTaskDialogStatus(!editTaskDialogStatus)
     }
-
     // Calculate the percentage for progressBar
     const percentageForProgressBar = ((task.swimlaneColumns
         .findIndex((swimlaneColumn) => swimlaneColumn.id === task.column.id) + 1) / task.swimlaneColumns.length) * 100

@@ -279,6 +279,37 @@ export const boardPageStyles = makeStyles({
 })
 
 export const swimlaneStyles = makeStyles({
+    root: {
+        minWidth: '96vw'
+    },
+
+    swimlaneAddButtonGrid: {
+        width: '20%'
+    },
+
+    swimlaneToggleSwimlanesButtonGrid: {
+        width: '80%'
+    },
+
+    swimlaneAddTaskButton: {
+        color: colours.blue,
+        marginLeft: 5,
+        fontFamily: font,
+        fontSize: 14
+    },
+    swimlaneHideButton: {
+        color: colours.blue,
+        fontFamily: font,
+        fontSize: 14
+    },
+
+    swimlaneShowButton: {
+        color: colours.blue,
+        marginRight: 5,
+        fontFamily: font,
+        fontSize: 14
+    },
+
     swimlaneColumnNames: {
         width: '100%',
         flexWrap: 'nowrap',
