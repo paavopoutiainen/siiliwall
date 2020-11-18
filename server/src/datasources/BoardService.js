@@ -319,7 +319,7 @@ class BoardService {
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
         const removedColorIds = oldColorIds.filter((id) => !newColorIds.includes(id))
-        const addedColors = newColorIds.filter((id) => !oldMemberIds.includes(id))
+        const addedColors = newColorIds.filter((id) => !oldColorIds.includes(id))
         let task
 
         try {

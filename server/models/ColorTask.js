@@ -7,6 +7,7 @@ module.exports = (sequelize, DataTypes) => {
                 model: 'Color',
                 key: 'id',
             },
+            primaryKey: true,
         },
         taskId: {
             type: DataTypes.UUID,
@@ -15,6 +16,7 @@ module.exports = (sequelize, DataTypes) => {
                 model: 'Task',
                 key: 'id',
             },
+            primaryKey: true,
         },
     })
 

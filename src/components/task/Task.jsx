@@ -84,7 +84,7 @@ const Task = ({
                         <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
                             {task.colors ? (
                                 task.colors.map((colorObj) => (
-                                    <Grid item><ColorPill key={colorObj.id} color={colorObj.color} /></Grid>
+                                    <Grid item key={colorObj.id}><ColorPill color={colorObj.color} /></Grid>
                                 ))
                             ) : null}
                         </Grid>
@@ -97,7 +97,7 @@ const Task = ({
                     <Grid item container direction='row' justify='flex-end'>
                         {tasksOwnerAndMembers.length ? (
                             tasksOwnerAndMembers.map((personObj) => (
-                                <Grid item><MemberCircle key={personObj.id} name={personObj.userName} /></Grid>
+                                <Grid item key={personObj.id}><MemberCircle name={personObj.userName} /></Grid>
                             ))
                         ) : null}
                     </Grid>
