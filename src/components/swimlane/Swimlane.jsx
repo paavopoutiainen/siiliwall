@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { Grid, Button } from '@material-ui/core'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore'
 import { Draggable } from 'react-beautiful-dnd'
+import Divider from '@material-ui/core/Divider'
 import { swimlaneStyles } from '../../styles/styles'
 import SwimlaneHeader from './SwimlaneHeader'
 import SwimlaneColumnList from './SwimlaneColumnList'
@@ -26,6 +27,7 @@ const Swimlane = ({
     // Calculate the percentage for progressBar
     const percentageForProgressBar = ((task.swimlaneColumns
         .findIndex((swimlaneColumn) => swimlaneColumn.id === task.column.id) + 1) / task.swimlaneColumns.length) * 100
+
     const toggleAddDialog = (e) => {
         e.stopPropagation()
         setAddDialogStatus(!addDialogStatus)
@@ -43,6 +45,7 @@ const Swimlane = ({
 
     const numberOfSubtasks = task.swimlaneColumns
         .reduce((acc, cur) => parseInt(acc + cur.subtasks.length, 10), 0)
+
     return (
         <Draggable draggableId={task.id} index={index}>
             {(provided) => (
@@ -61,25 +64,16 @@ const Swimlane = ({
                         columnId={task?.column?.id}
                         prettyId={task.prettyId}
                         title={task.title}
-                        s
                         numberOfSubtasks={numberOfSubtasks}
                         handleShowClick={handleShowClick}
                     />
-
                     {show
                         && (
-                            <Grid item>
-                                <hr
-                                    style={{
-                                        color: '#f7f7f7',
-                                        backgroundColor: '#f7f7f7',
-                                        height: 0.3,
-                                    }}
-                                />
+                            <Grid item classes={{ root: classes.test }}>
+                                <Divider />
                                 <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
                             </Grid>
                         )}
-
                     <AddSubtaskDialog
                         addDialogStatus={addDialogStatus}
                         toggleAddDialog={toggleAddDialog}

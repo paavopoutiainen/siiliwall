@@ -2,34 +2,44 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
 import { Droppable } from 'react-beautiful-dnd'
+import Divider from '@material-ui/core/Divider'
 import { swimlaneStyles } from '../../styles/styles'
 import Subtask from '../subtask/Subtask'
 
-const SwimlaneColumn = ({ swimlaneColumn, taskId }) => {
+const SwimlaneColumn = ({
+    swimlaneColumn, taskId, isTheLeftMost, mostSubtasks,
+}) => {
     const { subtasks } = swimlaneColumn
     const classes = swimlaneStyles()
+    const heightOfTheDivider = mostSubtasks > 1 ? mostSubtasks * 125 : 1 * 125
 
     const idForDroppable = `${swimlaneColumn.id}${taskId}`
     return (
-        <Droppable droppableId={idForDroppable} type="subtask">
-            {(provided) => (
-                <Grid
-                    container
-                    {...provided.droppableProps}
-                    ref={provided.innerRef}
-                    classes={{ root: classes.swimlaneColumn }}
-                    direction="column"
-                    spacing={2}
-                >
-                    {subtasks.map((subtask) => (
-                        <Grid item key={subtask.id}>
-                            <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
-                        </Grid>
-                    ))}
-                    {provided.placeholder}
-                </Grid>
+        <Grid container direction="row">
+            <Droppable droppableId={idForDroppable} type="subtask">
+                {(provided) => (
+                    <Grid
+                        item
+                        container
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        classes={{ root: classes.swimlaneColumn }}
+                        direction="column"
+                    >
+                        {subtasks.map((subtask) => (
+                            <Grid item key={subtask.id}>
+                                <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
+                            </Grid>
+                        ))}
+                        {provided.placeholder}
+
+                    </Grid>
+                )}
+            </Droppable>
+            {!isTheLeftMost && (
+                <Divider style={{ height: heightOfTheDivider }} orientation="vertical" />
             )}
-        </Droppable>
+        </Grid>
 
     )
 }

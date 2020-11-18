@@ -5,17 +5,23 @@ import SwimlaneColumn from './SwimlaneColumn'
 
 const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
     const classes = swimlaneStyles()
+    const mostSubtasks = Math.max(...swimlaneColumns.map((swimlaneColumn) => swimlaneColumn.subtasks.length))
+    console.log(mostSubtasks)
     return (
         <Grid
             container
             direction="row"
             justify="space-evenly"
-            spacing={1}
             classes={{ root: classes.swimlaneColumnList }}
         >
             {swimlaneColumns.map((swimlaneColumn, index) => (
                 <Grid item key={swimlaneColumn.id}>
-                    <SwimlaneColumn swimlaneColumn={swimlaneColumn} taskId={taskId} />
+                    <SwimlaneColumn
+                        swimlaneColumn={swimlaneColumn}
+                        taskId={taskId}
+                        isTheLeftMost={index === swimlaneColumns.length - 1}
+                        mostSubtasks={mostSubtasks}
+                    />
                 </Grid>
             ))}
         </Grid>

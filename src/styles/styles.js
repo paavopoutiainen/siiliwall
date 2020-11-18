@@ -198,6 +198,7 @@ export const swimlaneStyles = makeStyles({
 
     swimlane: {
         backgroundColor: '#F5F5F5',
+        minWidth: 500,
     },
 
     swimlaneHeaderRow: {
@@ -205,14 +206,14 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneHeaderRowLeft: {
-        width: '50%',
+        width: '80%',
         marginLeft: 5,
         alignItems: 'center',
     },
 
     swimlaneHeaderRowRight: {
-        width: '50%',
-        marginRight: 5,
+        width: '20%',
+        marginRight: 0,
         alignItems: 'center',
     },
 
@@ -221,15 +222,33 @@ export const swimlaneStyles = makeStyles({
         width: '100%',
     },
 
+    progressBarRoot: {
+        height: 8,
+    },
+
+    progressBarBackground: {
+        backgroundColor: '#E3E3E3',
+
+    },
+
+    progressBarColor: {
+        backgroundColor: '#000000',
+
+    },
+
+    progressBar: {
+        backgroundColor: '#E3E3E3',
+    },
+
     swimlaneColumnList: {
-        minHeight: 133,
         width: '100%',
         flexWrap: 'nowrap',
     },
 
     swimlaneColumn: {
         width: 327,
-        minHeight: 133,
         flexWrap: 'nowrap',
+    },
+    test: {
     },
 })
