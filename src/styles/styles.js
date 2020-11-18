@@ -10,7 +10,7 @@ const colours = {
     white: '#FFFFFF',
     black: '#000000',
     gray: '#949494',
-    lightgrey: '#E3E3E3'
+    lightgrey: '#E3E3E3',
 }
 
 const font = 'Arial Regular'
@@ -68,7 +68,7 @@ export const boardPageStyles = makeStyles({
     // BOARD STYLES
     boardHeader: {
         width: '100%',
-        fontFamily: font
+        fontFamily: font,
     },
 
     addColumn: {
@@ -88,16 +88,16 @@ export const boardPageStyles = makeStyles({
 
     columnHeader: {
         flexWrap: 'nowrap',
-        marginTop: 10
+        marginTop: 10,
     },
 
     columnName: {
         fontFamily: font,
-        fontWeight: 'lighter'
+        fontWeight: 'lighter',
     },
 
     columnButtonGrid: {
-        width: 150
+        width: 150,
     },
 
     columnButtonIcons: {
@@ -107,11 +107,11 @@ export const boardPageStyles = makeStyles({
     },
 
     columnButton: {
-        minWidth: 30
+        minWidth: 30,
     },
 
     dropDownColumn: {
-        width: 18
+        width: 18,
     },
 
     // TASK STYLES
@@ -119,52 +119,52 @@ export const boardPageStyles = makeStyles({
         minHeight: 115,
         borderRadius: 4,
         backgroundColor: colours.white,
-        width: 320
+        width: 320,
     },
 
     taskButtonIcons: {
         fontSize: 22,
-        color: colours.white
+        color: colours.white,
     },
 
     taskDropdownButton: {
-        minWidth: 30
+        minWidth: 30,
     },
 
     taskHeader: {
         background: colours.black,
         flexWrap: 'nowrap',
         color: colours.white,
-        height: 30
+        height: 30,
     },
 
     taskTitle: {
         color: colours.white,
         fontSize: 12,
         marginLeft: 5,
-        fontFamily: font
+        fontFamily: font,
     },
 
     taskName: {
         fontSize: 18,
         marginTop: 5,
         marginLeft: 5,
-        fontFamily: font
+        fontFamily: font,
     },
 
     ticketColorPillsGrid: {
-        marginLeft: 1.5
+        marginLeft: 1.5,
     },
 
     colorPill: {
         borderRadius: 20,
         height: 13,
-        width: 46
+        width: 46,
     },
 
     ticketDivider: {
         marginLeft: -4,
-        marginRight: -3
+        marginRight: -3,
     },
 
     memberCircle: {
@@ -173,26 +173,26 @@ export const boardPageStyles = makeStyles({
         width: 32,
         textAlign: 'center',
         backgroundColor: colours.lightgrey,
-        fontFamily: font
+        fontFamily: font,
     },
 
     // SUBTASK STYLES
     subtaskComponent: {
         backgroundColor: '#fff',
         minHeight: 115,
-        width: 320
+        width: 320,
     },
 
     subtaskHeader: {
         backgroundColor: colours.lightgrey,
         flexWrap: 'nowrap',
-        height: 33
+        height: 33,
     },
 
     subtaskTitle: {
         fontSize: 14,
         marginLeft: 5,
-        fontFamily: font
+        fontFamily: font,
     },
 
     subtaskHeaderTitleItem: {
@@ -203,12 +203,12 @@ export const boardPageStyles = makeStyles({
         fontSize: 18,
         marginTop: 5,
         marginLeft: 5,
-        fontFamily: font
+        fontFamily: font,
     },
 
     subtaskDropdownGrid: {
         height: 30,
-        minWidth: 30
+        minWidth: 30,
     },
 
     subtaskButtonIcons: {
@@ -216,7 +216,7 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskDropdownButton: {
-        minWidth: 30
+        minWidth: 30,
     },
 
     subtaskContentAndName: {
@@ -297,11 +297,11 @@ export const swimlaneStyles = makeStyles({
     swimlaneTitle: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         width: '100%',
-        fontFamily: font
+        fontFamily: font,
     },
 
     subtaskText: {
-        fontFamily: font
+        fontFamily: font,
     },
 
     swimlaneColumnList: {
