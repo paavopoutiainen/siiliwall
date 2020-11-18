@@ -13,6 +13,8 @@ const colours = {
     lightgrey: '#E3E3E3'
 }
 
+const font = 'Arial Regular'
+
 export const projectPageStyles = makeStyles({
     root: {
         minHeight: '100vh',
@@ -66,6 +68,7 @@ export const boardPageStyles = makeStyles({
     // BOARD STYLES
     boardHeader: {
         width: '100%',
+        fontFamily: font
     },
 
     addColumn: {
@@ -86,6 +89,11 @@ export const boardPageStyles = makeStyles({
     columnHeader: {
         flexWrap: 'nowrap',
         marginTop: 10
+    },
+
+    columnName: {
+        fontFamily: font,
+        fontWeight: 'lighter'
     },
 
     columnButtonGrid: {
@@ -132,13 +140,16 @@ export const boardPageStyles = makeStyles({
 
     taskTitle: {
         color: colours.white,
-        fontSize: 12
+        fontSize: 12,
+        marginLeft: 5,
+        fontFamily: font
     },
 
     taskName: {
-        fontSize: 20,
+        fontSize: 18,
         marginTop: 5,
-        marginLeft: 5
+        marginLeft: 5,
+        fontFamily: font
     },
 
     ticketColorPillsGrid: {
@@ -162,6 +173,7 @@ export const boardPageStyles = makeStyles({
         width: 32,
         textAlign: 'center',
         backgroundColor: colours.lightgrey,
+        fontFamily: font
     },
 
     // SUBTASK STYLES
@@ -176,8 +188,11 @@ export const boardPageStyles = makeStyles({
         flexWrap: 'nowrap',
         height: 33
     },
+
     subtaskTitle: {
-        fontSize: 14
+        fontSize: 14,
+        marginLeft: 5,
+        fontFamily: font
     },
 
     subtaskHeaderTitleItem: {
@@ -185,9 +200,10 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskName: {
-        fontSize: 20,
+        fontSize: 18,
         marginTop: 5,
-        marginLeft: 5
+        marginLeft: 5,
+        fontFamily: font
     },
 
     subtaskDropdownGrid: {
@@ -270,6 +286,7 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumnName: {
         textAlign: 'center',
         width: 335,
+        fontFamily: font,
     },
 
     swimlane: {
@@ -280,6 +297,11 @@ export const swimlaneStyles = makeStyles({
     swimlaneTitle: {
         background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
         width: '100%',
+        fontFamily: font
+    },
+
+    subtaskText: {
+        fontFamily: font
     },
 
     swimlaneColumnList: {

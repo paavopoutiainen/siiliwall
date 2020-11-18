@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import EditText from 'react-editext'
+import { Grid } from '@material-ui/core'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
 import { boardPageStyles } from '../../styles/styles'
 
@@ -18,18 +19,20 @@ const RenameColumn = ({ editId, column }) => {
     }
 
     return (
-        <EditText
-            showButtonsOnHover
-            submitOnEnter
-            cancelOnEscape
-            editOnViewClick
-            cancelOnUnfocus
-            type="text"
-            value={name}
-            onSave={handleSave}
-            validationMessage="Name has to have 1 or more characters"
-            validation={(val) => val.length > 0}
-        />
+        <Grid item classes={{ root: classes.columnName }}>
+            <EditText
+                showButtonsOnHover
+                submitOnEnter
+                cancelOnEscape
+                editOnViewClick
+                cancelOnUnfocus
+                type="text"
+                value={name}
+                onSave={handleSave}
+                validationMessage="Name has to have 1 or more characters"
+                validation={(val) => val.length > 0}
+            />
+        </Grid>
     )
 }
 
