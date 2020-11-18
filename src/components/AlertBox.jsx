@@ -83,8 +83,6 @@ const AlertBox = ({
     }
 
     const archiveTaskById = () => {
-        // Handle cache
-        removeTaskFromCache(task, column, boardId)
         // Find the related subtasks and archive them
         const boardIdForCache = `Board:${boardId}`
         const columnData = client.readFragment({
@@ -92,7 +90,6 @@ const AlertBox = ({
             fragment: COLUMNORDER_AND_COLUMNS,
         })
         // Handle cache
-
         const columnsSubtasks = columnData.columns.map((column) => column.subtasks).flat()
         const subtasksToBeDeleted = columnsSubtasks.filter((subtask) => subtask.task.id === task.id)
         subtasksToBeDeleted.map((subtask) => archiveSubtaskById(subtask.id, subtask.column.id))
@@ -133,7 +130,7 @@ const AlertBox = ({
         setSnackbarMessage(`Subtask ${subtask.prettyId} deleted`)
     }
 
-    const archiveSubtaskById = (subtask.id, column.id) => {
+    const archiveSubtaskById = () => {
         removeSubtaskFromCache(subtask.id, column.id)
         archiveSubtask({
             variables: {
@@ -158,7 +155,7 @@ const AlertBox = ({
         const subtasksToBeDeleted = allSubtasks.filter((subtask) => subtask.task.id === task.id)
         subtasksToBeDeleted.map((subtask) => deleteSubtask(subtask.id, subtask.column.id))
         // Remove task from cache
-        removeTaskFromCache(taskId, columnId, boardId)
+        removeTaskFromCache(task.id, column.id, boardId)
         // Send mutation
         callDeleteTask({
             variables: {
