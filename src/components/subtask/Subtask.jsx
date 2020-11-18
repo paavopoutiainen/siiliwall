@@ -82,7 +82,9 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                     </Grid>
                     <Grid item >
-                        <Divider classes={{ root: classes.taskDivider }} />
+                        {subtasksOwnerAndMembers.length ? (
+                            <Divider classes={{ root: classes.ticketDivider }} />
+                        ) : null}
                     </Grid>
                     <Grid item container direction='row' justify='flex-end'>
                         {subtasksOwnerAndMembers.length ? (

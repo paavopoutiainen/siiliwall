@@ -7,6 +7,12 @@ const SUBTASK_REMOVED = 'SUBTASK_REMOVED'
 
 const schema = {
 
+    Query: {
+        allColors() {
+            return dataSources.boardService.getColors()
+        },
+    },
+
     Subscription: {
         subtaskMutated: {
             subscribe: withFilter(

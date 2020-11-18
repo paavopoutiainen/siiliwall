@@ -8,9 +8,11 @@ import '../../styles.css'
 import useAddSubtask from '../../graphql/subtask/hooks/useAddSubtask'
 import useAllUsers from '../../graphql/user/hooks/useAllUsers'
 import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragments'
+import useAllColors from '../../graphql/task/hooks/useAllColors'
 
 const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, boardId }) => {
-    const { loading, data } = useAllUsers()
+    const userQuery = useAllUsers()
+    const colorQuery = useAllColors()
     const classes = boardPageStyles()
     const [addSubtask] = useAddSubtask()
     const client = useApolloClient()
@@ -19,13 +21,15 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
     const [content, setContent] = useState('')
     const [owner, setOwner] = useState(null)
     const [members, setMembers] = useState([])
+    const [colors, setColors] = useState([])
     const [inputColumnId, setInputColumnId] = useState(null)
 
     const { columns, columnOrder } = client.cache.readFragment({
         id: `Board:${boardId}`,
         fragment: BOARDS_COLUMNS_AND_COLUMNORDER,
     })
-    if (loading) return null
+    if (userQuery.loading || colorQuery.loading) return null
+
     const columnOfParentTask = columns.find((col) => col.id === columnId)?.name
 
     const handleNameChange = (event) => {
@@ -52,6 +56,10 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         setMembers(Array.isArray(event) ? event.map((user) => user.value) : [])
     }
 
+    const handleColorsChange = (event) => {
+        setColors(Array.isArray(event) ? event.map((user) => user.value) : [])
+    }
+
     const handleColumnChange = (action) => {
         setInputColumnId(action.value)
     }
@@ -63,6 +71,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         setOwner(null)
         setInputColumnId(null)
         setMembers([])
+        setColors([])
     }
 
     const handleSave = (event) => {
@@ -81,6 +90,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                 boardId,
                 ownerId: owner,
                 memberIds: members,
+                colorIds: colors,
                 name,
                 content,
                 size,
@@ -97,8 +107,13 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
         toggleAddDialog(e)
     }
 
-    const modifiedData = data.allUsers.map((user) => {
+    const modifiedUserData = userQuery.data.allUsers.map((user) => {
         const newObject = { value: user.id, label: user.userName }
+        return newObject
+    })
+
+    const modifiedColorData = colorQuery.data.allColors.map((color) => {
+        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
         return newObject
     })
 
@@ -151,16 +166,24 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
                         onChange={handleSizeChange}
                     />
                     <Select
+                        isMulti
+                        className="selectField"
+                        placeholder="Select colors"
+                        options={modifiedColorData}
+                        onChange={handleColorsChange}
+                        closeMenuOnSelect={false}
+                    />
+                    <Select
                         className="selectField"
                         placeholder="Select owner"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         onChange={handleOwnerChange}
                     />
                     <Select
                         isMulti
                         className="selectField"
                         placeholder="Select members"
-                        options={modifiedData}
+                        options={modifiedUserData}
                         onChange={handleMembersChange}
                         closeMenuOnSelect={false}
                     />

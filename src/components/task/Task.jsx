@@ -90,7 +90,9 @@ const Task = ({
                         </Grid>
                     </Grid>
                     <Grid item >
-                        <Divider classes={{ root: classes.taskDivider }} />
+                        {tasksOwnerAndMembers.length ? (
+                            <Divider classes={{ root: classes.ticketDivider }} />
+                        ) : null}
                     </Grid>
                     <Grid item container direction='row' justify='flex-end'>
                         {tasksOwnerAndMembers.length ? (

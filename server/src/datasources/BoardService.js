@@ -666,8 +666,23 @@ class BoardService {
         return task
     }
 
+    async addColorForSubtask(subtaskId, colorId) {
+        let subtask
+        try {
+            await this.store.ColorSubtask.create({
+                id: uuid(),
+                colorId,
+                subtaskId
+            })
+            subtask = await this.store.Subtask.findByPk(subtaskId)
+        } catch (e) {
+            console.log(e)
+        }
+        return subtask
+    }
+
     async addSubtaskForTask(
-        taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder,
+        taskId, columnId, boardId, name, content, size, ownerId, memberIds, colorIds, ticketOrder,
     ) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
@@ -709,6 +724,11 @@ class BoardService {
             await Promise.all(
                 memberIds.map(async (memberId) => {
                     await this.addMemberForSubtask(addedSubtask.id, memberId)
+                }),
+            )
+            await Promise.all(
+                colorIds.map(async (colorId) => {
+                    await this.addColorForSubtask(addedSubtask.id, colorId)
                 }),
             )
         } catch (e) {

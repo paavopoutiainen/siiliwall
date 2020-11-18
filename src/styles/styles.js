@@ -151,7 +151,7 @@ export const boardPageStyles = makeStyles({
         width: 46
     },
 
-    taskDivider: {
+    ticketDivider: {
         marginLeft: -4,
         marginRight: -3
     },
