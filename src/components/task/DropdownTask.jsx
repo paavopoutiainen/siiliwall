@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
+    Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid, IconButton,
 } from '@material-ui/core'
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import {
     Delete, Archive, Add,
 } from '@material-ui/icons'
@@ -13,7 +14,7 @@ import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
-    columnId, task, boardId,
+    columnId, task, boardId, calledFromSwimlane,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
@@ -23,14 +24,16 @@ const DropdownTask = ({
     const classes = boardPageStyles()
     const client = useApolloClient()
 
-    const toggleAddDialog = () => {
+    const toggleAddDialog = (e) => {
+        e.stopPropagation()
         setAnchorEl(null)
         setAddDialogStatus(!addDialogStatus)
     }
     const toggleAlertDialog = () => setAlertDialogStatus(!alertDialogStatus)
 
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget)
+    const handleClick = (e) => {
+        e.stopPropagation()
+        setAnchorEl(e.currentTarget)
     }
 
     const openAlertDialog = (order) => {
@@ -61,14 +64,27 @@ const DropdownTask = ({
     }
     return (
         <Grid item classes={{ root: classes.taskDropdownComponent }}>
-            <Button
-                aria-owns={anchorEl ? 'simple-menu' : undefined}
-                aria-haspopup="true"
-                onClick={handleClick}
-                classes={{ root: classes.taskDropdownButton }}
-            >
-                <MoreHorizIcon fontSize="large" />
-            </Button>
+
+            {calledFromSwimlane
+                ? (
+                    <IconButton
+                        aria-owns={anchorEl ? 'simple-menu' : undefined}
+                        aria-haspopup="true"
+                        onClick={(e) => handleClick(e)}
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+                )
+                : (
+                    <Button
+                        aria-owns={anchorEl ? 'simple-menu' : undefined}
+                        aria-haspopup="true"
+                        onClick={(e) => handleClick(e)}
+                        classes={{ root: classes.taskDropdownButton }}
+                    >
+                        <MoreHorizIcon fontSize="large" />
+                    </Button>
+                )}
             <Menu
                 id="simple-menu"
                 anchorEl={anchorEl}
@@ -79,7 +95,7 @@ const DropdownTask = ({
                 getContentAnchorEl={null}
                 elevation={0}
             >
-                <MenuItem onClick={toggleAddDialog}>
+                <MenuItem onClick={(e) => toggleAddDialog(e)}>
                     <ListItemIcon>
                         <Add />
                     </ListItemIcon>

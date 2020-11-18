@@ -199,6 +199,7 @@ export const swimlaneStyles = makeStyles({
     swimlane: {
         backgroundColor: '#F5F5F5',
         minWidth: 500,
+        marginBottom: 14,
     },
 
     swimlaneHeaderRow: {
@@ -249,6 +250,9 @@ export const swimlaneStyles = makeStyles({
         width: 327,
         flexWrap: 'nowrap',
     },
-    test: {
+
+    taskDropdownButtonSwimlane: {
+        marginBottom: 23,
     },
+
 })

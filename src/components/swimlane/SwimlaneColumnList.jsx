@@ -6,7 +6,6 @@ import SwimlaneColumn from './SwimlaneColumn'
 const SwimlaneColumnList = ({ swimlaneColumns, taskId }) => {
     const classes = swimlaneStyles()
     const mostSubtasks = Math.max(...swimlaneColumns.map((swimlaneColumn) => swimlaneColumn.subtasks.length))
-    console.log(mostSubtasks)
     return (
         <Grid
             container

@@ -11,7 +11,7 @@ const SwimlaneColumn = ({
 }) => {
     const { subtasks } = swimlaneColumn
     const classes = swimlaneStyles()
-    const heightOfTheDivider = mostSubtasks > 1 ? mostSubtasks * 125 : 1 * 125
+    const heightOfTheDivider = mostSubtasks > 1 ? mostSubtasks * 140 : 1 * 140
 
     const idForDroppable = `${swimlaneColumn.id}${taskId}`
     return (
