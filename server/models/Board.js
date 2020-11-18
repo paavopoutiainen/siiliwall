@@ -33,6 +33,9 @@ module.exports = (sequelize, DataTypes) => {
         Board.hasMany(models.Task, {
             foreignKey: 'boardId',
         })
+        Board.belongsTo(models.Project, {
+            foreignKey: 'projectId'
+        })
     }
     return Board
 }

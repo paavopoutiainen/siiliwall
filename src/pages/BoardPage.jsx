@@ -6,19 +6,21 @@ import Board from '../components/board/Board'
 import SwimlaneView from '../components/swimlane/SwimlaneView'
 import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
-import useSubscriptions from '../graphql/useSubscriptions'
+import useBoardSubscriptions from '../graphql/subscriptions/useBoardSubscriptions'
 
 const BoardPage = ({ id, eventId }) => {
     const classes = boardPageStyles()
     const [view, toggleView] = useState('kanban')
     const queryResult = useBoardById(id)
-    useSubscriptions(id, eventId)
+    useBoardSubscriptions(id, eventId)
 
     if (queryResult.loading) return null
     const board = queryResult.data.boardById
+
     const switchView = () => {
         toggleView(view === 'kanban' ? 'swimlane' : 'kanban')
     }
+
     return (
         <Grid
             container

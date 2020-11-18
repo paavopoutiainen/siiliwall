@@ -11,14 +11,51 @@ class BoardService {
 
     initialize() { }
 
-    async getBoards() {
+    async getProjects() {
+        let projectsFromDb
+        try {
+            projectsFromDb = await this.store.Project.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return projectsFromDb
+    }
+
+    async getProjectById(projectId) {
+        let projectFromDb
+        try {
+            projectFromDb = await this.store.Project.findByPk(projectId)
+        } catch (e) {
+            console.log(e)
+        }
+        return projectFromDb
+    }
+
+    async getBoardsByProjectId(projectId) {
         let boardsFromDb
         try {
-            boardsFromDb = await this.store.Board.findAll()
+            boardsFromDb = await this.store.Board.findAll({
+                where: { projectId }
+            })
         } catch (e) {
             console.error(e)
         }
         return boardsFromDb
+    }
+
+    async addProject(projectName) {
+        let addedProject
+        try {
+            const largestOrderNumber = await this.store.Project.max('orderNumber')
+            addedProject = await this.store.Project.create({
+                id: uuid(),
+                name: projectName,
+                orderNumber: largestOrderNumber + 1,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedProject
     }
 
     async getBoardById(boardId) {
@@ -372,15 +409,18 @@ class BoardService {
         return arrayOfObjectsInOrder
     }
 
-    async addBoard(boardName, prettyId) {
+    async addBoard(boardName, prettyId, projectId) {
         let addedBoard
         try {
-            const largestOrderNumber = await this.store.Board.max('orderNumber')
+            const largestOrderNumber = await this.store.Board.max('orderNumber', {
+                where: { projectId }
+            })
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
                 prettyId,
                 orderNumber: largestOrderNumber + 1,
+                projectId
             })
         } catch (e) {
             console.error(e)
@@ -620,7 +660,6 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
-        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()

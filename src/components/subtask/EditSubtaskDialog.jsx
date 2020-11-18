@@ -54,6 +54,7 @@ const EditSubtaskDialog = ({
 
     const handleSave = (event) => {
         event.preventDefault()
+        const eventId = window.localStorage.getItem('eventId')
         editSubtask({
             variables: {
                 id: editId,
@@ -63,6 +64,7 @@ const EditSubtaskDialog = ({
                 ownerId: owner,
                 oldMemberIds: arrayOfOldMemberIds,
                 newMemberIds: members,
+                eventId,
             },
         })
         toggleDialog()
