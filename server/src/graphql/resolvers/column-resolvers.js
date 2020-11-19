@@ -62,7 +62,9 @@ const schema = {
             return createdColumn
         },
 
-        async editColumnById(root, { id, name, boardId, eventId }) {
+        async editColumnById(root, {
+            id, name, boardId, eventId,
+        }) {
             let editedColumn
             try {
                 editedColumn = await dataSources.boardService.editColumnById(id, name)
@@ -77,7 +79,7 @@ const schema = {
             } catch (e) {
                 console.log(e)
             }
-            return
+            return editedColumn
         },
 
         async deleteColumnById(root, { id, boardId, eventId }) {
