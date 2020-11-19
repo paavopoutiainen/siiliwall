@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import EditText from 'react-editext'
 import { Grid } from '@material-ui/core'
 import useEditColumn from '../../graphql/column/hooks/useEditColumn'
@@ -6,10 +6,14 @@ import { boardPageStyles } from '../../styles/styles'
 
 const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
-    const [name] = useState(column?.name)
+    const [name, setName] = useState(column?.name)
     const classes = boardPageStyles()
     const nameLimit = 19
     const dots = '...'
+
+    useEffect(() => {
+        setName(column.name)
+    }, [column.name])
 
     const add3Dots = () => {
         let checkedName = name
@@ -20,10 +24,13 @@ const RenameColumn = ({ editId, column }) => {
     }
 
     const handleSave = (newName) => {
+        const eventId = window.localStorage.getItem('eventId')
         editColumn({
             variables: {
                 columnId: editId,
                 columnName: newName,
+                boardId: column.board.id,
+                eventId
             },
         })
     }
