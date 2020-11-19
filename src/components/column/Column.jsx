@@ -35,7 +35,7 @@ const Column = ({ column, index }) => {
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
                         <Grid item>
-                            <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                            <DropdownColumn columnId={column.id} boardId={column.board.id} data-cy="dropdown" />
                         </Grid>
                     </Grid>
 

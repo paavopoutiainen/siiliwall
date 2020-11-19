@@ -52,7 +52,7 @@ const LandingPage = () => {
                 spacing={2}
             >
                 {projectsInOrder.map(({ id, name }) => (
-                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id} data-cy="projectGrid">
                         <Link to={`/projects/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}

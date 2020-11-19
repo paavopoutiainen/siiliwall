@@ -31,10 +31,11 @@ const BoardPage = ({ id, eventId }) => {
         >
             <Grid container item direction="column" justify="space-between" classes={{ root: classes.boardHeader }} id="boardHeader">
                 <Grid item>
-                    <h1>{board.name}</h1>
+                    <h1 data-cy="boardName">{board.name}</h1>
                 </Grid>
                 <Grid item classes={{ root: classes.switchView }}>
                     <FormControlLabel
+                        data-cy="switchLabel"
                         control={<Switch onChange={switchView} />}
                         label="Show swimlanes"
                         labelPlacement="end"
