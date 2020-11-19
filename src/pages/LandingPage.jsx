@@ -29,7 +29,7 @@ const LandingPage = () => {
         >
             {open && <NewProjectForm setOpen={setOpen} open={open} />}
             <Grid item classes={{ root: classes.title }}>
-                <h1 id="landingTitle">Welcome!</h1>
+                <h1 data-cy="landingTitle">Welcome!</h1>
             </Grid>
             <Grid
                 item
@@ -39,7 +39,7 @@ const LandingPage = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} data-cy="addButton">
                         Add Project
                     </Button>
                 </Grid>
