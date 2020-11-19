@@ -191,19 +191,8 @@ export const boardPageStyles = makeStyles({
         height: 33,
     },
 
-    subtaskTitle: {
+    subtaskTaskPrettyId: {
         fontSize: 14,
-        marginLeft: 5,
-        fontFamily: font,
-    },
-
-    subtaskHeaderTitleItem: {
-        width: 200,
-    },
-
-    subtaskName: {
-        fontSize: 18,
-        marginTop: 5,
         marginLeft: 5,
         fontFamily: font,
     },
@@ -211,6 +200,19 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownGrid: {
         height: 30,
         minWidth: 30,
+    },
+
+    subtaskPrettyId: {
+        color: '#949494',
+        fontFamily: font,
+        marginLeft: 5,
+        marginTop: 5
+    },
+
+    subtaskName: {
+        fontSize: 18,
+        marginLeft: 5,
+        fontFamily: font,
     },
 
     subtaskButtonIcons: {
