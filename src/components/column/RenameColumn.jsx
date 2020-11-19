@@ -8,6 +8,16 @@ const RenameColumn = ({ editId, column }) => {
     const [editColumn] = useEditColumn()
     const [name] = useState(column?.name)
     const classes = boardPageStyles()
+    const nameLimit = 19
+    const dots = '...'
+
+    const add3Dots = () => {
+        let checkedName = name
+        if (name.length > nameLimit) {
+            checkedName = name.substring(0, nameLimit) + dots
+        }
+        return checkedName
+    }
 
     const handleSave = (newName) => {
         editColumn({
@@ -27,7 +37,7 @@ const RenameColumn = ({ editId, column }) => {
                 editOnViewClick
                 cancelOnUnfocus
                 type="text"
-                value={name}
+                value={add3Dots(name)}
                 onSave={handleSave}
                 validationMessage="Name has to have 1 or more characters"
                 validation={(val) => val.length > 0}
