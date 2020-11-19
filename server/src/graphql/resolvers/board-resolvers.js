@@ -22,23 +22,23 @@ const schema = {
         boardAdded: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(BOARD_ADDED),
-                (payload, args) => {
-                    return (args.projectId === payload.projectId && args.eventId !== payload.eventId)
-                }
+                (payload, args) => (args.projectId === payload.projectId && args.eventId !== payload.eventId),
             ),
         },
     },
 
     Mutation: {
-        async addBoard(root, { name, prettyId, eventId, projectId }) {
+        async addBoard(root, {
+            name, prettyId, eventId, projectId,
+        }) {
             const addedBoard = await dataSources.boardService.addBoard(name, prettyId, projectId)
             pubsub.publish(BOARD_ADDED, {
                 projectId,
                 eventId,
                 boardAdded: {
                     mutationType: 'CREATED',
-                    board: addedBoard.dataValues
-                }
+                    board: addedBoard.dataValues,
+                },
             })
             return addedBoard
         },
