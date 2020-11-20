@@ -5,7 +5,15 @@ import { TASK_MUTATED, TASK_REMOVED, SWIMLANE_MOVED } from '../task/taskQueries'
 import { TICKET_MOVED_IN_COLUMN, TICKET_MOVED_FROM_COLUMN } from '../ticket/ticketQueries'
 import { COLUMN_MUTATED, COLUMN_DELETED } from '../column/columnQueries'
 import {
-    removeSubtaskFromCache, removeTaskFromCache, addNewSubtask, addNewTask, cacheTicketMovedInColumn, cacheTicketMovedFromColumn, deleteColumnFromCache, updateSwimlaneOrderOfBoardToTheCache, addNewColumn,
+    removeSubtaskFromCache,
+    removeTaskFromCache,
+    addNewSubtask,
+    addNewTask,
+    cacheTicketMovedInColumn,
+    cacheTicketMovedFromColumn,
+    deleteColumnFromCache,
+    updateSwimlaneOrderOfBoardToTheCache,
+    addNewColumn,
 } from '../../cacheService/cacheUpdates'
 
 const useBoardSubscriptions = (id, eventId) => {
