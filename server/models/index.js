@@ -80,14 +80,32 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.colors.map(async (color) => {
+                const resolved = await db.Color.create(color)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.usertasks.map(async (usertask) => {
                 const resolved = await db.UserTask.create(usertask)
                 return resolved
             }),
         )
         await Promise.all(
+            dummyData.colortasks.map(async (colortask) => {
+                const resolved = await db.ColorTask.create(colortask)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.subtasks.map(async (subtask) => {
                 const resolved = await db.Subtask.create(subtask)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.colorsubtasks.map(async (colorsubtask) => {
+                const resolved = await db.ColorSubtask.create(colorsubtask)
                 return resolved
             }),
         )

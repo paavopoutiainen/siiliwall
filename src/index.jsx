@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { ApolloProvider } from '@apollo/client'
 import { client } from './apollo'
 import App from './App'
-
 ReactDOM.render(<ApolloProvider client={client}>
     <App />
-                </ApolloProvider>, document.getElementById('root'))
+</ApolloProvider>, document.getElementById('root'))
