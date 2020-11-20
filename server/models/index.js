@@ -7,7 +7,7 @@ const dummyData = require('../dummyData')
 
 const basename = path.basename(__filename)
 const env = process.env.NODE_ENV || 'development'
-const config = require(`${__dirname}/../config/config.json`)[env]
+const config = require(`${__dirname}/../config/config.js`)[env]
 const db = {}
 
 let sequelize
@@ -44,6 +44,12 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.projects.map(async (project) => {
+                const resolved = await db.Project.create(project)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.boards.map(async (board) => {
                 const resolved = await db.Board.create(board)
                 return resolved
@@ -74,14 +80,32 @@ const initializeDb = async () => {
             }),
         )
         await Promise.all(
+            dummyData.colors.map(async (color) => {
+                const resolved = await db.Color.create(color)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.usertasks.map(async (usertask) => {
                 const resolved = await db.UserTask.create(usertask)
                 return resolved
             }),
         )
         await Promise.all(
+            dummyData.colortasks.map(async (colortask) => {
+                const resolved = await db.ColorTask.create(colortask)
+                return resolved
+            }),
+        )
+        await Promise.all(
             dummyData.subtasks.map(async (subtask) => {
                 const resolved = await db.Subtask.create(subtask)
+                return resolved
+            }),
+        )
+        await Promise.all(
+            dummyData.colorsubtasks.map(async (colorsubtask) => {
+                const resolved = await db.ColorSubtask.create(colorsubtask)
                 return resolved
             }),
         )

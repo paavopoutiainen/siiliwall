@@ -1,6 +1,15 @@
 /* eslint-disable import/prefer-default-export */
 import { gql } from '@apollo/client'
 
+export const PROJECTS_BOARDS = gql`
+    fragment projectsBoards on Project {
+        id
+        boards {
+            id
+        }
+    }
+`
+
 export const TICKETORDER_AND_TASKS = gql`
     fragment ticketOrderAndTasks on Column {
         ticketOrder

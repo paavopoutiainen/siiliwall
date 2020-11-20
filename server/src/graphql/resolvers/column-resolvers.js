@@ -2,9 +2,11 @@
 const { withFilter } = require('graphql-subscriptions')
 const dataSources = require('../../datasources')
 const { pubsub } = require('../pubsub')
+
 const TICKET_MOVED_IN_COLUMN = 'TICKET_MOVED_IN_COLUMN'
 const TICKET_MOVED_FROM_COLUMN = 'TICKET_MOVED_FROM_COLUMN'
 const COLUMN_DELETED = 'COLUMN_DELETED'
+const COLUMN_MUTATED = 'COLUMN_MUTATED'
 
 const schema = {
     Query: {
@@ -21,22 +23,63 @@ const schema = {
 
             ),
         },
+        ticketMovedFromColumn: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(TICKET_MOVED_FROM_COLUMN),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
         columnDeleted: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(COLUMN_DELETED),
                 (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
-            )
-        }
+            ),
+        },
+        columnMutated: {
+            subscribe: withFilter(
+                () => pubsub.asyncIterator(COLUMN_MUTATED),
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
+            ),
+        },
     },
 
     Mutation: {
-        addColumnForBoard(root, { boardId, columnName }) {
-            return dataSources.boardService.addColumnForBoard(boardId, columnName)
+        async addColumnForBoard(root, { boardId, columnName, eventId }) {
+            let createdColumn
+            try {
+                createdColumn = await dataSources.boardService.addColumnForBoard(boardId, columnName)
+                pubsub.publish(COLUMN_MUTATED, {
+                    boardId,
+                    eventId,
+                    columnMutated: {
+                        mutationType: 'CREATED',
+                        column: createdColumn.dataValues,
+                    },
+                })
+            } catch (e) {
+                console.error(e)
+            }
+            return createdColumn
         },
-        editColumnById(root, {
-            id, name,
+
+        async editColumnById(root, {
+            id, name, boardId, eventId,
         }) {
-            return dataSources.boardService.editColumnById(id, name)
+            let editedColumn
+            try {
+                editedColumn = await dataSources.boardService.editColumnById(id, name)
+                pubsub.publish(COLUMN_MUTATED, {
+                    boardId,
+                    eventId,
+                    columnMutated: {
+                        mutationType: 'EDITED',
+                        column: editedColumn.dataValues,
+                    },
+                })
+            } catch (e) {
+                console.log(e)
+            }
+            return editedColumn
         },
 
         async deleteColumnById(root, { id, boardId, eventId }) {
@@ -48,8 +91,8 @@ const schema = {
                     eventId,
                     columnDeleted: {
                         removeType: 'DELETED',
-                        removeInfo: { columnId: id, boardId }
-                    }
+                        removeInfo: { columnId: id, boardId },
+                    },
                 })
             } catch (e) {
                 console.log(e)
@@ -72,11 +115,22 @@ const schema = {
         },
 
         async moveTicketFromColumn(root, {
-            type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder,
+            type, ticketId, sourceColumnId, destColumnId, sourceTicketOrder, destTicketOrder, eventId,
         }) {
             await dataSources.boardService.changeTicketsColumnId(type, ticketId, destColumnId)
             const sourceColumn = await dataSources.boardService.reOrderTicketsOfColumn(sourceTicketOrder, sourceColumnId)
             const destColumn = await dataSources.boardService.reOrderTicketsOfColumn(destTicketOrder, destColumnId)
+            pubsub.publish(TICKET_MOVED_FROM_COLUMN, {
+                boardId: sourceColumn.boardId,
+                eventId,
+                ticketMovedFromColumn: {
+                    ticketInfo: { ticketId, type },
+                    sourceColumnId,
+                    destColumnId,
+                    sourceTicketOrder,
+                    destTicketOrder,
+                },
+            })
             return [sourceColumn, destColumn]
         },
         async moveColumn(root, { boardId, newColumnOrder }) {

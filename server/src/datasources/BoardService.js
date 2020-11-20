@@ -1,7 +1,6 @@
 /* eslint-disable no-shadow */
 /* eslint-disable radix */
 /* eslint-disable class-methods-use-this */
-/* eslint-disable max-len */
 const { v4: uuid } = require('uuid')
 
 class BoardService {
@@ -12,14 +11,51 @@ class BoardService {
 
     initialize() { }
 
-    async getBoards() {
+    async getProjects() {
+        let projectsFromDb
+        try {
+            projectsFromDb = await this.store.Project.findAll()
+        } catch (e) {
+            console.error(e)
+        }
+        return projectsFromDb
+    }
+
+    async getProjectById(projectId) {
+        let projectFromDb
+        try {
+            projectFromDb = await this.store.Project.findByPk(projectId)
+        } catch (e) {
+            console.log(e)
+        }
+        return projectFromDb
+    }
+
+    async getBoardsByProjectId(projectId) {
         let boardsFromDb
         try {
-            boardsFromDb = await this.store.Board.findAll()
+            boardsFromDb = await this.store.Board.findAll({
+                where: { projectId }
+            })
         } catch (e) {
             console.error(e)
         }
         return boardsFromDb
+    }
+
+    async addProject(projectName) {
+        let addedProject
+        try {
+            const largestOrderNumber = await this.store.Project.max('orderNumber')
+            addedProject = await this.store.Project.create({
+                id: uuid(),
+                name: projectName,
+                orderNumber: largestOrderNumber + 1,
+            })
+        } catch (e) {
+            console.error(e)
+        }
+        return addedProject
     }
 
     async getBoardById(boardId) {
@@ -109,7 +145,9 @@ class BoardService {
     async getSubtasksByColumnId(columnId) {
         let subtasksFromDb
         try {
-            subtasksFromDb = await this.store.Subtask.findAll({ where: { columnId, deletedAt: null } })
+            subtasksFromDb = await this.store.Subtask.findAll(
+                { where: { columnId, deletedAt: null } },
+            )
         } catch (e) {
             console.error(e)
         }
@@ -154,6 +192,42 @@ class BoardService {
             console.error(e)
         }
         return subtasksFromDb
+    }
+
+    async getColorsByTaskId(taskId) {
+        let rowsFromDb
+        let colors
+        try {
+            rowsFromDb = await this.store.ColorTask.findAll({ where: { taskId }, attributes: ['colorId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.colorId)
+            colors = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const color = await this.store.Color.findByPk(id)
+                    return color
+                })
+            )
+        } catch (e) {
+            console.log(e)
+        }
+        return colors
+    }
+
+    async getColorsBySubtaskId(subtaskId) {
+        let rowsFromDb
+        let colors
+        try {
+            rowsFromDb = await this.store.ColorSubtask.findAll({ where: { subtaskId }, attributes: ['colorId'] })
+            const arrayOfIds = rowsFromDb.map((r) => r.dataValues.colorId)
+            colors = await Promise.all(
+                arrayOfIds.map(async (id) => {
+                    const color = await this.store.Color.findByPk(id)
+                    return color
+                })
+            )
+        } catch (e) {
+            console.log(e)
+        }
+        return colors
     }
 
     async getMembersByStoryId(storyId) {
@@ -240,11 +314,14 @@ class BoardService {
         return story
     }
 
-    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, description) {
+    async editTaskById(taskId, title, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds, description) {
         // Logic for figuring out who was deleted and who was added as a new member for the task
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        const removedColorIds = oldColorIds.filter((id) => !newColorIds.includes(id))
+        const addedColors = newColorIds.filter((id) => !oldColorIds.includes(id))
         let task
+
         try {
             task = await this.store.Task.findByPk(taskId)
             task.title = title
@@ -264,16 +341,29 @@ class BoardService {
                     },
                 })
             }))
+            await Promise.all(addedColors.map(async (colorId) => {
+                await this.addColorForTask(task.id, colorId)
+            }))
+            await Promise.all(removedColorIds.map(async (colorId) => {
+                await this.store.ColorTask.destroy({
+                    where: {
+                        colorId,
+                        taskId: task.id
+                    }
+                })
+            }))
         } catch (e) {
             console.error(e)
         }
         return task
     }
 
-    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds) {
+    async editSubtaskById(id, name, content, size, ownerId, oldMemberIds, newMemberIds, oldColorIds, newColorIds) {
         // Logic for figuring out who was deleted and who was added as a new member for the subtask
         const removedMemberIds = oldMemberIds.filter((id) => !newMemberIds.includes(id))
         const addedMembers = newMemberIds.filter((id) => !oldMemberIds.includes(id))
+        const removedColorIds = oldColorIds.filter((id) => !newColorIds.includes(id))
+        const addedColors = newColorIds.filter((id) => !oldColorIds.includes(id))
         let subtask
         try {
             subtask = await this.store.Subtask.findByPk(id)
@@ -290,6 +380,17 @@ class BoardService {
                 await this.store.UserSubtask.destroy({
                     where: {
                         userId,
+                        subtaskId: subtask.id,
+                    },
+                })
+            }))
+            await Promise.all(addedColors.map(async (colorId) => {
+                await this.addColorForSubtask(subtask.id, colorId)
+            }))
+            await Promise.all(removedColorIds.map(async (colorId) => {
+                await this.store.ColorSubtask.destroy({
+                    where: {
+                        colorId,
                         subtaskId: subtask.id,
                     },
                 })
@@ -370,15 +471,18 @@ class BoardService {
         return arrayOfObjectsInOrder
     }
 
-    async addBoard(boardName, prettyId) {
+    async addBoard(boardName, prettyId, projectId) {
         let addedBoard
         try {
-            const largestOrderNumber = await this.store.Board.max('orderNumber')
+            const largestOrderNumber = await this.store.Board.max('orderNumber', {
+                where: { projectId }
+            })
             addedBoard = await this.store.Board.create({
                 id: uuid(),
                 name: boardName,
                 prettyId,
                 orderNumber: largestOrderNumber + 1,
+                projectId
             })
         } catch (e) {
             console.error(e)
@@ -427,7 +531,10 @@ class BoardService {
             console.error(e)
         }
 
-        const largestColumnOrderNumber = Math.max(largestColumnOrderNumberForTask, largestColumnOrderNumberForSubtask)
+        const largestColumnOrderNumber = Math.max(
+            largestColumnOrderNumberForTask,
+            largestColumnOrderNumberForSubtask,
+        )
         return largestColumnOrderNumber || 0
     }
 
@@ -471,9 +578,9 @@ class BoardService {
         return addedStory
     }
 
-    async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, description) {
+    async addTaskForColumn(boardId, columnId, title, size, ownerId, memberIds, colorIds, description) {
         /*
-          At the time of new tasks' creation we want to display it as the lower most task in its column,
+          At a new tasks' creation we want to display it as the lowermost task in its column,
           hence it is given the biggest columnOrderNumber of the column
           By default new task will be dirssplyed at the bottom of the swimlane view
         */
@@ -503,6 +610,11 @@ class BoardService {
                 memberIds.map(async (memberId) => {
                     await this.addMemberForTask(addedTask.id, memberId)
                 }),
+            )
+            await Promise.all(
+                colorIds.map(async (colorId) => {
+                    await this.addColorForTask(addedTask.id, colorId)
+                })
             )
         } catch (e) {
             console.error(e)
@@ -552,7 +664,39 @@ class BoardService {
         return subtask
     }
 
-    async addSubtaskForTask(taskId, columnId, boardId, name, content, size, ownerId, memberIds, ticketOrder) {
+    async addColorForTask(taskId, colorId) {
+        let task
+        try {
+            await this.store.ColorTask.create({
+                id: uuid(),
+                colorId,
+                taskId
+            })
+            task = await this.store.Task.findByPk(taskId)
+        } catch (e) {
+            console.log(e)
+        }
+        return task
+    }
+
+    async addColorForSubtask(subtaskId, colorId) {
+        let subtask
+        try {
+            await this.store.ColorSubtask.create({
+                id: uuid(),
+                colorId,
+                subtaskId
+            })
+            subtask = await this.store.Subtask.findByPk(subtaskId)
+        } catch (e) {
+            console.log(e)
+        }
+        return subtask
+    }
+
+    async addSubtaskForTask(
+        taskId, columnId, boardId, name, content, size, ownerId, memberIds, colorIds, ticketOrder,
+    ) {
         /*
           At the time of new subtask's creation we want to display it under its parent task
           hence we give it the columnOrderNumber one greater than the task's
@@ -581,7 +725,8 @@ class BoardService {
             const parentTask = await this.store.Task.findByPk(taskId, { attributes: ['columnId'] })
             const newTicketOrder = Array.from(ticketOrder)
             // figure out if the created subtask was created into same column than its parent task
-            // If so, give the added subtask an index one greater than the parent task's so that subtask will appear under parent task
+            // If so, give the added subtask an index one greater than the parent task's so that
+            // subtask will appear under parent task
             if (columnId === parentTask.dataValues.columnId) {
                 const indexOfParentTask = ticketOrder.findIndex((obj) => obj.ticketId === taskId)
                 newTicketOrder.splice(indexOfParentTask + 1, 0, { ticketId: addedSubtask.id, type: 'subtask' })
@@ -592,6 +737,11 @@ class BoardService {
             await Promise.all(
                 memberIds.map(async (memberId) => {
                     await this.addMemberForSubtask(addedSubtask.id, memberId)
+                }),
+            )
+            await Promise.all(
+                colorIds.map(async (colorId) => {
+                    await this.addColorForSubtask(addedSubtask.id, colorId)
                 }),
             )
         } catch (e) {
@@ -612,7 +762,6 @@ class BoardService {
     }
 
     async archiveSubtaskById(subtaskId) {
-        console.log(subtaskId)
         try {
             const subtask = await this.store.Subtask.findByPk(subtaskId)
             subtask.deletedAt = new Date()
@@ -694,6 +843,16 @@ class BoardService {
         } catch (e) {
             console.error(e)
         }
+    }
+
+    async getColors() {
+        let colorsFromDb
+        try {
+            colorsFromDb = await this.store.Color.findAll()
+        } catch (e) {
+            console.log(e)
+        }
+        return colorsFromDb
     }
 
     async getUsers() {

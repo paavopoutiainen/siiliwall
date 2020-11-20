@@ -1,15 +1,18 @@
 // dummy data
+const projects = [{
+    id: '9da1b35f-181a-4397-a5a5-47abced10a66', name: 'SiiliWall', orderNumber: 1,
+}]
 const boards = [{
-    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2, ticketCount: 2,
+    id: '83fa4f89-8ea1-4d1c-9fee-321daa941485', prettyId: 'PO', name: 'PO:n taulu', creatorId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576', orderNumber: 2, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
 },
 {
-    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', prettyId: 'DEV', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3, ticketCount: 2,
+    id: 'd3553f65-7ed4-4f43-9847-c14e4539eb5e', prettyId: 'DEV', name: 'Devaajan taulu', creatorId: '654df13f-51be-4b25-8f0e-7c2f40a3a81e', orderNumber: 3, ticketCount: 2, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
 },
 {
-    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1, ticketCount: 10,
+    id: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83', prettyId: 'KNBN', name: 'Kanban', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 1, ticketCount: 10, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
 },
 {
-    id: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83', prettyId: 'STR', name: 'StoryBoard', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 4, ticketCount: 0,
+    id: '0f154e01-f8ba-49c8-b2dc-e884d28e7f83', prettyId: 'STR', name: 'StoryBoard', creatorId: '8b251e01-0bec-41bf-b756-ba53c76d04e6', orderNumber: 4, ticketCount: 0, projectId: '9da1b35f-181a-4397-a5a5-47abced10a66'
 }]
 
 const users = [
@@ -191,7 +194,7 @@ const tasks = [
         prettyId: 'KNBN-2',
         title: 'Add drag and drop function to cards',
         content: 'Add drag and drop function to cards',
-        size: 1.1,
+        size: 1,
         columnId: 'f6209adb-91ca-476b-8269-328a82d05d4a',
         columnOrderNumber: 0,
         swimlaneOrderNumber: 1,
@@ -323,8 +326,8 @@ const subtasks = [
         id: '5d689892-f627-4ae3-84ab-766d45532601',
         columnOrderNumber: 1,
         done: false,
-        name: '',
-        content: 'Test 1',
+        name: 'Test 1',
+        content: '',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
@@ -335,8 +338,8 @@ const subtasks = [
         id: '5d689892-f627-4ae3-84ab-766d45532602',
         columnOrderNumber: 2,
         done: false,
-        name: '',
-        content: 'Test 2',
+        name: 'Test 2',
+        content: '',
         columnId: 'ce175646-4035-41f5-99d7-7d742f0e8ac5',
         taskId: 'f6209adb-91ca-476b-8269-328a82d05555',
         boardId: '0f154e01-f8ba-49c8-b2dc-e374d28f7f83',
@@ -347,14 +350,26 @@ const subtasks = [
         id: '5d689892-f627-4ae3-84ab-766d45532603',
         columnOrderNumber: 2,
         done: false,
-        name: '',
-        content: 'Update some more',
+        name: 'Update some more',
+        content: '',
         columnId: '28d0ce05-b1e1-4c21-9c8a-87ba1b2a0528',
         taskId: '7b29f130-fc89-4f16-b0ef-71a06e09110c',
         boardId: '83fa4f89-8ea1-4d1c-9fee-321daa941485',
         ownerId: '8b251e01-0bec-41bf-b756-ba53c76d04e6',
     },
 
+]
+
+const colors = [
+    { id: 'ca1b1793-e569-4fb3-8498-5a36406eeca6', color: 'yellow' },
+    { id: 'f7606b69-3755-497b-9ed4-206ab0712198', color: 'green' },
+    { id: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab', color: 'red' },
+    { id: 'adbb918c-de93-4a4c-8a1b-87af8afc2811', color: 'pink' },
+    { id: '55c528bb-6200-4614-8177-653149de7306', color: 'purple' },
+    { id: '4e935d81-665e-4efc-92b1-c22b05c5abd1', color: 'blue' },
+    { id: '516f1621-718b-4cda-9e2d-05f16c865ea8', color: 'black' },
+    { id: '9a965133-5817-42b3-8b3c-ce1c453e0b88', color: 'gray' },
+    { id: '99d0f5f1-6ff4-4e02-a564-fad8f3726c27', color: 'lightgrey' },
 ]
 
 const userStories = [
@@ -379,6 +394,44 @@ const usertasks = [
     },
 ]
 
+const colortasks = [
+    {
+        colorId: 'ca1b1793-e569-4fb3-8498-5a36406eeca6',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
+    },
+    {
+        colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
+        taskId: 'f3f3c12d-cee0-46bf-9374-f19ba8894ad6'
+    },
+    {
+        colorId: '3e679a60-ef5d-4fd7-ab2c-b147ee22d7ab',
+        taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
+    },
+    {
+        colorId: '516f1621-718b-4cda-9e2d-05f16c865ea8',
+        taskId: 'd29fc7da-93a1-40ec-8c56-7b619445465b'
+    },
+]
+
+const colorsubtasks = [
+    {
+        colorId: 'adbb918c-de93-4a4c-8a1b-87af8afc2811',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9'
+    },
+    {
+        colorId: '4e935d81-665e-4efc-92b1-c22b05c5abd1',
+        subtaskId: '6a752e4c-3254-49fa-a860-f1694b4e3fb9'
+    },
+    {
+        colorId: 'ca1b1793-e569-4fb3-8498-5a36406eeca6',
+        subtaskId: '7ccd9f9b-a706-4fa7-a99c-d07136606840'
+    },
+    {
+        colorId: 'f7606b69-3755-497b-9ed4-206ab0712198',
+        subtaskId: '5d689892-f627-4ae3-84ab-766d45532601'
+    },
+]
+
 const userSubtasks = [
     {
         userId: '6baba4dd-1ff4-4185-b8ff-1b735bc56576',
@@ -391,5 +444,5 @@ const userSubtasks = [
 ]
 
 module.exports = {
-    boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks,
+    projects, boards, columns, stories, tasks, subtasks, users, userStories, usertasks, userSubtasks, colors, colortasks, colorsubtasks
 }

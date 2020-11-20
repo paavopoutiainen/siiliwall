@@ -5,12 +5,12 @@ import {
 } from '@material-ui/core'
 import useAddBoard from '../../graphql/board/hooks/useAddBoard'
 
-const NewBoardForm = ({ setOpen, open }) => {
-    const [addBoard] = useAddBoard()
+const NewBoardForm = ({ setOpen, open, projectId }) => {
+    const [addBoard] = useAddBoard(projectId)
     const [name, setName] = useState('')
     const [prettyId, setPrettyId] = useState('')
     const [valid, setValid] = useState(true)
-
+    const eventId = window.localStorage.getItem('eventId')
     const handleChangeName = (event) => {
         setName(event.target.value)
     }
@@ -47,7 +47,9 @@ const NewBoardForm = ({ setOpen, open }) => {
             addBoard({
                 variables: {
                     name,
-                    prettyId
+                    prettyId,
+                    eventId,
+                    projectId
                 },
             })
             closeDialog()

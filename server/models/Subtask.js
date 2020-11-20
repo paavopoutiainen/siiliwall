@@ -38,6 +38,10 @@ module.exports = (sequelize, DataTypes) => {
             through: models.UserSubtask,
             foreignKey: 'subtaskId',
         })
+        Subtask.belongsToMany(models.Color, {
+            through: models.ColorSubtask,
+            foreignKey: 'subtaskId',
+        })
     }
     return Subtask
 }
