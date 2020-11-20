@@ -13,6 +13,7 @@ const resolvers = require('./graphql/resolvers')
 
 const schema = makeExecutableSchema({ typeDefs, resolvers })
 app.use('/graphql', bodyParser.json())
+app.use('/health', require('express-healthcheck')())
 
 const apollo = new ApolloServer({ schema })
 apollo.applyMiddleware({ app, path: '/graphql' })
