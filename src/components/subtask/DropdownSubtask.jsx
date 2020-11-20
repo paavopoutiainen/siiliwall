@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Delete, Archive } from '@material-ui/icons'
 import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
@@ -36,14 +36,14 @@ const DropdownSubtask = ({ subtask, column, boardId }) => {
     }
 
     return (
-        <Grid item classes={{ root: classes.subtaskDropdownComponent }}>
+        <Grid item container direction='row' justify='flex-end' alignItems='center' >
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
                 classes={{ root: classes.subtaskDropdownButton }}
             >
-                <MoreHorizIcon />
+                <MoreVertIcon classes={{ root: classes.subtaskButtonIcons }} />
             </Button>
             <Menu
                 id="simple-menu"

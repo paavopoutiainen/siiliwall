@@ -2,16 +2,18 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz'
+import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Delete from '@material-ui/icons/Delete'
 import { useApolloClient } from '@apollo/client'
 import { TICKETORDER } from '../../graphql/fragments'
 import AlertBox from '../AlertBox'
+import { boardPageStyles } from '../../styles/styles'
 
 const DropdownColumn = ({ column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
+    const classes = boardPageStyles()
     const client = useApolloClient()
 
     const data = client.readFragment({
@@ -39,8 +41,9 @@ const DropdownColumn = ({ column, boardId }) => {
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                classes={{ root: classes.columnButton }}
             >
-                <MoreHorizIcon fontSize="large" />
+                <MoreVertIcon className="dropDownColumn" classes={{ root: classes.columnButtonIcons }} />
             </Button>
             <Menu
                 id="simple-menu"

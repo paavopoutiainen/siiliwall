@@ -25,6 +25,10 @@ export const BOARD_BY_ID = gql`
                     prettyId
                     title
                     size
+                    colors {
+                        id
+                        color
+                    }
                     owner {
                       id
                       userName
@@ -63,6 +67,10 @@ export const BOARD_BY_ID = gql`
                     members {
                         id
                         userName
+                    }
+                    colors {
+                        id
+                        color
                     }
                     board {
                         id

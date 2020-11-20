@@ -18,8 +18,8 @@ export const TASK_BY_ID = gql`
 `
 
 export const ADD_TASK = gql`
-    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $description: String, $eventId: ID!) {
-        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, description: $description, eventId: $eventId) {
+    mutation createTask($boardId: ID!, $columnId: ID!, $title: String!, $size: Int, $ownerId: ID, $memberIds: [ID!], $colorIds: [ID!], $description: String, $eventId: ID!) {
+        addTaskForColumn(boardId: $boardId, columnId: $columnId, title: $title, size: $size, ownerId: $ownerId, memberIds: $memberIds, colorIds: $colorIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -31,6 +31,10 @@ export const ADD_TASK = gql`
             members {
                 id
                 userName
+            }
+            colors {
+                id
+                color
             }
             description
             swimlaneOrderNumber
@@ -51,8 +55,8 @@ export const DELETE_TASK = gql`
 `
 
 export const EDIT_TASK = gql`
-    mutation editTask($taskId: ID!, $title: String!, $size: Int, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $description: String, $eventId: ID!) {
-        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, description: $description, eventId: $eventId) {
+    mutation editTask($taskId: ID!, $title: String!, $size: Int, $ownerId: ID, $oldMemberIds: [ID!], $newMemberIds: [ID!], $oldColorIds: [ID!], $newColorIds: [ID!], $description: String, $eventId: ID!) {
+        editTaskById(id: $taskId, title: $title, size: $size, ownerId: $ownerId, oldMemberIds: $oldMemberIds, newMemberIds: $newMemberIds, oldColorIds: $oldColorIds, newColorIds: $newColorIds, description: $description, eventId: $eventId) {
             id
             prettyId
             title
@@ -60,6 +64,10 @@ export const EDIT_TASK = gql`
             owner {
                 id
                 userName
+            }
+            colors {
+                id
+                color
             }
             members {
                 id
@@ -97,6 +105,10 @@ export const TASK_MUTATED = gql`
         prettyId
         title
         size
+        colors {
+            id
+            color
+        }
         owner {
             id
             userName
@@ -142,4 +154,12 @@ subscription swimlaneMoved($boardId: ID!, $eventId: ID!) {
         swimlaneOrder
     }
   }
+`
+export const ALL_COLORS = gql`
+    query {
+        allColors {
+            id
+            color
+        }
+    }
 `

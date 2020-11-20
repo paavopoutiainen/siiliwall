@@ -33,7 +33,7 @@ const BoardPage = ({ id, eventId }) => {
                 <Grid item>
                     <h1>{board.name}</h1>
                 </Grid>
-                <Grid item classes={{ root: classes.switchView }}>
+                <Grid item>
                     <FormControlLabel
                         control={<Switch onChange={switchView} />}
                         label="Show swimlanes"

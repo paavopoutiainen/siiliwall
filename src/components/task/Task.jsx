@@ -1,34 +1,38 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useState } from 'react'
-import { Grid } from '@material-ui/core'
+import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
+import ColorPill from '../ColorPill'
+import MemberCircle from '../MemberCircle'
 
 const Task = ({
     task, index, column, boardId,
 }) => {
     const classes = boardPageStyles()
-    const { title, members, prettyId } = task
+    const { title, members, owner, prettyId } = task
     const titleLimit = 25
-    const descrLimit = 20
-    const [dialogStatus, setDialogStatus] = useState(false)
-    const toggleDialog = () => setDialogStatus(!dialogStatus)
     const dots = '...'
+
+    let tasksOwnerAndMembers
+    if (owner) {
+        tasksOwnerAndMembers = members.concat(owner)
+    } else {
+        tasksOwnerAndMembers = members
+    }
+
+    const [dialogStatus, setDialogStatus] = useState(false)
+
+    const toggleDialog = () => setDialogStatus(!dialogStatus)
+
     const add3Dots = () => {
         let checkedTitle = title
         if (title.length > titleLimit) {
             checkedTitle = title.substring(0, titleLimit) + dots
         }
         return checkedTitle
-    }
-    const descrDots = (description) => {
-        let retVal = description
-        if (description.length > descrLimit) {
-            retVal = description.substring(0, descrLimit) + dots
-        }
-        return retVal
     }
 
     // Opens task editing dialog
@@ -59,11 +63,11 @@ const Task = ({
                         container
                         direction="row"
                         justify="space-between"
-                        alignItems="flex-start"
-                        classes={{ root: classes.taskInner }}
+                        alignItems="center"
+                        classes={{ root: classes.taskHeader }}
                     >
-                        <Grid item>
-                            <h3>{prettyId}</h3>
+                        <Grid item classes={{ root: classes.taskTitle }}>
+                            <p>{prettyId}</p>
                         </Grid>
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
@@ -73,54 +77,39 @@ const Task = ({
                             />
                         </Grid>
                     </Grid>
-                    <Grid item direction="column" container>
-                        <Grid item>
+                    <Grid item direction="column" container spacing={1}>
+                        <Grid item classes={{ root: classes.taskName }}>
                             <p>{add3Dots(task.title)}</p>
                         </Grid>
-                        <Grid item>
-                            {task.owner ? (
-                                <p>
-                                    owner:&nbsp;
-                                    {task.owner.userName}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.size ? (
-                                <p>
-                                    size:&nbsp;
-                                    {task.size}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.members.length !== 0 ? (
-                                // this part renders commas after name only if formatting is like below
-                                <p>
-                                    {`members:  ${members.map((user) => ` ${user.userName}`)}`}
-                                </p>
-                            ) : null}
-                        </Grid>
-                        <Grid item>
-                            {task.description ? (
-                                <p>
-                                    description:&nbsp;
-                                    {descrDots(task.description)}
-                                </p>
+                        <Grid item container direction='row' spacing={1} classes={{ root: classes.ticketColorPillsGrid }}>
+                            {task.colors ? (
+                                task.colors.map((colorObj) => (
+                                    <Grid item key={colorObj.id}><ColorPill color={colorObj.color} /></Grid>
+                                ))
                             ) : null}
                         </Grid>
                     </Grid>
-
+                    <Grid item >
+                        {tasksOwnerAndMembers.length ? (
+                            <Divider classes={{ root: classes.ticketDivider }} />
+                        ) : null}
+                    </Grid>
+                    <Grid item container direction='row' justify='flex-end'>
+                        {tasksOwnerAndMembers.length ? (
+                            tasksOwnerAndMembers.map((personObj) => (
+                                <Grid item key={personObj.id}><MemberCircle name={personObj.userName} /></Grid>
+                            ))
+                        ) : null}
+                    </Grid>
                     <TaskEditDialog
                         dialogStatus={dialogStatus}
                         toggleDialog={toggleDialog}
                         editId={task.id}
                         task={task}
                     />
-                </Grid>
-
+                </Grid >
             )}
-        </Draggable>
+        </Draggable >
     )
 }
 export default Task
