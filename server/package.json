@@ -25,10 +25,11 @@
     "mysql2": "^2.2.5",
     "sequelize": "^6.3.5",
     "subscriptions-transport-ws": "^0.9.18",
-    "uuid": "^8.3.0"
+    "uuid": "^8.3.0",
+    "cross-env": "^7.0.2"
   },
+  "engines": { "node" : ">=12" },
   "devDependencies": {
-    "cross-env": "^7.0.2",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
     "supertest": "^4.0.2"

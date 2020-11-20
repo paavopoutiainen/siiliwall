@@ -124,4 +124,8 @@ if (env === 'development') {
     initializeDb()
 }
 
+if (env === 'production') {
+    initializeDb()
+}
+
 module.exports = db
