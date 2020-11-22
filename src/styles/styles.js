@@ -70,7 +70,7 @@ export const boardPageStyles = makeStyles({
     boardHeader: {
         width: '100%',
         fontFamily: font,
-        marginBottom: 20
+        marginBottom: 20,
     },
 
     addColumn: {
@@ -122,6 +122,7 @@ export const boardPageStyles = makeStyles({
         borderRadius: 4,
         backgroundColor: colours.white,
         width: 320,
+        marginBottom: 10,
     },
 
     taskButtonIcons: {
@@ -183,6 +184,7 @@ export const boardPageStyles = makeStyles({
         backgroundColor: '#fff',
         minHeight: 115,
         width: 320,
+        marginBottom: 10,
     },
 
     subtaskHeader: {
@@ -206,7 +208,7 @@ export const boardPageStyles = makeStyles({
         color: '#949494',
         fontFamily: font,
         marginLeft: 5,
-        marginTop: 5
+        marginTop: 5,
     },
 
     subtaskName: {
@@ -283,31 +285,31 @@ export const boardPageStyles = makeStyles({
 
 export const swimlaneStyles = makeStyles({
     swimlaneAddButtonGrid: {
-        width: '20%'
+        width: '20%',
     },
 
     swimlaneToggleSwimlanesButtonGrid: {
-        width: '80%'
+        width: '80%',
     },
 
     swimlaneAddTaskButton: {
         color: colours.blue,
         marginLeft: 5,
         fontFamily: font,
-        fontSize: 14
+        fontSize: 14,
     },
 
     swimlaneHideButton: {
         color: colours.blue,
         fontFamily: font,
-        fontSize: 14
+        fontSize: 14,
     },
 
     swimlaneShowButton: {
         color: colours.blue,
         marginRight: 5,
         fontFamily: font,
-        fontSize: 14
+        fontSize: 14,
     },
 
     swimlaneColumnNames: {
@@ -319,23 +321,23 @@ export const swimlaneStyles = makeStyles({
         width: 350,
         fontFamily: font,
         fontWeight: 600,
-        height: 50
+        height: 50,
     },
 
     swimlaneColumnNameGrid: {
-        width: '99%'
+        width: '99%',
     },
 
     swimlaneColumnName: {
-        paddingLeft: 15
+        paddingLeft: 15,
     },
 
     swimlaneNumberOfTasks: {
-        paddingRight: 20
+        paddingRight: 20,
     },
 
     swimlaneColumnDivider: {
-        width: '1%'
+        width: '1%',
     },
 
     swimlane: {
