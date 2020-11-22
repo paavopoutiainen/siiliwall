@@ -78,12 +78,12 @@ const SwimlaneView = ({ board }) => {
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id)}>
-            <Grid container direction="column" spacing={2}>
-                <Grid item container direction='row'>
+            <Grid container direction="column" spacing={2} classes={{ root: classes.swimlaneView }}>
+                <Grid item container direction="row">
                     <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
                         <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>
                     </Grid>
-                    <Grid item container classes={{ root: classes.swimlaneToggleSwimlanesButtonGrid }} justify='flex-end' spacing={1}>
+                    <Grid item container classes={{ root: classes.swimlaneToggleSwimlanesButtonGrid }} justify="flex-end" spacing={1}>
                         <Grid item>
                             <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }}>Hide all swimlanes</Button>
                         </Grid>
