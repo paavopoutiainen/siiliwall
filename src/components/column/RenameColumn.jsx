@@ -35,7 +35,7 @@ const RenameColumn = ({ editId, column }) => {
                 eventId,
             },
         })
-        setSnackbarMessage('Renamed column')
+        setSnackbarMessage(`Renamed column ${column.name}`)
     }
 
     return (
