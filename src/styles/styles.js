@@ -28,7 +28,7 @@ export const headerStyles = makeStyles({
 
     headerTitle: {
         color: colours.white,
-        width: 200,
+        width: 400,
         fontFamily: font,
         fontSize: 36,
         fontWeight: 'lighter',

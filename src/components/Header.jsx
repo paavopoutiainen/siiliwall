@@ -63,7 +63,18 @@ const Header = (props) => {
                 </>
             )}
             {landing && (
-                <div />
+                <>
+                    <Grid item container direction="row" alignItems="center" classes={{ root: classes.boardHeaderLeft }} spacing={2}>
+                        <Grid item>
+                            <Hedgehog />
+                        </Grid>
+                        <Grid item container classes={{ root: classes.headerTitle }} direction="column">
+                            <Grid item>
+                                <p>SiiliWall</p>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </>
             )}
 
         </Grid>
