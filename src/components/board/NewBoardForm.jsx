@@ -77,7 +77,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                         type="text"
                         fullWidth
                         onChange={(event) => handleChangeName(event)}
-                        id="inputName"
+                        data-cy="nameInput"
                     />
                     {valid ?
                         <TextField
@@ -87,6 +87,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                             label="Short Form"
                             type="text"
                             fullWidth
+                            data-cy="shortForm"
                             onChange={(event) => handleChangePrettyId(event)}
                             id="inputShortForm"
                             helperText="Has to be 2-5 characters long and letters must be capitalized"
@@ -108,7 +109,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                     <Button onClick={handleClose} color="primary">
                         Cancel
                     </Button>
-                    <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" id="addBoard">
+                    <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" data-cy="addNewBoard">
                         Add
                     </Button>
                 </DialogActions>

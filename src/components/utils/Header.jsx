@@ -13,6 +13,7 @@ const Header = (props) => {
 
     return (
         <Grid
+            data-cy="boardName"
             container
             item
             direction="row"
