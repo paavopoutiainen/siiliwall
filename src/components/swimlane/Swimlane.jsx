@@ -66,16 +66,6 @@ const Swimlane = ({
                                 <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
                             </Grid>
                         )}
-<<<<<<< HEAD
-                    <AddSubtaskDialog
-                        addDialogStatus={addDialogStatus}
-                        toggleAddDialog={toggleAddDialog}
-                        column={task?.column}
-                        taskId={task.id}
-                        boardId={boardId}
-                    />
-=======
->>>>>>> dev
                     <TaskEditDialog
                         dialogStatus={editTaskDialogStatus}
                         toggleDialog={toggleEditTaskDialog}

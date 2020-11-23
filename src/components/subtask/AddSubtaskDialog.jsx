@@ -11,7 +11,7 @@ import { TICKETORDER, BOARDS_COLUMNS_AND_COLUMNORDER } from '../../graphql/fragm
 import useAllColors from '../../graphql/task/hooks/useAllColors'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
-const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, boardId }) => {
+const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, boardId }) => {
     const userQuery = useAllUsers()
     const colorQuery = useAllColors()
     const classes = boardPageStyles()
@@ -32,7 +32,8 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, columnId, taskId, 
     })
     if (userQuery.loading || colorQuery.loading) return null
 
-    const columnOfParentTask = columns.find((col) => col.id === columnId)?.name
+    const columnOfParentTask = columns.find((col) => col.id === column.id)?.name
+    console.log(columns)
 
     const handleNameChange = (event) => {
         setName(event.target.value)
