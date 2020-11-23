@@ -426,7 +426,8 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumn: {
         width: 327,
         flexWrap: 'nowrap',
-
+        paddingTop: 15,
+        paddingBottom: 15,
     },
 
     swimlanePrettyId: {
