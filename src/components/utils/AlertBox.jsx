@@ -5,14 +5,14 @@ import {
 } from '@material-ui/core'
 import Alert from '@material-ui/lab/Alert'
 import { useMutation, useApolloClient } from '@apollo/client'
-import { boardPageStyles } from '../styles/styles'
-import { DELETE_COLUMN } from '../graphql/column/columnQueries'
-import { COLUMNORDER_AND_COLUMNS } from '../graphql/fragments'
-import { DELETE_TASK } from '../graphql/task/taskQueries'
-import useArchiveTask from '../graphql/task/hooks/useArchiveTask'
-import useArchiveSubtask from '../graphql/subtask/hooks/useArchiveSubtask'
-import useDeleteSubtask from '../graphql/subtask/hooks/useDeleteSubtask'
-import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../cacheService/cacheUpdates'
+import { boardPageStyles } from '../../styles/styles'
+import { DELETE_COLUMN } from '../../graphql/column/columnQueries'
+import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
+import { DELETE_TASK } from '../../graphql/task/taskQueries'
+import useArchiveTask from '../../graphql/task/hooks/useArchiveTask'
+import useArchiveSubtask from '../../graphql/subtask/hooks/useArchiveSubtask'
+import useDeleteSubtask from '../../graphql/subtask/hooks/useDeleteSubtask'
+import { removeTaskFromCache, deleteColumnFromCache, removeSubtaskFromCache } from '../../cacheService/cacheUpdates'
 
 const AlertBox = ({
     alertDialogStatus, toggleAlertDialog, action, columnId, boardId, taskId, subtaskId, count,
@@ -38,32 +38,32 @@ const AlertBox = ({
 
     let alertMsg
     switch (action) {
-    case 'DELETE_COLUMN':
-        alertMsg = alertMsgDeleteColumn
-        break
-    case 'DELETE_TASK':
-        alertMsg = alertMsgDeleteTask
-        break
-    case 'COLUMN_HAS_TICKETS':
-        alertMsg = alertMsgColumnHasTickets
-        break
-    case 'DELETE_TASK_IF_SUBTASKS':
-        alertMsg = alertMsgDeleteTaskIfSubtasks
-        break
-    case 'ARCHIVE_TASK_IF_SUBTASKS':
-        alertMsg = alertMsgArchiveTaskIfSubtasks
-        break
-    case 'ARCHIVE_TASK':
-        alertMsg = alertMsgArchiveTask
-        break
-    case 'ARCHIVE_SUBTASK':
-        alertMsg = alertMsgArchiveSubtask
-        break
-    case 'DELETE_SUBTASK':
-        alertMsg = alertMsgDeleteSubtask
-        break
-    default:
-        break
+        case 'DELETE_COLUMN':
+            alertMsg = alertMsgDeleteColumn
+            break
+        case 'DELETE_TASK':
+            alertMsg = alertMsgDeleteTask
+            break
+        case 'COLUMN_HAS_TICKETS':
+            alertMsg = alertMsgColumnHasTickets
+            break
+        case 'DELETE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgDeleteTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK_IF_SUBTASKS':
+            alertMsg = alertMsgArchiveTaskIfSubtasks
+            break
+        case 'ARCHIVE_TASK':
+            alertMsg = alertMsgArchiveTask
+            break
+        case 'ARCHIVE_SUBTASK':
+            alertMsg = alertMsgArchiveSubtask
+            break
+        case 'DELETE_SUBTASK':
+            alertMsg = alertMsgDeleteSubtask
+            break
+        default:
+            break
     }
 
     const WhiteCheckbox = withStyles({

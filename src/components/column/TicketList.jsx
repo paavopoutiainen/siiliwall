@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid } from '@material-ui/core'
-import Task from './task/Task'
-import Subtask from './subtask/Subtask'
+import Task from '../task/Task'
+import Subtask from '../subtask/Subtask'
 
 const TicketList = ({
     ticketOrder, tasks, subtasks, columnId, boardId,

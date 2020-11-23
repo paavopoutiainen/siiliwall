@@ -8,7 +8,7 @@ import { boardPageStyles } from '../styles/styles'
 import useBoardById from '../graphql/board/hooks/useBoardById'
 import useBoardSubscriptions from '../graphql/subscriptions/useBoardSubscriptions'
 import { client } from '../apollo'
-import Header from '../components/Header'
+import Header from '../components/utils/Header'
 
 const BoardPage = ({ id, eventId }) => {
     useEffect(() => () => {

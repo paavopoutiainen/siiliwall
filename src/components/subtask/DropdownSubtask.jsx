@@ -5,7 +5,7 @@ import {
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
 import { useApolloClient } from '@apollo/client'
 

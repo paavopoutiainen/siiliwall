@@ -7,7 +7,6 @@ const useProjectSubscriptions = (id, eventId) => {
         {
             variables: { projectId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
-                console.log(data)
                 if (data.boardAdded.mutationType === 'CREATED') {
                     addNewBoard(data.boardAdded.board, id)
                 }

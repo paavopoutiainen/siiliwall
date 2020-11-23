@@ -5,7 +5,7 @@ import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useAllProjects from '../graphql/project/hooks/useAllProjects'
 import NewProjectForm from '../components/project/NewProjectForm'
-import Header from '../components/Header'
+import Header from '../components/utils/Header'
 
 const LandingPage = () => {
     const queryResult = useAllProjects()
