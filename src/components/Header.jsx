@@ -31,7 +31,7 @@ const Header = (props) => {
                                 {boardPrettyId}
                             </Grid>
                             <Grid item>
-                                <h1>{boardName}</h1>
+                                <p>{boardName}</p>
                             </Grid>
 
                         </Grid>
@@ -49,7 +49,18 @@ const Header = (props) => {
                 </>
             )}
             {projectName && (
-                <div />
+                <>
+                    <Grid item container direction="row" alignItems="center" classes={{ root: classes.boardHeaderLeft }} spacing={2}>
+                        <Grid item>
+                            <Hedgehog />
+                        </Grid>
+                        <Grid item container classes={{ root: classes.headerTitle }} direction="column">
+                            <Grid item>
+                                <p>{projectName}</p>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </>
             )}
             {landing && (
                 <div />

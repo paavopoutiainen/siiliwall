@@ -30,6 +30,8 @@ export const headerStyles = makeStyles({
         color: colours.white,
         width: 200,
         fontFamily: font,
+        fontSize: 36,
+        fontWeight: 'lighter',
     },
 
     boardHeaderLeft: {
@@ -49,7 +51,8 @@ export const headerStyles = makeStyles({
 
 export const projectPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100%',
+        minWidth: '100%',
     },
 
     title: {
