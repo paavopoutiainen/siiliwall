@@ -33,7 +33,7 @@ const BoardPage = ({ id, eventId }) => {
             classes={{ root: classes.root }}
             id="boardElement"
         >
-            <Header boardName={board.name} data-cy="boardName" boardPrettyId={board.prettyId} switchView={switchView} />
+            <Header boardName={board.name} boardPrettyId={board.prettyId} switchView={switchView} />
             <Grid item>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>
