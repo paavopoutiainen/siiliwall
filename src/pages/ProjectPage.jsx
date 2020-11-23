@@ -45,7 +45,7 @@ const ProjectPage = ({ id, eventId }) => {
                 <Grid item container direction='column' classes={{ root: classes.projectPageLeftGrid }}>
                     <Grid item container direction='column' classes={{ root: classes.projectPageBoardsGrid }}>
                         <Grid item classes={{ root: classes.projectPageTitles }}><p>Boards</p></Grid>
-                        <Grid item container='row' classes={{ root: classes.projectPageBoardCardGrid }} spacing={2}>
+                        <Grid item container direction='row' classes={{ root: classes.projectPageBoardCardGrid }} spacing={2}>
                             {boardsInOrder.map(({ id, name, ticketCount, color }) => (
                                 <Grid item key={id}>
                                     <Link to={`/boards/${id}`} className="board_button">
