@@ -8,13 +8,14 @@ import EditSubtaskDialog from './EditSubtaskDialog'
 import ColorPill from '../utils/ColorPill'
 import MemberCircle from '../utils/MemberCircle'
 
-const Subtask = ({ subtask, index, columnId }) => {
+const Subtask = ({
+    subtask, index, column, boardId,
+}) => {
     const classes = boardPageStyles()
     const { name, members, owner } = subtask
     const nameLimit = 25
     const dots = '...'
     const [dialogStatus, setDialogStatus] = useState(false)
-
     let subtasksOwnerAndMembers
     if (owner) {
         subtasksOwnerAndMembers = members.concat(owner)
@@ -65,8 +66,9 @@ const Subtask = ({ subtask, index, columnId }) => {
                         </Grid>
                         <Grid item classes={{ root: classes.subtaskDropdownGrid }} onClick={handleDialogClick}>
                             <DropDownSubtask
-                                subtaskId={subtask.id}
-                                columnId={columnId}
+                                subtask={subtask}
+                                column={column}
+                                boardId={boardId}
                             />
                         </Grid>
                     </Grid>

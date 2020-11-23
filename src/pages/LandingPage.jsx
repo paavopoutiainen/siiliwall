@@ -65,4 +65,5 @@ const LandingPage = () => {
         </Grid>
     )
 }
+
 export default LandingPage
