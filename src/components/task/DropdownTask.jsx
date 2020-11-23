@@ -7,7 +7,7 @@ import {
     Delete, Archive, Add,
 } from '@material-ui/icons'
 import { useApolloClient } from '@apollo/client'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'

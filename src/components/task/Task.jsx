@@ -5,8 +5,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
-import ColorPill from '../ColorPill'
-import MemberCircle from '../MemberCircle'
+import ColorPill from '../utils/ColorPill'
+import MemberCircle from '../utils/MemberCircle'
 
 const Task = ({
     task, index, column, boardId,

@@ -5,7 +5,7 @@ import {
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Delete, Archive } from '@material-ui/icons'
 import { boardPageStyles } from '../../styles/styles'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 
 const DropdownSubtask = ({ subtask, column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
