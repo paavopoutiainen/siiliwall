@@ -9,19 +9,21 @@ import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInCol
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import { onDragEnd } from '../../utils/onDragEnd'
+import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 import { useSnackbarContext } from '../../contexts/SnackbarContext'
 
-const Board = ({ board, eventId }) => {
+const Board = ({ board }) => {
     const [moveTicketInColumn] = useMoveTicketInColumn()
     const [moveTicketFromColumn] = useMoveTicketFromColumn()
     const [moveColumn] = useMoveColumn()
+    const classes = boardPageStyles()
     const client = useApolloClient()
     const { setSnackbarMessage } = useSnackbarContext()
 
     const { columnOrder, columns } = board
     return (
-        <Grid container>
+        <Grid container classes={{ root: classes.board }}>
             <DragDropContext onDragEnd={(result) => onDragEnd(
                 result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage,
             )}

@@ -7,6 +7,7 @@ import NewUserForm from '../components/user/NewUserForm'
 import { projectPageStyles } from '../styles/styles'
 import '../styles.css'
 import useProjectSubscriptions from '../graphql/subscriptions/useProjectSubscriptions'
+import Header from '../components/Header'
 
 const ProjectPage = ({ id, eventId }) => {
     const queryResult = useProjectById(id)
@@ -34,8 +35,8 @@ const ProjectPage = ({ id, eventId }) => {
             alignItems="center"
             justify="center"
             classes={{ root: classes.root }}
-            spacing={7}
         >
+            <Header projectName={projectName} />
             {open && <NewBoardForm setOpen={setOpen} open={open} projectId={id} />}
             {openUserForm && <NewUserForm setOpen={setUserFormOpen} open={openUserForm} />}
             <Grid item classes={{ root: classes.title }}>
@@ -49,12 +50,12 @@ const ProjectPage = ({ id, eventId }) => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} data-cy="addBoard">
                         Add Board
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                    <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }} data-cy="addUser">
                         Add User
                     </Button>
                 </Grid>
@@ -67,7 +68,7 @@ const ProjectPage = ({ id, eventId }) => {
                 spacing={2}
             >
                 {boardsInOrder.map(({ id, name }) => (
-                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id} data-cy="boardGrid">
                         <Link to={`/boards/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}
