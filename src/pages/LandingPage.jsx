@@ -30,7 +30,7 @@ const LandingPage = () => {
             <Header landing={true} />
             {open && <NewProjectForm setOpen={setOpen} open={open} />}
             <Grid item classes={{ root: classes.title }}>
-                <h1 id="landingTitle">Welcome!</h1>
+                <h1 data-cy="landingTitle">Welcome!</h1>
             </Grid>
             <Grid
                 item
@@ -40,7 +40,7 @@ const LandingPage = () => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} data-cy="addButton">
                         Add Project
                     </Button>
                 </Grid>
@@ -53,7 +53,7 @@ const LandingPage = () => {
                 spacing={2}
             >
                 {projectsInOrder.map(({ id, name }) => (
-                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id} data-cy="projectGrid">
                         <Link to={`/projects/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}

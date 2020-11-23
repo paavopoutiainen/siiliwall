@@ -50,12 +50,12 @@ const ProjectPage = ({ id, eventId }) => {
                 spacing={3}
             >
                 <Grid item>
-                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} id="addButton">
+                    <Button onClick={handleClickOpen} classes={{ root: classes.addNewButton }} data-cy="addBoard">
                         Add Board
                     </Button>
                 </Grid>
                 <Grid item>
-                    <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }}>
+                    <Button onClick={handleClickOpenUser} classes={{ root: classes.addNewButton }} data-cy="addUser">
                         Add User
                     </Button>
                 </Grid>
@@ -68,7 +68,7 @@ const ProjectPage = ({ id, eventId }) => {
                 spacing={2}
             >
                 {boardsInOrder.map(({ id, name }) => (
-                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id}>
+                    <Grid item classes={{ root: classes.boardButtonGrid }} key={id} data-cy="boardGrid">
                         <Link to={`/boards/${id}`} className="boardList__button__link">
                             <Button fullWidth classes={{ root: classes.boardButton }}>
                                 {name}
