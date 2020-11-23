@@ -76,7 +76,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
-        let msg = `Moved swimlane ${movedTask.title}`
+        const msg = `Moved swimlane ${movedTask.name}`
         setSnackbarMessage(msg)
         return
     }
@@ -102,6 +102,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
         const newTicketOrder = Array.from(column.ticketOrder.map((obj) => ({ ticketId: obj.ticketId, type: obj.type })))
         const [movedTicketOrderObject] = newTicketOrder.splice(source.index, 1)
         newTicketOrder.splice(destination.index, 0, movedTicketOrderObject)
+        const subtask = column.subtasks.find((sub) => sub.id === movedTicketOrderObject.ticketId)
 
         // Handle cache updates
         cacheTicketMovedInColumn(column.id, newTicketOrder)
@@ -114,7 +115,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 boardId,
             },
         })
-        let msg = 'Moved subtask'
+        const msg = `Subtask ${subtask.prettyId} moved in ${column.name}`
         setSnackbarMessage(msg)
         return
     }
@@ -180,7 +181,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
-        let msg = 'Moved subtask'
+        const msg = `Subtask ${movedSubtask.prettyId} moved to ${destinationColumn.name}`
         setSnackbarMessage(msg)
     }
 }

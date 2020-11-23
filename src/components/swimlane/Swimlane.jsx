@@ -63,7 +63,7 @@ const Swimlane = ({
                         && (
                             <Grid item classes={{ root: classes.test }}>
                                 <Divider />
-                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} />
+                                <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} boardId={boardId} />
                             </Grid>
                         )}
                     <TaskEditDialog
