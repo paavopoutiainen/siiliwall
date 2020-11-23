@@ -8,13 +8,14 @@ import EditSubtaskDialog from './EditSubtaskDialog'
 import ColorPill from '../ColorPill'
 import MemberCircle from '../MemberCircle'
 
-const Subtask = ({ subtask, index, column, boardId }) => {
+const Subtask = ({
+    subtask, index, column, boardId,
+}) => {
     const classes = boardPageStyles()
     const { name, members, owner } = subtask
     const nameLimit = 25
     const dots = '...'
     const [dialogStatus, setDialogStatus] = useState(false)
-
     let subtasksOwnerAndMembers
     if (owner) {
         subtasksOwnerAndMembers = members.concat(owner)

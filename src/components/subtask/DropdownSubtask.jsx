@@ -2,26 +2,16 @@ import React, { useState } from 'react'
 import {
     Menu, MenuItem, Button, ListItemIcon, ListItemText, Grid,
 } from '@material-ui/core'
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { Delete, Archive } from '@material-ui/icons'
-import { useApolloClient } from '@apollo/client'
 import { boardPageStyles } from '../../styles/styles'
 import AlertBox from '../AlertBox'
-import { BOARD_ID_BY_COLUMN_ID } from '../../graphql/fragments'
 
 const DropdownSubtask = ({ subtask, column, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const classes = boardPageStyles()
     const [alertDialogStatus, setAlertDialogStatus] = useState(false)
     const [action, setAction] = useState(null)
-    const client = useApolloClient()
-    const columnIdForCache = `Column:${column.id}`
-
-    const columnData = client.readFragment({
-        id: columnIdForCache,
-        fragment: BOARD_ID_BY_COLUMN_ID,
-    })
-    if (!columnData) return null
 
     const openAlertDialog = (order) => {
         setAction(order)
@@ -36,7 +26,7 @@ const DropdownSubtask = ({ subtask, column, boardId }) => {
     }
 
     return (
-        <Grid item container direction='row' justify='flex-end' alignItems='center' >
+        <Grid item container direction="row" justify="flex-end" alignItems="center">
             <Button
                 aria-owns={anchorEl ? 'simple-menu' : undefined}
                 aria-haspopup="true"

@@ -28,7 +28,7 @@ const SwimlaneColumn = ({
                     >
                         {subtasks.map((subtask) => (
                             <Grid item key={subtask.id}>
-                                <Subtask subtask={subtask} index={subtask.index} columnId={swimlaneColumn.id} />
+                                <Subtask subtask={subtask} index={subtask.index} column={swimlaneColumn} />
                             </Grid>
                         ))}
                         {provided.placeholder}

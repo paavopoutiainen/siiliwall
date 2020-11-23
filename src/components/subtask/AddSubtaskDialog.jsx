@@ -32,8 +32,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, bo
     })
     if (userQuery.loading || colorQuery.loading) return null
 
-    const columnOfParentTask = columns.find((col) => col.id === column.id)?.name
-    console.log(columns)
+    const columnNameOfParentTask = columns.find((col) => col.id === column.id)?.name
 
     const handleNameChange = (event) => {
         setName(event.target.value)
@@ -193,7 +192,7 @@ const AddSubtaskDialog = ({ addDialogStatus, toggleAddDialog, column, taskId, bo
                     />
                     <Select
                         className="selectField"
-                        placeholder={`Select column - ${columnOfParentTask}`}
+                        placeholder={`Select column - ${columnNameOfParentTask}`}
                         options={columnsData}
                         onChange={handleColumnChange}
                     />

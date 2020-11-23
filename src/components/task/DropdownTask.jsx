@@ -22,7 +22,6 @@ const DropdownTask = ({
     const [addDialogStatus, setAddDialogStatus] = useState(false)
     const classes = boardPageStyles()
     const client = useApolloClient()
-
     const toggleAddDialog = (e) => {
         e.stopPropagation()
         setAnchorEl(null)
