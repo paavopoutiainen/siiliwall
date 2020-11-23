@@ -55,6 +55,45 @@ export const projectPageStyles = makeStyles({
         minWidth: '100%',
     },
 
+    projectPageMainGrid: {
+        paddingTop: 20,
+        paddingLeft: 30,
+        paddingRight: 30
+    },
+
+    projectPageTitles: {
+        fontFamily: font,
+        fontSize: 20
+    },
+
+    projectPageLeftGrid: {
+        width: '60%'
+    },
+
+    projectPageBoardsGrid: {
+        marginBottom: 35
+    },
+
+    projectPageBoardCardGrid: {
+        marginTop: 10
+    },
+
+    boardCardButton: {
+        width: 250,
+        height: 80,
+        border: `solid ${colours.lightgrey} 1px`
+    },
+
+    addBoardButton: {
+        width: 250,
+        height: 80,
+        border: `dashed ${colours.lightgrey} 2px`
+    },
+
+    projectPageRightGrid: {
+        width: '40%'
+    },
+
     title: {
         fontSize: '2rem',
     },
