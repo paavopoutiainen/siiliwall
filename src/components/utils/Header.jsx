@@ -2,7 +2,7 @@ import React from 'react'
 import {
     Grid, FormControlLabel, Switch,
 } from '@material-ui/core'
-import { headerStyles } from '../styles/styles'
+import { headerStyles } from '../../styles/styles'
 import Hedgehog from './Hedgehog'
 
 const Header = (props) => {

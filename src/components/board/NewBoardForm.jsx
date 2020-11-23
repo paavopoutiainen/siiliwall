@@ -11,6 +11,9 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
     const [prettyId, setPrettyId] = useState('')
     const [valid, setValid] = useState(true)
     const eventId = window.localStorage.getItem('eventId')
+    const colors = [0, 1]
+    const randomizedColor = colors[Math.floor(Math.random() * colors.length)]
+
     const handleChangeName = (event) => {
         setName(event.target.value)
     }
@@ -49,7 +52,8 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                     name,
                     prettyId,
                     eventId,
-                    projectId
+                    projectId,
+                    color: randomizedColor
                 },
             })
             closeDialog()
