@@ -7,7 +7,7 @@ import Hedgehog from './Hedgehog'
 
 const Header = (props) => {
     const {
-        board, switchView, project, landing,
+        boardName, boardPrettyId, switchView, projectName, landing,
     } = props
     const classes = headerStyles()
 
@@ -20,7 +20,7 @@ const Header = (props) => {
             id="boardHeader"
             alignItems="center"
         >
-            {board && (
+            {boardName && (
                 <>
                     <Grid item container direction="row" alignItems="center" classes={{ root: classes.boardHeaderLeft }} spacing={2}>
                         <Grid item>
@@ -28,10 +28,10 @@ const Header = (props) => {
                         </Grid>
                         <Grid item container classes={{ root: classes.headerTitle }} direction="column">
                             <Grid item classes={{ root: classes.headerPrettyId }}>
-                                {board.prettyId}
+                                {boardPrettyId}
                             </Grid>
                             <Grid item>
-                                <h1>{board.name}</h1>
+                                <h1>{boardName}</h1>
                             </Grid>
 
                         </Grid>
@@ -48,7 +48,7 @@ const Header = (props) => {
                     </Grid>
                 </>
             )}
-            {project && (
+            {projectName && (
                 <div />
             )}
             {landing && (
