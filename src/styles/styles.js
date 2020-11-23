@@ -16,9 +16,43 @@ const colours = {
 
 const font = 'Arial Regular'
 
+export const headerStyles = makeStyles({
+    header: {
+        backgroundColor: colours.black,
+        width: '100%',
+        fontFamily: font,
+        marginBottom: 20,
+        height: 105,
+        paddingLeft: 20,
+    },
+
+    headerTitle: {
+        color: colours.white,
+        width: 400,
+        fontFamily: font,
+        fontSize: 36,
+        fontWeight: 'lighter',
+    },
+
+    boardHeaderLeft: {
+        width: '50%',
+    },
+
+    boardHeaderRight: {
+        width: '50%',
+        justifySelf: 'flex-end',
+    },
+
+    headerPrettyId: {
+        fontSize: 12,
+        fontFamily: font,
+    },
+})
+
 export const projectPageStyles = makeStyles({
     root: {
-        minHeight: '100vh',
+        minHeight: '100%',
+        minWidth: '100%',
     },
 
     title: {
@@ -63,10 +97,14 @@ export const boardPageStyles = makeStyles({
     root: {
         minHeight: '100%',
         minWidth: '100%',
-        padding: 30,
     },
 
     // BOARD STYLES
+    board: {
+        marginLeft: 30,
+        marginTop: 15,
+    },
+
     boardHeader: {
         width: '100%',
         fontFamily: font,
@@ -284,6 +322,11 @@ export const boardPageStyles = makeStyles({
 })
 
 export const swimlaneStyles = makeStyles({
+
+    swimlaneView: {
+        paddingLeft: 30,
+    },
+
     swimlaneAddButtonGrid: {
         width: '20%',
     },
@@ -388,6 +431,8 @@ export const swimlaneStyles = makeStyles({
     swimlaneColumn: {
         width: 327,
         flexWrap: 'nowrap',
+        paddingTop: 15,
+        paddingBottom: 15,
     },
 
     swimlanePrettyId: {
