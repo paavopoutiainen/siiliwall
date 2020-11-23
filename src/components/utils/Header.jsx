@@ -4,7 +4,7 @@ import {
 } from '@material-ui/core'
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined'
 import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined'
-import { headerStyles } from '../styles/styles'
+import { headerStyles } from '../../styles/styles'
 import Hedgehog from './Hedgehog'
 
 const Header = (props) => {
