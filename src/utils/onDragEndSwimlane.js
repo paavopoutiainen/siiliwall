@@ -76,7 +76,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
-        const msg = `Moved swimlane ${movedTask.name}`
+        const msg = `Moved swimlane ${movedTask.prettyId}`
         setSnackbarMessage(msg)
         return
     }
