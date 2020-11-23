@@ -35,17 +35,35 @@ export const headerStyles = makeStyles({
     },
 
     boardHeaderLeft: {
-        width: '50%',
+        width: '88%',
     },
 
     boardHeaderRight: {
-        width: '50%',
+        width: '12%',
         justifySelf: 'flex-end',
     },
 
     headerPrettyId: {
         fontSize: 12,
         fontFamily: font,
+    },
+
+    toggleKanbanButton: {
+        height: 35,
+        width: 35,
+    },
+
+    toggleSwimlaneButton: {
+        height: 35,
+        width: 35,
+
+    },
+
+    toggleViewButtonIcon: {
+        display: 'block',
+        marginLeft: 'auto',
+        marginRight: 'auto',
+        padding: 5,
     },
 })
 
