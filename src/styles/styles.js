@@ -35,11 +35,11 @@ export const headerStyles = makeStyles({
     },
 
     boardHeaderLeft: {
-        width: '50%',
+        width: '90%',
     },
 
     boardHeaderRight: {
-        width: '50%',
+        width: '10%',
         justifySelf: 'flex-end',
     },
 
@@ -63,7 +63,9 @@ export const projectPageStyles = makeStyles({
 
     projectPageTitles: {
         fontFamily: font,
-        fontSize: 20
+        fontSize: 20,
+        fontWeight: 'bold'
+
     },
 
     projectPageLeftGrid: {
@@ -78,16 +80,29 @@ export const projectPageStyles = makeStyles({
         marginTop: 10
     },
 
-    boardCardButton: {
+    boardCard: {
         width: 250,
         height: 80,
-        border: `solid ${colours.lightgrey} 1px`
+        border: `solid ${colours.lightgrey} 1px`,
+        boxShadow: `-0.5px 1px 0 0.5px ${colours.lightergrey}`,
+    },
+
+    boardCardName: {
+        fontFamily: font,
+        fontSize: 15,
+    },
+
+    boardCardTasks: {
+        fontFamily: font,
+        fontSize: 12,
+        color: colours.gray
     },
 
     addBoardButton: {
         width: 250,
         height: 80,
-        border: `dashed ${colours.lightgrey} 2px`
+        border: `dashed ${colours.lightgrey} 2px`,
+        color: colours.gray
     },
 
     projectPageRightGrid: {
@@ -181,7 +196,7 @@ export const boardPageStyles = makeStyles({
 
     columnButtonIcons: {
         fontSize: 22,
-        color: '#949494',
+        color: colours.gray,
 
     },
 
@@ -282,7 +297,7 @@ export const boardPageStyles = makeStyles({
     },
 
     subtaskPrettyId: {
-        color: '#949494',
+        color: colours.gray,
         fontFamily: font,
         marginLeft: 5,
         marginTop: 5,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Grid, Button } from '@material-ui/core'
+import { Grid, Button, Card, CardContent, Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import useProjectById from '../graphql/project/hooks/useProjectById'
 import NewBoardForm from '../components/board/NewBoardForm'
@@ -44,10 +44,15 @@ const ProjectPage = ({ id, eventId }) => {
                     <Grid item container direction='column' classes={{ root: classes.projectPageBoardsGrid }}>
                         <Grid item classes={{ root: classes.projectPageTitles }}><p>Boards</p></Grid>
                         <Grid item container='row' classes={{ root: classes.projectPageBoardCardGrid }} spacing={2}>
-                            {boardsInOrder.map(({ id, name }) => (
+                            {boardsInOrder.map(({ id, name, ticketCount }) => (
                                 <Grid item key={id}>
                                     <Link to={`/boards/${id}`} className="board_button">
-                                        <Button classes={{ root: classes.boardCardButton }}>{name}</Button>
+                                        <Card classes={{ root: classes.boardCard }}>
+                                            <CardContent>
+                                                <Typography classes={{ root: classes.boardCardName }}>{name}</Typography>
+                                                <Typography classes={{ root: classes.boardCardTasks }}>{ticketCount ? ticketCount + ' tasks' : '0 tasks'}</Typography>
+                                            </CardContent>
+                                        </Card>
                                     </Link>
                                 </Grid>
                             ))}
