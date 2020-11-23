@@ -5,8 +5,8 @@ import { Draggable } from 'react-beautiful-dnd'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
 import EditSubtaskDialog from './EditSubtaskDialog'
-import ColorPill from '../ColorPill'
-import MemberCircle from '../MemberCircle'
+import ColorPill from '../utils/ColorPill'
+import MemberCircle from '../utils/MemberCircle'
 
 const Subtask = ({ subtask, index, columnId }) => {
     const classes = boardPageStyles()

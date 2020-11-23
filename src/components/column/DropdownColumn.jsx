@@ -6,7 +6,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Delete from '@material-ui/icons/Delete'
 import { useApolloClient } from '@apollo/client'
 import { TICKETORDER } from '../../graphql/fragments'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 import { boardPageStyles } from '../../styles/styles'
 
 const DropdownColumn = ({ columnId, boardId }) => {

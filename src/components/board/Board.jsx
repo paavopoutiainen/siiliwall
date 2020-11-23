@@ -10,7 +10,7 @@ import useMoveTicketInColumn from '../../graphql/ticket/hooks/useMoveTicketInCol
 import useMoveTicketFromColumn from '../../graphql/ticket/hooks/useMoveTicketFromColumn'
 import useMoveColumn from '../../graphql/column/hooks/useMoveColumn'
 import { onDragEnd } from '../../utils/onDragEnd'
-import SnackbarAlert from '../SnackbarAlert'
+import SnackbarAlert from '../utils/SnackbarAlert'
 import { boardPageStyles } from '../../styles/styles'
 import '../../styles.css'
 
