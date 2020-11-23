@@ -10,6 +10,7 @@ export const PROJECT_BY_ID = gql`
                 name
                 orderNumber
                 ticketCount
+                color
             }
         }
     }

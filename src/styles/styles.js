@@ -64,8 +64,6 @@ export const projectPageStyles = makeStyles({
     projectPageTitles: {
         fontFamily: font,
         fontSize: 20,
-        fontWeight: 'bold'
-
     },
 
     projectPageLeftGrid: {
@@ -87,15 +85,37 @@ export const projectPageStyles = makeStyles({
         boxShadow: `-0.5px 1px 0 0.5px ${colours.lightergrey}`,
     },
 
+    boardCardRowGrid: {
+        height: '100%'
+    },
+
+    boardCardColumnGrid: {
+        width: 125
+    },
+
+    boardCardBlob1: {
+        width: 100,
+        height: 100,
+        borderRadius: 100,
+        marginTop: -30,
+        marginRight: -15,
+        backgroundSize: '100% 100%',
+    },
+
     boardCardName: {
         fontFamily: font,
         fontSize: 15,
+        marginTop: 10,
+        paddingLeft: 10,
+        fontWeight: 'bold'
     },
 
     boardCardTasks: {
         fontFamily: font,
         fontSize: 12,
-        color: colours.gray
+        color: colours.gray,
+        paddingLeft: 10,
+        marginBottom: 7
     },
 
     addBoardButton: {
