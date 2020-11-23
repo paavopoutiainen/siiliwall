@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemText, Grid, IconButton,
+    Menu, MenuItem, Button, ListItemText, Grid, IconButton, Divider,
 } from '@material-ui/core'
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useApolloClient } from '@apollo/client'
@@ -92,7 +92,7 @@ const DropdownTask = ({
             </Grid>
 
             <Menu
-                id="simple-menu"
+                classes={{ paper: classes.taskDropdown }}
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={() => setAnchorEl(null)}
@@ -104,12 +104,15 @@ const DropdownTask = ({
                 <MenuItem onClick={() => toggleEditDialog()}>
                     <ListItemText primary="Edit task" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={(e) => toggleAddDialog(e)}>
                     <ListItemText primary="Add subtask" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
                     <ListItemText primary="Archive task" />
                 </MenuItem>
+                <Divider />
                 <MenuItem onClick={() => openAlertDialog('DELETE_TASK')}>
                     <ListItemText primary="Remove task" />
                 </MenuItem>
