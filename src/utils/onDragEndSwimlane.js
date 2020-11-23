@@ -5,7 +5,7 @@ import { BOARD_BY_ID } from '../graphql/board/boardQueries'
 import { SWIMLANE_ORDER } from '../graphql/fragments'
 import { cacheTicketMovedInColumn, cacheTicketMovedFromColumn, updateSwimlaneOrderOfBoardToTheCache } from '../cacheService/cacheUpdates'
 
-export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId) => {
+export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, boardId, setSnackbarMessage) => {
     const { destination, source, draggableId } = result
     if (!destination) return
 
@@ -76,7 +76,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
-
+        let msg = `Moved swimlane ${movedTask.title}`
+        setSnackbarMessage(msg)
         return
     }
 
@@ -113,6 +114,8 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 boardId,
             },
         })
+        let msg = 'Moved subtask'
+        setSnackbarMessage(msg)
         return
     }
 
@@ -177,5 +180,7 @@ export const onDragEndSwimlane = async (result, moveTicketInColumn, moveTicketFr
                 eventId,
             },
         })
+        let msg = 'Moved subtask'
+        setSnackbarMessage(msg)
     }
 }
