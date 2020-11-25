@@ -149,12 +149,16 @@ const EditTaskDialog = ({
     })
 
     const chosenColorsData = task.colors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
+        }
         return newObject
     })
 
     const modifiedColorData = colorQuery.data.allColors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
+        }
         return newObject
     })
 
@@ -172,6 +176,13 @@ const EditTaskDialog = ({
         }
         return newObject
     })
+
+    const isDisabled = () => {
+        if (sizeError || titleError || descriptionError) {
+            return true
+        }
+        return false
+    }
 
     return (
         <Grid>
@@ -269,6 +280,7 @@ const EditTaskDialog = ({
                         Cancel
                     </Button>
                     <Button
+                        disabled={isDisabled()}
                         onClick={handleSave}
                         color="primary"
                         id="submitEditTaskButton"

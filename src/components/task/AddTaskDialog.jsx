@@ -129,16 +129,16 @@ const AddTaskDialog = ({
 
     const modifiedColorData = colorQuery.data.allColors.map((color) => {
         const newObject = {
-            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1)
+            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
         }
         return newObject
     })
 
     const isDisabled = () => {
         if (!title.length
-            || sizeError.length > 0
-            || titleError.length > 0
-            || descriptionError.length > 0) {
+            || sizeError
+            || titleError
+            || descriptionError) {
             return true
         }
         return false
