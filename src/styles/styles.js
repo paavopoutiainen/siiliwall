@@ -265,6 +265,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 30,
     },
 
+    taskDropdown: {
+        width: 310,
+        maxHeight: 245,
+        borderRadius: 0,
+    },
+
     taskHeader: {
         background: colours.black,
         flexWrap: 'nowrap',
