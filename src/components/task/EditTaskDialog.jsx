@@ -60,10 +60,13 @@ const EditTaskDialog = ({
     }
 
     const handleSizeChange = (event) => {
-        const input = parseInt(event.target.value, 10)
-        if (input === '') {
+        let input = event.target.value
+        if (input === '' || input === null) {
             setSize(null)
             return
+        }
+        if (input) {
+            input = parseInt(input, 10)
         }
         sizeSchema.validate(input).catch((err) => {
             setSizeError(err.message)

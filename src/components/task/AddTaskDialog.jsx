@@ -43,10 +43,13 @@ const AddTaskDialog = ({
     }
 
     const handleSizeChange = (event) => {
-        const input = parseInt(event.target.value, 10)
-        if (input === '') {
+        let input = event.target.value
+        if (input === '' || input === null) {
             setSize(null)
             return
+        }
+        if (input) {
+            input = parseInt(input, 10)
         }
         sizeSchema.validate(input).catch((err) => {
             setSizeError(err.message)
@@ -125,7 +128,9 @@ const AddTaskDialog = ({
     })
 
     const modifiedColorData = colorQuery.data.allColors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1)
+        }
         return newObject
     })
 

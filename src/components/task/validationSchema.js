@@ -1,6 +1,6 @@
 import * as yup from 'yup'
 
-export const sizeSchema = yup.number().integer().positive().max(10)
+export const sizeSchema = yup.number().integer().positive('Size must be over 0').max(100)
     .nullable()
 
 export const titleSchema = yup.string().required().trim().min(2)
