@@ -268,6 +268,7 @@ export const boardPageStyles = makeStyles({
     taskDropdown: {
         width: 310,
         maxHeight: 245,
+        borderRadius: 0,
     },
 
     taskHeader: {
