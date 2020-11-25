@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
 import {
-    Menu, MenuItem, Button, ListItemText, Grid, IconButton, Divider,
+    Menu, MenuItem, Button, ListItemText, ListItemIcon, Grid, IconButton, Divider,
 } from '@material-ui/core'
+import {
+    Delete, Archive, Add, Edit,
+} from '@material-ui/icons'
+
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useApolloClient } from '@apollo/client'
 import AlertBox from '../AlertBox'
@@ -102,18 +106,30 @@ const DropdownTask = ({
                 elevation={0}
             >
                 <MenuItem onClick={() => toggleEditDialog()}>
+                    <ListItemIcon>
+                        <Edit />
+                    </ListItemIcon>
                     <ListItemText primary="Edit task" />
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={(e) => toggleAddDialog(e)}>
+                    <ListItemIcon>
+                        <Add />
+                    </ListItemIcon>
                     <ListItemText primary="Add subtask" />
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={() => openAlertDialog('ARCHIVE_TASK')}>
+                    <ListItemIcon>
+                        <Archive />
+                    </ListItemIcon>
                     <ListItemText primary="Archive task" />
                 </MenuItem>
                 <Divider />
                 <MenuItem onClick={() => openAlertDialog('DELETE_TASK')}>
+                    <ListItemIcon>
+                        <Delete />
+                    </ListItemIcon>
                     <ListItemText primary="Remove task" />
                 </MenuItem>
             </Menu>
