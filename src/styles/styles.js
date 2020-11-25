@@ -335,6 +335,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 30,
     },
 
+    subtaskDropdown: {
+        width: 250,
+        maxHeight: 245,
+        borderRadius: 0,
+    },
+
     subtaskPrettyId: {
         color: colours.gray,
         fontFamily: font,
