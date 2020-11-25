@@ -265,6 +265,12 @@ export const boardPageStyles = makeStyles({
         minWidth: 30,
     },
 
+    taskDropdown: {
+        width: 310,
+        maxHeight: 245,
+        borderRadius: 0,
+    },
+
     taskHeader: {
         background: colours.black,
         flexWrap: 'nowrap',
@@ -333,6 +339,12 @@ export const boardPageStyles = makeStyles({
     subtaskDropdownGrid: {
         height: 30,
         minWidth: 30,
+    },
+
+    subtaskDropdown: {
+        width: 250,
+        maxHeight: 245,
+        borderRadius: 0,
     },
 
     subtaskPrettyId: {
