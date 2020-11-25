@@ -8,14 +8,14 @@ import {
 
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import { useApolloClient } from '@apollo/client'
-import AlertBox from '../AlertBox'
+import AlertBox from '../utils/AlertBox'
 import AddSubtaskDialog from '../subtask/AddSubtaskDialog'
 import TaskEditDialog from './EditTaskDialog'
 import { boardPageStyles } from '../../styles/styles'
 import { COLUMNORDER_AND_COLUMNS } from '../../graphql/fragments'
 
 const DropdownTask = ({
-    columnId, task, boardId, calledFromSwimlane,
+    column, task, boardId, calledFromSwimlane,
 }) => {
     const [anchorEl, setAnchorEl] = useState(null)
     const [action, setAction] = useState(null)
@@ -27,7 +27,6 @@ const DropdownTask = ({
     const client = useApolloClient()
 
     const toggleEditDialog = () => {
-        // e.stopPropagation()
         setAnchorEl(null)
         setEditDialogStatus(!editDialogStatus)
     }
@@ -142,8 +141,8 @@ const DropdownTask = ({
             <AlertBox
                 alertDialogStatus={alertDialogStatus}
                 toggleAlertDialog={toggleAlertDialog}
-                taskId={task.id}
-                columnId={columnId}
+                task={task}
+                column={column}
                 boardId={boardId}
                 action={action}
                 count={count}
@@ -151,7 +150,7 @@ const DropdownTask = ({
             <AddSubtaskDialog
                 addDialogStatus={addDialogStatus}
                 toggleAddDialog={toggleAddDialog}
-                columnId={columnId}
+                column={column}
                 taskId={task.id}
                 boardId={boardId}
             />

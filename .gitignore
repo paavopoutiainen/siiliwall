@@ -26,6 +26,7 @@ yarn-error.log*
 .netlify
 
 .env
+/server/.env
 
 /server/node_modules
 /server/config/config.json
