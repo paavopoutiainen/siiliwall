@@ -8,16 +8,17 @@ import { getMainDefinition } from '@apollo/client/utilities'
 require('dotenv').config('../.env')
 
 const loadBalancerUri = process.env.LOADBALANCER_URI
-const backEndUri = 'http://awseb-AWSEB-5G8ZE5PK1FBW-990418282.eu-north-1.elb.amazonaws.com/graphql'
+const backEndUri = process.env.REACT_APP_ENVIRONMENT === 'production' ? loadBalancerUri : 'http://localhost:4001/graphql'
 
-    // process.env.REACT_APP_ENVIRONMENT === 'production' ? loadBalancerUri : 'http://localhost:4001/graphql'
-//
+const wsUri = process.env.REACT_APP_ENVIRONMENT === 'production' ?
+    'ws://awseb-AWSEB-5G8ZE5PK1FBW-990418282.eu-north-1.elb.amazonaws.com/graphql' : 'ws://localhost:4001/graphql'
+
 const httpLink = new HttpLink({
     uri: backEndUri,
 })
 
 const wsLink = new WebSocketLink({
-    uri: 'ws://awseb-AWSEB-5G8ZE5PK1FBW-990418282.eu-north-1.elb.amazonaws.com/graphql',
+    uri: wsUri,
     options: {
         reconnect: true,
     },

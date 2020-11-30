@@ -1,0 +1,22 @@
+version: '3'
+services:
+  backend:
+    build: './server'
+    ports:
+      - "4001:4001"
+  db:
+    build: "./mysql"
+    ports:
+      - "3306:3306"
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITARY: 1
+    restart:
+      always
+    ports:
+      - "8081:80"

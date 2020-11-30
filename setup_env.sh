@@ -1,4 +1,5 @@
 #!/bin/bash
 
 echo LOADBALANCER_URI="$LOADBALANCER_URI" >> .env
+echo REACT_APP_ENVIRONMENT="$REACT_APP_ENVIRONMENT" >> .env
 echo SKIP_PREFLIGHT_CHECK="true" >> .env
