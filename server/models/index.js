@@ -125,6 +125,7 @@ if (env === 'development') {
 }
 
 if (env === 'production') {
+    console.log('Initializing database')
     initializeDb()
 }
 
