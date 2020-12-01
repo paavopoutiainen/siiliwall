@@ -7,11 +7,8 @@ import { getMainDefinition } from '@apollo/client/utilities'
 
 require('dotenv').config('../.env')
 
-const loadBalancerUri = process.env.LOADBALANCER_URI
-const backEndUri = 'http://awseb-AWSEB-5G8ZE5PK1FBW-990418282.eu-north-1.elb.amazonaws.com/graphql'
-
-const wsUri = process.env.REACT_APP_ENVIRONMENT = 'ws://awseb-AWSEB-5G8ZE5PK1FBW-990418282.eu-north-1.elb.amazonaws.com/graphql'
-
+const backEndUri = process.env.REACT_APP_ENVIRONMENT === 'production' ? process.env.REACT_APP_LOADBALANCER_HTTP_URI : 'http://localhost:4001';
+const wsUri = process.env.REACT_APP_ENVIRONMENT === 'production' ? process.env.REACT_APP_LOADBALANCER_WS_URI : 'ws://localhost:4001';
 const httpLink = new HttpLink({
     uri: backEndUri,
 })
