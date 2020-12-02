@@ -79,7 +79,8 @@ export const onDragEnd = async (
             variables: {
                 orderArray: newTicketOrder,
                 columnId: column.id,
-                boardId: board.id
+                boardId: board.id,
+                eventId
             },
         })
         

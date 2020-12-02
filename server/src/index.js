@@ -8,6 +8,7 @@ const { makeExecutableSchema } = require('graphql-tools')
 const { execute, subscribe } = require('graphql')
 const { SubscriptionServer } = require('subscriptions-transport-ws')
 const config = require('./utils/config')
+
 const typeDefs = require('./graphql/typedefs')
 const resolvers = require('./graphql/resolvers')
 
