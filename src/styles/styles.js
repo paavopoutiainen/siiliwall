@@ -17,11 +17,21 @@ const colours = {
 const font = 'Arial Regular'
 
 export const headerStyles = makeStyles({
-    header: {
+    headerMain: {
         backgroundColor: colours.black,
         width: '100%',
         fontFamily: font,
         marginBottom: 20,
+        height: 105,
+        paddingLeft: 20,
+    },
+
+    headerBoard: {
+        backgroundColor: colours.black,
+        width: '100%',
+        position: 'fixed',
+        zIndex: 1,
+        fontFamily: font,
         height: 105,
         paddingLeft: 20,
     },
@@ -190,6 +200,11 @@ export const boardPageStyles = makeStyles({
     root: {
         minHeight: '100%',
         minWidth: '100%',
+    },
+
+    invisibleGrid: {
+        height: 130,
+        width: '100%'
     },
 
     // BOARD STYLES
@@ -427,16 +442,32 @@ export const boardPageStyles = makeStyles({
 })
 
 export const swimlaneStyles = makeStyles({
-
     swimlaneView: {
         paddingLeft: 30,
+        marginTop: 105
+    },
+
+    swimlaneStickyGrid: {
+        zIndex: 1,
+        position: 'sticky',
+        top: 105,
+        backgroundColor: colours.white,
+        paddingTop: 20,
+        marginBottom: 20,
+        boxShadow: '0 7.5px 5px -7.5px',
+    },
+
+    swimlaneViewButtonGrid: {
+        maxWidth: '100vw',
+        position: 'sticky',
+        left: 30,
     },
 
     swimlaneAddButtonGrid: {
         width: '20%',
     },
 
-    swimlaneToggleSwimlanesButtonGrid: {
+    toggleSwimlaneButtonGrid: {
         width: '80%',
     },
 
@@ -454,10 +485,14 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneShowButton: {
+        marginRight: 70,
         color: colours.blue,
-        marginRight: 5,
         fontFamily: font,
         fontSize: 14,
+    },
+
+    swimlaneViewHeaderGrid: {
+        marginTop: 30,
     },
 
     swimlaneColumnNames: {
@@ -466,7 +501,7 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneColumnGrid: {
-        width: 350,
+        width: 337,
         fontFamily: font,
         fontWeight: 600,
         height: 50,
@@ -488,6 +523,15 @@ export const swimlaneStyles = makeStyles({
         width: '1%',
     },
 
+
+    swimlaneListGrid: {
+        width: '100%',
+    },
+
+    swimlaneListComponent: {
+        marginTop: 15
+    },
+
     swimlane: {
         backgroundColor: colours.lightergrey,
         minWidth: 500,
@@ -498,15 +542,22 @@ export const swimlaneStyles = makeStyles({
         height: 60,
     },
 
+    swimlaneHeaderRowDropdownIcon: {
+        paddingRight: 10,
+        paddingLeft: 10
+    },
+
     swimlaneHeaderRowLeft: {
-        width: '80%',
-        marginLeft: 5,
+        width: '90vw',
         alignItems: 'center',
+        position: 'sticky',
+        left: 0,
     },
 
     swimlaneHeaderRowRight: {
-        width: '20%',
-        marginRight: 0,
+        width: 'auto',
+        position: 'sticky',
+        left: '95%',
         alignItems: 'center',
     },
 
@@ -541,16 +592,19 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlanePrettyId: {
+        paddingRight: 20,
         color: colours.blue,
         fontFamily: font,
     },
 
     swimlaneTitle: {
+        paddingRight: 20,
         fontFamily: font,
         fontWeight: 500,
     },
 
     swimlaneNumberOfSubtasks: {
+        paddingRight: 10,
         fontFamily: font,
     },
 })

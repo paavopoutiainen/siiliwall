@@ -28,7 +28,6 @@ const SwimlaneView = ({ board }) => {
     const client = useApolloClient()
     const { setSnackbarMessage } = useSnackbarContext()
     const classes = swimlaneStyles()
-
     const { columns, swimlaneOrder } = board
     let tasks = []
     let subtasks = []
@@ -80,27 +79,29 @@ const SwimlaneView = ({ board }) => {
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id, setSnackbarMessage)}>
-            <Grid container direction="column" spacing={2} classes={{ root: classes.swimlaneView }}>
-                <Grid item container direction="row">
-                    <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
-                        <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>
-                    </Grid>
-                    <Grid item container classes={{ root: classes.swimlaneToggleSwimlanesButtonGrid }} justify="flex-end" spacing={1}>
-                        <Grid item>
-                            <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }}>Hide all swimlanes</Button>
+            <Grid container direction="column" classes={{ root: classes.swimlaneView }}>
+                <Grid item container direction='column' classes={{ root: classes.swimlaneStickyGrid }}>
+                    <Grid item container direction="row" alignItems='center' classes={{ root: classes.swimlaneViewButtonGrid }}>
+                        <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
+                            <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>
                         </Grid>
-                        <Grid item>
-                            <Button onClick={() => handleShowClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneShowButton }}>Expand all swimlanes</Button>
+                        <Grid item container direction='row' justify='flex-end' classes={{ root: classes.toggleSwimlaneButtonGrid }}>
+                            <Grid item>
+                                <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }}>Hide all swimlanes</Button>
+                            </Grid>
+                            <Grid item>
+                                <Button onClick={() => handleShowClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneShowButton }}>Expand all swimlanes</Button>
+                            </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-                <Grid item>
-                    <SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} />
+                    <Grid item classes={{ root: classes.swimlaneViewHeaderGrid }}>
+                        <SwimlaneViewHeader columns={columnsForSwimlaneViewHeader} />
+                    </Grid>
                 </Grid>
                 <Droppable droppableId={board.id} direction="vertical" type="swimlane">
                     {(provided) => (
-                        <Grid item {...provided.droppableProps} ref={provided.innerRef}>
-                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} boardId={board.id} />
+                        <Grid item {...provided.droppableProps} ref={provided.innerRef} classes={{ root: classes.swimlaneListGrid }}>
+                            <SwimlaneList tasksInOrder={tasksInOrder} showAll={showAll} setShowAll={setShowAll} boardId={board.id} />
                             {provided.placeholder}
                         </Grid>
                     )}

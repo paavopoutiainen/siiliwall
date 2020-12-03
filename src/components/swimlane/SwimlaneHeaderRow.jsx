@@ -12,8 +12,8 @@ const SwimlaneHeaderRow = ({
 
     return (
         <Grid container item direction="row" classes={{ root: classes.swimlaneHeaderRow }} onClick={(e) => toggleEditTaskDialog(e)}>
-            <Grid item container spacing={3} classes={{ root: classes.swimlaneHeaderRowLeft }}>
-                <Grid item>
+            <Grid item container classes={{ root: classes.swimlaneHeaderRowLeft }}>
+                <Grid item classes={{ root: classes.swimlaneHeaderRowDropdownIcon }}>
                     <IconButton
                         onClick={(e) => handleShowClick(e)}
                     >
@@ -25,9 +25,9 @@ const SwimlaneHeaderRow = ({
                 <Grid item classes={{ root: classes.swimlanePrettyId }}><p>{prettyId}</p></Grid>
                 <Grid item classes={{ root: classes.swimlaneTitle }}><p>{title}</p></Grid>
             </Grid>
-            <Grid item container spacing={3} classes={{ root: classes.swimlaneHeaderRowRight }} justify="flex-end">
+            <Grid item container classes={{ root: classes.swimlaneHeaderRowRight }} >
                 <Grid item classes={{ root: classes.swimlaneNumberOfSubtasks }}>{numberOfSubtasks}</Grid>
-                <Grid item classes={{ root: classes.taskDropdownButtonSwimlane }} onClick={(e) => handleDialogClick(e)}>
+                <Grid item onClick={(e) => handleDialogClick(e)}>
                     <DropdownTask
                         task={task}
                         column={column}
