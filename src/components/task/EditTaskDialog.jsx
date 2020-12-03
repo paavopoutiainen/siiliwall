@@ -123,6 +123,7 @@ const EditTaskDialog = ({
     const recoverState = () => {
         setTitle(task?.title)
         setSize(task?.size ? task.size : null)
+        setSizeError('')
         setOwner(task?.owner ? task.owner.id : null)
         setMembers(task.members.length > 0 ? arrayOfOldMemberIds : [])
         setColors(task.colors.length > 0 ? arrayOfOldColorIds : [])
