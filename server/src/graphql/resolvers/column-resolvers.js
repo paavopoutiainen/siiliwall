@@ -19,7 +19,7 @@ const schema = {
         ticketMovedInColumn: {
             subscribe: withFilter(
                 () => pubsub.asyncIterator(TICKET_MOVED_IN_COLUMN),
-                (payload, args) => args.boardId === payload.boardId,
+                (payload, args) => (args.boardId === payload.boardId && args.eventId !== payload.eventId),
 
             ),
         },
@@ -101,11 +101,12 @@ const schema = {
         },
 
         async moveTicketInColumn(root, {
-            newOrder, columnId, boardId,
+            newOrder, columnId, boardId, eventId,
         }) {
             const modifiedColumn = await dataSources.boardService.reOrderTicketsOfColumn(newOrder, columnId)
             pubsub.publish(TICKET_MOVED_IN_COLUMN, {
                 boardId,
+                eventId,
                 ticketMovedInColumn: {
                     newOrder,
                     columnId,

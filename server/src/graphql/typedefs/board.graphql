@@ -26,8 +26,19 @@ type SwimlaneOrderObject {
 }
 
 type Mutation {
-  addBoard(name: String!, prettyId: String!, color: Int!, eventId: ID!, projectId: ID!): Board!
-  moveSwimlane(boardId: ID!, affectedSwimlanes: [newSwimlaneOrderInput]!, swimlaneOrder: [ID!]!, eventId: ID!): ID
+  addBoard(
+    name: String!
+    prettyId: String!
+    color: Int!
+    eventId: ID!
+    projectId: ID!
+  ): Board!
+  moveSwimlane(
+    boardId: ID!
+    affectedSwimlanes: [newSwimlaneOrderInput]!
+    swimlaneOrder: [ID!]!
+    eventId: ID!
+  ): ID
 }
 
 type Subscription {
