@@ -9,7 +9,7 @@ import ProgressBarComponent from './ProgressBarComponent'
 import TaskEditDialog from '../task/EditTaskDialog'
 
 const Swimlane = ({
-    task, index, showAll, boardId,
+    task, index, showAll, setShowAll, boardId,
 }) => {
     const classes = swimlaneStyles()
     const [show, setShow] = useState(false)
@@ -29,6 +29,7 @@ const Swimlane = ({
     const handleShowClick = (e) => {
         e.stopPropagation()
         setShow(!show)
+        setShowAll(null)
     }
 
     const numberOfSubtasks = task.swimlaneColumns
@@ -59,7 +60,7 @@ const Swimlane = ({
                     />
                     {show
                         && (
-                            <Grid item classes={{ root: classes.test }}>
+                            <Grid item>
                                 <Divider />
                                 <SwimlaneColumnList swimlaneColumns={task.swimlaneColumns} taskId={task.id} boardId={boardId} />
                             </Grid>

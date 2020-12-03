@@ -15,7 +15,7 @@ const BoardPage = ({ id, eventId }) => {
         client.resetStore()
     }, [])
     const classes = boardPageStyles()
-    const [view, toggleView] = useState('kanban')
+    const [view, toggleView] = useState('swimlane')
     const queryResult = useBoardById(id)
     useBoardSubscriptions(id, eventId)
 
@@ -34,6 +34,9 @@ const BoardPage = ({ id, eventId }) => {
             id="boardElement"
         >
             <Header boardName={board.name} boardPrettyId={board.prettyId} switchView={switchView} view={view} />
+            {view === 'kanban' && (
+                <Grid item classes={{ root: classes.invisibleGrid }}></Grid>
+            )}
             <Grid item>
                 {view === 'kanban' ? <Board board={board} /> : <SwimlaneView board={board} />}
             </Grid>

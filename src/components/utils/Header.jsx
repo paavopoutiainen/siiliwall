@@ -19,7 +19,7 @@ const Header = (props) => {
             container
             item
             direction="row"
-            classes={{ root: classes.header }}
+            classes={{ root: landing || projectName ? classes.headerMain : classes.headerBoard }}
             id="boardHeader"
             alignItems="center"
         >
