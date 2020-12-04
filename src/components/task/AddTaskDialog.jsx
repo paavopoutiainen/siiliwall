@@ -46,15 +46,17 @@ const AddTaskDialog = ({
         let input = event.target.value
         if (input === '' || input === null) {
             setSize(null)
+            setSizeError('')
             return
         }
-        if (input) {
+
+        if (input && Number.isInteger(parseInt(input, 10))) {
             input = parseInt(input, 10)
+            setSize(input)
+            sizeSchema.validate(input).catch((err) => {
+                setSizeError(err.message)
+            })
         }
-        sizeSchema.validate(input).catch((err) => {
-            setSizeError(err.message)
-        })
-        setSize(input)
         setSizeError('')
     }
 
@@ -91,6 +93,9 @@ const AddTaskDialog = ({
         setMembers([])
         setColors([])
         setDescription(null)
+        setTitleError('')
+        setSizeError('')
+        setDescriptionError('')
     }
 
     const handleSave = async (event) => {
@@ -178,7 +183,7 @@ const AddTaskDialog = ({
                         margin="dense"
                         name="size"
                         label="Size"
-                        type="number"
+                        type="text"
                         value={size || ''}
                         fullWidth
                         helperText={sizeError}
