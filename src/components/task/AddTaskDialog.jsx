@@ -43,15 +43,20 @@ const AddTaskDialog = ({
     }
 
     const handleSizeChange = (event) => {
-        const input = parseInt(event.target.value, 10)
-        if (input === '') {
+        let input = event.target.value
+        if (input === '' || input === null) {
             setSize(null)
+            setSizeError('')
             return
         }
-        sizeSchema.validate(input).catch((err) => {
-            setSizeError(err.message)
-        })
-        setSize(input)
+
+        if (input && Number.isInteger(parseInt(input, 10))) {
+            input = parseInt(input, 10)
+            setSize(input)
+            sizeSchema.validate(input).catch((err) => {
+                setSizeError(err.message)
+            })
+        }
         setSizeError('')
     }
 
@@ -88,6 +93,9 @@ const AddTaskDialog = ({
         setMembers([])
         setColors([])
         setDescription(null)
+        setTitleError('')
+        setSizeError('')
+        setDescriptionError('')
     }
 
     const handleSave = async (event) => {
@@ -125,15 +133,17 @@ const AddTaskDialog = ({
     })
 
     const modifiedColorData = colorQuery.data.allColors.map((color) => {
-        const newObject = { value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1) }
+        const newObject = {
+            value: color.id, label: color.color.charAt(0).toUpperCase() + color.color.slice(1),
+        }
         return newObject
     })
 
     const isDisabled = () => {
         if (!title.length
-            || sizeError.length > 0
-            || titleError.length > 0
-            || descriptionError.length > 0) {
+            || sizeError
+            || titleError
+            || descriptionError) {
             return true
         }
         return false
@@ -173,7 +183,7 @@ const AddTaskDialog = ({
                         margin="dense"
                         name="size"
                         label="Size"
-                        type="number"
+                        type="text"
                         value={size || ''}
                         fullWidth
                         helperText={sizeError}
