@@ -501,7 +501,7 @@ export const swimlaneStyles = makeStyles({
     },
 
     swimlaneColumnGrid: {
-        width: 337,
+        width: 360,
         fontFamily: font,
         fontWeight: 600,
         height: 50,

@@ -85,7 +85,7 @@ const useBoardSubscriptions = (id, eventId) => {
         })
     useSubscription(TICKET_MOVED_IN_COLUMN,
         {
-            variables: { boardId: id },
+            variables: { boardId: id, eventId },
             onSubscriptionData: ({ subscriptionData: { data } }) => {
                 const { columnId, newOrder } = data.ticketMovedInColumn
                 cacheTicketMovedInColumn(columnId, newOrder)
