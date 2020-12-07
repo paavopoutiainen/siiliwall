@@ -41,7 +41,7 @@ const Header = (props) => {
                     </Grid>
                     <Grid item container classes={{ root: classes.boardHeaderRight }} justify="flex-end">
                         <Grid item container justify="center" alignItems="center">
-                            <Grid item classes={{ root: classes.toggleKanbanButton }} style={{ backgroundColor: view === 'kanban' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('kanban')}>
+                            <Grid item classes={{ root: classes.toggleKanbanButton }} style={{ backgroundColor: view === 'kanban' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('kanban')} data-cy="kanbanView">
                                 <ViewWeekOutlinedIcon classes={{ root: classes.toggleViewButtonIcon }} />
                             </Grid>
                             <Grid item classes={{ root: classes.toggleSwimlaneButton }} style={{ backgroundColor: view === 'swimlane' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('swimlane')}>

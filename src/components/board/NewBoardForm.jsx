@@ -32,9 +32,7 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
         setOpen(false)
     }
 
-    const hasLowerCase = (prettyId) => {
-        return (/[a-z]/.test(prettyId))
-    }
+    const hasLowerCase = (prettyId) => (/[a-z]/.test(prettyId))
 
     const validationOfPrettyId = () => {
         if (prettyId.length < 2 || prettyId.length > 5 || hasLowerCase(prettyId)) return false
@@ -44,16 +42,14 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
     const handleSave = () => {
         if (!validationOfPrettyId()) {
             setValid(false)
-            return
-        }
-        else {
+        } else {
             addBoard({
                 variables: {
                     name,
                     prettyId,
                     eventId,
                     projectId,
-                    color: randomizedColor
+                    color: randomizedColor,
                 },
             })
             closeDialog()
@@ -79,34 +75,37 @@ const NewBoardForm = ({ setOpen, open, projectId }) => {
                         onChange={(event) => handleChangeName(event)}
                         data-cy="nameInput"
                     />
-                    {valid ?
-                        <TextField
-                            required
-                            margin="dense"
-                            name="shortForm"
-                            label="Short Form"
-                            type="text"
-                            fullWidth
-                            data-cy="shortForm"
-                            onChange={(event) => handleChangePrettyId(event)}
-                            id="inputShortForm"
-                            helperText="Has to be 2-5 characters long and letters must be capitalized"
-                        />
-                        : <TextField
-                            error
-                            margin="dense"
-                            name="shortFormError"
-                            defaultValue={prettyId}
-                            type="text"
-                            fullWidth
-                            onChange={(event) => handleChangePrettyId(event)}
-                            id="inputShortFormError"
-                            helperText="Has to be 2-5 characters long and letters must be capitalized"
-                        />
-                    }
+                    {valid
+                        ? (
+                            <TextField
+                                required
+                                margin="dense"
+                                name="shortForm"
+                                label="Short Form"
+                                type="text"
+                                fullWidth
+                                data-cy="shortForm"
+                                onChange={(event) => handleChangePrettyId(event)}
+                                id="inputShortForm"
+                                helperText="Has to be 2-5 characters long and letters must be capitalized"
+                            />
+                        )
+                        : (
+                            <TextField
+                                error
+                                margin="dense"
+                                name="shortFormError"
+                                defaultValue={prettyId}
+                                type="text"
+                                fullWidth
+                                onChange={(event) => handleChangePrettyId(event)}
+                                id="inputShortFormError"
+                                helperText="Has to be 2-5 characters long and letters must be capitalized"
+                            />
+                        )}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose} color="primary">
+                    <Button onClick={handleClose} color="primary" data-cy="cancel">
                         Cancel
                     </Button>
                     <Button disabled={!name.length || !prettyId.length} onClick={handleSave} color="primary" data-cy="addNewBoard">
