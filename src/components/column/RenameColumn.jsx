@@ -39,7 +39,7 @@ const RenameColumn = ({ editId, column }) => {
     }
 
     return (
-        <Grid item classes={{ root: classes.columnName }}>
+        <Grid item classes={{ root: classes.columnName }} data-cy="editOnClick">
             <EditText
                 showButtonsOnHover
                 submitOnEnter

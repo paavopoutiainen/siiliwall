@@ -7,6 +7,9 @@ const useAddColumn = () => {
         update: async (cache, response) => {
             addNewColumn(response.data.addColumnForBoard)
         },
+        onError(error) {
+            console.error('error :>>', error.message)
+        },
     })
     return retVal
 }

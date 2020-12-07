@@ -41,7 +41,7 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
                 <TextField
                     margin="dense"
                     name="title"
-                    label="Name"
+                    placeholder="Name"
                     type="text"
                     value={columnName}
                     fullWidth
