@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
+import propsAreEqual from '../../utils/propsAreEqual'
 import { boardPageStyles } from '../../styles/styles'
 import DropdownTask from './DropdownTask'
 import TaskEditDialog from './EditTaskDialog'
@@ -9,7 +10,7 @@ import ColorPill from '../utils/ColorPill'
 import MemberCircle from '../utils/MemberCircle'
 
 const Task = ({
-    task, index, column, boardId,
+    task, index, columnId, columnName, boardId,
 }) => {
     const classes = boardPageStyles()
     const {
@@ -27,7 +28,6 @@ const Task = ({
     const [dialogStatus, setDialogStatus] = useState(false)
 
     const toggleDialog = () => setDialogStatus(!dialogStatus)
-
     const add3Dots = () => {
         let checkedTitle = title
         if (title.length > titleLimit) {
@@ -73,7 +73,8 @@ const Task = ({
                         <Grid item onClick={handleDialogClick}>
                             <DropdownTask
                                 task={task}
-                                column={column}
+                                columnId={columnId}
+                                columnName={columnName}
                                 boardId={boardId}
                             />
                         </Grid>
@@ -113,4 +114,5 @@ const Task = ({
         </Draggable>
     )
 }
-export default Task
+
+export default React.memo(Task, propsAreEqual)
