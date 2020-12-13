@@ -2,6 +2,7 @@
 import React, { useState } from 'react'
 import { Grid, Divider } from '@material-ui/core'
 import { Draggable } from 'react-beautiful-dnd'
+import propsAreEqual from '../../utils/propsAreEqual'
 import DropDownSubtask from './DropdownSubtask'
 import { boardPageStyles } from '../../styles/styles'
 import EditSubtaskDialog from './EditSubtaskDialog'
@@ -9,7 +10,7 @@ import ColorPill from '../utils/ColorPill'
 import MemberCircle from '../utils/MemberCircle'
 
 const Subtask = ({
-    subtask, index, column, boardId,
+    subtask, index, columnId, boardId,
 }) => {
     const classes = boardPageStyles()
     const { name, members, owner } = subtask
@@ -71,7 +72,7 @@ const Subtask = ({
                         >
                             <DropDownSubtask
                                 subtask={subtask}
-                                column={column}
+                                columnId={columnId}
                                 boardId={boardId}
                             />
                         </Grid>
@@ -116,4 +117,5 @@ const Subtask = ({
         </Draggable>
     )
 }
-export default Subtask
+
+export default React.memo(Subtask, propsAreEqual)
