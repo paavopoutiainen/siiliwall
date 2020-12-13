@@ -120,7 +120,6 @@ const AlertBox = ({
     }
 
     const deleteColumn = () => {
-        deleteColumnFromCache(column.id, boardId)
         callDeleteColumn({
             variables: {
                 columnId: column.id,
@@ -128,6 +127,7 @@ const AlertBox = ({
                 eventId,
             },
         })
+        deleteColumnFromCache(column.id, boardId)
         setSnackbarMessage(`Column ${column.name} deleted`)
     }
 
