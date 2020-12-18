@@ -1,7 +1,6 @@
+/* eslint-disable max-len */
 import React from 'react'
-import {
-    Grid,
-} from '@material-ui/core'
+import { Grid } from '@material-ui/core'
 import ViewAgendaOutlinedIcon from '@material-ui/icons/ViewAgendaOutlined'
 import ViewWeekOutlinedIcon from '@material-ui/icons/ViewWeekOutlined'
 import isEqual from 'lodash.isequal'
@@ -16,7 +15,6 @@ const Header = (props) => {
 
     return (
         <Grid
-            data-cy="boardName"
             container
             item
             direction="row"
@@ -31,21 +29,21 @@ const Header = (props) => {
                             <Hedgehog />
                         </Grid>
                         <Grid item container classes={{ root: classes.headerTitle }} direction="column">
-                            <Grid item classes={{ root: classes.headerPrettyId }}>
+                            <Grid item data-cy="boardPrettyId" classes={{ root: classes.headerPrettyId }}>
                                 {boardPrettyId}
                             </Grid>
                             <Grid item>
-                                <p>{boardName}</p>
+                                <p data-cy="boardName">{boardName}</p>
                             </Grid>
 
                         </Grid>
                     </Grid>
                     <Grid item container classes={{ root: classes.boardHeaderRight }} justify="flex-end">
                         <Grid item container justify="center" alignItems="center">
-                            <Grid item classes={{ root: classes.toggleKanbanButton }} style={{ backgroundColor: view === 'kanban' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('kanban')} data-cy="kanbanView">
+                            <Grid item classes={{ root: classes.toggleKanbanButton }} style={{ backgroundColor: view === 'kanban' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('kanban')} data-cy="switchKanbanView">
                                 <ViewWeekOutlinedIcon classes={{ root: classes.toggleViewButtonIcon }} />
                             </Grid>
-                            <Grid item classes={{ root: classes.toggleSwimlaneButton }} style={{ backgroundColor: view === 'swimlane' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('swimlane')}>
+                            <Grid item classes={{ root: classes.toggleSwimlaneButton }} style={{ backgroundColor: view === 'swimlane' ? '#F5F5F5' : '#949494' }} onClick={() => switchView('swimlane')} data-cy="switchSwimlaneView">
                                 <ViewAgendaOutlinedIcon classes={{ root: classes.toggleViewButtonIcon }} />
                             </Grid>
                         </Grid>
@@ -60,7 +58,7 @@ const Header = (props) => {
                         </Grid>
                         <Grid item container classes={{ root: classes.headerTitle }} direction="column">
                             <Grid item>
-                                <p>{landing ? 'SiiliWall' : projectName}</p>
+                                <p data-cy="projectName">{landing ? 'SiiliWall' : projectName}</p>
                             </Grid>
                         </Grid>
                     </Grid>

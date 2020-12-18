@@ -37,7 +37,7 @@ const ColumnList = ({ columns, columnOrder, boardId }) => {
                     <Column column={column} index={index} />
                 </Grid>
             ))}
-            <Grid item classes={{ root: classes.addColumn }}>
+            <Grid item data-cy="nameInputGrid" classes={{ root: classes.addColumn }}>
                 <TextField
                     margin="dense"
                     name="title"

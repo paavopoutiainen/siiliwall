@@ -66,6 +66,7 @@ const Subtask = ({
                             <p>{subtask.task.prettyId}</p>
                         </Grid>
                         <Grid
+                            data-cy="subtaskDropdown"
                             item
                             classes={{ root: classes.subtaskDropdownGrid }}
                             onClick={handleDialogClick}
