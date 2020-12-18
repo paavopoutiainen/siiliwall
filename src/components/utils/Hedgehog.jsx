@@ -3,7 +3,7 @@ import whiteHedgehog from '../../pics/whiteHedgehog.PNG'
 
 const Hedgehog = () => (
 
-    <img src={whiteHedgehog} alt="siili" />
+    <img src={whiteHedgehog} alt="siili" data-cy="hedgehog" />
 
 )
 

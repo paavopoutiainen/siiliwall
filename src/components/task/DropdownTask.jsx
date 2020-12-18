@@ -126,7 +126,7 @@ const DropdownTask = ({
                     <ListItemText primary="Archive task" />
                 </MenuItem>
                 <Divider />
-                <MenuItem onClick={() => openAlertDialog('DELETE_TASK')}>
+                <MenuItem id="deleteTask" onClick={() => openAlertDialog('DELETE_TASK')}>
                     <ListItemIcon>
                         <Delete />
                     </ListItemIcon>

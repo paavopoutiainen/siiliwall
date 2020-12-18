@@ -36,7 +36,7 @@ const ProjectPage = ({ id, eventId }) => {
             justify="center"
             classes={{ root: classes.root }}
         >
-            <Header projectName={projectName} />
+            <Header projectName={projectName} data-cy="projectName" />
             {open && <NewBoardForm setOpen={setOpen} open={open} projectId={id} />}
             <Grid
                 item

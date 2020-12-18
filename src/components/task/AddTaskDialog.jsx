@@ -152,6 +152,7 @@ const AddTaskDialog = ({
     return (
         <Grid>
             <Dialog
+                data-cy="addTaskDialog"
                 fullWidth
                 maxWidth="md"
                 onClose={toggleDialog}
@@ -175,6 +176,7 @@ const AddTaskDialog = ({
                         fullWidth
                         helperText={titleError}
                         onChange={handleTitleChange}
+                        data-cy="taskTitle"
                     />
                     <TextField
                         error={sizeError.length > 0}
@@ -188,6 +190,7 @@ const AddTaskDialog = ({
                         fullWidth
                         helperText={sizeError}
                         onChange={handleSizeChange}
+                        data-cy="taskSize"
                     />
                     <Select
                         isMulti
@@ -196,6 +199,7 @@ const AddTaskDialog = ({
                         options={modifiedColorData}
                         onChange={handleColorsChange}
                         closeMenuOnSelect={false}
+                        data-cy="taskColors"
                     />
                     <Select
                         className="selectField"
@@ -213,6 +217,7 @@ const AddTaskDialog = ({
                         closeMenuOnSelect={false}
                     />
                     <TextField
+                        data-cy="description"
                         error={descriptionError.length > 0}
                         id="standard-multiline-static, filled-error-helper-text"
                         autoComplete="off"
@@ -240,6 +245,7 @@ const AddTaskDialog = ({
                         onClick={handleSave}
                         color="primary"
                         id="createTaskButton"
+                        data-cy="add"
                     >
                         Create task
                     </Button>

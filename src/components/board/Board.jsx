@@ -23,12 +23,11 @@ const Board = ({ board }) => {
 
     const { columnOrder, columns } = board
     return (
-        <Grid container classes={{ root: classes.board }}>
+        <Grid container classes={{ root: classes.board }} data-cy="board">
             <DragDropContext onDragEnd={(result) => onDragEnd(
                 result, moveTicketInColumn, moveTicketFromColumn, moveColumn, client, columns, board, setSnackbarMessage,
             )}
             >
-
                 <Droppable droppableId={board.id} direction="horizontal" type="column">
                     {(provided) => (
                         <Grid
@@ -39,13 +38,13 @@ const Board = ({ board }) => {
                             ref={provided.innerRef}
                             spacing={2}
                         >
-                            <Grid item><ColumnList columns={columns} columnOrder={columnOrder} boardId={board.id} /></Grid>
+                            <Grid item>
+                                <ColumnList columns={columns} columnOrder={columnOrder} boardId={board.id} />
+                            </Grid>
                             {provided.placeholder}
-
                         </Grid>
                     )}
                 </Droppable>
-
             </DragDropContext>
         </Grid>
     )

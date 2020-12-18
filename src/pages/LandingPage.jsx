@@ -17,6 +17,7 @@ const LandingPage = () => {
     }
 
     if (queryResult.loading) return null
+    // eslint-disable-next-line max-len
     const projectsInOrder = queryResult.data.allProjects.slice().sort((a, b) => a.orderNumber - b.orderNumber)
 
     return (

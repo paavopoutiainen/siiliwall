@@ -31,18 +31,21 @@ const Column = ({ column, index }) => {
                     ref={provided.innerRef}
                     spacing={2}
                 >
-                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps}>
+                    <Grid classes={{ root: classes.columnHeader }} item container direction="row" justify="space-between" {...provided.dragHandleProps} data-cy="ColumnGrid">
                         <Grid item>
                             <RenameColumn editId={column.id} column={column} />
                         </Grid>
                         <Grid item container direction="row" alignItems="center" justify="flex-end" classes={{ root: classes.columnButtonGrid }}>
                             <Grid item>
-                                <Button classes={{ root: classes.columnButton }}>
-                                    <AddIcon classes={{ root: classes.columnButtonIcons }} onClick={toggleDialog} />
+                                <Button classes={{ root: classes.columnButton }} data-cy="addTask">
+                                    <AddIcon
+                                        classes={{ root: classes.columnButtonIcons }}
+                                        onClick={toggleDialog}
+                                    />
                                 </Button>
                             </Grid>
-                            <Grid item>
-                                <DropdownColumn columnId={column.id} boardId={column.board.id} />
+                            <Grid item data-cy="columnDropDown">
+                                <DropdownColumn column={column} boardId={column.board.id} />
                             </Grid>
                         </Grid>
                     </Grid>
