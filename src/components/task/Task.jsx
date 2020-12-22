@@ -70,7 +70,7 @@ const Task = ({
                         <Grid item classes={{ root: classes.taskTitle }}>
                             <p>{prettyId}</p>
                         </Grid>
-                        <Grid item onClick={handleDialogClick}>
+                        <Grid item id="taskDropdown" onClick={handleDialogClick}>
                             <DropdownTask
                                 task={task}
                                 columnId={columnId}

@@ -6,7 +6,8 @@ describe('Test for landing page', () => {
         cy.visit('/')
     })
     it('renders the title', () => {
-        cy.get('[data-cy=landingTitle]')
+        cy.get('[data-cy=landingTitle]').should('contain', 'Welcome!')
+        cy.get('[data-cy=projectName]').should('contain', 'SiiliWall')
     })
     it('can cancel projecta adding', () => {
         cy.get('[data-cy=addButton]').click()
@@ -19,5 +20,6 @@ describe('Test for landing page', () => {
         cy.get('[data-cy=inputName]').type('New Project')
         cy.get('[data-cy=addProject]').click()
         cy.get('[data-cy=projectGrid]').contains('New Project').click()
+        cy.get('[data-cy=projectName]').should('contain', 'New Project')
     })
 })

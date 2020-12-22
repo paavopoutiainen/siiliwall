@@ -79,18 +79,18 @@ const SwimlaneView = ({ board }) => {
 
     return (
         <DragDropContext onDragEnd={(result) => onDragEndSwimlane(result, moveTicketInColumn, moveTicketFromColumn, moveSwimlane, columns, client, tasksInOrder, board.id, setSnackbarMessage)}>
-            <Grid container direction="column" classes={{ root: classes.swimlaneView }}>
+            <Grid container direction="column" classes={{ root: classes.swimlaneView }} data-cy="swimlaneView">
                 <Grid item container direction="column" classes={{ root: classes.swimlaneStickyGrid }}>
                     <Grid item container direction="row" alignItems="center" classes={{ root: classes.swimlaneViewButtonGrid }}>
                         <Grid item classes={{ root: classes.swimlaneAddButtonGrid }}>
-                            <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }}>Add task</Button>
+                            <Button onClick={() => toggleDialog()} disabled={columns.length === 0} classes={{ root: classes.swimlaneAddTaskButton }} data-cy="addTask">Add task</Button>
                         </Grid>
                         <Grid item container direction="row" justify="flex-end" classes={{ root: classes.toggleSwimlaneButtonGrid }}>
                             <Grid item>
-                                <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }}>Hide all swimlanes</Button>
+                                <Button onClick={() => handleHideClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneHideButton }} data-cy="switchLabelHide">Hide all swimlanes</Button>
                             </Grid>
                             <Grid item>
-                                <Button onClick={() => handleShowClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneShowButton }} data-cy="switchLabel">Expand all swimlanes</Button>
+                                <Button onClick={() => handleShowClick()} disabled={tasks.length === 0} classes={{ root: classes.swimlaneShowButton }} data-cy="switchLabelShow">Expand all swimlanes</Button>
                             </Grid>
                         </Grid>
                     </Grid>

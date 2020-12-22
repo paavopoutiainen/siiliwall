@@ -224,6 +224,7 @@ const AlertBox = ({
                             {action === 'DELETE_TASK' || action === 'DELETE_COLUMN' || action === 'DELETE_SUBTASK' || action === 'DELETE_TASK_IF_SUBTASKS'
                                 ? (
                                     <Button
+                                        data-cy="deleteButton"
                                         size="small"
                                         color="secondary"
                                         variant="contained"
