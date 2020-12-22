@@ -5,10 +5,10 @@ import {
 import MoreVertIcon from '@material-ui/icons/MoreVert'
 import Delete from '@material-ui/icons/Delete'
 import { useApolloClient } from '@apollo/client'
-import propsAreEqual from '../../utils/propsAreEqual'
 import { TICKETORDER } from '../../graphql/fragments'
 import AlertBox from '../utils/AlertBox'
 import { boardPageStyles } from '../../styles/styles'
+import propsAreEqual from '../../utils/propsAreEqual'
 
 const DropdownColumn = ({ columnId, boardId }) => {
     const [anchorEl, setAnchorEl] = useState(null)
@@ -35,7 +35,6 @@ const DropdownColumn = ({ columnId, boardId }) => {
         toggleAlertDialog()
         setAnchorEl(null)
     }
-
     return (
         <Grid item>
             <Button

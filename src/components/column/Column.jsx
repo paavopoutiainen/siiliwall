@@ -45,7 +45,7 @@ const Column = ({ column, index }) => {
                                 </Button>
                             </Grid>
                             <Grid item data-cy="columnDropDown">
-                                <DropdownColumn column={column} boardId={column.board.id} />
+                                <DropdownColumn columnId={column.id} boardId={column.board.id} />
                             </Grid>
                         </Grid>
                     </Grid>
